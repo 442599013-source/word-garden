@@ -13,7 +13,65 @@ const $=id=>document.getElementById(id),levels=['幼儿园小班','幼儿园中�
 let level=0,week=0,terms=[],tiles=[],selected=null,correct=0,locked=false,last=null,voiceOn=true,voiceToken=0,round=0,examKind='mid',questions=[],qindex=0,chosen=null,answers=[];
 let saved={pairs:0,weeks:{},exams:{}};try{saved=JSON.parse(localStorage.getItem('pte-word-garden-644-v1')||'null')||saved}catch{};saved.weeks||={};saved.exams||={};
 const store=()=>{try{localStorage.setItem('pte-word-garden-644-v1',JSON.stringify(saved))}catch{}},shuffle=a=>{for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
-function stop(){voiceToken++;try{speechSynthesis.cancel()}catch{}}function say(items){stop();if(!voiceOn||!('speechSynthesis'in window))return;const id=voiceToken;const run=()=>{if(id!==voiceToken)return;const t=items.shift();if(!t)return;const u=new SpeechSynthesisUtterance(t[0]);u.lang=t[1];u.rate=.85;u.onend=run;u.onerror=run;try{speechSynthesis.speak(u)}catch{}};run()}
+// Prefer a locally installed high-quality British English male voice, with honest fallback.
+const VOICE_PREF_KEY='word-garden-voice-preferences-v2';
+const voicePrefs={accent:'en-GB',rate:0.76,gender:'male',manual:''};
+try{Object.assign(voicePrefs,JSON.parse(localStorage.getItem(VOICE_PREF_KEY)||'{}'))}catch{}
+let installedVoices=[];
+function refreshVoices(){
+  if(!('speechSynthesis'in window))return;
+  installedVoices=speechSynthesis.getVoices()||[];
+  const select=document.getElementById('voiceChoice');if(!select)return;
+  select.replaceChildren();
+  const auto=document.createElement('option');auto.value='';auto.textContent='自动优先英国男声（推荐）';select.append(auto);
+  installedVoices.filter(v=>/^en[-_]/i.test(v.lang)).sort((a,b)=>(a.lang==='en-GB'?0:1)-(b.lang==='en-GB'?0:1)).forEach(v=>{
+   const o=document.createElement('option');o.value=v.voiceURI;o.textContent=v.name+' · '+v.lang+(v.localService?' · 本机':'');select.append(o);
+  });
+  select.value=installedVoices.some(v=>v.voiceURI===voicePrefs.manual)?voicePrefs.manual:'';
+  const candidate=chooseVoice('en-GB');
+  document.getElementById('voiceStatus').textContent=candidate?
+    '当前英文声音：'+candidate.name+'（'+candidate.lang+'）。系统无法可靠识别所有声音的性别，请试听确认。':
+    '未检测到可用的英文声音，请检查设备的朗读语音设置。';
+}
+function chooseVoice(lang){
+  const vs=installedVoices;
+  if(lang==='zh-CN')return vs.find(v=>/^zh[-_]CN/i.test(v.lang))||vs.find(v=>/^zh/i.test(v.lang))||null;
+  if(voicePrefs.manual){const manual=vs.find(v=>v.voiceURI===voicePrefs.manual);if(manual)return manual}
+  const british=vs.filter(v=>/^en[-_]GB/i.test(v.lang));
+  const pool=british.length?british:vs.filter(v=>/^en/i.test(v.lang));
+  const male=/(male|daniel|oliver|arthur|george|james|ryan|thomas|alfie|reed)/i;
+  const female=/(female|samantha|serena|kate|victoria|emily|susan|hazel)/i;
+  return pool.slice().sort((a,b)=>{
+   const quality=v=>(/premium|enhanced|neural|natural/i.test(v.name)?4:0)+(male.test(v.name)&&!female.test(v.name)?3:0)+(v.localService?1:0);
+   return quality(b)-quality(a);
+  })[0]||null;
+}
+function stop(){voiceToken++;try{speechSynthesis.cancel()}catch{}}
+function say(items){
+ stop();if(!voiceOn||!('speechSynthesis'in window))return;
+ if(!installedVoices.length)refreshVoices();
+ const id=voiceToken;const queue=items.slice();
+ function run(){if(id!==voiceToken)return;const item=queue.shift();if(!item)return;
+  const u=new SpeechSynthesisUtterance(item[0]);const chinese=/^zh/i.test(item[1]);
+  u.lang=chinese?'zh-CN':'en-GB';u.rate=chinese?0.88:Number(voicePrefs.rate)||0.76;
+  u.pitch=chinese?1:0.93;const v=chooseVoice(u.lang);if(v)u.voice=v;
+  let completed=false;const next=()=>{if(completed)return;completed=true;run()};
+  u.onend=next;u.onerror=next;
+  try{speechSynthesis.speak(u)}catch{next()}
+ }run();
+}
+function saveVoicePrefs(){try{localStorage.setItem(VOICE_PREF_KEY,JSON.stringify(voicePrefs))}catch{}}
+function setupVoicePanel(){
+ const parent=document.querySelector('#home');const pane=document.createElement('div');pane.className='pane';pane.style.cssText='text-align:left;margin:16px 0';
+ pane.innerHTML='<div style="font-weight:700;margin-bottom:10px">🎙️ 语音设置 · Voice settings</div><div class="sub">默认：沉稳男声优先 · 英国英语 · 慢速。实际音质由设备已安装的声音决定。</div><label style="display:block;margin:10px 0 5px">英文声音 / English voice</label><select id="voiceChoice" style="width:100%;max-width:100%;padding:10px;border-radius:10px;border:1px solid #cfdfd9;background:white"></select><label style="display:block;margin:10px 0 5px">英语语速 / Speech speed</label><select id="voiceSpeed" style="width:100%;padding:10px;border-radius:10px;border:1px solid #cfdfd9;background:white"><option value="0.65">更慢 / Very slow</option><option value="0.76">慢速 / Slow</option><option value="0.92">正常 / Normal</option></select><div id="voiceStatus" class="sub" style="margin:10px 0">正在检测可用声音……</div><button id="voiceTest" class="lite">🔊 试听英国英语男声</button>';
+ parent.append(pane);
+ document.getElementById('voiceSpeed').value=String(voicePrefs.rate);
+ document.getElementById('voiceChoice').onchange=e=>{voicePrefs.manual=e.target.value;saveVoicePrefs();refreshVoices()};
+ document.getElementById('voiceSpeed').onchange=e=>{voicePrefs.rate=Number(e.target.value);saveVoicePrefs()};
+ document.getElementById('voiceTest').onclick=()=>say([['Hello! Welcome to Word Garden. Let us learn English together.','en-GB'],['你好，欢迎来到单词消消乐，我们一起学习英语。','zh-CN']]);
+ refreshVoices();if('speechSynthesis'in window){speechSynthesis.addEventListener?.('voiceschanged',refreshVoices)}
+}
+
 const bilingual=(en,zh)=>say([[en,'en-US'],[zh,'zh-CN']]);
 function show(id){stop();for(const s of ['home','levels','weeks','play','exam','result','ptepage'])$(s).hidden=s!==id;$('pairs').textContent=saved.pairs;$('passed').textContent=Object.values(saved.exams).filter(n=>n>=60).length}
 function band(){return level<=2?0:level<=8?1:level<=11?2:level<=14?2:3}
@@ -38,5 +96,5 @@ function finishExam(){const score=answers.filter(x=>x.chosen===x.ans).length*10,
 function review(){const out=$('mistakes');out.replaceChildren();const errors=answers.filter(x=>x.chosen!==x.ans);if(!errors.length)out.textContent='Perfect! · 全部答对了。';errors.forEach((x,i)=>{const p=document.createElement('p');p.style.fontSize='13px';p.textContent=(i+1)+'. '+x.q+' · 你的答案：'+x.chosen+' · 正确：'+x.ans+'。'+x.why;out.append(p)});out.hidden=false}
 const tasks=[['Read Aloud · 朗读文本','Regular practice can improve language proficiency.','请朗读英文句子，注意发音和流畅度。'],['Repeat Sentence · 复述句子','The lecture will begin in approximately ten minutes.','先听句子，再尽量准确复述。'],['Write from Dictation · 听写句子','Research results should be interpreted carefully.','播放英文并尝试听写完整句子。'],['Reading Fill in the Blanks · 阅读填空','Consistent practice can _____ vocabulary retention. (improve / damage / ignore)','选择最合适的单词。答案：improve。'],['Respond to a Situation · 情境应答','Your classmate missed a meeting. Politely invite them to the next one.','请用英语礼貌邀请同学参加下次会议。'],['Summarize Group Discussion · 小组讨论总结','A: Online courses are convenient. B: Classroom interaction is useful. C: Both methods have benefits.','概括三位发言者的共同主题和不同观点。']];
 function drawPte(){const box=$('pteitems');box.replaceChildren();tasks.forEach(t=>{const p=document.createElement('div');p.className='pane';const title=document.createElement('strong');title.textContent=t[0];const body=document.createElement('p');body.textContent=t[1];const sub=document.createElement('div');sub.className='sub';sub.textContent=t[2];const b=document.createElement('button');b.className='lite';b.textContent='🔊 英文播放 / Listen';b.onclick=()=>say([[t[1],'en-US']]);p.append(title,body,sub,b);box.append(p)})}
-$('loaded').textContent=WORDS.length;$('begin').onclick=()=>show('levels');$('pte').onclick=()=>show('ptepage');document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{if(b.dataset.back==='weeks')drawWeeks();show(b.dataset.back)});$('mid').onclick=()=>{examKind='mid';exam()};$('final').onclick=()=>{examKind='final';exam()};$('repeat').onclick=()=>last&&lessonAudio(last);$('voice').onclick=()=>{voiceOn=!voiceOn;stop();$('voice').textContent=voiceOn?'🔊 语音：开':'🔇 语音：关'};$('restart').onclick=()=>start(week);$('nextweek').onclick=()=>{if(week<39)start(week+1);else if(level<17){level++;start(0)}else show('levels')};$('submit').onclick=()=>{if(chosen===null)return;answers.push({...questions[qindex],chosen});if(qindex===9)finishExam();else{qindex++;qrender()}};$('retry').onclick=exam;$('review').onclick=review;drawStages();drawPte();show('home');
+$('loaded').textContent=WORDS.length;$('begin').onclick=()=>show('levels');$('pte').onclick=()=>show('ptepage');document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>{if(b.dataset.back==='weeks')drawWeeks();show(b.dataset.back)});$('mid').onclick=()=>{examKind='mid';exam()};$('final').onclick=()=>{examKind='final';exam()};$('repeat').onclick=()=>last&&lessonAudio(last);$('voice').onclick=()=>{voiceOn=!voiceOn;stop();$('voice').textContent=voiceOn?'🔊 语音：开':'🔇 语音：关'};$('restart').onclick=()=>start(week);$('nextweek').onclick=()=>{if(week<39)start(week+1);else if(level<17){level++;start(0)}else show('levels')};$('submit').onclick=()=>{if(chosen===null)return;answers.push({...questions[qindex],chosen});if(qindex===9)finishExam();else{qindex++;qrender()}};$('retry').onclick=exam;$('review').onclick=review;drawStages();drawPte();setupVoicePanel();show('home');
 </script></body></html>
