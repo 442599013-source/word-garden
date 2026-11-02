@@ -1,5 +1,5 @@
 import {icon,escapeHTML} from './home-icons.js';
-import {skills} from '../pte-summary/view.js';
+import {skills} from './home-pte.js';
 export function subpage(page, data){
  const skill=skills.find(s=>s.id===page);
  let name='',english='',content='';
