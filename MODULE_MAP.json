@@ -1,0 +1,67 @@
+{
+  "version": "1.5-flat",
+  "layout": "all files in repository root",
+  "home_components": {
+    "modules/home/header/header.js": "home-header.js",
+    "modules/home/icons.js": "home-icons.js",
+    "modules/home/index.js": "home-main.js",
+    "modules/home/layout.css": "home-style.css",
+    "modules/home/level-summary/view.js": "home-level.js",
+    "modules/home/navigation/view.js": "home-journey.js",
+    "modules/home/progress-summary/view.js": "home-progress.js",
+    "modules/home/pte-summary/view.js": "home-pte.js",
+    "modules/home/quick-actions/actions.js": "home-subpages.js"
+  },
+  "feature_modules": [
+    {
+      "name": "进阶之旅",
+      "filename": "feature-advanced.js",
+      "route": "journey"
+    },
+    {
+      "name": "综合考试成绩",
+      "filename": "feature-exams.js",
+      "route": "results"
+    },
+    {
+      "name": "听力题库",
+      "filename": "feature-listening.js",
+      "route": "listening"
+    },
+    {
+      "name": "口语题库",
+      "filename": "feature-speaking.js",
+      "route": "speaking"
+    },
+    {
+      "name": "阅读题库",
+      "filename": "feature-reading.js",
+      "route": "reading"
+    },
+    {
+      "name": "写作题库",
+      "filename": "feature-writing.js",
+      "route": "writing"
+    },
+    {
+      "name": "登录",
+      "filename": "feature-login.js",
+      "route": "login"
+    },
+    {
+      "name": "注册",
+      "filename": "feature-register.js",
+      "route": "register"
+    },
+    {
+      "name": "已消灭单词",
+      "filename": "feature-words.js",
+      "route": "words"
+    },
+    {
+      "name": "设置",
+      "filename": "feature-settings.js",
+      "route": "settings"
+    }
+  ]
+}

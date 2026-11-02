@@ -1,0 +1,43 @@
+WORD MATCH — FLAT ROOT FILES V1.5
+
+重要：本 ZIP 里的所有文件都在同一层，没有任何子文件夹。
+首次部署：解压，将全部文件作为单独文件上传到 GitHub 仓库 word-garden 根目录（与原 index.html 同级），同名文件需要替换。
+先备份旧版 index.html。上传后 GitHub Pages 会把首页切换为新首页；旧版单文件游戏不会保留在新入口里，功能以后逐个接入。
+
+以后更新一个已有首页小区域：
+- 标题/登录设置入口 -> home-header.js
+- 首页布局样式 -> home-style.css
+- 当前英语阶段 -> home-level.js
+- 已消灭单词、平均考试分 -> home-progress.js
+- 进阶之旅入口 -> home-journey.js
+- PTE四科 -> home-pte.js
+- 各模块未完成时的演示页面 -> home-subpages.js
+这些都只用上传对应的同名文件即可替换，不需要重新上传 index.html。
+
+以后新增独立功能：请创建一个单独 JS 文件，按以下约定命名，放到仓库根目录，首页现有入口就可以自动载入对应模块。不要再创建文件夹。
+
+  进阶之旅  ->  feature-advanced.js  (入口 journey)
+  综合考试成绩  ->  feature-exams.js  (入口 results)
+  听力题库  ->  feature-listening.js  (入口 listening)
+  口语题库  ->  feature-speaking.js  (入口 speaking)
+  阅读题库  ->  feature-reading.js  (入口 reading)
+  写作题库  ->  feature-writing.js  (入口 writing)
+  登录  ->  feature-login.js  (入口 login)
+  注册  ->  feature-register.js  (入口 register)
+  已消灭单词  ->  feature-words.js  (入口 words)
+  设置  ->  feature-settings.js  (入口 settings)
+
+未来新增一个模块的代码示例（文件名以听力为例：feature-listening.js）：
+export function mount(container, context) {
+  container.innerHTML = `<div><h2>听力题库</h2><p>Listening Question Bank</p><button id="back-home">返回首页</button></div>`;
+  container.querySelector('#back-home').addEventListener('click', context.goHome);
+  return () => {}; // 离开页面时可选择清理事件
+}
+
+context.emitUpdate({pteScores:{listening:58}}) 只用于实际测得的成绩；
+其他可用数据字段：wordsEliminated, examScores, stage。
+
+说明：首次上传时应全部上传本包中的根目录文件。此后 *已预留的页面模块* 只需上传对应 feature-*.js 即可启用；
+若未来想在首页增加一个从来没有预留过的新按钮，仍需局部修改对应首页组件/模块加载器，绝不是自动创造新按钮。
+如果你需要给模块添加声音、题库文件等，也可以使用独立根目录文件，但它们需要由该模块引用。
+所有文本文件为 UTF-8 编码；压缩包、路径和代码文件名均为英文，不使用中文路径。
