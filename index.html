@@ -32323,19 +32323,32 @@ function mountKindergarten(container,context){
  let frame=null, lessonFrame=null, back=null, toMap=null;
  function size(f){if(!f||f.hidden)return;try{const d=f.contentDocument;f.style.height=Math.max(160,d.documentElement.scrollHeight+8,d.body.scrollHeight+8)+'px'}catch(e){}}
  function mkFrame(src,title){let f=document.createElement('iframe');f.title=title;f.style.cssText='border:0;display:block;width:100%;min-height:160px;background:white;';f.srcdoc=src;return f;}
- function goMap(){if(lessonFrame)lessonFrame.hidden=true;if(toMap)toMap.hidden=true;frame.hidden=false;back.hidden=false;size(frame);window.scrollTo(0,0)}
+ function goMap(){if(lessonFrame)lessonFrame.hidden=true;if(toMap){toMap.hidden=true;toMap.nextElementSibling.hidden=true;}frame.hidden=false;back.hidden=false;size(frame);window.scrollTo(0,0)}
  function openLesson(week,grade){
   if(!lessonFrame){
-   toMap=document.createElement('button');toMap.className='back';toMap.style.cssText='display:block;margin-bottom:10px';toMap.textContent='← 返回课程地图';toMap.onclick=goMap;holder.append(toMap);
-   lessonFrame=mkFrame(LESSON_HTML,'V13教学课程');holder.append(lessonFrame);
+   toMap=document.createElement('button');toMap.className='back';toMap.style.cssText='display:block;margin-top:12px';toMap.textContent='← 返回课程地图';toMap.onclick=goMap;lessonFrame=mkFrame(LESSON_HTML,'V13教学课程');holder.append(lessonFrame);holder.append(toMap);
+   const bottomHome=document.createElement('button');bottomHome.className='back';bottomHome.style.cssText='display:block;margin-top:8px';bottomHome.textContent='← 返回主页';bottomHome.onclick=()=>holder.querySelector('[data-route=home]')?.click();holder.append(bottomHome);
    lessonFrame.addEventListener('load',()=>{if(closed)return;configureLesson();new ResizeObserver(()=>size(lessonFrame)).observe(lessonFrame.contentDocument.body);});
   }
   function configureLesson(){const d=lessonFrame.contentDocument,w=lessonFrame.contentWindow;if(!w?.WORD_MATCH_KG_DATA)return;
    Object.assign(w.WORD_MATCH_KG_DATA.lessons,window.WM_DRAFT_LESSONS);
    d.querySelector('#gradeSelect').value=grade;d.querySelector('#weekSelect').value=String(week);
    d.querySelector('#weekSelect').dispatchEvent(new Event('change',{bubbles:true}));
-   if(!d.querySelector('#wm-integration')){let s=d.createElement('style');s.id='wm-integration';s.textContent='.selects{display:none!important}.vocab b{overflow-wrap:anywhere;word-break:break-word;font-size:clamp(10px,2.7vw,13px)}.vocab small{overflow-wrap:anywhere;word-break:break-word}.foot,.translation,.story,.panel,.work,.muted{overflow-wrap:anywhere;word-break:break-word;white-space:normal}.vocab button{overflow:hidden}';d.head.append(s)}
-   frame.hidden=true;back.hidden=true;lessonFrame.hidden=false;toMap.hidden=false;size(lessonFrame);window.scrollTo(0,0);
+   if(!d.querySelector('#wm-integration')){let s=d.createElement('style');s.id='wm-integration';s.textContent='.selects{display:none!important}.vocab b{overflow-wrap:anywhere;word-break:break-word;font-size:clamp(10px,2.7vw,13px)}.vocab small{overflow-wrap:anywhere;word-break:break-word}.foot,.translation,.story,.panel,.work,.muted{overflow-wrap:anywhere;word-break:break-word;white-space:normal}.vocab button{overflow:hidden}.app>.back{display:none!important}#pte-groups{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;max-width:100%}#pte-ex .row{display:flex!important;flex-wrap:wrap!important;max-width:100%;gap:6px}#pte-ex .row>button{min-width:0!important;max-width:100%;flex:1 1 30%;overflow-wrap:anywhere;white-space:normal}#pte-ex,.panel{min-width:0;max-width:100%;overflow-wrap:anywhere}body{overflow-x:hidden}';d.head.append(s)}
+   // Beginner practice: kindergarten teaches its own weekly words and short phrases before formal PTE tasks.
+   const pteGroups=d.querySelector('#pte-groups');
+   if(pteGroups){const panel=pteGroups.closest('section');
+    if(panel&&!panel.dataset.wmBeginner){panel.dataset.wmBeginner='1';panel.replaceChildren();
+     const heading=d.createElement('h2');heading.textContent='PTE 预备训练 · 从零开始';panel.append(heading);
+     const intro=d.createElement('p');intro.className='muted';intro.textContent='幼儿园先练听懂单词、认识短句和简单跟读。正式PTE长篇听力总结等题型将在高级阶段逐步学习。';panel.append(intro);
+     const task=d.createElement('div');task.className='work';task.style.cssText='max-width:100%;min-width:0;overflow-wrap:anywhere';panel.append(task);
+     const words=(w.WORD_MATCH_KG_DATA.lessons[grade+'-'+week]||{}).vocabulary||[];
+     const cards=words.slice(0,Math.min(5,words.length));let k=0;
+     const title=d.createElement('h3');const play=d.createElement('button');play.className='outline';play.textContent='🔊 听一听 · Listen';const explain=d.createElement('p');explain.className='muted';const opts=d.createElement('div');opts.style.cssText='display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:100%';const feedback=d.createElement('p');feedback.className='muted';task.append(title,play,explain,opts,feedback);
+     function drawBasic(){if(!cards.length){task.textContent='本周词汇暂未填写';return;}let word=cards[k%cards.length];title.textContent='第 '+(k+1)+' / '+cards.length+' 题 · 听音选中文';explain.textContent='先听英语单词，再选择正确的中文意思。';feedback.textContent='';opts.replaceChildren();play.onclick=()=>{const u=new w.SpeechSynthesisUtterance(word[0]);u.lang=window.localStorage.getItem('wm-voice-accent')==='en-GB'?'en-GB':'en-US';w.speechSynthesis.cancel();w.speechSynthesis.speak(u);};const distract=cards.filter(x=>x!==word).slice(0,3);const candidates=[word,...distract].sort((a,b)=>((a[0].length*7+k)%11)-((b[0].length*7+k)%11));for(const pair of candidates){const b=d.createElement('button');b.className='outline';b.style.cssText='min-width:0;white-space:normal;overflow-wrap:anywhere;padding:10px';b.textContent=pair[1];b.onclick=()=>{if(pair===word){feedback.textContent='✓ 答对了！ '+word[0]+' · '+word[1];b.disabled=true;const next=d.createElement('button');next.className='outline';next.textContent=k+1<cards.length?'下一题 →':'再练一次 ↻';next.onclick=()=>{k=(k+1)%cards.length;drawBasic()};feedback.append(' ',next);}else feedback.textContent='再听一次，试试看。';};opts.append(b)}}drawBasic();
+    }
+   }
+   frame.hidden=true;back.hidden=true;lessonFrame.hidden=false;toMap.hidden=false;toMap.nextElementSibling.hidden=false;size(lessonFrame);window.scrollTo(0,0);
   }
   if(lessonFrame.contentDocument?.readyState==='complete'&&lessonFrame.contentWindow.WORD_MATCH_KG_DATA)configureLesson();
   else lessonFrame.addEventListener('load',configureLesson,{once:true});
