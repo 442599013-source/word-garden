@@ -7,6 +7,8 @@ import os
 from pathlib import Path
 import re
 import urllib.request
+import urllib.error
+import time
 
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'audio' / 'azure'
@@ -41,6 +43,28 @@ for en in re.findall(r"\[\s*'([^']{1,150})'\s*,\s*'en-US'\s*\]",lesson):
 # Limited initial catalog to avoid accidentally consuming the free tier on unrelated UI strings.
 texts={t for t in texts if t.strip() and len(t) <= 1500}
 voices={'en-US':'en-US-JennyNeural','en-GB':'en-GB-SoniaNeural'}
+def synthesize(request, label):
+    # Azure F0 supports up to 20 text-to-speech transactions per 60 seconds.
+    # Also retry transient 429 responses caused by voice capacity in a region.
+    for attempt in range(1, 7):
+        try:
+            with urllib.request.urlopen(request, timeout=40) as response:
+                return response.read()
+        except urllib.error.HTTPError as exc:
+            if exc.code != 429:
+                details = exc.read(400).decode('utf-8', errors='replace')
+                raise RuntimeError(f'Azure returned HTTP {exc.code}; {details[:200]}') from None
+            if attempt == 6:
+                raise RuntimeError('Azure repeatedly returned 429 after six attempts. F0 rate limit, monthly quota, or regional voice capacity may be the cause. Check Azure usage and retry later without upgrading.') from None
+            retry = exc.headers.get('Retry-After', '')
+            try:
+                seconds = max(float(retry), 4.0)
+            except ValueError:
+                seconds = min(10 * attempt, 45)
+            print(f'Azure HTTP 429 ({label}), retry {attempt}/5 after {seconds:g}s', flush=True)
+            time.sleep(seconds)
+    raise AssertionError('Unreachable')
+
 manifest={}
 for locale, voice in voices.items():
     for text in sorted(texts):
@@ -57,10 +81,10 @@ for locale, voice in voices.items():
                     'User-Agent':'wordmatch-lesson-audio'
                 }
             )
-            with urllib.request.urlopen(request,timeout=40) as response:
-                audio=response.read()
+            audio=synthesize(request, locale)
             if not audio:raise RuntimeError('Empty audio for '+repr(text))
             dest.write_bytes(audio)
+            time.sleep(3.5)  # Stay comfortably under the F0 request-rate cap.
         manifest[locale+'|'+text]=name
 (OUT/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8')
 print('Ready:',len(manifest),'voice clips (both accents).')
