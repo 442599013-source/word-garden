@@ -32654,13 +32654,38 @@ window.WordMatchStandalone={open,close};
 #forest-game .forest-finished[hidden]{display:none}
 #forest-game .forest-back{position:absolute;left:3%;top:3%;width:9%;height:4%;border:0;background:transparent;color:transparent}
 @media(min-width:520px){#forest-game .forest-tile{font-size:28px}#forest-game .forest-week{font-size:17px}#forest-game .forest-goal{font-size:14px}#forest-game .forest-goal small{font-size:11px}}
+
+/* V2.3: hide baked-in lettering in the fixed artwork behind live UI */
+#forest-game .forest-result{background:#fffaf1 !important;border:3px solid #f3ba57 !important;isolation:isolate;z-index:2}
+#forest-game .forest-goals{top:75.3% !important;height:14.4% !important;padding:3.3% 1.5% 1.5% !important;background:#e8c9f6 !important;border:3px solid #be87dd !important;isolation:isolate;z-index:2}
+#forest-game .forest-goals:before{content:'本关任务单词（10个）';position:absolute;top:1%;left:0;right:0;text-align:center;font-weight:900;color:#71349d;font-size:clamp(12px,3.2vw,17px);pointer-events:none}
+#forest-game .forest-hint{top:68.4% !important;left:43% !important;width:14% !important;height:2.9% !important;font-size:clamp(10px,2.5vw,13px) !important;background:#fff4dc !important}
+#forest-game .forest-toast{top:72% !important;background:#fff5defb !important;z-index:4}
+</style><style id="forest-v24-learning-style">
+#forest-game .forest-result{top:59.3%!important;height:10.9%!important;padding:1.0% 2.5%!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;gap:1px!important;border-radius:15px!important;white-space:normal!important;font-size:clamp(9px,2.25vw,12px)!important;overflow:hidden!important}
+#forest-game .forest-learning-top{display:flex;align-items:center;gap:7px;min-height:23%;white-space:nowrap;overflow:hidden}
+#forest-game .forest-letter-chips{display:inline-flex;gap:2px;flex:none}
+#forest-game .forest-letter-chip{width:clamp(13px,3.8vw,19px);height:clamp(14px,4vw,21px);border-radius:5px;background:linear-gradient(#ffdef0,#f9a7cf);box-shadow:inset 0 1px 2px #fff,0 1px 2px #aa6891;display:inline-flex;align-items:center;justify-content:center;font-size:clamp(9px,2.6vw,13px);font-weight:900;color:#78365f}
+#forest-game .forest-meaning{font-weight:800;color:#914d36;overflow:hidden;text-overflow:ellipsis}
+#forest-game .forest-spelling{margin-left:auto;font-size:clamp(8px,2.15vw,11px);font-weight:600;color:#794b91;flex:none}
+#forest-game .forest-learning-phrase,#forest-game .forest-learning-en,#forest-game .forest-learning-zh{line-height:1.25;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:15%;font-size:clamp(9px,2.3vw,12px)}
+#forest-game .forest-learning-phrase{font-weight:800;color:#6e4295}
+#forest-game .forest-learning-en{font-weight:800;color:#336d57}
+#forest-game .forest-learning-zh{font-weight:600;color:#795d70}
+#forest-game .forest-result [data-part].speaking{background:#fff1a3;border-radius:4px;box-shadow:0 0 0 2px #fff1a3}
+#forest-game .forest-hint{top:71.3%!important;height:2.4%!important;left:43%!important;width:14%!important}
+#forest-game .forest-toast{top:74.0%!important}
+#forest-game .forest-goals{top:77.3%!important;height:13.4%!important}
+.forest-flying-tile{border:1px solid #ffffffb9;border-bottom:3px solid #0002;border-radius:20%;color:#fff;font-size:clamp(16px,5.1vw,29px);font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 3px 4px #fff9,0 2px 6px #38215888;transition:transform .58s cubic-bezier(.22,.8,.23,1),opacity .58s ease}
+@media(prefers-reduced-motion:reduce){.forest-flying-tile{transition-duration:.01ms}}
 </style><script id="forest-v22-script">
 (()=>{'use strict';
 const WEEKS=[["am","an","as","at","be","by","do","go","he","hi"],["if","in","is","it","me","my","no","of","on","or"],["so","to","up","us","we","cat","dog","sun","pen","bag"],["mum","dad","boy","man","son","kid","her","him","she","you"],["run","sit","eat","see","get","put","hop","cut","mix","fix"],["hen","pig","cow","fox","ant","bee","owl","sky","sea","wet"],["eye","ear","arm","leg","lip","toe","jaw","gum","rib","hip"],["red","tan","big","hot","old","new","blue","pink","dark","cool"],["book","desk","toy","box","card","page","note","line","glue","rule"],["home","room","door","bed","lamp","sofa","bath","wall","roof","yard"],["milk","rice","cake","pear","egg","fish","soup","meat","corn","salt"],["day","week","noon","moon","rain","snow","wind","warm","cold","late"],["the","and","that","was","his","with","had","for","not","from"],["but","were","all","this","they","are","have","who","what","when"],["been","them","into","out","did","only","now","its","has","will"],["then","some","time","such","how","over","your","than","any","well"],["down","face","can","like","our","same","went","made","came","even"],["eyes","come","war","life","way","away","hand","left","own","also"],["asked","while","just","army","say","count","back","whole","head","right"],["part","felt","here","why","place","state","house","every","heard","off"],["bone","take","many","saw","never","don","skin","took","years","once"],["look","last","round","found","power","too","met","both","give","side"],["form","let","make","quite","tell","told","whom","yet","love","end"],["voice","words","hands","cases","days","among","sonya","seen","often","gave"],["case","taken","law","done","smile","free","soon","each","far","along"],["order","sat","night","stood","joint","cause","going","less","wife","given"],["world","chief","front","does","white","mind","alone","body","horse","later"],["labor","money","open","set","until","nerve","want","ran","act","fig"],["use","sent","half","south","year","wound","pain","thing","leave","above"],["added","party","word","parts","table","lay","find","boris","near","enemy"],["fact","high","held","talk","cried","got","nor","land","light","next"],["used","ever","fire","union","early","petya","full","bones","name","road"],["since","heart","forms","speak","means","ask","kept","arms","due","moved"],["rose","wish","gone","rise","force","king","times","black","hair","clear"],["laws","help","ready","air","north","peace","rode","crowd","tried","lost"],["news","anyone","orders","past","point","across","close","rather","read","sound"],["beside","happy","self","spoke","coming","limb","making","opened","trade","till"],["deep","show","wanted","field","raised","thus","family","wished","seeing","answer"],["true","events","neck","occur","period","kind","able","else","won","foot"],["call","led","lower","least","lymph","russia","spread","local","middle","reason"]], META={"am":["是","I am","我是"],"an":["一个","an apple","一个苹果"],"as":["像","as good as","和……一样好"],"at":["在","at home","在家"],"be":["是","be happy","开心"],"by":["通过","by me","由我"],"do":["做","do it","做这件事"],"go":["去","go home","回家"],"he":["他","he is","他是"],"hi":["你好","say hi","打招呼"],"if":["如果","if you can","如果你能"],"in":["在里面","in the box","在盒子里"],"is":["是","it is","它是"],"it":["它","it is good","它很好"],"me":["我","help me","帮助我"],"my":["我的","my book","我的书"],"no":["不","no way","不行"],"of":["属于","a cup of tea","一杯茶"],"on":["在上面","on the desk","在桌上"],"or":["或者","yes or no","是或否"],"so":["所以","so good","真好"],"to":["到","go to school","去学校"],"up":["向上","stand up","站起来"],"us":["我们","help us","帮助我们"],"we":["我们","we can","我们能"],"good":["好","good job","干得漂亮"],"cat":["猫","a cat","一只猫"],"dog":["狗","a dog","一只狗"],"sun":["太阳","the sun","太阳"],"pen":["笔","a pen","一支笔"],"bag":["包","my bag","我的包"]};
 const ALL=new Set([...WEEKS.flat(),'good','job','at','in','on','to','go','me','we','he','be','it','is','am','an','as','by','do','if','no','so','up','of','or','us','my','hi','cat','dog','sun','pen','bag','man','can','run','sit','eat','see','red','big','hat','toy','boy','dad','mum','yes','you','she','him','her','one','two','three','four','five','six','seven','ten','and','the','not','get','let','set','met','net','hot','pot','top','got','lot','low','now','how','cow','new','wet','pet','bet','bat','fat','mat','sat','rat','pan','fan','tan','map','cap','nap','tap','pin','win','fin','bin','tin','pig','wig','fig','dig','log','fog','hog','dot','cot','not','rot','box','fox','ox','add','odd','off','all','ill','will','well','tell','bell','book','look','good','food','wood','cook','hook','take','make','like','bike','cake','home','name','game','time','mine','fine','line','nine','stop','shop','ship','chip','help','back','pack','rock','sock','lock','duck','luck','star','fast','last','past','cast','this','that','with','then','them','when','what','why','who','where','have','give','live','green','black','white']);
+const EXAMPLES={"am":["I am happy.","我很开心。"],"an":["I have an apple.","我有一个苹果。"],"as":["I am as tall as you.","我和你一样高。"],"at":["I am at home.","我在家里。"],"be":["Be happy.","开心一点。"],"by":["The book is by me.","书在我旁边。"],"do":["Do it now.","现在就做。"],"go":["I go home.","我回家。"],"he":["He is my dad.","他是我爸爸。"],"hi":["I say hi to you.","我向你问好。"],"if":["I can go if you come.","如果你来，我就能去。"],"in":["The toy is in the box.","玩具在盒子里。"],"is":["It is a dog.","它是一只狗。"],"it":["It is good.","它很好。"],"me":["Please help me.","请帮助我。"],"my":["This is my book.","这是我的书。"],"no":["No, thank you.","不，谢谢。"],"of":["This is a cup of tea.","这是一杯茶。"],"on":["The pen is on the desk.","钢笔在桌上。"],"or":["Yes or no?","是还是不是？"],"so":["It is so good.","它真好。"],"to":["I go to school.","我去学校。"],"up":["Stand up, please.","请站起来。"],"us":["Please help us.","请帮助我们。"],"we":["We can do it.","我们能做到。"],"good":["Good job!","干得漂亮！"],"cat":["I see a cat.","我看见一只猫。"],"dog":["The dog can run.","这只狗会跑。"],"sun":["The sun is hot.","太阳很热。"],"pen":["I have a pen.","我有一支笔。"],"bag":["This is my bag.","这是我的包。"],"note":["I write a note.","我写一张便条。"],"book":["This is a book.","这是一本书。"],"home":["I am at home.","我在家。"],"job":["Good job!","干得好。"]};
 const palette=['#fa3f8b','#22b5f5','#46d62b','#ffa91e','#a45cf4','#ffd01b'];
 const STORE='wm_forest_level_v22';const DONE='wm_forest_done_v22';
-let root,board=[],week=0,done=new Set(),picked=-1,busy=false,speakId=0,lastAudio=null,hintPair=null,solutionPair=null,dragFrom=-1;
+let root,board=[],week=0,done=new Set(),picked=-1,busy=false,speakId=0,lastAudio=null,hintPair=null,solutionPair=null,dragFrom=-1,voiceQueue=Promise.resolve();
 const dim=7,rows=8, coord=i=>[Math.floor(i/dim),i%dim];
 function neighbors(a,b){const [ar,ac]=coord(a),[br,bc]=coord(b);return Math.abs(ar-br)+Math.abs(ac-bc)===1;}
 function target(){return WEEKS[week]}
@@ -32669,26 +32694,84 @@ function tile(c,tag=''){return {c,tag,color:tag?palette[WEEKS[week].indexOf(tag)
 function plant(word){if(!word||word.length>7)return;const row=1+Math.floor(Math.random()*5),col=Math.floor(Math.random()*(8-word.length));for(let k=0;k<word.length;k++)board[row*7+col+k]=tile(k===0?word[k].toUpperCase():word[k],word);
 const p=row*7+col+Math.min(1,word.length-1),q=(row+1)*7+col+Math.min(1,word.length-1);[board[p],board[q]]=[board[q],board[p]];solutionPair=[p,q];hintPair=null;}
 function seed(){board=Array.from({length:56},()=>tile(rand()));plant(target().find(w=>!done.has(w))||target()[0]);}
-function detect(a,b){const matches=[];for(let n=2;n<=7;n++){for(const [dr,dc] of [[0,1],[1,0]])for(let r=0;r<8;r++)for(let c=0;c<7;c++){if(r+dr*(n-1)>=8||c+dc*(n-1)>=7)continue;let ids=Array.from({length:n},(_,k)=>(r+dr*k)*7+c+dc*k);if(!ids.includes(a)&&!ids.includes(b))continue;const w=ids.map(i=>board[i].c).join('').toLowerCase();if(ALL.has(w))matches.push({ids,word:w})}}matches.sort((x,y)=>Number(target().includes(y.word))-Number(target().includes(x.word))||y.ids.length-x.ids.length);return matches[0]||null;}
+function allMatches(){const matches=[],seen=new Set();for(let n=2;n<=7;n++){for(const [dr,dc] of [[0,1],[1,0]])for(let r=0;r<8;r++)for(let c=0;c<7;c++){if(r+dr*(n-1)>=8||c+dc*(n-1)>=7)continue;const ids=Array.from({length:n},(_,k)=>(r+dr*k)*7+c+dc*k);const w=ids.map(i=>board[i].c).join('').toLowerCase();if(ALL.has(w)){const key=ids.join(',');if(!seen.has(key)){seen.add(key);matches.push({ids,word:w})}}}}return matches.sort((a,b)=>Number(target().includes(b.word)&&!done.has(b.word))-Number(target().includes(a.word)&&!done.has(a.word))||b.word.length-a.word.length)}
+function detect(a,b){return allMatches().find(m=>m.ids.includes(a)||m.ids.includes(b))||allMatches()[0]||null;}
 function render(drop=false){const grid=root.querySelector('.forest-board');grid.replaceChildren();for(let i=0;i<56;i++){let el=document.createElement('button');el.type='button';el.className='forest-tile'+(i===picked?' selected':'')+(hintPair?.includes(i)?' hinted':'')+(drop?' dropping':'');el.style.background=`linear-gradient(160deg,#ffffff80,transparent 40%),${board[i].color}`;el.style.animationDelay=drop?`${(i%7)*25}ms`:'0ms';el.textContent=board[i].c;el.dataset.i=i;grid.append(el)}root.querySelector('.forest-week').textContent=`第${week+1}关`;root.querySelector('.forest-count').textContent=`${done.size}/10`;const goals=root.querySelector('.forest-goals');goals.replaceChildren();target().forEach(w=>{let item=document.createElement('div');item.className='forest-goal'+(done.has(w)?' done':'');item.innerHTML=`<span>${done.has(w)?'✓ ':''}${w}</span><small>${META[w]?.[0]||''}</small>`;goals.append(item)})}
-function showWord(word){const d=META[word]||['','', ''];const phrase=d[1]||word,meaning=d[2]||'';root.querySelector('.forest-result').innerHTML=`<strong>${word}</strong><span>${d[0]}</span><span class="sep"></span><span>${word.toUpperCase().split('').join(' · ')}</span><span class="sep"></span><span>${phrase}　${meaning}</span>`;}
+function showWord(word){
+ const d=META[word]||['','',''];const ex=EXAMPLES[word]||['',''];const phrase=d[1]||word;
+ const box=root.querySelector('.forest-result');box.replaceChildren();
+ const row=document.createElement('div');row.className='forest-learning-top';row.dataset.part='word';
+ const chips=document.createElement('span');chips.className='forest-letter-chips';chips.dataset.flyTarget='true';
+ for(const char of word){const tile=document.createElement('span');tile.className='forest-letter-chip';tile.textContent=char;chips.append(tile)}
+ row.append(chips);const meaning=document.createElement('span');meaning.className='forest-meaning';meaning.textContent=d[0]||'释义待完善';row.append(meaning);
+ const spell=document.createElement('span');spell.className='forest-spelling';spell.dataset.part='spell';spell.textContent=word.toUpperCase().split('').join(' · ');row.append(spell);box.append(row);
+ const phraseRow=document.createElement('div');phraseRow.className='forest-learning-phrase';phraseRow.dataset.part='phrase';phraseRow.textContent=phrase+(d[2]?' · '+d[2]:'');box.append(phraseRow);
+ const en=document.createElement('div');en.className='forest-learning-en';en.dataset.part='sentence';en.textContent=ex[0]||'例句待完善';box.append(en);
+ const zh=document.createElement('div');zh.className='forest-learning-zh';zh.dataset.part='sentenceZh';zh.textContent=ex[1]||'';box.append(zh);
+}
+function focusPart(part){root.querySelectorAll('.forest-result [data-part]').forEach(el=>el.classList.toggle('speaking',el.dataset.part===part))}
+function flyLetters(ids,word){return new Promise(resolve=>{
+ const tiles=root.querySelectorAll('.forest-tile');const landing=root.querySelector('.forest-result');const dst=landing.getBoundingClientRect();
+ if(!dst.width||!dst.height){resolve();return}
+ const clones=[];const ordered=[...ids];
+ for(let j=0;j<ordered.length;j++){
+  const tile=tiles[ordered[j]];if(!tile)continue;const src=tile.getBoundingClientRect();
+  const clone=tile.cloneNode(true);clone.className='forest-flying-tile';
+  clone.style.cssText='position:fixed;z-index:2147483200;pointer-events:none;left:'+src.left+'px;top:'+src.top+'px;width:'+src.width+'px;height:'+src.height+'px;background:'+getComputedStyle(tile).background+';';
+  document.body.append(clone);clones.push({clone,src,j});tile.style.opacity='0';
+ }
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{for(const {clone,src,j} of clones){
+   const x=dst.left+Math.min(dst.width*.1+j*Math.min(24,dst.width*.065),dst.width*.65);
+   const y=dst.top+Math.min(dst.height*.12,8);
+   clone.style.transform='translate('+(x-src.left)+'px,'+(y-src.top)+'px) scale(.62)';clone.style.opacity='.22';
+ }}));
+ setTimeout(()=>{clones.forEach(({clone})=>clone.remove());resolve()},620);
+})}
 function toast(t){root.querySelector('.forest-toast').textContent=t;}
 function collapse(ids){const gone=new Set(ids);for(let c=0;c<7;c++){const remain=[];for(let r=7;r>=0;r--)if(!gone.has(r*7+c))remain.push(board[r*7+c]);for(let r=7;r>=0;r--)board[r*7+c]=remain[7-r]||tile(rand())}}
 function save(){localStorage.setItem(STORE,String(week));localStorage.setItem(DONE,JSON.stringify([...done]));}
 function complete(){root.querySelector('.forest-finished').hidden=false;root.querySelector('.forest-finished').textContent=`🌟 第${week+1}关完成！`;setTimeout(()=>{if(root.hidden)return;root.querySelector('.forest-finished').hidden=true;if(week<39){week++;done=new Set();save();seed();render(true);toast('进入第'+(week+1)+'关！')}else toast('恭喜完成全部40关！')},1400)}
-async function say(text,locale,token){if(!text||token!==speakId)return;try{const conf=window.WordMatchVoiceSettings?.()||{};let voice=locale==='zh-CN'?(conf.azureChineseVoice||'zh-CN-XiaoxiaoNeural'):(conf.azureVoice||'en-US-JennyNeural');const res=await fetch((window.wordMatchOnlineTtsUrl||'https://wordmatch-voice.442599013.workers.dev')+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice})});if(!res.ok)throw Error('TTS '+res.status);const url=URL.createObjectURL(await res.blob());if(token!==speakId){URL.revokeObjectURL(url);return}await new Promise(resolve=>{let a=new Audio(url);lastAudio=a;a.onended=resolve;a.onerror=resolve;a.play().catch(resolve)});URL.revokeObjectURL(url)}catch(e){toast('语音服务暂不可用，仍可继续游戏')}}
-async function speak(word){const token=++speakId;const d=META[word]||['','',''];const seq=[[word,'en-US'],[d[0],'zh-CN'],[word.toUpperCase().split('').join('. '),'en-US'],[d[1],'en-US'],[d[2],'zh-CN']];for(const [txt,locale] of seq){if(token!==speakId)return;await say(txt,locale,token)}}
+async function say(text,locale,token){if(!text||token!==speakId)return;try{const conf=window.WordMatchVoiceSettings?.()||{};const voice=locale==='zh-CN'?(conf.azureChineseVoice||'zh-CN-XiaoxiaoNeural'):(conf.azureVoice||'en-US-JennyNeural');const endpoint=(window.wordMatchOnlineTtsUrl||'https://wordmatch-voice.442599013.workers.dev').replace(/\/$/,'')+'/tts';const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice})});if(!res.ok)throw Error('TTS '+res.status);const url=URL.createObjectURL(await res.blob());if(token!==speakId){URL.revokeObjectURL(url);return}await new Promise(resolve=>{const a=new Audio(url);lastAudio=a;a.onended=resolve;a.onerror=resolve;a.play().catch(resolve)});URL.revokeObjectURL(url)}catch(e){if(token===speakId)toast('AI 语音暂不可用，请检查网络或语音服务')}}
+async function speak(word){
+ const token=speakId;const d=META[word]||['','',''];const ex=EXAMPLES[word]||['',''];
+ const steps=[
+ [word,'en-US','word'],[d[0],'zh-CN','word'],
+ [word.toUpperCase().split('').join('. ')+'.','en-US','spell'],
+ [d[1],'en-US','phrase'],[d[2],'zh-CN','phrase'],
+ [ex[0],'en-US','sentence'],[ex[1],'zh-CN','sentenceZh']
+ ];
+ voiceQueue=voiceQueue.catch(()=>{}).then(async()=>{for(const [txt,locale,part] of steps){
+   if(token!==speakId||root.hidden)return;
+   if(!txt)continue;
+   focusPart(part);await say(txt,locale,token);
+ }if(token===speakId)focusPart('')});return voiceQueue;
+}
 function moveHint(){// Always offer a real next move when one is needed.
 const next=target().find(w=>!done.has(w));if(!next)return null;
-if(!solutionPair)plant(next);
+if(!solutionPair){plant(next);render()}
 return {pair:solutionPair,word:next}}
-function attempt(a,b){if(busy||!neighbors(a,b))return;busy=true;picked=-1;hintPair=null;[board[a],board[b]]=[board[b],board[a]];render();let m=detect(a,b);if(!m){setTimeout(()=>{[board[a],board[b]]=[board[b],board[a]];busy=false;render();toast('再试一次')},260);return}showWord(m.word);speak(m.word);toast('消除成功！');setTimeout(()=>{if(root.hidden)return;const el=root.querySelectorAll('.forest-tile');m.ids.forEach(i=>el[i]?.classList.add('popping'));setTimeout(()=>{collapse(m.ids);if(target().includes(m.word))done.add(m.word);save();if(done.size<10)plant(target().find(w=>!done.has(w)));render(true);busy=false;if(done.size===10)complete();},340)},150)}
-function open(){root.hidden=false;document.body.style.overflow='hidden';week=Math.min(39,Math.max(0,Number(localStorage.getItem(STORE)||0)));try{done=new Set(JSON.parse(localStorage.getItem(DONE)||'[]').filter(w=>target().includes(w)))}catch{done=new Set()}seed();render();toast('拼出有效单词即可消除')}
-function close(){root.hidden=true;document.body.style.overflow='';speakId++;if(lastAudio)lastAudio.pause()}
+async function resolveMatches(depth=0){
+ if(root.hidden)return;const m=allMatches()[0];
+ if(!m||depth>=18){busy=false;render();if(done.size===10)complete();else if(!solutionPair){plant(target().find(w=>!done.has(w)));render()}return}
+ toast('消除成功：'+m.word);
+ await flyLetters(m.ids,m.word);
+ if(root.hidden)return;
+ showWord(m.word);
+ const originals=root.querySelectorAll('.forest-tile');m.ids.forEach(i=>originals[i]?.classList.add('popping'));
+ await new Promise(r=>setTimeout(r,250));if(root.hidden)return;
+ collapse(m.ids);if(target().includes(m.word))done.add(m.word);save();render(true);
+ await speak(m.word);if(root.hidden)return;
+ await new Promise(r=>setTimeout(r,320));
+ if(done.size===10){busy=false;complete();return}
+ return resolveMatches(depth+1);
+}
+function attempt(a,b){if(busy||a===b)return;busy=true;picked=-1;hintPair=null;[board[a],board[b]]=[board[b],board[a]];solutionPair=null;render();setTimeout(()=>{if(root.hidden)return;if(allMatches().length){resolveMatches(0)}else{busy=false;toast('已交换字母，继续拼词');render();render()}},165)}
+function open(){root.hidden=false;speakId++;voiceQueue=Promise.resolve();document.body.style.overflow='hidden';week=Math.min(39,Math.max(0,Number(localStorage.getItem(STORE)||0)));try{done=new Set(JSON.parse(localStorage.getItem(DONE)||'[]').filter(w=>target().includes(w)))}catch{done=new Set()}seed();render();toast('拼出有效单词即可消除')}
+function close(){root.hidden=true;document.body.style.overflow='';speakId++;voiceQueue=Promise.resolve();if(lastAudio)lastAudio.pause()}
 root=document.createElement('section');root.id='forest-game';root.hidden=true;root.innerHTML='<div class="forest-canvas"><button class="forest-back" aria-label="返回首页">返回</button><div class="forest-week"></div><div class="forest-count"></div><div class="forest-board" aria-label="单词消消乐棋盘"></div><div class="forest-result">消除成功的单词和词组会显示在这里</div><button class="forest-hint">提示</button><div class="forest-toast"></div><div class="forest-goals"></div><div class="forest-finished" hidden></div></div>';document.body.append(root);
 root.querySelector('.forest-board').addEventListener('pointerdown',e=>{const t=e.target.closest('.forest-tile');if(t)dragFrom=Number(t.dataset.i)});
-root.querySelector('.forest-board').addEventListener('pointerup',e=>{if(dragFrom<0)return;const from=dragFrom;dragFrom=-1;const t=e.target.closest('.forest-tile');if(!t)return;const to=Number(t.dataset.i);if(to!==from&&neighbors(from,to)){picked=-1;attempt(from,to);return}if(busy)return;if(picked<0){picked=from;render()}else if(picked===from){picked=-1;render()}else if(neighbors(picked,from)){let prev=picked;picked=-1;attempt(prev,from)}else{picked=from;render()}});
-root.querySelector('.forest-hint').onclick=()=>{if(busy)return;const h=moveHint();if(h){hintPair=h.pair;render();toast('提示：请寻找这个单词');speak(h.word)}};
+root.querySelector('.forest-board').addEventListener('pointerup',e=>{if(dragFrom<0)return;const from=dragFrom;dragFrom=-1;const t=e.target.closest('.forest-tile');if(!t||busy)return;const to=Number(t.dataset.i);if(to!==from){picked=-1;attempt(from,to);return}if(picked<0){picked=from;render()}else if(picked===from){picked=-1;render()}else{const prev=picked;picked=-1;attempt(prev,from)}});
+root.querySelector('.forest-hint').onclick=()=>{if(busy)return;const h=moveHint();if(h){hintPair=h.pair;render();toast('提示：听发音并寻找这个单词');showWord(h.word);speak(h.word)}};
 root.querySelector('.forest-back').onclick=close;
 window.WordMatchStandalone={open,close};
 })();
