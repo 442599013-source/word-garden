@@ -32678,6 +32678,17 @@ window.WordMatchStandalone={open,close};
 #forest-game .forest-goals{top:77.3%!important;height:13.4%!important}
 .forest-flying-tile{border:1px solid #ffffffb9;border-bottom:3px solid #0002;border-radius:20%;color:#fff;font-size:clamp(16px,5.1vw,29px);font-weight:900;text-align:center;display:flex;align-items:center;justify-content:center;box-shadow:inset 0 3px 4px #fff9,0 2px 6px #38215888;transition:transform .58s cubic-bezier(.22,.8,.23,1),opacity .58s ease}
 @media(prefers-reduced-motion:reduce){.forest-flying-tile{transition-duration:.01ms}}
+</style><style id="forest-v25-ghost-fix">
+/* Solid, isolated live panels hide the wording already printed inside the artwork. */
+#forest-game .forest-result{background:#fff9ea!important;opacity:1!important;box-shadow:0 2px 5px #b7834b80!important;z-index:8!important;}
+#forest-game .forest-goals{background:#ead1f8!important;opacity:1!important;z-index:8!important;}
+/* Cover the old hint label in the flattened illustration so there is only one live hint button. */
+#forest-game .forest-canvas:before{content:"";position:absolute;left:37%;top:70.1%;width:26%;height:4.3%;background:linear-gradient(180deg,#98dc72,#9ad975 55%,#7ecc6d);border-radius:14px;z-index:5;pointer-events:none;}
+#forest-game .forest-hint{top:70.55%!important;left:43%!important;width:14%!important;height:2.6%!important;z-index:9!important;}
+#forest-game .forest-toast{top:73.9%!important;z-index:10!important;opacity:.98!important;}
+</style><style id="forest-v25-rule-fix">
+#forest-game .forest-rule-overlay{position:absolute;left:14%;top:13.1%;width:72%;min-height:3.2%;z-index:12;background:#fff1d9;border:1px solid #dbad71;border-radius:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;font-size:clamp(8px,2vw,12px);font-weight:700;color:#722c37;line-height:1.22;padding:2px 4px;pointer-events:none}
+#forest-game .forest-rule-overlay small{display:block;font-size:clamp(7px,1.75vw,10px);font-weight:500;color:#743c58}
 </style><script id="forest-v22-script">
 (()=>{'use strict';
 const WEEKS=[["am","an","as","at","be","by","do","go","he","hi"],["if","in","is","it","me","my","no","of","on","or"],["so","to","up","us","we","cat","dog","sun","pen","bag"],["mum","dad","boy","man","son","kid","her","him","she","you"],["run","sit","eat","see","get","put","hop","cut","mix","fix"],["hen","pig","cow","fox","ant","bee","owl","sky","sea","wet"],["eye","ear","arm","leg","lip","toe","jaw","gum","rib","hip"],["red","tan","big","hot","old","new","blue","pink","dark","cool"],["book","desk","toy","box","card","page","note","line","glue","rule"],["home","room","door","bed","lamp","sofa","bath","wall","roof","yard"],["milk","rice","cake","pear","egg","fish","soup","meat","corn","salt"],["day","week","noon","moon","rain","snow","wind","warm","cold","late"],["the","and","that","was","his","with","had","for","not","from"],["but","were","all","this","they","are","have","who","what","when"],["been","them","into","out","did","only","now","its","has","will"],["then","some","time","such","how","over","your","than","any","well"],["down","face","can","like","our","same","went","made","came","even"],["eyes","come","war","life","way","away","hand","left","own","also"],["asked","while","just","army","say","count","back","whole","head","right"],["part","felt","here","why","place","state","house","every","heard","off"],["bone","take","many","saw","never","don","skin","took","years","once"],["look","last","round","found","power","too","met","both","give","side"],["form","let","make","quite","tell","told","whom","yet","love","end"],["voice","words","hands","cases","days","among","sonya","seen","often","gave"],["case","taken","law","done","smile","free","soon","each","far","along"],["order","sat","night","stood","joint","cause","going","less","wife","given"],["world","chief","front","does","white","mind","alone","body","horse","later"],["labor","money","open","set","until","nerve","want","ran","act","fig"],["use","sent","half","south","year","wound","pain","thing","leave","above"],["added","party","word","parts","table","lay","find","boris","near","enemy"],["fact","high","held","talk","cried","got","nor","land","light","next"],["used","ever","fire","union","early","petya","full","bones","name","road"],["since","heart","forms","speak","means","ask","kept","arms","due","moved"],["rose","wish","gone","rise","force","king","times","black","hair","clear"],["laws","help","ready","air","north","peace","rode","crowd","tried","lost"],["news","anyone","orders","past","point","across","close","rather","read","sound"],["beside","happy","self","spoke","coming","limb","making","opened","trade","till"],["deep","show","wanted","field","raised","thus","family","wished","seeing","answer"],["true","events","neck","occur","period","kind","able","else","won","foot"],["call","led","lower","least","lymph","russia","spread","local","middle","reason"]], META={"am":["是","I am","我是"],"an":["一个","an apple","一个苹果"],"as":["像","as good as","和……一样好"],"at":["在","at home","在家"],"be":["是","be happy","开心"],"by":["通过","by me","由我"],"do":["做","do it","做这件事"],"go":["去","go home","回家"],"he":["他","he is","他是"],"hi":["你好","say hi","打招呼"],"if":["如果","if you can","如果你能"],"in":["在里面","in the box","在盒子里"],"is":["是","it is","它是"],"it":["它","it is good","它很好"],"me":["我","help me","帮助我"],"my":["我的","my book","我的书"],"no":["不","no way","不行"],"of":["属于","a cup of tea","一杯茶"],"on":["在上面","on the desk","在桌上"],"or":["或者","yes or no","是或否"],"so":["所以","so good","真好"],"to":["到","go to school","去学校"],"up":["向上","stand up","站起来"],"us":["我们","help us","帮助我们"],"we":["我们","we can","我们能"],"good":["好","good job","干得漂亮"],"cat":["猫","a cat","一只猫"],"dog":["狗","a dog","一只狗"],"sun":["太阳","the sun","太阳"],"pen":["笔","a pen","一支笔"],"bag":["包","my bag","我的包"]};
@@ -32731,28 +32742,54 @@ function toast(t){root.querySelector('.forest-toast').textContent=t;}
 function collapse(ids){const gone=new Set(ids);for(let c=0;c<7;c++){const remain=[];for(let r=7;r>=0;r--)if(!gone.has(r*7+c))remain.push(board[r*7+c]);for(let r=7;r>=0;r--)board[r*7+c]=remain[7-r]||tile(rand())}}
 function save(){localStorage.setItem(STORE,String(week));localStorage.setItem(DONE,JSON.stringify([...done]));}
 function complete(){root.querySelector('.forest-finished').hidden=false;root.querySelector('.forest-finished').textContent=`🌟 第${week+1}关完成！`;setTimeout(()=>{if(root.hidden)return;root.querySelector('.forest-finished').hidden=true;if(week<39){week++;done=new Set();save();seed();render(true);toast('进入第'+(week+1)+'关！')}else toast('恭喜完成全部40关！')},1400)}
-async function say(text,locale,token){if(!text||token!==speakId)return;try{const conf=window.WordMatchVoiceSettings?.()||{};const voice=locale==='zh-CN'?(conf.azureChineseVoice||'zh-CN-XiaoxiaoNeural'):(conf.azureVoice||'en-US-JennyNeural');const endpoint=(window.wordMatchOnlineTtsUrl||'https://wordmatch-voice.442599013.workers.dev').replace(/\/$/,'')+'/tts';const res=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice})});if(!res.ok)throw Error('TTS '+res.status);const url=URL.createObjectURL(await res.blob());if(token!==speakId){URL.revokeObjectURL(url);return}await new Promise(resolve=>{const a=new Audio(url);lastAudio=a;a.onended=resolve;a.onerror=resolve;a.play().catch(resolve)});URL.revokeObjectURL(url)}catch(e){if(token===speakId)toast('AI 语音暂不可用，请检查网络或语音服务')}}
+async function say(text,locale,token){
+ if(token!==speakId)return false;
+ if(!text){toast('本词教学资料尚未配齐，已暂停朗读');return false;}
+ let url=null;
+ try{
+  const conf=window.WordMatchVoiceSettings?.()||{};
+  const voice=locale==='zh-CN'?(conf.azureChineseVoice||'zh-CN-XiaoxiaoNeural'):(conf.azureVoice||'en-US-JennyNeural');
+  const endpoint=(window.wordMatchOnlineTtsUrl||'https://wordmatch-voice.442599013.workers.dev').replace(/\/$/,'')+'/tts';
+  const response=await fetch(endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice})});
+  if(!response.ok){let detail='';try{const d=await response.json();detail=d.error||''}catch{}
+   throw Error('Azure '+response.status+(detail?': '+detail:''));}
+  url=URL.createObjectURL(await response.blob());
+  if(token!==speakId)return false;
+  await new Promise((resolve,reject)=>{
+   const a=new Audio(url);lastAudio=a;
+   a.onended=()=>resolve(); a.onerror=()=>reject(Error('音频加载失败'));
+   a.play().catch(err=>reject(Error('播放被浏览器阻止：'+(err?.message||''))));
+  });
+  return token===speakId;
+ }catch(e){if(token===speakId){console.error('WordMatch Azure Speech:',e);toast('微软语音失败：'+String(e.message||e).slice(0,90))}return false}
+ finally{if(url)URL.revokeObjectURL(url)}
+}
 async function speak(word){
- const token=speakId;const d=META[word]||['','',''];const ex=EXAMPLES[word]||['',''];
+ const token=++speakId;const d=META[word]||['','',''];const ex=EXAMPLES[word]||['',''];
  const steps=[
- [word,'en-US','word'],[d[0],'zh-CN','word'],
- [word.toUpperCase().split('').join('. ')+'.','en-US','spell'],
- [d[1],'en-US','phrase'],[d[2],'zh-CN','phrase'],
- [ex[0],'en-US','sentence'],[ex[1],'zh-CN','sentenceZh']
+  [word,'en-US','word'],[d[0],'zh-CN','word'],
+  [word.toUpperCase().split('').join('. ')+'.','en-US','spell'],
+  [d[1],'en-US','phrase'],[d[2],'zh-CN','phrase'],
+  [ex[0],'en-US','sentence'],[ex[1],'zh-CN','sentenceZh']
  ];
- voiceQueue=voiceQueue.catch(()=>{}).then(async()=>{for(const [txt,locale,part] of steps){
+ voiceQueue=voiceQueue.catch(()=>{}).then(async()=>{
+  for(const [txt,locale,part] of steps){
    if(token!==speakId||root.hidden)return;
-   if(!txt)continue;
-   focusPart(part);await say(txt,locale,token);
- }if(token===speakId)focusPart('')});return voiceQueue;
+   focusPart(part);
+   const ok=await say(txt,locale,token);
+   if(!ok){focusPart('');return;}
+  }
+  if(token===speakId)focusPart('');
+ });
+ return voiceQueue;
 }
 function moveHint(){// Always offer a real next move when one is needed.
 const next=target().find(w=>!done.has(w));if(!next)return null;
 if(!solutionPair){plant(next);render()}
 return {pair:solutionPair,word:next}}
-async function resolveMatches(depth=0){
- if(root.hidden)return;const m=allMatches()[0];
- if(!m||depth>=18){busy=false;render();if(done.size===10)complete();else if(!solutionPair){plant(target().find(w=>!done.has(w)));render()}return}
+async function resolveMatches(depth=0,chosen=null){
+ if(root.hidden)return;const m=chosen;
+ if(!m){busy=false;render();if(done.size===10)complete();else if(!solutionPair){plant(target().find(w=>!done.has(w)));render()}return}
  toast('消除成功：'+m.word);
  await flyLetters(m.ids,m.word);
  if(root.hidden)return;
@@ -32763,16 +32800,26 @@ async function resolveMatches(depth=0){
  await speak(m.word);if(root.hidden)return;
  await new Promise(r=>setTimeout(r,320));
  if(done.size===10){busy=false;complete();return}
- return resolveMatches(depth+1);
+ // Stop after one actual, player-triggered match; prevent autonomous chains.
+ busy=false;render();
 }
-function attempt(a,b){if(busy||a===b)return;busy=true;picked=-1;hintPair=null;[board[a],board[b]]=[board[b],board[a]];solutionPair=null;render();setTimeout(()=>{if(root.hidden)return;if(allMatches().length){resolveMatches(0)}else{busy=false;toast('已交换字母，继续拼词');render();render()}},165)}
+function attempt(a,b){if(busy||a===b)return;busy=true;picked=-1;hintPair=null;[board[a],board[b]]=[board[b],board[a]];solutionPair=null;render();setTimeout(()=>{if(root.hidden)return;const found=allMatches().find(m=>m.ids.includes(a)||m.ids.includes(b));if(found){resolveMatches(0,found)}else{busy=false;toast('已交换字母，继续拼词');render()}},165)}
 function open(){root.hidden=false;speakId++;voiceQueue=Promise.resolve();document.body.style.overflow='hidden';week=Math.min(39,Math.max(0,Number(localStorage.getItem(STORE)||0)));try{done=new Set(JSON.parse(localStorage.getItem(DONE)||'[]').filter(w=>target().includes(w)))}catch{done=new Set()}seed();render();toast('拼出有效单词即可消除')}
 function close(){root.hidden=true;document.body.style.overflow='';speakId++;voiceQueue=Promise.resolve();if(lastAudio)lastAudio.pause()}
-root=document.createElement('section');root.id='forest-game';root.hidden=true;root.innerHTML='<div class="forest-canvas"><button class="forest-back" aria-label="返回首页">返回</button><div class="forest-week"></div><div class="forest-count"></div><div class="forest-board" aria-label="单词消消乐棋盘"></div><div class="forest-result">消除成功的单词和词组会显示在这里</div><button class="forest-hint">提示</button><div class="forest-toast"></div><div class="forest-goals"></div><div class="forest-finished" hidden></div></div>';document.body.append(root);
+root=document.createElement('section');root.id='forest-game';root.hidden=true;root.innerHTML='<div class="forest-canvas"><div class="forest-rule-overlay">任意交换两个字母，组成至少2个字母的单词即可消除。<small>Swap any two letters to form a word of 2+ letters.</small></div><button class="forest-back" aria-label="返回首页">返回</button><div class="forest-week"></div><div class="forest-count"></div><div class="forest-board" aria-label="单词消消乐棋盘"></div><div class="forest-result">消除成功的单词和词组会显示在这里</div><button class="forest-hint">提示</button><div class="forest-toast"></div><div class="forest-goals"></div><div class="forest-finished" hidden></div></div>';document.body.append(root);
 root.querySelector('.forest-board').addEventListener('pointerdown',e=>{const t=e.target.closest('.forest-tile');if(t)dragFrom=Number(t.dataset.i)});
 root.querySelector('.forest-board').addEventListener('pointerup',e=>{if(dragFrom<0)return;const from=dragFrom;dragFrom=-1;const t=e.target.closest('.forest-tile');if(!t||busy)return;const to=Number(t.dataset.i);if(to!==from){picked=-1;attempt(from,to);return}if(picked<0){picked=from;render()}else if(picked===from){picked=-1;render()}else{const prev=picked;picked=-1;attempt(prev,from)}});
 root.querySelector('.forest-hint').onclick=()=>{if(busy)return;const h=moveHint();if(h){hintPair=h.pair;render();toast('提示：听发音并寻找这个单词');showWord(h.word);speak(h.word)}};
 root.querySelector('.forest-back').onclick=close;
 window.WordMatchStandalone={open,close};
 })();
-</script></body></html>
+</script><style id="forest-v26-clean-and-stable">
+/* Cover baked-in lettering and button artwork beneath real UI. */
+#forest-game .forest-result{background:#fffaf0!important;border:3px solid #f1bb69!important;box-shadow:0 2px 6px #87532255!important;opacity:1!important;overflow:hidden!important;isolation:isolate!important;z-index:20!important}
+#forest-game .forest-result:before{content:none!important}
+#forest-game .forest-goals{background:#f0d7fa!important;border:3px solid #c994e7!important;box-shadow:0 2px 6px #60318555!important;isolation:isolate!important;z-index:20!important}
+#forest-game .forest-hint{z-index:22!important;border-radius:999px!important;font-size:clamp(9px,2.2vw,13px)!important;font-weight:700!important}
+#forest-game .forest-toast{z-index:22!important;background:#fff5dd!important;color:#6f3578!important;max-width:72%!important;left:14%!important;white-space:normal!important}
+#forest-game .forest-learning-top,#forest-game .forest-learning-phrase,#forest-game .forest-learning-en,#forest-game .forest-learning-zh{position:relative;z-index:2;background:#fffaf0}
+#forest-game .forest-result .speaking{background:#ffe3a1!important;border-radius:7px}
+</style></body></html>
