@@ -302,10 +302,10 @@ function drawHome(){
  const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):'待评估';
  const count=Math.max(0,Math.floor(Number(data.wordsEliminated)||0));
  const skillHTML=skills.map((skill,i)=>{
-  const score=data.pteScores?.[skill.id],valid=Number.isFinite(score)&&score>=10&&score<=90;
+  const score=data.pteScores?.[skill.id],valid=Number.isFinite(score)&&score>=10&&score<=90;const estimate=window.WMPracticeAssessment?.summary(skill.id);
   const x=i%2===0?229:628,y=i<2?1231:1517;
   return `<button class="home-hot home-skill" data-route="${skill.id}" style="left:${i%2===0?40:438}px;top:${i<2?1113:1395}px;width:376px;height:268px" aria-label="${skill.cn} ${skill.en}"></button>`+
-   [valid?score:'待评估',skill.target,valid?Math.max(0,skill.target-score):'待计算'].map((value,j)=>`<span class="home-value home-score" style="left:${x}px;top:${y+j*46}px;width:166px;height:35px" data-home-value="${skill.id}-${['current','target','gap'][j]}">${escapeHTML(value)}</span>`).join('')+
+   [valid?score:estimate?estimate.label:'待评估',skill.target,valid?Math.max(0,skill.target-score):estimate?'需正式测试':'待计算'].map((value,j)=>`<span class="home-value home-score" style="left:${x}px;top:${y+j*46}px;width:166px;height:35px;flex-direction:column;line-height:18px;font-size:${estimate&&!valid&&j===0?18:24}px" title="${estimate&&!valid?'练习粗估 Practice estimate：'+estimate.level+'，掌握 '+estimate.mastered+' 项；'+(estimate.firstTryAccuracy===null?'历史首次正确率未知':'首次正确率 '+Math.round(estimate.firstTryAccuracy*100)+'%')+'。不是正式雅思或PTE成绩。':''}" data-home-value="${skill.id}-${['current','target','gap'][j]}">${escapeHTML(value)}${estimate&&!valid&&j===0?'<small style="display:block;font-size:10px;line-height:10px">练习粗估 · Estimate</small>':''}</span>`).join('')+
    `<div class="home-progress" style="left:${i%2===0?63:460}px;top:${i<2?1195:1480}px;width:332px;height:23px" role="progressbar" aria-label="${skill.cn}进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(Math.min(100,score/skill.target*100))}"`:'aria-valuetext="待评估"'}><span style="width:${valid?Math.min(100,score/skill.target*100):0}%;background:${['#5da5f4','#ed80b6','#75b97a','#edb441'][i]}"></span></div>`;
  }).join('');
  app.innerHTML=`<div class="home-viewport"><section class="home-scene" aria-label="单词消消乐首页">
@@ -335,7 +335,7 @@ function drawFallback(route){
  app.innerHTML=route==='journey'?output.replace('__JOURNEY__',journeyPage()):output;
 }
 async function navigate(route){
- if(route==='listening'){location.href='./listening.html?v=14';return;}
+ if(route==='listening'){location.href='./listening.html?v=17';return;}
  ++token; const thisToken=token;
  if(cleanup){try{cleanup()}catch(err){console.warn('Module cleanup',err)}cleanup=null;}
  page=route;
@@ -420,3 +420,5 @@ function updateHomeData(update={}){
 window.addEventListener('wordmatch:data-changed', e=>updateHomeData(e.detail||{}));
 window.WordMatchPreviewAzure=async()=>{try{const locale=data.accent;const voice=data.azureVoice||(locale==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural');const response=await fetch(window.wordMatchOnlineTtsUrl+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Hello! Welcome to our English learning game.',locale,voice})});if(!response.ok)throw Error('HTTP '+response.status);const u=URL.createObjectURL(await response.blob());const a=new Audio(u);a.playbackRate=data.voiceSpeed||1;a.onended=()=>URL.revokeObjectURL(u);await a.play()}catch(e){alert('语音试听失败：'+e.message)}};window.WordMatchOpenExam=(g,w)=>{navigate('journey');setTimeout(()=>{const tab=document.querySelector('[data-route="journey"]');/* Select exam in existing journey page where available */const target=document.querySelector('[data-exam-grade="'+g+'"][data-exam-week="'+w+'"]');if(target)target.click();else alert('请在成长之旅的课程地图中进入'+(w===20?'期中':'期末')+'考试。')},150)};window.WordMatchHome={navigate,updateHomeData};window.WordMatchVoiceSettings=()=>({accent:data.accent,sound:data.sound,voiceChoice:data.voiceChoice,voiceSpeed:data.voiceSpeed,azureVoice:data.azureVoice|| (data.accent==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural'),azureChineseVoice:data.azureChineseVoice});
 drawHome();
+
+window.addEventListener('wm-assessment-updated',()=>{if(page==='home')drawHome()});window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13')&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});
