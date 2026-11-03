@@ -38,7 +38,22 @@
 #native-input::placeholder{font-size:28px;font-weight:500;letter-spacing:0;color:#8065a9}
 #native-input:focus-visible{outline:3px solid #a66cf0;outline-offset:2px}
 .alert{top:1070px;left:240px;width:544px;font-size:25px}
-</style></head><body>
+
+/* Keep the artwork and live hit targets aligned as the visible keyboard area changes. */
+#scene{--compact:1}
+#back{top:calc(184px * var(--compact))!important;height:calc(119px * var(--compact))!important}
+#level{top:calc(205px * var(--compact))!important;height:calc(80px * var(--compact))!important}
+.remaining{top:calc(188px * var(--compact))!important;height:calc(112px * var(--compact))!important}
+#tasks{top:calc(434px * var(--compact))!important;height:calc(251px * var(--compact))!important;grid-template-rows:repeat(2,calc(114px * var(--compact)));row-gap:calc(23px * var(--compact))}
+#lessonword{top:calc(888px * var(--compact))!important;height:calc(153px * var(--compact))!important}
+.sentence{top:calc(1153px * var(--compact))!important;height:calc(137px * var(--compact))!important;gap:2px}
+#typingbox{top:calc(1344px * var(--compact))!important;height:calc(85px * var(--compact))!important}
+.alert{top:calc(1070px * var(--compact));font-size:23px}
+.keyboard-open{overflow:hidden;background:#f7e8d5}
+.keyboard-open #tasks .word b{font-size:31px}.keyboard-open #tasks .word small{font-size:24px}
+.keyboard-open .remaining span{font-size:24px!important}.keyboard-open .remaining strong{font-size:40px!important}
+.keyboard-open #native-input{font-size:44px}
+</style><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="单词消消乐"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.webmanifest"></head><body>
 <div id="viewport"><main id="scene" aria-label="单词消消乐打字游戏">
 <button class="area hot" style="left:25px;top:147px;width:92px;height:100px" id="back" aria-label="返回首页"></button>
 <div id="level" class="area bubble level" style="left:134px;top:181px;width:178px;height:58px">第4关</div>
@@ -61,7 +76,19 @@ const WORDS=[
 [{w:'mum',zh:'妈妈',en:'My mum is kind.',cn:'我妈妈很友善。'},{w:'dad',zh:'爸爸',en:'My dad is at home.',cn:'我爸爸在家。'},{w:'boy',zh:'男孩',en:'This boy is my friend.',cn:'这个男孩是我的朋友。'},{w:'man',zh:'男人',en:'The man is tall.',cn:'这个男人很高。'},{w:'son',zh:'儿子',en:'He is my son.',cn:'他是我的儿子。'},{w:'kid',zh:'小孩',en:'The kid is happy.',cn:'这个孩子很高兴。'},{w:'her',zh:'她的',en:'This is her bag.',cn:'这是她的包。'},{w:'him',zh:'他',en:'I can see him.',cn:'我能看见他。'},{w:'she',zh:'她',en:'She is my friend.',cn:'她是我的朋友。'},{w:'you',zh:'你/你们',en:'You are my friend.',cn:'你是我的朋友。'}]
 ];
 const $=id=>document.getElementById(id), scene=$('scene'),view=$('viewport');let scale=1;
-function fit(){scale=Math.min((view.clientWidth||390)/1024,1);scene.style.transform='scale('+scale+')';view.style.height=(1536*scale)+'px'}window.addEventListener('resize',fit);fit();
+function fit(){
+ scale=Math.min((view.clientWidth||390)/1024,1);
+ const vv=window.visualViewport,focused=document.activeElement?.id==='native-input';
+ const keyboard=focused&&vv&&vv.height<window.innerHeight-100;
+ const designHeight=keyboard?Math.max(760,Math.min(1536,(vv.height-8)/scale)):1536;
+ const compression=designHeight/1536;
+ scene.style.setProperty('--compact',compression);
+ scene.style.height=designHeight+'px';scene.style.backgroundSize='1024px '+designHeight+'px';
+ scene.style.transform='scale('+scale+')';view.style.height=(designHeight*scale)+'px';
+ document.body.classList.toggle('keyboard-open',!!keyboard);
+ if(keyboard){view.style.position='absolute';view.style.top=((vv.offsetTop||0)+window.scrollY+4)+'px';view.style.left='0';view.style.right='0';}
+ else{view.style.position='relative';view.style.top='';view.style.left='';view.style.right='';}
+}window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);window.visualViewport?.addEventListener('scroll',fit);fit();
 const key='wm-v42-progress';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){};
 let level=Number.isInteger(saved.level)&&saved.level>=0&&saved.level<WORDS.length?saved.level:3;
 let completed=new Set(Array.isArray(saved.completed)?saved.completed:[]);let targetIndex=2,input='',busy=false,remainingTimer=null;
@@ -77,12 +104,12 @@ async function azureAudio(text,locale){
  if(!resp.ok){let detail='';try{detail=(await resp.json()).error||''}catch(e){}throw Error('Azure '+resp.status+(detail?' '+detail:''))}
  const data=await resp.arrayBuffer();if(!data.byteLength)throw Error('Azure 返回空音频');return data;
 }
-async function playAzure(text,locale,session){if(!text||session!==audioSession)return;
+async function playAzure(text,locale,session){if(locale==='zh-CN'||!text||session!==audioSession)return;
  const bytes=await azureAudio(text,locale);if(session!==audioSession)return;
  if(audioContext){if(audioContext.state!=='running')await audioContext.resume();const buffer=await audioContext.decodeAudioData(bytes.slice(0));if(session!==audioSession)return;await new Promise((resolve,reject)=>{const node=audioContext.createBufferSource();node.buffer=buffer;node.connect(audioContext.destination);node.onended=resolve;try{node.start(0)}catch(e){reject(e)}})}
  else{await new Promise((resolve,reject)=>{const blob=URL.createObjectURL(new Blob([bytes],{type:'audio/mpeg'}));const a=new Audio(blob);a.onended=()=>{URL.revokeObjectURL(blob);resolve()};a.onerror=()=>{URL.revokeObjectURL(blob);reject(Error('音频播放失败'))};a.play().catch(reject)})}
 }
-function voiceSequence(segments){initVoice();const id=++audioSession;audioQueue=audioQueue.catch(()=>{}).then(async()=>{for(const part of segments){if(id!==audioSession)break;try{await playAzure(part[0],part[1],id)}catch(e){if(!speechErrorShown){speechErrorShown=true;announce('微软语音服务异常：'+e.message,6500)};/* preserve queue; do not stop on first failed Chinese clip */}}});}
+function voiceSequence(segments){segments=segments.filter(part=>part[1]==='en-GB'||part[1]==='en-US');initVoice();const id=++audioSession;audioQueue=audioQueue.catch(()=>{}).then(async()=>{for(const part of segments){if(id!==audioSession)break;try{await playAzure(part[0],part[1],id)}catch(e){if(!speechErrorShown){speechErrorShown=true;announce('英文朗读暂时不可用，请稍后重试',2600)};/* preserve queue; do not stop on first failed Chinese clip */}}});}
 const grammarNotes={
  am:'am 是 be 动词的第一人称单数形式。',an:'an 用在元音音素开头的单数名词前。',as:'as 可以表示像、如同。',at:'at 表示在某个地点或时间。',be:'be 是系动词原形。',by:'by 表示在旁边，或通过某种方式。',do:'do 表示做。',go:'go 表示去。',he:'he 是第三人称单数男性主格。',hi:'hi 是打招呼用语。',
  mum:'mum 是母亲的口语说法。',dad:'dad 是父亲的口语说法。',boy:'boy 是可数名词，表示男孩。',man:'man 是可数名词，表示男人。',son:'son 是可数名词，表示儿子。',kid:'kid 表示孩子，是非正式表达。',her:'her 可作宾格代词或形容词性物主代词。',him:'him 是 he 的宾格。',she:'she 是女性第三人称单数主格。',you:'you 既可以表示你，也可以表示你们。'
@@ -109,6 +136,7 @@ $('clear').onclick=()=>{input='';updateTyping()};$('back').onclick=()=>{location
 const nativeInput=$('native-input');
 let composing=false;
 function acceptNative(){if(composing)return;if(busy){nativeInput.value=input;return}const value=nativeInput.value.toLowerCase().replace(/[^a-z' -]/g,'').slice(0,30);input='';for(const ch of value){enter(ch);if(busy)break}updateTyping();}
+nativeInput.addEventListener('focus',()=>{fit();setTimeout(fit,350)});nativeInput.addEventListener('blur',()=>{setTimeout(fit,120)});
 nativeInput.addEventListener('compositionstart',()=>{composing=true});
 nativeInput.addEventListener('compositionend',()=>{composing=false;acceptNative()});
 nativeInput.addEventListener('input',acceptNative);
