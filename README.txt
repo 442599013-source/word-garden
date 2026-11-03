@@ -1,6 +1,1 @@
-WordMatch V3.0 Lucky Bay visual recreation based on the final approved artwork.
-UPLOAD: index.html and wordmatch-game.html to the same root folder of GitHub Pages. Do NOT upload the ZIP directly.
-Both files are complete; images are embedded in wordmatch-game.html.
-index.html retains previous homepage. Cloudflare Azure Worker deployment remains separate and is not automatic. worker.js included for reference, not uploaded to GitHub.
-This is a real page built from separated background/panels/characters. Full visual is adapted to 9:20 fixed artboard, with page scrolling only where phone viewport is shorter.
-Some source PNG cutouts have residual artifacts from original art and cannot be claimed pixel-identical to original. No ghosting text is embedded in dynamic content panels.
+WordMatch V3.2 targeted fix: levels 1-3 use ONLY two-letter task words (10 per level); levels 4+ use per-level minimum task-word length for clearing, preventing DO from auto-clearing before DOG in a three-letter level. 5x5 game board kept. Other visual and Azure fixes are not certified in this targeted release. Upload index.html and wordmatch-game.html to GitHub root. Deploy worker.js separately only if needed.
