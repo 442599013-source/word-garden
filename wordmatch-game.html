@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#55c9f0" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="单词消消乐" name="apple-mobile-web-app-title"/><link href="./manifest.webmanifest" rel="manifest"/><title>单词消消乐 · 彩色网页键盘</title><style>
+<html lang="zh-CN"><head><meta charset="utf-8"/><meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/><meta content="#24baf4" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="单词消消乐" name="apple-mobile-web-app-title"/><link href="./manifest.webmanifest" rel="manifest"/><title>单词消消乐 · 句子与语法</title><style>
 *{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#f5ddbc;color:#3c1767;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif}button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation}button:focus-visible,[role=button]:focus-visible{outline:4px solid #f9bd3c;outline-offset:-3px}
 #shell{position:fixed;inset:0;display:grid;place-items:center;padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);background:radial-gradient(ellipse at center,#fff0cd,#edd0b0);overflow:hidden}#viewport{position:relative}#scene{position:absolute;left:0;top:0;width:852px;height:1846px;transform-origin:0 0;background-image:none;background-size:852px 1846px;overflow:hidden;user-select:none;-webkit-user-select:none}
 .area,.key{position:absolute}.hot,.key{border:0;background:transparent;color:#3c1767}.key{z-index:8;border-radius:22px;padding:0;display:flex;align-items:center;justify-content:center;font-size:43px;font-weight:800}.key:active{background:#fff7!important;box-shadow:inset 0 0 0 4px #fff9}.key.printed{background:linear-gradient(150deg,#ffffff99,transparent 70%),var(--key-color);border:2px solid #fff9;box-shadow:0 3px 4px #8652bb88}.key.listening{outline:4px solid #ed397b;background:#ff56884d;animation:blink 1s ease infinite}
@@ -21,7 +21,28 @@ html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
 .zone-tasks #tasks{top:32px}.zone-learning #lessonword{top:137px}.zone-sentence .sentence{top:12px}.zone-typing #typingbox{top:23px}
 .zone-keyboard #keyboard{top:-1214px;bottom:auto;height:1846px}.zone-keyboard #dictation-note{top:0}
 #message{top:560px}#voice-status{font-size:16px}
-</style><style id="voice-clean-v8">.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}</style></head><body>
+</style><style id="voice-clean-v8">.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}</style><style id="sentence-lessons-v9">
+.remaining{flex-direction:column;gap:0;line-height:1.15;font-size:22px}.remaining strong{font-size:35px;max-width:190px;overflow:hidden}
+#lessonword{flex-direction:column;gap:5px;line-height:1.08}#wordvalue{max-width:96%}#wordzh{max-width:96%;white-space:normal;text-align:center}
+#tasks .word{cursor:default}#tasks .word b{overflow-wrap:anywhere;white-space:normal;text-align:center;overflow:visible;text-overflow:clip}#tasks .word.empty{opacity:.3}#tasks .word.matched{background:#b9edc277;box-shadow:inset 0 0 0 3px #73bd80}
+#sentence-progress{position:absolute;left:55px;top:4px;width:740px;text-align:center;font-size:17px;font-weight:750;color:#68428f;white-space:nowrap}
+#lesson-panel{height:113px;top:7px;padding:0 18px 2px;gap:0;justify-content:flex-start}.lesson-tabs{display:flex;justify-content:center;gap:8px;height:28px;flex-shrink:0}.lesson-tabs button{border:0;border-radius:12px;padding:1px 18px;background:#ffffff77;color:#795295;font-size:17px;font-weight:750}.lesson-tabs button.selected{background:#a86cd5;color:white}
+#lesson-content{width:100%;max-height:83px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;touch-action:pan-y;user-select:text;display:block;line-height:1.25;padding:0 4px}#lesson-content b,#lesson-content span{display:block}#lesson-content span{margin-top:3px}.grammar-mode #lesson-content{text-align:left;font-weight:650}.grammar-mode #senten{text-align:center;color:#8b3bb1}.grammar-mode #sentzh{line-height:1.4;padding-bottom:5px}
+#typingbox{justify-content:flex-start;padding:0 15px;letter-spacing:1px;overflow-x:auto;scrollbar-width:none}#typingbox::-webkit-scrollbar{display:none}#typed{flex-shrink:0}.input-mismatch{color:#bd3553!important}.caret{flex-shrink:0}
+#completion-card{position:absolute;z-index:12;inset:25px 40px 21px;border-radius:30px;border:3px solid #d5a1f5;background:linear-gradient(145deg,#fff7ff,#eee3ff);box-shadow:0 5px 14px #9b61b744;text-align:center;padding:19px;color:#582777}#completion-card[hidden]{display:none}#completion-card strong{font-size:34px}#completion-card p{font-size:23px;margin:10px 0}#completion-card button{border:2px solid #e8caff;background:linear-gradient(#b771ef,#7b34c3);border-radius:21px;padding:10px 42px;color:#fff;font-size:27px;font-weight:800;box-shadow:0 4px 8px #9c68c944}
+</style><style id="screen-edges-v10">
+/* Safe areas belong to the scenery; preserve the artwork's aspect ratio. */
+html{background:#24baf4;min-height:100%;overscroll-behavior-y:none}
+body{min-height:100svh;min-height:100dvh}
+body:has(.beach-home),body.game-page{background:linear-gradient(180deg,#24baf4 0px,#3cc5f5 max(80px,env(safe-area-inset-top,0px)),#f6dcb7 60%,#f6dcb7 100%);background-attachment:fixed}
+body.game-page #shell{background:transparent;min-height:100svh;min-height:100dvh}
+.app.beach-home{min-height:100svh;min-height:100dvh;position:relative;padding-top:env(safe-area-inset-top,0px);padding-bottom:max(12px,env(safe-area-inset-bottom,0px));padding-left:env(safe-area-inset-left,0px);padding-right:env(safe-area-inset-right,0px)}
+body.game-page #shell{padding-bottom:max(12px,env(safe-area-inset-bottom,0px))}
+/* Top safety strip uses the opening sky/palms rather than a beige bar. */
+.app.beach-home::before,body.game-page #shell::before{content:'';position:absolute;z-index:0;left:0;right:0;top:0;height:env(safe-area-inset-top,0px);background-image:linear-gradient(180deg,#24baf455,#24baf400),var(--opening-scenery,none);background-size:100% auto;background-position:center top;pointer-events:none;transform:scaleY(-1)}
+.home-viewport,#viewport{z-index:1}
+@media(min-width:761px){body:has(.beach-home),body.game-page{background:linear-gradient(180deg,#24baf4,#d1f3ff 45%,#f6dcb7 75%);background-attachment:fixed}}
+</style><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/></head><body class="game-page">
 <div id="shell"><div id="viewport"><main aria-label="单词消消乐，彩色网页键盘" id="scene">
 
 
@@ -32,17 +53,13 @@ html,body{height:auto;min-height:100%;overflow-x:hidden;overflow-y:auto}
 
 
 
-<section class="game-zone zone-header" data-original-y="48" style="height:269px;background-position:0 -48px"><button aria-label="返回首页" class="area hot" id="back" type="button"></button><div class="area" id="level"></div><span id="voice-status" class="sr-only" role="status" aria-live="polite"></span><div class="area remaining"><span>剩余单词</span><strong id="remaining"></strong></div></section><section class="game-zone zone-tasks" data-original-y="317" style="height:273px;background-position:0 -317px"><div aria-label="本关任务单词" class="area" id="tasks"></div></section><section class="game-zone zone-learning" data-original-y="590" style="height:344px;background-position:0 -590px"><div class="area" id="lessonword"><span id="wordvalue"></span><span style="font-size:28px;color:white">│</span><span id="wordzh"></span></div></section><section class="game-zone zone-sentence" data-original-y="934" style="height:134px;background-position:0 -934px"><div class="area sentence"><b id="senten"></b><span id="sentzh"></span></div></section><section class="game-zone zone-typing" data-original-y="1075" style="height:119px;background-position:0 -1075px"><div aria-label="使用下方彩色键盘输入英文" aria-readonly="true" class="area" id="typingbox" role="textbox"><span id="typed"></span><span class="caret">│</span></div><button aria-label="清空输入" hidden="" id="clear" type="button"></button></section><section class="game-zone zone-keyboard" data-original-y="1214" style="height:582px;background-position:0 -1214px"><div aria-label="彩色英文键盘" id="keyboard"></div><div hidden="" id="dictation-note" role="status"></div></section><div aria-live="polite" class="alert" id="message" role="status"></div></main></div></div>
+<section class="game-zone zone-header" data-original-y="48" style="height:269px;background-position:0 -48px"><button aria-label="返回首页" class="area hot" id="back" type="button"></button><div class="area" id="level"></div><span id="voice-status" class="sr-only" role="status" aria-live="polite"></span><div class="area remaining"><span>累计消灭单词</span><strong id="remaining"></strong></div></section><section class="game-zone zone-tasks" data-original-y="317" style="height:273px;background-position:0 -317px"><div aria-label="待输入句子，每格一个单词" class="area" id="tasks"></div></section><section class="game-zone zone-learning" data-original-y="590" style="height:344px;background-position:0 -590px"><div class="area" id="lessonword"><span id="wordvalue"></span><span id="wordzh"></span></div></section><section class="game-zone zone-sentence" data-original-y="934" style="height:134px;background-position:0 -934px"><div class="area sentence" id="lesson-panel"><div class="lesson-tabs"><button type="button" id="tab-sentence">句子</button><button type="button" id="tab-grammar">语法</button></div><div id="lesson-content" tabindex="0"><b id="senten"></b><span id="sentzh"></span></div></div></section><section class="game-zone zone-typing" data-original-y="1075" style="height:119px;background-position:0 -1075px"><div aria-label="使用下方彩色键盘输入英文" aria-readonly="true" class="area" id="typingbox" role="textbox"><span id="typed"></span><span class="caret">│</span></div><button aria-label="清空输入" hidden="" id="clear" type="button"></button></section><section class="game-zone zone-keyboard" data-original-y="1214" style="height:582px;background-position:0 -1214px"><div aria-label="彩色英文键盘" id="keyboard"></div><div hidden="" id="dictation-note" role="status"></div></section><div aria-live="polite" class="alert" id="message" role="status"></div></main></div></div>
 <section aria-label="微软声音测试" hidden="" id="voice-panel"><strong>微软在线朗读</strong><p id="voice-detail">朗读出现问题时，可在这里重试播放。</p><audio controls="" id="microsoft-player" playsinline="" preload="auto"></audio><button id="voice-close" type="button">关闭</button><small>若没听见，请点播放器的 ▶，并检查媒体音量和蓝牙输出。</small></section>
-<div class="overlay" id="overlay"><div class="dialog"><h3 id="dialog-title">恭喜通关！</h3><p id="dialog-text">本关单词已全部完成。</p><button id="dialog-action" type="button">进入下一关</button></div></div>
+
 <script>
 (function(){'use strict';
-const WORDS=[
-[{w:'am',zh:'是',en:'I am happy.',cn:'我很开心。'},{w:'an',zh:'一个',en:'I have an apple.',cn:'我有一个苹果。'},{w:'as',zh:'像',en:'She is as tall as me.',cn:'她和我一样高。'},{w:'at',zh:'在',en:'I am at home.',cn:'我在家。'},{w:'be',zh:'是',en:'Be happy.',cn:'要快乐。'},{w:'by',zh:'通过',en:'We sit by the sea.',cn:'我们坐在海边。'},{w:'do',zh:'做',en:'I do my homework.',cn:'我做家庭作业。'},{w:'go',zh:'去',en:'Let us go.',cn:'我们走吧。'},{w:'he',zh:'他',en:'He is my friend.',cn:'他是我的朋友。'},{w:'hi',zh:'你好',en:'Hi, how are you?',cn:'你好，你好吗？'}],
-[{w:'in',zh:'在里面',en:'The toy is in the box.',cn:'玩具在盒子里。'},{w:'is',zh:'是',en:'She is here.',cn:'她在这里。'},{w:'it',zh:'它',en:'It is a cat.',cn:'它是一只猫。'},{w:'me',zh:'我',en:'Please help me.',cn:'请帮助我。'},{w:'my',zh:'我的',en:'This is my bag.',cn:'这是我的包。'},{w:'no',zh:'不',en:'No, thank you.',cn:'不，谢谢。'},{w:'of',zh:'的',en:'I want a cup of tea.',cn:'我想要一杯茶。'},{w:'on',zh:'在上面',en:'The book is on the table.',cn:'书在桌子上。'},{w:'or',zh:'或者',en:'Tea or coffee?',cn:'茶还是咖啡？'},{w:'to',zh:'到',en:'I go to school.',cn:'我去上学。'}],
-[{w:'up',zh:'向上',en:'Stand up.',cn:'站起来。'},{w:'us',zh:'我们',en:'Please help us.',cn:'请帮助我们。'},{w:'we',zh:'我们',en:'We are friends.',cn:'我们是朋友。'},{w:'if',zh:'如果',en:'Come if you like.',cn:'如果你愿意就来吧。'},{w:'so',zh:'所以',en:'You are so nice.',cn:'你真好。'},{w:'ox',zh:'公牛',en:'The ox is big.',cn:'这头公牛很大。'},{w:'ex',zh:'前任',en:'My ex called.',cn:'我的前任打来了电话。'},{w:'oh',zh:'哦',en:'Oh no!',cn:'哦，不！'},{w:'ok',zh:'好的',en:'OK, let us go.',cn:'好的，我们走吧。'},{w:'ah',zh:'啊',en:'Ah, I see.',cn:'啊，我明白了。'}],
-[{w:'mum',zh:'妈妈',en:'My mum is kind.',cn:'我妈妈很友善。'},{w:'dad',zh:'爸爸',en:'My dad is at home.',cn:'我爸爸在家。'},{w:'boy',zh:'男孩',en:'This boy is my friend.',cn:'这个男孩是我的朋友。'},{w:'man',zh:'男人',en:'The man is tall.',cn:'这个男人很高。'},{w:'son',zh:'儿子',en:'He is my son.',cn:'他是我的儿子。'},{w:'kid',zh:'小孩',en:'The kid is happy.',cn:'这个孩子很高兴。'},{w:'her',zh:'她的',en:'This is her bag.',cn:'这是她的包。'},{w:'him',zh:'他',en:'I can see him.',cn:'我能看见他。'},{w:'she',zh:'她',en:'She is my friend.',cn:'她是我的朋友。'},{w:'you',zh:'你/你们',en:'You are my friend.',cn:'你是我的朋友。'}]
-];
+const UNITS=[{"title": "认识自己 · I am", "lessons": [{"en": "I am a boy.", "cn": "我是一个男孩。", "w": "boy", "zh": "男孩", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am a girl.", "cn": "我是一个女孩。", "w": "girl", "zh": "女孩", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am a kid.", "cn": "我是一个小孩。", "w": "kid", "zh": "小孩", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am a student.", "cn": "我是一名学生。", "w": "student", "zh": "学生", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am a teacher.", "cn": "我是一名老师。", "w": "teacher", "zh": "老师", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am happy.", "cn": "我很开心。", "w": "happy", "zh": "开心的", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am sad.", "cn": "我很难过。", "w": "sad", "zh": "难过的", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am tired.", "cn": "我很累。", "w": "tired", "zh": "疲惫的", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am hungry.", "cn": "我饿了。", "w": "hungry", "zh": "饥饿的", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}, {"en": "I am ready.", "cn": "我准备好了。", "w": "ready", "zh": "准备好的", "grammar": "I 表示“我”，后面搭配 am。介绍身份时，单数可数名词前通常用 a 或 an；描述状态时，可以直接接形容词。"}]}, {"title": "认识事物 · This is", "lessons": [{"en": "This is a cat.", "cn": "这是一只猫。", "w": "cat", "zh": "猫", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is a dog.", "cn": "这是一只狗。", "w": "dog", "zh": "狗", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is a book.", "cn": "这是一本书。", "w": "book", "zh": "书", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is a pen.", "cn": "这是一支笔。", "w": "pen", "zh": "笔", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is a bag.", "cn": "这是一个包。", "w": "bag", "zh": "包", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is a cup.", "cn": "这是一个杯子。", "w": "cup", "zh": "杯子", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is an apple.", "cn": "这是一个苹果。", "w": "apple", "zh": "苹果", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is an egg.", "cn": "这是一个鸡蛋。", "w": "egg", "zh": "鸡蛋", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is an orange.", "cn": "这是一个橙子。", "w": "orange", "zh": "橙子", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}, {"en": "This is an umbrella.", "cn": "这是一把伞。", "w": "umbrella", "zh": "伞", "grammar": "This is 表示“这是”，用来介绍一个人或事物。a 用在辅音音素开头的单词前，an 用在元音音素开头的单词前。"}]}, {"title": "我的物品 · I have", "lessons": [{"en": "I have a ball.", "cn": "我有一个球。", "w": "ball", "zh": "球", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a toy.", "cn": "我有一个玩具。", "w": "toy", "zh": "玩具", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a bike.", "cn": "我有一辆自行车。", "w": "bike", "zh": "自行车", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a hat.", "cn": "我有一顶帽子。", "w": "hat", "zh": "帽子", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a coat.", "cn": "我有一件外套。", "w": "coat", "zh": "外套", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a desk.", "cn": "我有一张书桌。", "w": "desk", "zh": "书桌", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a chair.", "cn": "我有一把椅子。", "w": "chair", "zh": "椅子", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have a bed.", "cn": "我有一张床。", "w": "bed", "zh": "床", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have two eyes.", "cn": "我有两只眼睛。", "w": "eyes", "zh": "眼睛", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}, {"en": "I have two hands.", "cn": "我有两只手。", "w": "hands", "zh": "手", "grammar": "I have 表示“我有”。have 后面接拥有的东西；a 表示一个，复数名词则可以搭配 two 等数量词。"}]}, {"title": "表达喜好 · I like", "lessons": [{"en": "I like cats.", "cn": "我喜欢猫。", "w": "cats", "zh": "猫（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like dogs.", "cn": "我喜欢狗。", "w": "dogs", "zh": "狗（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like apples.", "cn": "我喜欢苹果。", "w": "apples", "zh": "苹果（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like bananas.", "cn": "我喜欢香蕉。", "w": "bananas", "zh": "香蕉（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like milk.", "cn": "我喜欢牛奶。", "w": "milk", "zh": "牛奶", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like rice.", "cn": "我喜欢米饭。", "w": "rice", "zh": "米饭", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like bread.", "cn": "我喜欢面包。", "w": "bread", "zh": "面包", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like music.", "cn": "我喜欢音乐。", "w": "music", "zh": "音乐", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like books.", "cn": "我喜欢书。", "w": "books", "zh": "书（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}, {"en": "I like flowers.", "cn": "我喜欢花。", "w": "flowers", "zh": "花（复数）", "grammar": "I like 表示“我喜欢”。泛指某一类可数事物时，通常用复数形式；milk 和 rice 等不可数名词可以直接跟在 like 后面。"}]}, {"title": "我会做 · I can", "lessons": [{"en": "I can run.", "cn": "我会跑步。", "w": "run", "zh": "跑步", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can jump.", "cn": "我会跳。", "w": "jump", "zh": "跳", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can swim.", "cn": "我会游泳。", "w": "swim", "zh": "游泳", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can sing.", "cn": "我会唱歌。", "w": "sing", "zh": "唱歌", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can dance.", "cn": "我会跳舞。", "w": "dance", "zh": "跳舞", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can read.", "cn": "我会阅读。", "w": "read", "zh": "阅读", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can write.", "cn": "我会写字。", "w": "write", "zh": "写字", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can draw.", "cn": "我会画画。", "w": "draw", "zh": "画画", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can cook.", "cn": "我会做饭。", "w": "cook", "zh": "做饭", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}, {"en": "I can help.", "cn": "我能帮忙。", "w": "help", "zh": "帮助", "grammar": "can 表示“能”或“会”，后面的动词使用原形。表达不会时，可以在 can 后面加 not。"}]}, {"title": "描述事物 · It is", "lessons": [{"en": "It is red.", "cn": "它是红色的。", "w": "red", "zh": "红色的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is blue.", "cn": "它是蓝色的。", "w": "blue", "zh": "蓝色的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is green.", "cn": "它是绿色的。", "w": "green", "zh": "绿色的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is yellow.", "cn": "它是黄色的。", "w": "yellow", "zh": "黄色的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is big.", "cn": "它很大。", "w": "big", "zh": "大的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is small.", "cn": "它很小。", "w": "small", "zh": "小的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is hot.", "cn": "它很热。", "w": "hot", "zh": "热的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is cold.", "cn": "它很冷。", "w": "cold", "zh": "冷的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is soft.", "cn": "它很柔软。", "w": "soft", "zh": "柔软的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}, {"en": "It is clean.", "cn": "它很干净。", "w": "clean", "zh": "干净的", "grammar": "It is 表示“它是”或“它很”。is 后面接形容词，可以描述颜色、大小和其他特征。"}]}, {"title": "认识家人 · He and she", "lessons": [{"en": "She is my mum.", "cn": "她是我妈妈。", "w": "mum", "zh": "妈妈", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "He is my dad.", "cn": "他是我爸爸。", "w": "dad", "zh": "爸爸", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "She is my sister.", "cn": "她是我姐姐或妹妹。", "w": "sister", "zh": "姐妹", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "He is my brother.", "cn": "他是我哥哥或弟弟。", "w": "brother", "zh": "兄弟", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "She is my grandma.", "cn": "她是我奶奶或外婆。", "w": "grandma", "zh": "奶奶；外婆", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "He is my grandpa.", "cn": "他是我爷爷或外公。", "w": "grandpa", "zh": "爷爷；外公", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "She is my aunt.", "cn": "她是我的阿姨。", "w": "aunt", "zh": "阿姨；姑姑", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "He is my uncle.", "cn": "他是我的叔叔。", "w": "uncle", "zh": "叔叔；舅舅", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "She is my friend.", "cn": "她是我的朋友。", "w": "friend", "zh": "朋友", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}, {"en": "He is my son.", "cn": "他是我的儿子。", "w": "son", "zh": "儿子", "grammar": "He 表示“他”，She 表示“她”，后面都搭配 is。my 表示“我的”，放在名词前说明所属关系。"}]}, {"title": "日常生活 · Simple present", "lessons": [{"en": "I eat breakfast.", "cn": "我吃早餐。", "w": "breakfast", "zh": "早餐", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I drink water.", "cn": "我喝水。", "w": "water", "zh": "水", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I go to school.", "cn": "我去上学。", "w": "school", "zh": "学校", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I play in the park.", "cn": "我在公园里玩。", "w": "park", "zh": "公园", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I walk home.", "cn": "我走路回家。", "w": "walk", "zh": "走路", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I wash my face.", "cn": "我洗脸。", "w": "face", "zh": "脸", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I brush my teeth.", "cn": "我刷牙。", "w": "teeth", "zh": "牙齿", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I open the door.", "cn": "我打开门。", "w": "door", "zh": "门", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I close the window.", "cn": "我关上窗户。", "w": "window", "zh": "窗户", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}, {"en": "I sleep at night.", "cn": "我在夜里睡觉。", "w": "night", "zh": "夜晚", "grammar": "这里用一般现在时描述日常习惯。主语是 I 时，后面的动词使用原形；时间或地点可以放在句子后面。"}]}, {"title": "物品位置 · Prepositions", "lessons": [{"en": "The cat is in the box.", "cn": "猫在盒子里。", "w": "box", "zh": "盒子", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The book is on the table.", "cn": "书在桌子上。", "w": "table", "zh": "桌子", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The dog is under the bed.", "cn": "狗在床下面。", "w": "under", "zh": "在……下面", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The ball is by the chair.", "cn": "球在椅子旁边。", "w": "by", "zh": "在……旁边", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The toy is in my bag.", "cn": "玩具在我的包里。", "w": "in", "zh": "在……里面", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The cup is on the desk.", "cn": "杯子在书桌上。", "w": "on", "zh": "在……上面", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The hat is under the chair.", "cn": "帽子在椅子下面。", "w": "hat", "zh": "帽子", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The bike is by the tree.", "cn": "自行车在树旁边。", "w": "tree", "zh": "树", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The apple is in the bowl.", "cn": "苹果在碗里。", "w": "bowl", "zh": "碗", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}, {"en": "The bird is on the roof.", "cn": "鸟在屋顶上。", "w": "roof", "zh": "屋顶", "grammar": "位置介词用来说明东西在哪里。in 表示在里面，on 表示在上面，under 表示在下面，by 表示在旁边。"}]}, {"title": "现在进行时 · I am doing", "lessons": [{"en": "I am reading a book.", "cn": "我正在读一本书。", "w": "reading", "zh": "正在阅读", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am eating an apple.", "cn": "我正在吃一个苹果。", "w": "eating", "zh": "正在吃", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am drinking milk.", "cn": "我正在喝牛奶。", "w": "drinking", "zh": "正在喝", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am playing a game.", "cn": "我正在玩一个游戏。", "w": "playing", "zh": "正在玩", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am drawing a cat.", "cn": "我正在画一只猫。", "w": "drawing", "zh": "正在画画", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am writing my name.", "cn": "我正在写我的名字。", "w": "writing", "zh": "正在写", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am watching a bird.", "cn": "我正在看一只鸟。", "w": "watching", "zh": "正在看", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am washing my hands.", "cn": "我正在洗手。", "w": "washing", "zh": "正在洗", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am making a cake.", "cn": "我正在做一个蛋糕。", "w": "making", "zh": "正在制作", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}, {"en": "I am learning English.", "cn": "我正在学习英语。", "w": "learning", "zh": "正在学习", "grammar": "现在进行时可以表示正在发生的动作。主语是 I 时，使用 am 加动词的 ing 形式，例如 reading 表示正在阅读。"}]}, {"title": "表达否定 · Do not", "lessons": [{"en": "I do not like rain.", "cn": "我不喜欢下雨。", "w": "rain", "zh": "雨", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not eat meat.", "cn": "我不吃肉。", "w": "meat", "zh": "肉", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not drink coffee.", "cn": "我不喝咖啡。", "w": "coffee", "zh": "咖啡", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not watch television.", "cn": "我不看电视。", "w": "television", "zh": "电视", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not play football.", "cn": "我不踢足球。", "w": "football", "zh": "足球", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not need sugar.", "cn": "我不需要糖。", "w": "sugar", "zh": "糖", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not want juice.", "cn": "我不想要果汁。", "w": "juice", "zh": "果汁", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not see the moon.", "cn": "我看不到月亮。", "w": "moon", "zh": "月亮", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not hear the bell.", "cn": "我听不到铃声。", "w": "bell", "zh": "铃", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}, {"en": "I do not know the answer.", "cn": "我不知道答案。", "w": "answer", "zh": "答案", "grammar": "一般现在时中，主语是 I 时，可以用 do not 加动词原形来表达否定。do not 也可以缩写成 don’t。"}]}, {"title": "学习提问 · Do you", "lessons": [{"en": "Do you like tea?", "cn": "你喜欢茶吗？", "w": "tea", "zh": "茶", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you eat fish?", "cn": "你吃鱼吗？", "w": "fish", "zh": "鱼", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you drink water?", "cn": "你喝水吗？", "w": "drink", "zh": "喝", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you have a pet?", "cn": "你养宠物吗？", "w": "pet", "zh": "宠物", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you play tennis?", "cn": "你打网球吗？", "w": "tennis", "zh": "网球", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you speak English?", "cn": "你说英语吗？", "w": "speak", "zh": "说（语言）", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you need a ticket?", "cn": "你需要一张票吗？", "w": "ticket", "zh": "票", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you want some soup?", "cn": "你想要一些汤吗？", "w": "soup", "zh": "汤", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you live near here?", "cn": "你住在这附近吗？", "w": "near", "zh": "在……附近", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}, {"en": "Do you remember my name?", "cn": "你记得我的名字吗？", "w": "remember", "zh": "记得", "grammar": "Do you 加动词原形，可以询问对方的习惯、喜好或情况。一般可以用 Yes, I do 或 No, I don’t 来回答。"}]}];
+const WORDS=UNITS.map(unit=>unit.lessons);
 const $=id=>document.getElementById(id), scene=$('scene'),view=$('viewport');let scale=1;
 function fit(){
  const shell=$('shell'),style=getComputedStyle(shell);
@@ -50,10 +67,11 @@ function fit(){
  scale=Math.max(.1,width/852);
  scene.style.transform='scale('+scale+')';view.style.width=(852*scale)+'px';view.style.height=(1721*scale)+'px';
 }
+$('shell').style.setProperty('--opening-scenery',getComputedStyle(document.querySelector('.zone-header')).backgroundImage);
 window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);fit();
-const key='wm-v42-progress';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){};
-let level=Number.isInteger(saved.level)&&saved.level>=0&&saved.level<WORDS.length?saved.level:3;
-let completed=new Set(Array.isArray(saved.completed)?saved.completed:[]);let targetIndex=2,input='',busy=false,remainingTimer=null;
+const key='wm-sentences-v9-progress';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){};
+let level=Number.isInteger(saved.level)&&saved.level>=0&&saved.level<WORDS.length?saved.level:0;
+let completed=new Set((Array.isArray(saved.completed)?saved.completed:[]).filter(i=>Number.isInteger(i)&&i>=0&&i<10));let targetIndex=0,input='',busy=false,remainingTimer=null;
 function dataset(){return WORDS[level]};function write(){try{localStorage.setItem(key,JSON.stringify({level,completed:[...completed]}))}catch(e){}}
 function announce(msg,duration=2200){const box=$('message');box.textContent=msg;box.classList.add('show');clearTimeout(remainingTimer);remainingTimer=setTimeout(()=>box.classList.remove('show'),duration)}
 
@@ -76,11 +94,11 @@ function initVoice(){
 function unlockVoice(){initVoice()}
 function warmAudio(){}
 async function azureAudio(text,locale='en-GB'){
- const key=new URL('./__microsoft_audio_v2__/'+locale+'/'+encodeURIComponent(text),location.href).href;
- let cache=null;try{if(window.caches){cache=await caches.open('wordmatch-microsoft-ryan-v1');const hit=await cache.match(key);if(hit)return await hit.arrayBuffer()}}catch(e){}
- const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),15000);
+ const key=new URL('./__microsoft_audio_v3__/'+locale+'/'+encodeURIComponent(text),location.href).href;
+ let cache=null;try{if(window.caches){cache=await caches.open('wordmatch-microsoft-bilingual-v9');const hit=await cache.match(key);if(hit)return await hit.arrayBuffer()}}catch(e){}
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),25000);
  try{
-  const response=await fetch(AZURE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice:locale==='zh-CN'?'zh-CN-XiaoxiaoNeural':'en-GB-RyanNeural'}),signal:controller.signal});
+  const response=await fetch(AZURE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice:locale==='zh-CN'?'zh-CN-XiaoxiaoNeural':'en-GB-SoniaNeural'}),signal:controller.signal});
   if(!response.ok){let detail='';try{detail=(await response.json()).error||''}catch(e){}if(locale==='zh-CN'&&response.status===400&&/only|support|locale/i.test(detail)){chineseAvailable=false;const error=Error('中文语音服务尚未开启');error.code='ZH_UNSUPPORTED';throw error}throw Error('语音请求失败 HTTP '+response.status+(detail?'：'+detail:''))}
   const type=response.headers?.get('content-type')||'';if(type&&(!type.startsWith('audio/')&&!type.includes('octet-stream')))throw Error('接口返回了非音频内容：'+type);
   if(locale==='zh-CN')chineseAvailable=true;const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw Error('微软返回了空音频');
@@ -111,14 +129,14 @@ function playMedia(url,label){
 function queueSpeech(texts){
  const token=generation;
  for(const item of texts){
-  const [text,locale]=Array.isArray(item)?item:[item,'en-GB'];if(!text)continue;
+  const [text,locale,onStart]=Array.isArray(item)?item:[item,'en-GB'];if(!text)continue;
   const ready=locale==='zh-CN'?null:prepareClip(text,locale).then(url=>({url}),error=>({error}));
   audioQueue=audioQueue.catch(()=>{}).then(async()=>{
    if(token!==generation||locale==='zh-CN'&&chineseAvailable===false)return;
    try{
     status('正在加载微软声音：'+text);
     const result=ready?await ready:await prepareClip(text,locale).then(url=>({url}),error=>({error}));
-    if(token!==generation)return;if(result.error)throw result.error;if(unlocking)await unlocking;await playMedia(result.url,text);
+    if(token!==generation)return;if(result.error)throw result.error;if(unlocking)await unlocking;if(token!==generation)return;if(onStart)onStart();await playMedia(result.url,text);
    }catch(e){if(e.code==='ZH_UNSUPPORTED'){announce('中文服务尚未开启，英文继续朗读',4000)}else status(errorMessage(e),true)}
   });
  }
@@ -130,49 +148,85 @@ document.addEventListener('pointerdown',e=>{if(e.target.closest?.('#voice-panel'
 window.addEventListener('pagehide',()=>{generation++;if(stopCurrent)stopCurrent();media.pause()});
 function voiceSequence(segments){return queueSpeech(segments)}
 
-const grammarNotes={
- am:'am 是 be 动词的第一人称单数形式。',an:'an 用在元音音素开头的单数名词前。',as:'as 可以表示像、如同。',at:'at 表示在某个地点或时间。',be:'be 是系动词原形。',by:'by 表示在旁边，或通过某种方式。',do:'do 表示做。',go:'go 表示去。',he:'he 是第三人称单数男性主格。',hi:'hi 是打招呼用语。',
- mum:'mum 是母亲的口语说法。',dad:'dad 是父亲的口语说法。',boy:'boy 是可数名词，表示男孩。',man:'man 是可数名词，表示男人。',son:'son 是可数名词，表示儿子。',kid:'kid 表示孩子，是非正式表达。',her:'her 可作宾格代词或形容词性物主代词。',him:'him 是 he 的宾格。',she:'she 是女性第三人称单数主格。',you:'you 既可以表示你，也可以表示你们。'
-};
-
-const spokenPhrases={
- am:['I am','我是'],an:['an apple','一个苹果'],as:['as tall as','和……一样高'],at:['at home','在家'],be:['be happy','要快乐'],by:['by the sea','在海边'],do:['do homework','做作业'],go:['go home','回家'],he:['he is','他是'],hi:['say hi','打招呼'],
- in:['in the box','在盒子里'],is:['it is','它是'],it:['it is','它是'],me:['help me','帮助我'],my:['my bag','我的包'],no:['no thank you','不，谢谢'],of:['a cup of tea','一杯茶'],on:['on the table','在桌子上'],or:['tea or coffee','茶或咖啡'],to:['go to school','去上学'],
- up:['stand up','站起来'],us:['help us','帮助我们'],we:['we are','我们是'],if:['if you like','如果你愿意'],so:['so nice','如此友好'],ox:['big ox','大公牛'],ex:['my ex','我的前任'],oh:['oh no','哦不'],ok:["OK let's go",'好的，我们走吧'],ah:['ah I see','啊，我明白了'],
- mum:['my mum','我的妈妈'],dad:['my dad','我的爸爸'],boy:['a little boy','一个小男孩'],man:['a tall man','一个高个子男人'],son:['my son','我的儿子'],kid:['a happy kid','一个开心的孩子'],her:['her bag','她的包'],him:['see him','看见他'],she:['she is','她是'],you:['you are','你是']
-};
+let displayedLesson=null, lessonMode='sentence';
 function stopSpeech(){generation++;audioQueue=Promise.resolve();if(stopCurrent)stopCurrent()}
-function speakWord(w){stopSpeech();const phrase=spokenPhrases[w.w]||[w.w,w.zh];return queueSpeech([[w.w,'en-GB'],[w.zh,'zh-CN'],...(phrase[0]!==w.w?[[phrase[0],'en-GB'],[phrase[1],'zh-CN']]:[]),[w.en,'en-GB'],[w.cn,'zh-CN']]);}
-
-$('lessonword').setAttribute('role','button');$('lessonword').setAttribute('tabindex','0');$('lessonword').setAttribute('aria-label','重听微软英文发音');$('lessonword').onclick=()=>{unlockVoice();speakWord(dataset()[targetIndex])};$('lessonword').onkeydown=e=>{if(e.key==='Enter'){unlockVoice();speakWord(dataset()[targetIndex])}};
-function select(i){if(busy||completed.has(i))return;targetIndex=i;input='';updateTyping();updateTasks();lesson(dataset()[i]);initVoice();}
-function updateTasks(){const wrap=$('tasks');wrap.replaceChildren();dataset().forEach((w,i)=>{const b=document.createElement('button');b.type='button';b.className='area word'+(i===targetIndex?' active':'')+(completed.has(i)?' gone':'');const strong=document.createElement('b');strong.textContent=w.w;const small=document.createElement('small');small.textContent=w.zh;b.append(strong,small);b.setAttribute('aria-label',w.w+' '+w.zh+(completed.has(i)?' 已完成':''));b.onclick=()=>select(i);if(completed.has(i))b.disabled=true;wrap.appendChild(b)});$('remaining').textContent=dataset().length-completed.size;$('level').textContent='第'+(level+1)+'关'}
-function lesson(w){$('wordvalue').textContent=w.w;$('wordzh').textContent=w.zh;$('senten').textContent=w.en;$('sentzh').textContent=w.cn;const t=w.w.length>9?28:w.w.length>6?38:53;$('wordvalue').style.fontSize=t+'px';$('wordzh').style.fontSize=(w.zh.length>5?29:38)+'px';$('senten').style.fontSize=(w.en.length>28?26:36)+'px';$('sentzh').style.fontSize=(w.cn.length>18?23:31)+'px'}
-function updateTyping(){$('typed').textContent=input;$('typed').style.fontSize=(input.length>20?25:input.length>12?35:48)+'px'}
-function fly(index){return new Promise(resolve=>{const el=$('tasks').children[index],src=el.getBoundingClientRect(),dst=$('lessonword').getBoundingClientRect(),r=scene.getBoundingClientRect();const f=document.createElement('div');f.className='fly';f.textContent=dataset()[index].w;f.style.left=((src.left-r.left)/scale)+'px';f.style.top=((src.top-r.top)/scale)+'px';scene.appendChild(f);requestAnimationFrame(()=>requestAnimationFrame(()=>{f.style.transform='translate('+((dst.left-src.left)/scale)+'px,'+((dst.top-src.top)/scale)+'px) scale(.75)';f.style.opacity='.08'}));setTimeout(()=>{f.remove();resolve()},760)})}
-function recordHomeWord(word){try{
+function setLessonMode(mode){
+ lessonMode=mode;const w=displayedLesson;
+ $('tab-sentence').classList.toggle('selected',mode==='sentence');$('tab-grammar').classList.toggle('selected',mode==='grammar');
+ $('tab-sentence').setAttribute('aria-pressed',String(mode==='sentence'));$('tab-grammar').setAttribute('aria-pressed',String(mode==='grammar'));
+ $('lesson-content').scrollTop=0;
+ if(!w){$('senten').textContent='';$('sentzh').textContent='完成上方句子后，在这里学习句子和语法。';return}
+ $('lesson-panel').classList.toggle('grammar-mode',mode==='grammar');
+ $('senten').textContent=mode==='grammar'?'语法小课堂':w.en;
+ $('sentzh').textContent=mode==='grammar'?w.grammar:w.cn;
+ $('senten').style.fontSize=(mode==='grammar'?23:w.en.length>36?26:32)+'px';
+ $('sentzh').style.fontSize=(mode==='grammar'?23:26)+'px';
+}
+function lesson(w){displayedLesson=w;$('wordvalue').textContent=w?.w||'';$('wordzh').textContent=w?.zh||'';$('wordvalue').style.fontSize=(w?.w.length>9?34:46)+'px';$('wordzh').style.fontSize=(w?.zh.length>6?23:29)+'px';setLessonMode('sentence')}
+function speakWord(w){
+ if(!w)return;stopSpeech();lesson(w);
+ return queueSpeech([[w.w,'en-GB'],[w.zh,'zh-CN'],[w.en,'en-GB',()=>setLessonMode('sentence')],[w.cn,'zh-CN'],[w.grammar,'zh-CN',()=>setLessonMode('grammar')]]);
+}
+$('lessonword').setAttribute('role','button');$('lessonword').setAttribute('tabindex','0');$('lessonword').setAttribute('aria-label','重听已完成的单词、句子和语法');
+$('lessonword').onclick=()=>{unlockVoice();speakWord(displayedLesson)};
+$('lessonword').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();unlockVoice();speakWord(displayedLesson)}};
+$('tab-sentence').onclick=()=>{stopSpeech();setLessonMode('sentence');if(displayedLesson)queueSpeech([[displayedLesson.en,'en-GB'],[displayedLesson.cn,'zh-CN']])};
+$('tab-grammar').onclick=()=>{stopSpeech();setLessonMode('grammar');if(displayedLesson)queueSpeech([[displayedLesson.grammar,'zh-CN']])};
+function normalize(text){return String(text).toLowerCase().replace(/[’‘]/g,"'").replace(/[.,!?;:]/g,'').trim().replace(/\s+/g,' ')}
+function getTotal(){try{const p=JSON.parse(localStorage.getItem('word-match-home-preview-v1')||'{}');return Math.max(Number(p.wordsEliminated)||0,new Set((p.learnedWords||[]).map(w=>String(w).toLowerCase())).size)}catch{return 0}}
+function updateTasks(){
+ const wrap=$('tasks');wrap.replaceChildren();const finished=completed.size===dataset().length;
+ const current=dataset()[targetIndex];const words=finished?[]:current.en.split(/\s+/);const typed=normalize(input).split(' ');
+ for(let i=0;i<10;i++){
+  const b=document.createElement('div');b.className='word'+(words[i]?' active':' empty');
+  if(words[i]){const strong=document.createElement('b');strong.textContent=words[i];strong.style.fontSize=(words[i].length>10?20:words[i].length>7?25:34)+'px';b.append(strong);if(normalize(words[i])===typed[i])b.classList.add('matched');}
+  wrap.append(b);
+ }
+ $('remaining').textContent=getTotal();$('level').textContent='第'+(level+1)+'关';
+ $('sentence-progress').textContent='第 '+Math.min(completed.size+1,10)+' / 10 句 · '+UNITS[level].title;
+ if(finished)showWin();
+}
+function updateTyping(){
+ $('typed').textContent=input;$('typingbox').scrollLeft=$('typingbox').scrollWidth;
+ $('typed').style.fontSize=(input.length>45?25:input.length>25?31:input.length>16?38:48)+'px';
+}
+function fly(){
+ const el=$('tasks'),src=el.getBoundingClientRect(),dst=$('lessonword').getBoundingClientRect(),r=scene.getBoundingClientRect();
+ const f=document.createElement('div');f.className='fly';f.textContent=dataset()[targetIndex].w;f.style.left=((src.left-r.left)/scale)+'px';f.style.top=((src.top-r.top)/scale)+'px';scene.appendChild(f);
+ requestAnimationFrame(()=>requestAnimationFrame(()=>{f.style.transform='translate('+((dst.left-src.left)/scale)+'px,'+((dst.top-src.top)/scale)+'px) scale(.75)';f.style.opacity='.08'}));setTimeout(()=>f.remove(),760);
+}
+function recordHomeSentence(sentence){try{
  const key='word-match-home-preview-v1';const profile=JSON.parse(localStorage.getItem(key)||'{}');
- const learned=new Set((Array.isArray(profile.learnedWords)?profile.learnedWords:[]).map(w=>String(w).toLowerCase()));
- if(!learned.has(word)){profile.wordsEliminated=Math.max(Number(profile.wordsEliminated)||0,learned.size)+1;learned.add(word)}
- profile.learnedWords=[...learned];profile.wordsSeen=[...new Set([...(Array.isArray(profile.wordsSeen)?profile.wordsSeen:[]),word])];
+ const learned=new Set((Array.isArray(profile.learnedWords)?profile.learnedWords:[]).map(w=>normalize(w)).filter(Boolean));
+ let count=Math.max(Number(profile.wordsEliminated)||0,learned.size);
+ for(const word of normalize(sentence).split(' ')){if(word&&!learned.has(word)){learned.add(word);count++}}
+ profile.wordsEliminated=count;profile.learnedWords=[...learned];profile.wordsSeen=[...new Set([...(Array.isArray(profile.wordsSeen)?profile.wordsSeen:[]),...normalize(sentence).split(' ')])];
  profile.studyDays=[...new Set([...(Array.isArray(profile.studyDays)?profile.studyDays:[]),new Date().toLocaleDateString('en-CA')])];localStorage.setItem(key,JSON.stringify(profile));
 }catch(e){}}
 function success(i){
- if(completed.has(i))return;
- const word=dataset()[i];fly(i);completed.add(i);write();recordHomeWord(word.w);input='';
- targetIndex=dataset().findIndex((_,j)=>!completed.has(j));if(targetIndex<0)targetIndex=i;
- updateTasks();updateTyping();lesson(word);speakWord(word);
- announce('✓ '+word.w+' 消除成功！');
- if(completed.size===dataset().length){busy=true;setTimeout(showWin,450)}
+ if(completed.has(i))return;const word=dataset()[i];fly();completed.add(i);recordHomeSentence(word.en);input='';
+ const next=dataset().findIndex((_,j)=>!completed.has(j));targetIndex=next<0?i:next;write();$('typingbox').classList.remove('input-mismatch');updateTyping();speakWord(word);updateTasks();
 }
 function checkInput(){
- const normalized=input.toLowerCase();
- const exact=dataset().findIndex((w,i)=>!completed.has(i)&&w.w.toLowerCase()===normalized);
- if(exact>=0){const longer=dataset().some((w,i)=>!completed.has(i)&&w.w.length>input.length&&w.w.toLowerCase().startsWith(normalized));if(!longer){targetIndex=exact;updateTasks();success(exact);return}}
- if(input&&!dataset().some((w,i)=>!completed.has(i)&&w.w.toLowerCase().startsWith(normalized)))announce('没有匹配的任务词，请删除重试');
+ if(completed.size===dataset().length)return;
+ const normalized=normalize(input),wanted=normalize(dataset()[targetIndex].en);
+ if(normalized===wanted){success(targetIndex);return}
+ updateTasks();
+ if(normalized&&!wanted.startsWith(normalized))$('typingbox').classList.add('input-mismatch');else $('typingbox').classList.remove('input-mismatch');
 }
-function enter(key){if(busy)return;initVoice();if(key==='BACK'){input=[...input].slice(0,-1).join('');updateTyping();return}if(key==='SPACE')key=' ';if(input.length>=30)return;input+=key;updateTyping();checkInput();}
-$('clear').onclick=()=>{input='';updateTyping()};$('back').onclick=()=>{location.href='./index.html'};
+function enter(key){
+ if(busy||completed.size===dataset().length)return;initVoice();
+ if(key==='BACK'){input=[...input].slice(0,-1).join('');updateTyping();checkInput();return}
+ if(key==='SPACE')key=' ';if(!input&&/^[ .,!?:;]$/.test(key))return;if(input.length>=150)return;
+ input+=key;updateTyping();checkInput();
+}
+$('clear').onclick=()=>{input='';updateTyping();checkInput()};$('back').onclick=()=>{location.href='./index.html'};
+const progress=document.createElement('div');progress.id='sentence-progress';document.querySelector('.zone-tasks').append(progress);
+const win=document.createElement('div');win.id='completion-card';win.hidden=true;win.innerHTML='<strong>🎉 恭喜通关！</strong><p id="completion-text"></p><button id="next-level" type="button">进入下一关</button>';
+document.querySelector('.zone-tasks').append(win);
+function showWin(){win.hidden=false;$('completion-text').textContent=level===WORDS.length-1?'本版 12 关已完成！最后一句还可以继续听和复习。':'本关 10 句话已完成，可以继续听最后一句和语法。';$('next-level').textContent=level===WORDS.length-1?'从第一关复习':'进入下一关'}
+$('next-level').onclick=()=>{stopSpeech();stopDictation();level=(level+1)%WORDS.length;completed.clear();targetIndex=0;input='';busy=false;win.hidden=true;write();lesson(null);updateTyping();updateTasks()};
+window.addEventListener('storage',e=>{if(e.key==='word-match-home-preview-v1')$('remaining').textContent=getTotal()});
 
 let keyMode='letters',shifted=false,recognition=null,listening=false;
 const letterRows=['qwertyuiop','asdfghjkl','zxcvbnm'];
@@ -196,7 +250,7 @@ function renderKeyboard(){
  keyButton(keyMode==='letters'?'数字和符号':'返回字母',30,1572,102,92,()=>{keyMode=keyMode==='letters'?'symbols':'letters';shifted=false;renderKeyboard()});
  keyButton('表情',141,1572,82,92,()=>{keyMode=keyMode==='emoji'?'letters':'emoji';renderKeyboard()});
  keyButton('空格',233,1572,399,92,()=>enter('SPACE'));
- keyButton('确认输入',641,1572,181,92,()=>{if(!input){announce('请先输入任务单词');return}checkInput()});
+ keyButton('确认输入',641,1572,181,92,()=>{if(!input){announce('请先输入上方的完整句子');return}checkInput();if(input)announce('请对照上方句子继续输入或删除修改')});
  keyButton('切换标点符号',52,1685,80,80,()=>{keyMode=keyMode==='symbols'?'letters':'symbols';shifted=false;renderKeyboard()});
  const mic=keyButton(listening?'停止语音输入':'英文语音输入',727,1685,80,80,toggleDictation);mic.id='dictation-key';mic.setAttribute('aria-pressed',String(listening));if(listening)mic.classList.add('listening');
 }
@@ -210,13 +264,18 @@ function toggleDictation(){
  recognition.onstart=()=>{listening=true;renderKeyboard();$('dictation-note').hidden=false;$('dictation-note').textContent='正在听英文… 点击话筒结束';};
  recognition.onend=()=>{listening=false;renderKeyboard();$('dictation-note').hidden=true;};
  recognition.onerror=e=>{const hints={'not-allowed':'麦克风权限未允许，请在浏览器中允许语音输入。','service-not-allowed':'当前浏览器未开放语音识别服务，请使用键盘。','no-speech':'没有听到语音，请再试一次。','audio-capture':'没有可用的麦克风。',network:'语音识别网络连接失败，请稍后再试。'};announce(hints[e.error]||('语音输入失败：'+e.error),5000);};
- recognition.onresult=e=>{if(busy)return;const heard=e.results?.[0]?.[0]?.transcript||'';const text=heard.toLowerCase().replace(/[^a-z' -]/g,'').trim().slice(0,30);if(text){input=text;updateTyping();checkInput()}else announce('没有识别到英文，请再试一次。');};
+ recognition.onresult=e=>{if(busy)return;const heard=e.results?.[0]?.[0]?.transcript||'';const text=heard.toLowerCase().replace(/[^a-z' -]/g,'').trim().slice(0,150);if(text){input=text;updateTyping();checkInput()}else announce('没有识别到英文，请再试一次。');};
  try{recognition.start()}catch(e){announce('无法启动语音输入：'+e.message,5000)}
 }
 renderKeyboard();
-const overlay=$('overlay');$('dialog-action').onclick=()=>{stopSpeech();overlay.classList.remove('open');level=(level+1)%WORDS.length;completed.clear();targetIndex=0;input='';busy=false;write();updateTasks();lesson(dataset()[0]);updateTyping();warmAudio()};
-function showWin(){busy=false;$('dialog-title').textContent='🎉 恭喜通关！';$('dialog-text').textContent='本关10个单词全部拼写成功，进入下一关！';overlay.classList.add('open')}
-document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(/^[a-z]$/i.test(e.key)){e.preventDefault();enter(e.key.toLowerCase())}else if(e.key==="'"||e.key==='-'){enter(e.key)}else if(e.key==='Backspace'){e.preventDefault();enter('BACK')}else if(e.key===' '){e.preventDefault();enter('SPACE')}});
-if(completed.size===dataset().length)completed.clear();if(completed.has(targetIndex))targetIndex=dataset().findIndex((_,i)=>!completed.has(i));updateTasks();lesson(dataset()[targetIndex]);updateTyping();
+document.addEventListener('keydown',e=>{
+ if(e.target.matches('input,textarea')||e.ctrlKey||e.metaKey||e.altKey)return;
+ if(e.key==='Enter'&&!e.target.closest('button,[role=button]')){e.preventDefault();checkInput()}
+ else if(/^[a-z.,!?;'’:-]$/i.test(e.key)){e.preventDefault();enter(e.key)}
+ else if(e.key==='Backspace'){e.preventDefault();enter('BACK')}
+ else if(e.key===' '){e.preventDefault();enter('SPACE')}
+});
+targetIndex=dataset().findIndex((_,i)=>!completed.has(i));if(targetIndex<0)targetIndex=9;
+lesson(completed.size===10?dataset()[9]:null);updateTasks();updateTyping();
 })();
 </script></body></html>
