@@ -53,9 +53,43 @@
 .keyboard-open #tasks .word b{font-size:31px}.keyboard-open #tasks .word small{font-size:24px}
 .keyboard-open .remaining span{font-size:24px!important}.keyboard-open .remaining strong{font-size:40px!important}
 .keyboard-open #native-input{font-size:44px}
-</style><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="单词消消乐"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.webmanifest"></head><body>
+</style><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="单词消消乐"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="manifest" href="./manifest.webmanifest"><style id="typing-and-beach-v4">
+/* Real flow layout while typing, independent of the tall illustration's coordinates. */
+.typing-heading{display:none}
+html:has(body.keyboard-open),body.keyboard-open{overflow:hidden;overscroll-behavior:none}
+.keyboard-open #scene{display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:42px minmax(86px,1fr) 44px 54px 44px;gap:7px;padding:8px 12px 6px;background-position:center 35%;box-sizing:border-box;overflow:hidden}
+.keyboard-open #scene:before{background:linear-gradient(#cef2ffdb,#f7e8d5dd);z-index:0}
+.keyboard-open .typing-heading{display:flex;align-items:center;justify-content:center;grid-row:1;font-size:16px;font-weight:900;color:#8c1919;z-index:2;padding:0 100px 0 60px;white-space:nowrap}
+.keyboard-open #back{left:12px!important;top:8px!important;width:38px!important;height:38px!important;background:linear-gradient(#a76bf2,#6824c9);border-radius:50%;color:white;box-shadow:0 2px 0 #6833ad}
+.keyboard-open #back:after{content:'‹';font-size:34px;line-height:28px}
+.keyboard-open #level{left:auto!important;right:64px!important;top:8px!important;width:48px!important;height:38px!important;font-size:13px!important;background:#ffeb9e!important;border-radius:12px!important}
+.keyboard-open .remaining{left:auto!important;right:12px!important;top:8px!important;width:46px!important;height:38px!important;background:#7935c9!important;border-radius:12px!important;gap:0}
+.keyboard-open .remaining span{font-size:9px!important}.keyboard-open .remaining strong{font-size:18px!important}
+.keyboard-open #tasks{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important;grid-row:2;grid-template-rows:repeat(2,minmax(0,1fr));gap:6px;min-height:0;z-index:5}
+.keyboard-open #tasks .word{border-radius:16px!important;background:linear-gradient(#fdfaff,#e0d4ff)!important;border:1px solid #bc8ce5!important;box-shadow:0 2px 0 #a167cc!important;padding:2px!important;min-width:0;gap:2px}
+.keyboard-open #tasks .word b{font-size:19px}.keyboard-open #tasks .word small{font-size:13px}
+.keyboard-open #tasks .word.active{background:linear-gradient(#fff8d7,#ffe4a0)!important;outline:2px solid #e8ad32;outline-offset:-2px}
+.keyboard-open #tasks .word.gone{visibility:visible!important;opacity:.35!important}
+.keyboard-open #lessonword{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important;grid-row:3;background:linear-gradient(#fff7b8,#ffdd74)!important;border-radius:17px!important;gap:8px;min-width:0}
+.keyboard-open #wordvalue{font-size:24px!important}.keyboard-open #wordzh{font-size:20px!important}.keyboard-open #lessonword>span:nth-child(2){font-size:20px!important}
+.keyboard-open .sentence{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important;grid-row:4;border-radius:16px!important;background:#ffe2f4f5!important;padding:3px 8px;gap:2px}
+.keyboard-open #senten{font-size:16px!important;line-height:1.15}.keyboard-open #sentzh{font-size:14px!important;line-height:1.15}
+.keyboard-open #typingbox{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:100%!important;grid-row:5;background:#f9f5ff!important;border:2px solid #a261df!important;border-radius:22px!important;min-height:0}
+.keyboard-open #native-input{font-size:20px!important;padding:0 12px;letter-spacing:2px;height:100%;border-radius:20px}
+.keyboard-open #native-input::placeholder{font-size:14px;letter-spacing:0}
+.keyboard-open .alert{top:48px;left:20px;width:calc(100% - 40px);font-size:12px;padding:6px 10px;border-width:1px;border-radius:10px}
+@media(max-height:340px){.keyboard-open #scene{grid-template-rows:34px minmax(66px,1fr) 34px 42px 38px;gap:4px;padding-top:4px}.keyboard-open .typing-heading{font-size:14px}.keyboard-open #tasks .word b{font-size:17px}.keyboard-open #tasks .word small{font-size:11px}}
+
+/* Continue the beach below the illustration on tall screens. */
+html{min-height:100%;background:#f5d7ac}body{min-height:100vh;min-height:100svh;background-color:#f5d7ac;background-image:url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDI0IiBoZWlnaHQ9IjQwMCI+PGRlZnM+PGZpbHRlciBpZD0ic2FuZCI+PGZlVHVyYnVsZW5jZSB0eXBlPSJmcmFjdGFsTm9pc2UiIGJhc2VGcmVxdWVuY3k9Ii4xNCIgbnVtT2N0YXZlcz0iMyIgc3RpdGNoVGlsZXM9InN0aXRjaCIvPjxmZUNvbG9yTWF0cml4IHR5cGU9InNhdHVyYXRlIiB2YWx1ZXM9IjAiLz48ZmVDb21wb25lbnRUcmFuc2Zlcj48ZmVGdW5jQSB0eXBlPSJsaW5lYXIiIHNsb3BlPSIuMTMiLz48L2ZlQ29tcG9uZW50VHJhbnNmZXI+PGZlQmxlbmQgaW49IlNvdXJjZUdyYXBoaWMiIG1vZGU9InNvZnQtbGlnaHQiLz48L2ZpbHRlcj48cmFkaWFsR3JhZGllbnQgaWQ9InN1biI+PHN0b3Agc3RvcC1jb2xvcj0iI2ZmZThiYiIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2Y1ZDdhYyIvPjwvcmFkaWFsR3JhZGllbnQ+PC9kZWZzPjxwYXRoIGZpbGw9InVybCgjc3VuKSIgZmlsdGVyPSJ1cmwoI3NhbmQpIiBkPSJNMCAwaDEwMjR2NDAwSDB6Ii8+PC9zdmc+');background-size:640px 250px;background-repeat:repeat}
+body:not(.keyboard-open) #scene{mask-image:linear-gradient(#000 0%,#000 98%,transparent 100%);-webkit-mask-image:linear-gradient(#000 0%,#000 98%,transparent 100%)}
+body:not(.keyboard-open) #viewport{margin-top:env(safe-area-inset-top,0px)}
+.keyboard-open #scene{padding-top:max(8px,env(safe-area-inset-top,0px))}
+.keyboard-open #back,.keyboard-open #level,.keyboard-open .remaining{top:max(8px,env(safe-area-inset-top,0px))!important}
+#lessonword{cursor:pointer}
+</style></head><body>
 <div id="viewport"><main id="scene" aria-label="单词消消乐打字游戏">
-<button class="area hot" style="left:25px;top:147px;width:92px;height:100px" id="back" aria-label="返回首页"></button>
+<div class="typing-heading">单词消消乐</div><button class="area hot" style="left:25px;top:147px;width:92px;height:100px" id="back" aria-label="返回首页"></button>
 <div id="level" class="area bubble level" style="left:134px;top:181px;width:178px;height:58px">第4关</div>
 <div class="area bubble remaining" style="left:624px;top:172px;width:174px;height:74px"><span>剩余单词</span><strong id="remaining">10</strong></div>
 <div id="tasks" class="area" style="left:57px;top:350px;width:727px;height:219px"></div>
@@ -76,19 +110,27 @@ const WORDS=[
 [{w:'mum',zh:'妈妈',en:'My mum is kind.',cn:'我妈妈很友善。'},{w:'dad',zh:'爸爸',en:'My dad is at home.',cn:'我爸爸在家。'},{w:'boy',zh:'男孩',en:'This boy is my friend.',cn:'这个男孩是我的朋友。'},{w:'man',zh:'男人',en:'The man is tall.',cn:'这个男人很高。'},{w:'son',zh:'儿子',en:'He is my son.',cn:'他是我的儿子。'},{w:'kid',zh:'小孩',en:'The kid is happy.',cn:'这个孩子很高兴。'},{w:'her',zh:'她的',en:'This is her bag.',cn:'这是她的包。'},{w:'him',zh:'他',en:'I can see him.',cn:'我能看见他。'},{w:'she',zh:'她',en:'She is my friend.',cn:'她是我的朋友。'},{w:'you',zh:'你/你们',en:'You are my friend.',cn:'你是我的朋友。'}]
 ];
 const $=id=>document.getElementById(id), scene=$('scene'),view=$('viewport');let scale=1;
+let typingMode=false;
 function fit(){
- scale=Math.min((view.clientWidth||390)/1024,1);
- const vv=window.visualViewport,focused=document.activeElement?.id==='native-input';
- const keyboard=focused&&vv&&vv.height<window.innerHeight-100;
- const designHeight=keyboard?Math.max(760,Math.min(1536,(vv.height-8)/scale)):1536;
- const compression=designHeight/1536;
- scene.style.setProperty('--compact',compression);
- scene.style.height=designHeight+'px';scene.style.backgroundSize='1024px '+designHeight+'px';
- scene.style.transform='scale('+scale+')';view.style.height=(designHeight*scale)+'px';
- document.body.classList.toggle('keyboard-open',!!keyboard);
- if(keyboard){view.style.position='absolute';view.style.top=((vv.offsetTop||0)+window.scrollY+4)+'px';view.style.left='0';view.style.right='0';}
- else{view.style.position='relative';view.style.top='';view.style.left='';view.style.right='';}
-}window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);window.visualViewport?.addEventListener('scroll',fit);fit();
+ const vv=window.visualViewport;
+ const focused=document.activeElement?.id==='native-input';
+ typingMode=focused;
+ document.body.classList.toggle('keyboard-open',typingMode);
+ if(typingMode){
+  scale=1;
+  const height=vv?vv.height:window.innerHeight;
+  const width=vv?vv.width:window.innerWidth;
+  view.style.cssText='position:absolute;left:0;right:0;max-width:none;width:'+width+'px;height:'+height+'px;top:'+((vv?.offsetTop||0)+window.scrollY)+'px;margin:0;';
+  scene.style.transform='none';scene.style.width=width+'px';scene.style.height=height+'px';
+  scene.style.backgroundSize='cover';scene.style.setProperty('--compact',1);
+ }else{
+  view.style.cssText='';scene.style.width='1024px';scene.style.height='1536px';
+  scene.style.backgroundSize='1024px 1536px';scene.style.setProperty('--compact',1);
+  scale=Math.min((view.clientWidth||390)/1024,1);
+  scene.style.transform='scale('+scale+')';view.style.height=(1536*scale)+'px';
+ }
+}
+window.addEventListener('resize',fit);window.visualViewport?.addEventListener('resize',fit);window.visualViewport?.addEventListener('scroll',fit);fit();
 const key='wm-v42-progress';let saved={};try{saved=JSON.parse(localStorage.getItem(key)||'{}')}catch(e){};
 let level=Number.isInteger(saved.level)&&saved.level>=0&&saved.level<WORDS.length?saved.level:3;
 let completed=new Set(Array.isArray(saved.completed)?saved.completed:[]);let targetIndex=2,input='',busy=false,remainingTimer=null;
@@ -97,19 +139,55 @@ function announce(msg,duration=2200){const box=$('message');box.textContent=msg;
 
 // Microsoft Azure voice: text segments played consecutively, with matching locales.
 const AZURE_URL='https://wordmatch-voice.442599013.workers.dev/tts';
-let audioContext=null, audioQueue=Promise.resolve(),audioSession=0, speechErrorShown=false;
-function initVoice(){try{if(!audioContext){const AC=window.AudioContext||window.webkitAudioContext;if(AC)audioContext=new AC()}if(audioContext&&audioContext.state==='suspended')audioContext.resume().catch(()=>{})}catch(e){}}
-async function azureAudio(text,locale){
- const resp=await fetch(AZURE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice:locale==='zh-CN'?'zh-CN-XiaoxiaoNeural':'en-GB-RyanNeural'})});
- if(!resp.ok){let detail='';try{detail=(await resp.json()).error||''}catch(e){}throw Error('Azure '+resp.status+(detail?' '+detail:''))}
- const data=await resp.arrayBuffer();if(!data.byteLength)throw Error('Azure 返回空音频');return data;
+
+let audioContext=null,audioQueue=Promise.resolve(),speechErrorShown=false,currentNode=null;
+const decoded=new Map(),pending=new Map();
+function initVoice(){
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC)return;
+  if(!audioContext||audioContext.state==='closed'||audioContext.state==='interrupted')audioContext=new AC();
+  if(audioContext.state!=='running')audioContext.resume().catch(()=>{});
+  // Prime the output inside the actual tap, not after a network response.
+  const n=audioContext.createBufferSource();n.buffer=audioContext.createBuffer(1,1,22050);n.connect(audioContext.destination);n.start();
+ }catch(e){}
 }
-async function playAzure(text,locale,session){if(locale==='zh-CN'||!text||session!==audioSession)return;
- const bytes=await azureAudio(text,locale);if(session!==audioSession)return;
- if(audioContext){if(audioContext.state!=='running')await audioContext.resume();const buffer=await audioContext.decodeAudioData(bytes.slice(0));if(session!==audioSession)return;await new Promise((resolve,reject)=>{const node=audioContext.createBufferSource();node.buffer=buffer;node.connect(audioContext.destination);node.onended=resolve;try{node.start(0)}catch(e){reject(e)}})}
- else{await new Promise((resolve,reject)=>{const blob=URL.createObjectURL(new Blob([bytes],{type:'audio/mpeg'}));const a=new Audio(blob);a.onended=()=>{URL.revokeObjectURL(blob);resolve()};a.onerror=()=>{URL.revokeObjectURL(blob);reject(Error('音频播放失败'))};a.play().catch(reject)})}
+function timeout(p,ms){return Promise.race([p,new Promise((_,reject)=>setTimeout(()=>reject(Error('音频等待超时')),ms))])}
+async function azureAudio(text){
+ const cacheKey=new URL('./__microsoft_audio_v1__/'+encodeURIComponent(text),location.href).href;
+ let cache=null;try{if(window.caches){cache=await caches.open('wordmatch-microsoft-ryan-v1');const hit=await cache.match(cacheKey);if(hit)return await hit.arrayBuffer()}}catch(e){}
+ const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),12000);
+ try{const response=await fetch(AZURE_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale:'en-GB',voice:'en-GB-RyanNeural'}),signal:controller.signal});if(!response.ok)throw Error('微软语音 '+response.status);const bytes=await response.arrayBuffer();if(!bytes.byteLength)throw Error('音频为空');if(cache)try{await cache.put(cacheKey,new Response(bytes,{headers:{'Content-Type':'audio/mpeg'}}))}catch(e){}return bytes}finally{clearTimeout(timer)}
 }
-function voiceSequence(segments){segments=segments.filter(part=>part[1]==='en-GB'||part[1]==='en-US');initVoice();const id=++audioSession;audioQueue=audioQueue.catch(()=>{}).then(async()=>{for(const part of segments){if(id!==audioSession)break;try{await playAzure(part[0],part[1],id)}catch(e){if(!speechErrorShown){speechErrorShown=true;announce('英文朗读暂时不可用，请稍后重试',2600)};/* preserve queue; do not stop on first failed Chinese clip */}}});}
+function prepareClip(text){
+ if(decoded.has(text))return Promise.resolve(decoded.get(text));
+ if(pending.has(text))return pending.get(text);
+ if(!audioContext)return Promise.reject(Error('请点击输入框启用声音'));
+ const task=azureAudio(text).then(bytes=>audioContext.decodeAudioData(bytes.slice(0))).then(buffer=>{decoded.set(text,buffer);return buffer}).finally(()=>pending.delete(text));pending.set(text,task);return task;
+}
+async function playMicrosoft(text){
+ if(!text)return;
+ const buffer=await prepareClip(text);
+ if(audioContext.state!=='running')await timeout(audioContext.resume(),2500);
+ await new Promise((resolve,reject)=>{
+  const node=audioContext.createBufferSource();currentNode=node;node.buffer=buffer;node.connect(audioContext.destination);node.playbackRate.value=0.9;
+  const timer=setTimeout(()=>{try{node.stop()}catch(e){}reject(Error('播放超时'))},(buffer.duration/0.9+3)*1000);
+  node.onended=()=>{clearTimeout(timer);if(currentNode===node)currentNode=null;resolve()};node.start();
+ });
+}
+function queueSpeech(texts){
+ for(const text of texts){
+  if(!text)continue;
+  const ready=prepareClip(text).then(()=>true,()=>false);
+  audioQueue=audioQueue.catch(()=>{}).then(async()=>{try{if(!await ready)throw Error('音频加载失败');await playMicrosoft(text);speechErrorShown=false}catch(e){if(!speechErrorShown){speechErrorShown=true;announce('请再点一下输入框启用声音，并检查手机音量',3200)}}});
+ }
+ return audioQueue;
+}
+function warmAudio(){} // Audio is requested only for actual typing and completed words.
+function unlockVoice(){initVoice()}
+document.addEventListener('pointerdown',unlockVoice,{passive:true});
+function voiceSequence(segments){return queueSpeech(segments.filter(p=>p[1]==='en-GB'||p[1]==='en-US').map(p=>p[0]))}
+
 const grammarNotes={
  am:'am 是 be 动词的第一人称单数形式。',an:'an 用在元音音素开头的单数名词前。',as:'as 可以表示像、如同。',at:'at 表示在某个地点或时间。',be:'be 是系动词原形。',by:'by 表示在旁边，或通过某种方式。',do:'do 表示做。',go:'go 表示去。',he:'he 是第三人称单数男性主格。',hi:'hi 是打招呼用语。',
  mum:'mum 是母亲的口语说法。',dad:'dad 是父亲的口语说法。',boy:'boy 是可数名词，表示男孩。',man:'man 是可数名词，表示男人。',son:'son 是可数名词，表示儿子。',kid:'kid 表示孩子，是非正式表达。',her:'her 可作宾格代词或形容词性物主代词。',him:'him 是 he 的宾格。',she:'she 是女性第三人称单数主格。',you:'you 既可以表示你，也可以表示你们。'
@@ -121,27 +199,41 @@ const spokenPhrases={
  up:['stand up','站起来'],us:['help us','帮助我们'],we:['we are','我们是'],if:['if you like','如果你愿意'],so:['so nice','如此友好'],ox:['big ox','大公牛'],ex:['my ex','我的前任'],oh:['oh no','哦不'],ok:["OK let's go",'好的，我们走吧'],ah:['ah I see','啊，我明白了'],
  mum:['my mum','我的妈妈'],dad:['my dad','我的爸爸'],boy:['a little boy','一个小男孩'],man:['a tall man','一个高个子男人'],son:['my son','我的儿子'],kid:['a happy kid','一个开心的孩子'],her:['her bag','她的包'],him:['see him','看见他'],she:['she is','她是'],you:['you are','你是']
 };
-function speakWord(w){const spelling=w.w.split('').map(c=>c.toUpperCase()).join(', ');const note=grammarNotes[w.w]||w.w+' 的用法请结合例句学习。';const phrase=spokenPhrases[w.w]||[w.w,w.zh];
-voiceSequence([[w.w,'en-GB'],[w.zh,'zh-CN'],[spelling,'en-GB'],[phrase[0],'en-GB'],[phrase[1],'zh-CN'],[w.en,'en-GB'],[w.cn,'zh-CN'],[note,'zh-CN']]);}
+function speakWord(w){const phrase=(spokenPhrases[w.w]||[w.w])[0];return queueSpeech([w.w,...(phrase!==w.w?[phrase]:[]),...(w.en!==phrase?[w.en]:[])]);}
 
+$('lessonword').setAttribute('role','button');$('lessonword').setAttribute('tabindex','0');$('lessonword').setAttribute('aria-label','重听微软英文发音');$('lessonword').onclick=()=>{unlockVoice();speakWord(dataset()[targetIndex])};$('lessonword').onkeydown=e=>{if(e.key==='Enter'){unlockVoice();speakWord(dataset()[targetIndex])}};
 function select(i){if(busy||completed.has(i))return;targetIndex=i;input='';updateTyping();updateTasks();lesson(dataset()[i]);initVoice();}
 function updateTasks(){const wrap=$('tasks');wrap.replaceChildren();dataset().forEach((w,i)=>{const b=document.createElement('button');b.type='button';b.className='area word'+(i===targetIndex?' active':'')+(completed.has(i)?' gone':'');b.style.cssText='left:'+((i%5)*147)+'px;top:'+(Math.floor(i/5)*110)+'px;width:139px;height:92px';const strong=document.createElement('b');strong.textContent=w.w;const small=document.createElement('small');small.textContent=w.zh;b.append(strong,small);b.setAttribute('aria-label',w.w+' '+w.zh+(completed.has(i)?' 已完成':''));b.onclick=()=>select(i);if(completed.has(i))b.disabled=true;wrap.appendChild(b)});$('remaining').textContent=dataset().length-completed.size;$('level').textContent='第'+(level+1)+'关'}
 function lesson(w){$('wordvalue').textContent=w.w;$('wordzh').textContent=w.zh;$('senten').textContent=w.en;$('sentzh').textContent=w.cn;const t=w.w.length>9?28:w.w.length>6?38:53;$('wordvalue').style.fontSize=t+'px';$('wordzh').style.fontSize=(w.zh.length>5?29:38)+'px';$('senten').style.fontSize=(w.en.length>28?26:36)+'px';$('sentzh').style.fontSize=(w.cn.length>18?23:31)+'px'}
 function updateTyping(){if($('native-input').value!==input)$('native-input').value=input;$('typed').textContent=input;$('typed').style.fontSize=(input.length>14?26:input.length>9?37:58)+'px'}
 function fly(index){return new Promise(resolve=>{const el=$('tasks').children[index],src=el.getBoundingClientRect(),dst=$('lessonword').getBoundingClientRect(),r=scene.getBoundingClientRect();const f=document.createElement('div');f.className='fly';f.textContent=dataset()[index].w;f.style.left=((src.left-r.left)/scale)+'px';f.style.top=((src.top-r.top)/scale)+'px';scene.appendChild(f);requestAnimationFrame(()=>requestAnimationFrame(()=>{f.style.transform='translate('+((dst.left-src.left)/scale)+'px,'+((dst.top-src.top)/scale)+'px) scale(.75)';f.style.opacity='.08'}));setTimeout(()=>{f.remove();resolve()},760)})}
-async function success(i){if(busy)return;busy=true;initVoice();speakWord(dataset()[i]);await fly(i);completed.add(i);write();lesson(dataset()[i]);updateTasks();input='';updateTyping();announce('✓ '+dataset()[i].w+' 消除成功！');if(completed.size===dataset().length){setTimeout(()=>showWin(),950)}else{setTimeout(()=>{let j=dataset().findIndex((_,k)=>!completed.has(k));targetIndex=j;updateTasks();lesson(dataset()[j]);busy=false},1200)}}
-function enter(key){if(busy)return;initVoice();if(key==='BACK'){input=input.slice(0,-1);updateTyping();return}if(key==='SPACE')key=' ';if(input.length>=30)return;input+=key;updateTyping();const exact=dataset().findIndex((w,i)=>!completed.has(i)&&w.w.toLowerCase()===input.toLowerCase());if(exact>=0){const longer=dataset().some((w,i)=>!completed.has(i)&&w.w.length>input.length&&w.w.toLowerCase().startsWith(input.toLowerCase()));if(!longer){targetIndex=exact;updateTasks();success(exact);return}}const prefix=dataset().some((w,i)=>!completed.has(i)&&w.w.toLowerCase().startsWith(input.toLowerCase()));if(!prefix){announce('没有匹配的任务词，请删除重试');}}
+async function success(i){if(busy)return;busy=true;initVoice();const teaching=speakWord(dataset()[i]);await fly(i);completed.add(i);write();lesson(dataset()[i]);updateTasks();input='';updateTyping();announce('✓ '+dataset()[i].w+' 消除成功！');if(completed.size===dataset().length){teaching.finally(()=>showWin())}else{teaching.finally(()=>setTimeout(()=>{let j=dataset().findIndex((_,k)=>!completed.has(k));targetIndex=j;updateTasks();lesson(dataset()[j]);busy=false},150))}}
+function checkInput(){
+ const exact=dataset().findIndex((w,i)=>!completed.has(i)&&w.w.toLowerCase()===input);
+ if(exact>=0){const longer=dataset().some((w,i)=>!completed.has(i)&&w.w.length>input.length&&w.w.toLowerCase().startsWith(input));if(!longer){targetIndex=exact;updateTasks();success(exact);return}}
+ if(input&&!dataset().some((w,i)=>!completed.has(i)&&w.w.toLowerCase().startsWith(input)))announce('没有匹配的任务词，请删除重试');
+}
+function enter(key){if(busy)return;initVoice();if(key==='BACK'){input=input.slice(0,-1);updateTyping();return}if(key==='SPACE')key=' ';if(input.length>=30)return;input+=key.toLowerCase();if(/^[a-z]$/i.test(key))queueSpeech([key.toUpperCase()]);updateTyping();checkInput();}
 $('clear').onclick=()=>{input='';updateTyping()};$('back').onclick=()=>{location.href='./index.html'};
 
 const nativeInput=$('native-input');
+$('tasks').addEventListener('pointerdown',e=>{if(document.activeElement===nativeInput)e.preventDefault()});
 let composing=false;
-function acceptNative(){if(composing)return;if(busy){nativeInput.value=input;return}const value=nativeInput.value.toLowerCase().replace(/[^a-z' -]/g,'').slice(0,30);input='';for(const ch of value){enter(ch);if(busy)break}updateTyping();}
-nativeInput.addEventListener('focus',()=>{fit();setTimeout(fit,350)});nativeInput.addEventListener('blur',()=>{setTimeout(fit,120)});
+function acceptNative(){
+ if(composing)return;
+ if(busy){nativeInput.value=input;return}
+ initVoice();
+ const value=nativeInput.value.toLowerCase().replace(/[^a-z' -]/g,'').slice(0,30);
+ let common=0;while(common<input.length&&common<value.length&&input[common]===value[common])common++;
+ const added=value.slice(common).replace(/[^a-z]/g,'');
+ input=value;updateTyping();if(added)queueSpeech([...added.toUpperCase()]);checkInput();
+}
+nativeInput.addEventListener('focus',()=>{unlockVoice();fit();setTimeout(fit,350)});nativeInput.addEventListener('blur',()=>{fit();setTimeout(()=>{fit();window.scrollTo(0,0)},180)});
 nativeInput.addEventListener('compositionstart',()=>{composing=true});
 nativeInput.addEventListener('compositionend',()=>{composing=false;acceptNative()});
 nativeInput.addEventListener('input',acceptNative);
 nativeInput.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();nativeInput.blur()}});
-const overlay=$('overlay');$('dialog-action').onclick=()=>{overlay.classList.remove('open');level=(level+1)%WORDS.length;completed.clear();targetIndex=0;input='';busy=false;write();updateTasks();lesson(dataset()[0]);updateTyping()};
+const overlay=$('overlay');$('dialog-action').onclick=()=>{overlay.classList.remove('open');level=(level+1)%WORDS.length;completed.clear();targetIndex=0;input='';busy=false;write();updateTasks();lesson(dataset()[0]);updateTyping();warmAudio()};
 function showWin(){busy=false;$('dialog-title').textContent='🎉 恭喜通关！';$('dialog-text').textContent='本关10个单词全部拼写成功，进入下一关！';overlay.classList.add('open')}
 document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea'))return;if(/^[a-z]$/i.test(e.key)){e.preventDefault();enter(e.key.toLowerCase())}else if(e.key==="'"||e.key==='-'){enter(e.key)}else if(e.key==='Backspace'){e.preventDefault();enter('BACK')}else if(e.key===' '){e.preventDefault();enter('SPACE')}});
 if(completed.size===dataset().length)completed.clear();if(completed.has(targetIndex))targetIndex=dataset().findIndex((_,i)=>!completed.has(i));updateTasks();lesson(dataset()[targetIndex]);updateTyping();
