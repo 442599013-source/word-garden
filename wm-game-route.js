@@ -1,0 +1,1 @@
+(function(){const launch=function(){location.href='./sentence-game.html?v=16'};const previous=window.WordMatchStandalone||{};window.WordMatchStandalone={...previous,open:launch};document.addEventListener('click',function(e){const target=e.target.closest('[data-quick="match"]');if(target){e.preventDefault();e.stopImmediatePropagation();launch()}},true)})();
