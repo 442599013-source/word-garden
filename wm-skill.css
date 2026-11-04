@@ -5,3 +5,5 @@ body[data-skill=writing] .question,body[data-skill=speaking] .question{height:14
 .typed-answer{height:38%;top:36%;justify-content:center;gap:6px;padding:12px}.typed-answer .wm-answer-field{height:76px!important}.typed-answer label{font-size:13px}.typed-answer .wm-keyboard-toggle{font-size:11px}.typed-answer .mic-button{min-height:38px}.context{min-width:0}.context #theme{min-width:0;max-width:51%;overflow-wrap:break-word}.context label{display:flex;align-items:center;gap:4px;max-width:49%;min-width:0}.context .wm-select-button{font-size:16px;max-width:112px;min-width:0}.context select[hidden]{display:none}.feedback{height:9%;top:74.5%;min-height:0;overflow:hidden}.feedback #status{min-height:32px;max-height:48px;overflow:auto;font-size:12px;line-height:1.4}body[data-skill=writing] .question,body[data-skill=speaking] .question{height:11%}
 
 .typed-answer{padding:8px;gap:4px}
+
+.dots{flex-wrap:wrap;gap:5px}
