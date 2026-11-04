@@ -34,3 +34,5 @@
 .activities-body .availability:not(:empty){background:#f4edfd;margin:0 auto}
 
 .activities-body .activity-page{background:#9bd7ee url('wm-activity-scenery.webp') center/cover no-repeat}.activity-hero{mask-image:linear-gradient(#000 91%,transparent);-webkit-mask-image:linear-gradient(#000 91%,transparent)}
+
+.activities-body #activity-links{justify-content:center;gap:clamp(15px,3.6svh,30px);padding:20px 0}
