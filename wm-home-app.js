@@ -64,7 +64,7 @@ return {progressCards};
 })();
 const {journeyButton,journeyPage} = (()=>{
 
-function journeyButton(){return `<button type="button" class="journey" data-quick="learn"><span class="journey-icon">${icon('rocket')}</span><span class="journey-text"><strong>进阶之旅</strong><small>Level Up</small></span>${icon('chevron','journey-chevron')}</button>`;}
+function journeyButton(){return `<button type="button" class="journey" data-quick="learn"><span class="journey-icon">${icon('rocket')}</span><span class="journey-text"><strong>成长之路</strong><small>Our Growth Journey</small></span>${icon('chevron','journey-chevron')}</button>`;}
 function journeyPage(){
  const stages=[['幼儿园','Kindergarten'],['小学','Primary School'],['初中','Junior High School'],['高中','Senior High School'],['大学','University'],['研究生','Postgraduate']];
  return `<div class="inner-panel"><div class="bilingual-head"><h3>英语学习阶段</h3><p>English Learning Stages</p></div><div class="journey-list">${stages.map((s,i)=>`<div class="stage-item"><span class="stage-num">${i+1}</span><div class="item-name"><strong>${s[0]}</strong><small>${s[1]}</small></div>${icon('chevron','lock-icon')}</div>`).join('')}</div><p class="secondary-info">选择阶段查看课程。幼儿园已开放；其他阶段正在编排题库。</p><p class="secondary-info">Choose a stage. Kindergarten lessons are available now.</p></div>`;
@@ -109,7 +109,7 @@ function subpage(page, data){
  const best=history.length?Math.max(...history.map(x=>Number(x.score))):'—';
  const stageNames={junior:'幼儿园小班',middle:'幼儿园中班',senior:'幼儿园大班',primary:'小学',juniorHigh:'初中',seniorHigh:'高中',university:'大学',postgraduate:'研究生'};
  const sorted=history.slice().reverse();
- content=`<div class="wm-stats-grid wm-exam-stats"><div class="wm-stat"><strong>${avg}</strong><span>平均分</span><small>Average</small></div><div class="wm-stat"><strong>${history.length}</strong><span>参加考试</span><small>Exams Taken</small></div><div class="wm-stat"><strong>${best}</strong><span>最高分</span><small>Highest Score</small></div></div><p class="secondary-info">只统计期中、期末正式考试，不计练习题成绩。</p><div class="wm-exam-list">${sorted.length?sorted.map((x,i)=>`<div class="wm-exam-row"><div><strong>${stageNames[x.grade]||escapeHTML(String(x.grade||'未知阶段'))} · ${Number(x.week)===20?'期中考试':'期末考试'}</strong><small>${x.at?escapeHTML(String(x.at).slice(0,10)):''}</small></div><b>${x.score} 分</b><button type="button" class="wm-mini-action" data-exam-grade="${escapeHTML(String(x.grade||''))}" data-exam-week="${Number(x.week)}">重新考试</button></div>`).join(''):'<div class="placeholder-notice">尚无正式期中或期末考试成绩。完成考试后会自动显示在这里。</div>'}</div><button class="primary-action" type="button" data-route="journey">去参加更多考试</button><button class="secondary-action" type="button" data-route="mistakes">错题巩固练习</button>`;
+ content=`<div class="wm-stats-grid wm-exam-stats"><div class="wm-stat"><strong>${avg}</strong><span>平均分</span><small>Average</small></div><div class="wm-stat"><strong>${history.length}</strong><span>参加考试</span><small>Exams Taken</small></div><div class="wm-stat"><strong>${best}</strong><span>最高分</span><small>Highest Score</small></div></div><p class="secondary-info">只统计期中、期末正式考试，不计练习题成绩。</p><div class="wm-exam-list">${sorted.length?sorted.map((x,i)=>`<div class="wm-exam-row"><div><strong>${stageNames[x.grade]||escapeHTML(String(x.grade||'未知阶段'))} · ${Number(x.week)===20?'期中考试':'期末考试'}</strong><small>${x.at?escapeHTML(String(x.at).slice(0,10)):''}</small></div><b>${x.score} 分</b><button type="button" class="wm-mini-action" data-exam-grade="${escapeHTML(String(x.grade||''))}" data-exam-week="${Number(x.week)}" data-exam-block="${escapeHTML(String(x.blockId||''))}">重新考试</button></div>`).join(''):'<div class="placeholder-notice">尚无正式期中或期末考试成绩。完成考试后会自动显示在这里。</div>'}</div><button class="primary-action" type="button" data-route="journey">去参加更多考试</button><button class="secondary-action" type="button" data-route="mistakes">错题巩固练习</button>`;
  }else if(page==='mistakes'){
  name='考试错题巩固练习';english='Exam Mistake Review';
  const mistakes=(data.examMistakes||[]);
@@ -118,7 +118,7 @@ function subpage(page, data){
  name='本机学习档案';english='Local Learning Profile';
  content=`<div class="inner-panel"><h3>邮箱注册 · Create Account</h3><label class="input-label" for="authEmail">邮箱 · Email</label><input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com"><label class="input-label" for="authPassword">密码 · Password（至少6位）</label><input id="authPassword" class="input" type="password" autocomplete="new-password" minlength="6" placeholder="Password"><button class="primary-action" type="button" data-auth="signup">注册并发送验证邮件<small>Register & Verify Email</small></button><button class="secondary-action" type="button" data-auth="google">使用 Google 一键登录 · Continue with Google</button><button class="secondary-action" type="button" data-route="login">已有账户？登录 · Log In</button><p id="authStatus" class="secondary-info" role="status">${escapeHTML(window.WMAuth?.status||'正在连接 Firebase…')}</p></div>`;
  }else if(page==='journey'){
- name='进阶之旅';english='Level Up'; content='__JOURNEY__';
+ name='成长之路';english='Level Up'; content='__JOURNEY__';
  }else if(page==='login'){
  name=data.nickname?'账户':'登录';english=data.nickname?'Account':'Log In';
  content=`<div class="inner-panel"><h3>邮箱账户 · Email Account</h3><p id="authUserInfo" class="secondary-info">${escapeHTML(window.WMAuth?.user?.email||'未登录 · Guest')}</p><label class="input-label" for="authEmail">邮箱 · Email</label><input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com"><label class="input-label" for="authPassword">密码 · Password</label><input id="authPassword" class="input" type="password" autocomplete="current-password" placeholder="Password"><button class="primary-action" type="button" data-auth="login">邮箱登录<small>Log In</small></button><button class="secondary-action" type="button" data-auth="google">使用 Google 一键登录 · Continue with Google</button><button class="secondary-action" type="button" data-route="register">注册<small>Register</small></button><button class="secondary-action" type="button" data-auth="reset">忘记密码 · Reset Password</button><button class="secondary-action" type="button" data-auth="verify">重发验证邮件 · Resend Verification</button><button class="secondary-action" type="button" data-auth="logout">退出登录 · Log Out</button><p id="authStatus" class="secondary-info" role="status">${escapeHTML(window.WMAuth?.status||'正在连接 Firebase…')}</p><p class="secondary-info">原有本机学习记录保留，账户登录不会清空记录。</p></div>`;
@@ -182,7 +182,7 @@ function mountKindergarten(container,context){
   else lessonFrame.addEventListener('load',configureLesson,{once:true});
  }
  function openMap(){
-  holder.replaceChildren();back=document.createElement('button');back.className='back';back.style.cssText='display:block;margin-top:12px';back.textContent='← 返回进阶之旅';back.onclick=()=>{holder.innerHTML=original;const x=holder.querySelector('.stage-item');x.style.cursor='pointer';x.addEventListener('click',openMap);x.setAttribute('role','button');x.tabIndex=0; x.addEventListener('keydown',e=>{if(e.key==='Enter')openMap()});};
+  holder.replaceChildren();back=document.createElement('button');back.className='back';back.style.cssText='display:block;margin-top:12px';back.textContent='← 返回成长之路';back.onclick=()=>{holder.innerHTML=original;const x=holder.querySelector('.stage-item');x.style.cursor='pointer';x.addEventListener('click',openMap);x.setAttribute('role','button');x.tabIndex=0; x.addEventListener('keydown',e=>{if(e.key==='Enter')openMap()});};
   frame=mkFrame(NAV_HTML,'幼儿园课程导航V1');holder.append(frame);holder.append(back);
   frame.addEventListener('load',()=>{
    if(closed)return;const d=frame.contentDocument;
@@ -305,7 +305,7 @@ function drawHome(){
   const estimate=window.WMPracticeAssessment?.summary(skill.id);const score=estimate?estimate.score:data.pteScores?.[skill.id],valid=Number.isFinite(score)&&score>=0&&score<=90;
   const x=i%2===0?229:628,y=i<2?1231:1517;
   return `<button class="home-hot home-skill" data-route="${skill.id}" style="left:${i%2===0?40:438}px;top:${i<2?1113:1395}px;width:376px;height:268px" aria-label="${skill.cn} ${skill.en}"></button>`+
-   [valid?score:'待评估',skill.target,valid?Math.max(0,skill.target-score):'待计算'].map((value,j)=>`<span class="home-value home-score" style="left:${x}px;top:${y+j*46}px;width:166px;height:35px;flex-direction:column;line-height:20px;font-size:24px" title="${estimate?'PTE练习估算：90 × 加权掌握量 ÷ 总权重；掌握 '+estimate.mastered+' 个不同词。自定学习进度估值。':''}" data-home-value="${skill.id}-${['current','target','gap'][j]}">${escapeHTML(value)}${estimate&&j===0?'<small style="display:block;font-size:10px;line-height:10px">练习估算 · Estimate</small>':''}</span>`).join('')+
+   [valid?score.toFixed(2):'0.00',skill.target.toFixed(2),(valid?Math.max(0,skill.target-score):skill.target).toFixed(2)].map((value,j)=>`<span class="home-value home-score" style="left:${x}px;top:${y+j*46}px;width:166px;height:35px;flex-direction:column;line-height:20px;font-size:24px" title="${estimate?'PTE练习估算：90 × 加权掌握量 ÷ 总权重；掌握 '+estimate.mastered+' 个不同词。自定学习进度估值。':''}" data-home-value="${skill.id}-${['current','target','gap'][j]}">${escapeHTML(value)}</span>`).join('')+
    `<div class="home-progress" style="left:${i%2===0?63:460}px;top:${i<2?1195:1480}px;width:332px;height:23px" role="progressbar" aria-label="${skill.cn}进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(Math.min(100,score/skill.target*100))}"`:'aria-valuetext="待评估"'}><span style="width:${valid?Math.min(100,score/skill.target*100):0}%;background:${['#5da5f4','#ed80b6','#75b97a','#edb441'][i]}"></span></div>`;
  }).join('');
  app.innerHTML=`<div class="home-viewport"><section class="home-scene" aria-label="单词消消乐首页">
@@ -318,7 +318,7 @@ function drawHome(){
  <span class="home-value home-count" style="left:70px;top:703px;width:321px;height:58px" data-home-value="words">${count} 个</span>
  <button class="home-hot" data-route="results" aria-label="综合考试成绩 ${average}" style="left:437px;top:610px;width:372px;height:234px"></button>
  <span class="home-value home-count" style="left:463px;top:703px;width:321px;height:58px" data-home-value="average">${escapeHTML(average)}${exams.length?' 分':''}</span>
- <button class="home-hot" data-quick="learn" aria-label="进阶之旅 Level Up" style="left:24px;top:883px;width:804px;height:97px"></button>
+ <button class="home-hot home-growth" data-route="journey" aria-label="成长之路 Our Growth Journey" style="left:24px;top:883px;width:804px;height:97px"><span class="growth-rocket">🚀</span><span>成长之路<small>Our Growth Journey</small></span><b>›</b></button>
  ${skillHTML}
  </section></div>`;
  fitBeachHome();
@@ -335,7 +335,8 @@ function drawFallback(route){
  app.innerHTML=route==='journey'?output.replace('__JOURNEY__',journeyPage()):output;
 }
 async function navigate(route){
- if(route==='listening'){location.href='./listening.html?v=17';return;}
+ if(route==='journey'){location.href='growth-road.html';return;}
+ if(['listening','speaking','reading','writing'].includes(route)){location.href='./'+route+'.html?v=20';return;}
  ++token; const thisToken=token;
  if(cleanup){try{cleanup()}catch(err){console.warn('Module cleanup',err)}cleanup=null;}
  page=route;
@@ -363,7 +364,7 @@ app.addEventListener('change',e=>{if(e.target.id==='accent'){data.accent=e.targe
 app.addEventListener('click',e=>{
  const quick=e.target.closest('[data-quick]');if(quick){if(quick.dataset.quick==='match'){window.WordMatchStandalone.open();return;}wmQuickMode='learn';navigate('journey');window.scrollTo({top:0,behavior:'instant'});return;}
  const route=e.target.closest('[data-route]');
- if(route){navigate(route.dataset.route);window.scrollTo({top:0,behavior:'instant'});return;}const exam=e.target.closest('[data-exam-grade]');if(exam){window.WordMatchOpenExam?.(exam.dataset.examGrade,Number(exam.dataset.examWeek));return;}
+ if(route){navigate(route.dataset.route);window.scrollTo({top:0,behavior:'instant'});return;}const exam=e.target.closest('[data-exam-grade]');if(exam){window.WordMatchOpenExam?.(exam.dataset.examGrade,Number(exam.dataset.examWeek),exam.dataset.examBlock);return;}
  const action=e.target.closest('[data-action]');if(!action)return;
  if(action.dataset.action==='sound'){data.sound=!data.sound;save();navigate('settings');}
  if(action.dataset.action==='voice-test'){window.WordMatchPreviewAzure?.();}
@@ -418,7 +419,7 @@ function updateHomeData(update={}){
  else if(!cleanup)drawFallback(page);
 }
 window.addEventListener('wordmatch:data-changed', e=>updateHomeData(e.detail||{}));
-window.WordMatchPreviewAzure=async()=>{try{const locale=data.accent;const voice=data.azureVoice||(locale==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural');const response=await fetch(window.wordMatchOnlineTtsUrl+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Hello! Welcome to our English learning game.',locale,voice})});if(!response.ok)throw Error('HTTP '+response.status);const u=URL.createObjectURL(await response.blob());const a=new Audio(u);a.playbackRate=data.voiceSpeed||1;a.onended=()=>URL.revokeObjectURL(u);await a.play()}catch(e){alert('语音试听失败：'+e.message)}};window.WordMatchOpenExam=(g,w)=>{navigate('journey');setTimeout(()=>{const tab=document.querySelector('[data-route="journey"]');/* Select exam in existing journey page where available */const target=document.querySelector('[data-exam-grade="'+g+'"][data-exam-week="'+w+'"]');if(target)target.click();else alert('请在成长之旅的课程地图中进入'+(w===20?'期中':'期末')+'考试。')},150)};window.WordMatchHome={navigate,updateHomeData};window.WordMatchVoiceSettings=()=>({accent:data.accent,sound:data.sound,voiceChoice:data.voiceChoice,voiceSpeed:data.voiceSpeed,azureVoice:data.azureVoice|| (data.accent==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural'),azureChineseVoice:data.azureChineseVoice});
+window.WordMatchPreviewAzure=async()=>{try{const locale=data.accent;const voice=data.azureVoice||(locale==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural');const response=await fetch(window.wordMatchOnlineTtsUrl+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Hello! Welcome to our English learning game.',locale,voice})});if(!response.ok)throw Error('HTTP '+response.status);const u=URL.createObjectURL(await response.blob());const a=new Audio(u);a.playbackRate=data.voiceSpeed||1;a.onended=()=>URL.revokeObjectURL(u);await a.play()}catch(e){alert('语音试听失败：'+e.message)}};window.WordMatchOpenExam=(g,w,b)=>{const ci={junior:0,middle:1,senior:2}[g]||0;const n=/^\d+-\d+$/.test(b||'')?Number(b.split('-')[0]):ci*40+(Number(w)===20?1:21);location.href='assessment.html?level='+n};window.WordMatchHome={navigate,updateHomeData};window.WordMatchVoiceSettings=()=>({accent:data.accent,sound:data.sound,voiceChoice:data.voiceChoice,voiceSpeed:data.voiceSpeed,azureVoice:data.azureVoice|| (data.accent==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural'),azureChineseVoice:data.azureChineseVoice});
 drawHome();
 
 window.addEventListener('wm-assessment-updated',()=>{if(page==='home')drawHome()});window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13')&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});

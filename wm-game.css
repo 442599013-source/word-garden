@@ -40,3 +40,6 @@ html,body{background:#fff!important;background-image:none!important}html::before
 .wm-completion{inset:32px 8px 8px;min-width:0;min-height:0;padding:8px;gap:8px;overflow:hidden;box-sizing:border-box}
 .wm-completion strong{display:block;flex:0 0 auto;max-width:100%;font-size:clamp(14px,3.6vw,19px);line-height:1.25;white-space:nowrap}
 .wm-completion button{flex:0 0 auto;max-width:100%;min-height:34px;padding:6px 12px;font-size:clamp(12px,3.4vw,16px);line-height:1.25;white-space:nowrap;box-sizing:border-box}
+
+/* V20: visible clear-all control; display never focuses a system input. */
+.wm-input{position:relative;padding-right:42px;overflow:hidden}.wm-input-text{display:block;overflow-x:auto;white-space:nowrap;max-width:calc(100% - 18px)}.wm-clear{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;background:transparent;color:#875ba9;font-size:26px;line-height:1;z-index:3}.wm-tabs button{white-space:nowrap;font-size:clamp(9px,2.35vw,13px);padding:4px 6px}.wm-tabs .wm-icon{width:14px;height:14px;vertical-align:middle}

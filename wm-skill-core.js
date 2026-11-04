@@ -1,0 +1,9 @@
+/* Shared course-derived content for reading, speaking, writing and independent training. */
+(()=>{'use strict';
+const normalize=s=>String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[.,!?;:]/g,'').trim().replace(/\s+/g,' ');
+function phrase(l){const en=l.en.replace(/[.!?]$/,'');const prefixes=['I can ','I have ','This is ','He is ','She is ','I like ','I am ','It is ','Do you ','I do not ','I '];const prefix=prefixes.find(p=>en.startsWith(p));const result=prefix?en.slice(prefix.length):en;return /\s/.test(result)?result:en.replace(/^I /,'')}
+function material(unit,type,i){const lessons=unit.sourceLessons,l=lessons[i%lessons.length];if(type==='word')return {en:l.w,zh:l.zh,word:l.w};if(type==='phrase')return {en:phrase(l),zh:l.cn.replace(/^(我是|我有|这是|他是|她是|我喜欢|它是|你喜欢|你是|我不|我会|我正在|我)/,''),word:l.w};if(type==='sentence')return {en:l.en,zh:l.cn,word:l.w};let en=[],zh=[],words=0;for(let k=0;k<lessons.length;k++){const x=lessons[(i+k)%lessons.length],n=x.en.trim().split(/\s+/).length;if(words+n>50)break;en.push(x.en);zh.push(x.cn);words+=n;if(words>=20)break}return {en:en.join(' '),zh:zh.join(''),word:l.w}}
+function question(bank,skill,level,index){const unit=bank.levels[level],base=unit.questions[index%10];if(skill==='reading')return {...base,en:base.audioText,word:base.focusWord};const type=level<4?'word':level<8?'phrase':'sentence';return {...material(unit,type,index),type}}
+function pieces(text,type){if(type==='word')return Array.from(text);if(type==='phrase')return text.match(/\s+|[^\s]{1,3}/g)||[];return text.split(/\s+/)}
+function shuffle(items){const a=items.map((text,id)=>({text,id}));for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}if(a.length>1&&a.every((x,i)=>x.id===i))[a[0],a[1]]=[a[1],a[0]];return a}
+window.WMSkillCore={normalize,material,question,pieces,shuffle};})();
