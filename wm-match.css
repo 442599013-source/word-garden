@@ -22,3 +22,17 @@
 .finish-bling{position:absolute;color:#fff3aa;text-shadow:0 0 5px #e9a938,0 0 9px #fff;pointer-events:none;font-size:4.5cqw;animation:finish-twinkle 2.4s ease-in-out 3}.finish-bling.left{left:-6px;top:8px}.finish-bling.top{right:5px;top:-9px;animation-delay:.6s}.finish-bling.right{right:-5px;bottom:3px;font-size:3.5cqw;animation-delay:1.2s}.finish-fireworks{position:absolute;left:-3%;width:106%;height:62px;top:-64px;pointer-events:none}.finish-burst{position:absolute;width:1px;height:1px;left:var(--burst-x);top:var(--burst-y);color:#ffe098}.finish-burst:nth-child(2){color:#ffc4ee}.finish-burst:nth-child(3){color:#bcefff}.finish-burst i{position:absolute;width:3px;height:7px;border-radius:3px;background:currentColor;box-shadow:0 0 4px currentColor;transform:rotate(var(--angle)) translateY(-19px);animation:finish-pop 2.8s ease-out both;animation-delay:var(--delay)}
 @keyframes finish-twinkle{0%,100%{opacity:.6;transform:scale(.85)}45%{opacity:1;transform:scale(1.2);filter:drop-shadow(0 0 3px #fff)}}@keyframes finish-pop{0%{opacity:0;transform:rotate(var(--angle)) translateY(0) scale(.4)}18%{opacity:1}65%,100%{opacity:.9;transform:rotate(var(--angle)) translateY(-19px) scale(.75)}}
 @media(prefers-reduced-motion:reduce){.finish-bling,.finish-burst i{animation:none}}
+
+/* V36: clean wider vocabulary panel and close-set collected cards. */
+.match-stage{background-image:url('wm-match-forest-v36.png?v=36')}
+.match-targets{left:8%;width:84%;background:transparent}
+.match-message{top:84.2%;height:6%;overflow:visible}
+.matched-pair{width:94%;height:100%;gap:2px;flex:0 0 auto;align-items:center;justify-content:center;overflow:visible}
+.collected-card{width:calc(50% - 1px);height:74%;flex:0 0 calc(50% - 1px);border-radius:2cqw}
+.collecting-card{flex:none}
+.collision-gold{position:absolute;width:0;height:0;pointer-events:none;z-index:5;filter:drop-shadow(0 0 4px #ffcf42)}
+.collision-gold:before{content:'';position:absolute;left:-18px;top:-18px;width:36px;height:36px;border-radius:50%;background:radial-gradient(circle,#fffde9c9,#ffe18744 45%,transparent 72%);animation:gold-contact-glow 2550ms linear both}
+.collision-star{position:absolute;display:block;left:0;top:0;color:#ffe58a;font-size:var(--gs);line-height:1;font-style:normal;text-shadow:0 0 3px #fff,0 0 8px #ffcf3d;transform:translate(var(--gx),var(--gy));animation:gold-contact-star 2550ms linear both}
+@keyframes gold-contact-star{0%{opacity:0;transform:translate(0,0) scale(.4)}7.84%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1)}40%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(.85)}70%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1.05)}86.27%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1)}100%{opacity:0;transform:translate(var(--gx),calc(var(--gy) - 5px)) scale(.8)}}
+@keyframes gold-contact-glow{0%{opacity:0}7.84%,86.27%{opacity:1}100%{opacity:0}}
+@media(prefers-reduced-motion:reduce){.collision-star,.collision-gold:before{animation:none}}

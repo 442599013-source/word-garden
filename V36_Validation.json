@@ -1,0 +1,37 @@
+{
+  "engine": {
+    "levelsPassed": 129,
+    "corpusWords": 665,
+    "missingCorpusWords": 0,
+    "pool": "50 pairs = 100 cards; 32 initial + 68 queued",
+    "cycles": "fixed 10 targets and fresh 40 corpus fillers",
+    "newBatch": "skips visible targets; preserves completed progress",
+    "savedPool": "exact snapshot restore passed",
+    "maxMoves": 134,
+    "maxBatches": 12,
+    "ratings": "all thresholds passed"
+  },
+  "ui": {
+    "uiHandlers": "passed",
+    "singleSelection": "translation remains hidden",
+    "pairCollection": "two original-color cards",
+    "newBatch": "preserves progress",
+    "audioSequence": "Excellent/Amazing/Unbelievable recording before original line; applause after ten-line",
+    "applauseMilestones": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80
+    ],
+    "collision": "gold stars created; CSS holds full opacity 2000 ms before fade",
+    "completion": "three poppers and three working actions",
+    "progressMigration": "total and completed levels retained"
+  },
+  "audioFiles": "All three MP3 files are byte-identical to user-confirmed previews; FFmpeg decode passed.",
+  "background": "853x1844, same as original; cleaned/widened asset is included.",
+  "visualQA": "No browser executable is available. Real-device visual and audio playback verification remains necessary."
+}
