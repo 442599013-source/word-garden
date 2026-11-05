@@ -43,3 +43,32 @@ html,body{background:#fff!important;background-image:none!important}html::before
 
 /* V20: visible clear-all control; display never focuses a system input. */
 .wm-input{position:relative;padding-right:42px;overflow:hidden}.wm-input-text{display:block;overflow-x:auto;white-space:nowrap;max-width:calc(100% - 18px)}.wm-clear{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;background:transparent;color:#875ba9;font-size:26px;line-height:1;z-index:3}.wm-tabs button{white-space:nowrap;font-size:clamp(9px,2.35vw,13px);padding:4px 6px}.wm-tabs .wm-icon{width:14px;height:14px;vertical-align:middle}
+
+/* V26: whole sentences stay within the panel and grow naturally when required. */
+.wm-progress{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:11px;line-height:24px}
+.wm-word-grid{align-content:start;padding:6px 5px;line-height:1.35;overflow:auto}
+.wm-word-tile,.wm-word-tile.is-long{font-size:var(--wm-sentence-size,23px);line-height:1.35;max-width:100%;white-space:normal;overflow-wrap:anywhere}
+.wm-game{height:auto;min-height:100dvh;grid-template-rows:clamp(68px,12dvh,110px) minmax(115px,auto) auto minmax(120px,auto) clamp(36px,5.2dvh,48px) minmax(190px,29dvh)}
+.wm-tasks{grid-template-rows:24px minmax(72px,auto)}
+.wm-lesson-body{max-height:220px;overflow:auto}.wm-lesson-body .wm-english{font-size:clamp(14px,3.9vw,20px);line-height:1.3}
+.wm-lesson-body:not(.is-sentence){white-space:pre-line;display:block;align-content:safe center}
+.wm-caret{animation:none}.wm-focus span{font-size:clamp(10px,2.9vw,15px);overflow-wrap:anywhere}
+.wm-game:has(.wm-completion:not([hidden])){grid-template-rows:clamp(68px,12dvh,110px) minmax(145px,auto) auto minmax(120px,auto) clamp(36px,5.2dvh,48px) minmax(190px,29dvh)}
+
+/* V26 local word lookup. Text only; pronunciation is requested only on speaker tap. */
+.wm-word-tile[data-lookup]{cursor:pointer;touch-action:manipulation}.wm-word-tile[data-lookup]:focus-visible{outline:2px solid #a16aca;border-radius:4px}
+.wm-word-popover{position:absolute;z-index:35;left:8px;right:8px;top:calc(100% - 4px);padding:12px 14px;border:2px solid #c89ce2;border-radius:18px;background:#fffaf2;box-shadow:0 6px 20px #61317b44;text-align:left;color:#542877;max-height:220px;overflow:auto;font-size:14px;line-height:1.5}
+.wm-word-popover[hidden]{display:none}.wm-word-popover header{display:flex;align-items:center;gap:8px}.wm-word-popover strong{font-size:19px;flex:1;overflow-wrap:anywhere}.wm-word-popover button{border:0;border-radius:9px;background:#efe2fa;color:#744092;min-width:34px;min-height:34px;font-size:21px;line-height:1;padding:3px;cursor:pointer}.wm-word-popover p{margin:7px 0}.wm-word-popover small{display:block;border-top:1px solid #e8d8ed;padding-top:6px;font-size:11px;font-weight:400}.wm-word-phrase{font-size:12px}
+
+/* V26: fixed single-line answer viewport; older text scrolls out to the left. */
+.wm-game{grid-template-rows:clamp(68px,12dvh,110px) minmax(115px,auto) auto minmax(120px,auto) clamp(38px,5.2dvh,48px) minmax(190px,29dvh)}
+.wm-game:has(.wm-completion:not([hidden])){grid-template-rows:clamp(68px,12dvh,110px) minmax(145px,auto) auto minmax(120px,auto) clamp(38px,5.2dvh,48px) minmax(190px,29dvh)}
+.wm-input{height:100%;min-height:0;max-height:48px;align-items:center;white-space:nowrap;padding:2px 42px 2px 12px;overflow:hidden;font-size:clamp(17px,4.6vw,23px);line-height:1.2}
+.wm-input-text{display:block;flex:0 1 auto;min-width:0;max-width:100%;max-height:none;line-height:1.2;white-space:pre;overflow-wrap:normal;word-break:normal;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;scrollbar-width:none}
+.wm-input-text::-webkit-scrollbar{display:none}.wm-caret{flex:0 0 auto;align-self:center;font-size:18px;line-height:1.2}.wm-clear{right:5px}
+
+/* V27: bilingual prompt above; English-only live input feedback below. */
+.wm-tasks{grid-template-rows:24px minmax(48px,auto) auto}
+.wm-top-translation{margin:0;padding:0 8px 7px;text-align:center;font-size:clamp(12px,3.2vw,16px);line-height:1.4;color:#542877;overflow-wrap:anywhere}
+.wm-top-translation:empty{display:none}
+.wm-lesson-body .wm-english{width:100%;white-space:pre-wrap;overflow-wrap:anywhere}
