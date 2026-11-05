@@ -36,3 +36,13 @@
 @keyframes gold-contact-star{0%{opacity:0;transform:translate(0,0) scale(.4)}7.84%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1)}40%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(.85)}70%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1.05)}86.27%{opacity:1;transform:translate(var(--gx),var(--gy)) scale(1)}100%{opacity:0;transform:translate(var(--gx),calc(var(--gy) - 5px)) scale(.8)}}
 @keyframes gold-contact-glow{0%{opacity:0}7.84%,86.27%{opacity:1}100%{opacity:0}}
 @media(prefers-reduced-motion:reduce){.collision-star,.collision-gold:before{animation:none}}
+
+/* V37: two seconds of visible hint cost; compact opening rules pagination. */
+.hint-cost{position:absolute;z-index:6;transform:translate(-50%,0);font-size:8cqw;font-weight:900;color:#ffefb0;text-shadow:0 2px 2px #8d254d,0 0 7px #a92b45;animation:hint-cost-hold 2350ms linear both}
+@keyframes hint-cost-hold{0%{opacity:1;transform:translate(-50%,0) scale(.9)}8%,85%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-8px) scale(1)}}
+.howto-controls{position:absolute;left:37%;top:90.1%;width:27%;height:2%;display:flex;align-items:center;justify-content:center;gap:2cqw;z-index:4;color:#764199;font-size:2cqw}
+.howto-controls button{padding:0;width:5cqw;height:4cqw;line-height:1;border:1px solid #e3c5eb;border-radius:1.5cqw;background:#fff8;color:#764199;font-size:3cqw}.howto-controls button:disabled{opacity:.35}
+.match-message:has(~.howto-controls:not([hidden])){gap:2px}
+.match-message:has(~.howto-controls:not([hidden])) strong{font-size:2.65cqw;font-weight:750}
+.match-message:has(~.howto-controls:not([hidden]))>span{font-size:2.35cqw}
+@media(prefers-reduced-motion:reduce){.hint-cost{animation:none}}

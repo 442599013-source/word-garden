@@ -1,0 +1,36 @@
+{
+  "engine": {
+    "levelsPassed": 129,
+    "corpusWords": 665,
+    "missingCorpusWords": 0,
+    "pool": "50 pairs = 100 cards; 32 initial + 68 queued",
+    "cycles": "fixed 10 targets and fresh 40 corpus fillers",
+    "newBatch": "recycles all unmatched cards without duplicates, rewards or lost targets",
+    "savedPool": "exact snapshot restore passed",
+    "maxMoves": 36,
+    "maxBatches": 5,
+    "ratings": "all thresholds passed"
+  },
+  "ui": {
+    "uiHandlers": "passed",
+    "singleSelection": "translation remains hidden",
+    "pairCollection": "two original-color cards",
+    "newBatch": "recycles unmatched cards and preserves progress",
+    "audioSequence": "confirmed word before uploaded clip, original cheer, applause; no confirmed words dropped",
+    "applauseMilestones": [
+      10,
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80
+    ],
+    "collision": "gold stars created; CSS holds full opacity 2000 ms before fade",
+    "completion": "three poppers and three working actions",
+    "progressMigration": "total and completed levels retained"
+  },
+  "additional": "Deferred voice completion before recording verified; approach, contact squash and rebound frames verified. Negative total survives refresh and replay does not alter accumulated total.",
+  "limitations": "No real device/browser playback or visual verification."
+}
