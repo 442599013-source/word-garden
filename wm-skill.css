@@ -7,3 +7,5 @@ body[data-skill=writing] .question,body[data-skill=speaking] .question{height:14
 .typed-answer{padding:8px;gap:4px}
 
 .dots{flex-wrap:wrap;gap:5px}
+
+.context label{max-width:55%;width:clamp(126px,43vw,176px);font-size:0;gap:0}.context .wm-select-button{width:100%;max-width:none;font-size:clamp(12px,3.4vw,15px);overflow:visible;text-overflow:clip;white-space:nowrap}.context #theme{max-width:43%}
