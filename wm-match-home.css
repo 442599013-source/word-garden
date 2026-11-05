@@ -1,0 +1,3 @@
+/* Split only the existing journey bar; preserve all other home artwork and counters. */
+.home-entry-splitbg{position:absolute;left:24px;top:883px;width:804px;height:97px;z-index:2;border:3px solid #f4c0ff;border-radius:55px;background:linear-gradient(#da6af7,#b22adf);pointer-events:none}
+.home-hot.home-growth-half{padding:8px 17px;gap:10px;font-size:30px;border-radius:48px}.home-growth-half .growth-rocket{font-size:41px;flex:0 0 41px}.home-growth-half>span:nth-child(2){flex:1;min-width:0;text-align:center;line-height:1.15}.home-growth-half strong{display:block;font-size:24px;font-weight:750;white-space:nowrap}.home-growth-half small{font-size:29px;margin-top:2px;line-height:1.1;letter-spacing:1px}.home-growth-half b{font-size:47px;flex:0 0 14px}

@@ -314,11 +314,11 @@ function drawHome(){
  <button class="home-hot" data-route="settings" aria-label="设置 Settings" style="left:670px;top:85px;width:140px;height:130px"></button>
  <button class="home-hot" data-quick="learn" aria-label="当前阶段 ${escapeHTML(stages[stage][0])}" style="left:386px;top:465px;width:411px;height:100px"></button>
  <div class="home-value home-stage" style="left:393px;top:474px;width:392px;height:80px"><strong>${stages[stage][0]}</strong><small>${stages[stage][1]}</small></div>
- <button class="home-hot" data-quick="match" aria-label="已消灭的单词数 ${count}，进入单词游戏" style="left:46px;top:610px;width:372px;height:234px"></button>
+ <button class="home-hot" data-quick="match" aria-label="已消灭的单词数 ${count}，进入新版单词消消乐" style="left:46px;top:610px;width:372px;height:234px"></button>
  <span class="home-value home-count" style="left:70px;top:703px;width:321px;height:58px" data-home-value="words">${count} 个</span>
  <button class="home-hot" data-route="results" aria-label="综合考试成绩 ${average}" style="left:437px;top:610px;width:372px;height:234px"></button>
  <span class="home-value home-count" style="left:463px;top:703px;width:321px;height:58px" data-home-value="average">${escapeHTML(average)}${exams.length?' 分':''}</span>
- <button class="home-hot home-growth" data-route="journey" aria-label="成长之路 Our Growth Journey" style="left:24px;top:883px;width:804px;height:97px"><span class="growth-rocket">🚀</span><span>成长之路<small>Our Growth Journey</small></span><b>›</b></button>
+ <div class="home-entry-splitbg" aria-hidden="true"></div><button class="home-hot home-growth home-growth-half" data-route="journey" aria-label="成长之路 Growth Journey" style="left:24px;top:883px;width:395px;height:97px"><span class="growth-rocket">🚀</span><span><strong>Growth Journey</strong><small>成长之路</small></span><b>›</b></button><button class="home-hot home-growth home-growth-half" data-quick="advance" aria-label="晋级之旅 Level Up" style="left:433px;top:883px;width:395px;height:97px"><span class="growth-rocket">★</span><span><strong>Level Up</strong><small>晋级之旅</small></span><b>›</b></button>
  ${skillHTML}
  </section></div>`;
  fitBeachHome();
