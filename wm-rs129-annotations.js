@@ -9,6 +9,6 @@ const grammarCorrections={
  '90:2':['现在进行时','完整原句中的 Newspapers + are reporting 表示“报纸正在报道”。当前片段若只到 are，需继续加上 reporting 才构成完整进行时结构。'],
  '92:2':['现在分词修饰与将来计划','visiting 修饰 professor，表示“来访的教授”，不是独立谓语。完整原句 is going to give 表示“将要举办”，结构为 be going to + 动词原形。']
 };
-function grammarFor(r){const corrected=grammarCorrections[r['关卡']+':'+r['小题']];if(corrected)return corrected;let text=r['语法或词汇解释'];const mention=text.match(/注意本题出现的结构：([^。]+)/);if(mention&&/^[a-zA-Z' ]+$/.test(mention[1])&&!r['输入标准答案'].toLowerCase().includes(mention[1].toLowerCase()))text='完整原句语法预习（当前片段尚未出现该表达）：\n'+text.replace('注意本题出现的结构：','完整原句包含：');return [r['本题知识点'],text]}
+function grammarFor(r){const corrected=grammarCorrections[r['关卡']+':'+r['小题']];if(corrected)return corrected;let text=r['语法或词汇解释'].replace(/[^。；\n]*(?:不需要输入|不用输入|输入不打|标准输入为)[^。\n]*[。]?/g,'').trim();const mention=text.match(/注意本题出现的结构：([^。]+)/);if(mention&&/^[a-zA-Z' ]+$/.test(mention[1])&&!r['输入标准答案'].toLowerCase().includes(mention[1].toLowerCase()))text='完整原句语法预习（当前片段尚未出现该表达）：\n'+text.replace('注意本题出现的结构：','完整原句包含：');return [r['本题知识点'],text]}
 window.WMRS129Annotations={grammarFor,grammarCorrections};
 })();

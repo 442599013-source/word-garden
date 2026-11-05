@@ -27,7 +27,7 @@ const plurals=(en.match(/[A-Za-z]+/g)||[]).filter(w=>gloss(w).includes('复数')
 if(!rules.length){add(/\b(am|is|are)\b/i,m=>m[0]+' 是be动词，后面的名词、形容词或地点表达补充主语是什么、怎么样或在哪里；单看be动词不能判定为进行时。')}
 if(!rules.length&&/^(please\s+)?(number|put|take|keep|stop|write|bring|don't hesitate)\b/i.test(en))rules.push('这里是请求或指令的开头，省略主语 you，用动词原形；please 表示礼貌。');
 if(!rules.length)rules.push('当前练的是原句片段，先把上面这些词按顺序连起来理解；片段尚未补齐时，不把它硬标成一个完整句型。');
-const chunks=r['顶部展示英文'].split(/[+＋|｜]/).map(x=>x.trim()).filter(Boolean);let split='';if(chunks.length>1)split='分段提示：'+chunks.map(x=>'“'+x+'”').join(' ＋ ')+'。这些分隔符不用输入。\n';
+const chunks=r['顶部展示英文'].split(/[+＋|｜]/).map(x=>x.trim()).filter(Boolean);let split='';if(chunks.length>1)split='分段提示：'+chunks.map(x=>'“'+x+'”').join(' ＋ ')+'。\n';
 return [r['本题知识点'],'拆开理解：'+breakdown(en)+'。\n'+split+rules.slice(0,3).join('\n')]
 }
 window.WMRS129Annotations={...window.WMRS129Annotations,grammarFor};
