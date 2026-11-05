@@ -3,3 +3,6 @@
 @media(min-width:500px){.scene{min-height:1000px}.answer.rs-choice,.rs-tokens,.rs-word{font-size:17px}.rs-fill-options .rs-word{font-size:15px}}
 
 .feedback{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;align-content:center;gap:3px}.feedback #status{min-width:0;max-height:36px;overflow:auto}.feedback #retry{min-height:40px;padding:4px 8px}.feedback .dots{grid-column:1/-1}
+
+/* V33: constrain the header title to its grid column, never under the counter. */
+.header .title{min-width:0;max-width:100%;white-space:normal;line-height:1.1;font-size:clamp(14px,3.6vw,20px);overflow-wrap:normal;word-break:normal}.header .listening-title-en{display:block;max-width:100%}.header .listening-title-en>span{display:block}.header .title small{white-space:normal;font-size:clamp(10px,2.6vw,12px);line-height:1.15;margin-top:3px}
