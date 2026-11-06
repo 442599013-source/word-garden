@@ -5,3 +5,6 @@
 .settings select,.settings input[type=time]{box-sizing:border-box;width:100%;min-width:0;max-width:100%;height:42px;font-size:16px;padding:7px}
 #set-timer{align-self:end;justify-self:stretch;height:42px;min-height:42px;margin:8px 0;padding:6px 10px;font-size:14px;line-height:1.2;white-space:nowrap}
 #timer-status{grid-column:1/-1;min-width:0;min-height:22px;margin:5px 0 0;font-size:12px}
+
+/* V38: equal compact listening tabs with bilingual lines. */
+#types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}#types button{min-width:0;padding:9px 2px;min-height:56px;font-size:12px;line-height:1.3;overflow-wrap:normal;word-break:normal}#types button .type-zh{display:block;white-space:nowrap;font-size:14px}#types button small{font-size:clamp(8px,2.3vw,11px);line-height:1.3;white-space:nowrap}

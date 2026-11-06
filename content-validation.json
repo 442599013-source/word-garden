@@ -1,0 +1,26 @@
+{
+  "source_sha256": "770136479e7d5dce8f5bda599508554f9283169943a29896bf546c4b18b9e6eb",
+  "source_sentences": 129,
+  "counts": {
+    "听单词": 278,
+    "听词组": 249,
+    "听短句": 203,
+    "听短文": 129
+  },
+  "source_coverage": {
+    "word": 117,
+    "phrase": 129,
+    "sentence": 129,
+    "passage": 129
+  },
+  "rules": {
+    "category": "幼儿园听力",
+    "levels": false,
+    "words": "人工筛选重点词，排除常见基础词；相同词形去重",
+    "phrases": "3–5词、原句连续片段",
+    "short_sentences": "5–8词、原句连续片段",
+    "passages": "全部129句原型，逐字保留英文与现有中文释义",
+    "playback": "每条先英文后中文",
+    "word_count": "空格分词；o'clock及end-of-term分别按一个词计算；5词片段允许同时出现在词组和短句类别"
+  }
+}
