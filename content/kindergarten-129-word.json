@@ -1,0 +1,2286 @@
+{
+  "id": "kindergarten-listening-129-word-v38",
+  "category": "kindergarten",
+  "type": "word",
+  "titleZh": "幼儿园听力 · 听单词",
+  "titleEn": "Key Words",
+  "items": [
+    {
+      "id": "word-0001",
+      "en": "lectures",
+      "zh": "讲座；课",
+      "sourceIds": [
+        1,
+        67
+      ]
+    },
+    {
+      "id": "word-0002",
+      "en": "provides",
+      "zh": "提供",
+      "sourceIds": [
+        2,
+        5
+      ]
+    },
+    {
+      "id": "word-0003",
+      "en": "telephone",
+      "zh": "电话",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "word-0004",
+      "en": "booths",
+      "zh": "亭子；小隔间",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "word-0005",
+      "en": "available",
+      "zh": "可用的；可供使用的",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "word-0006",
+      "en": "employees",
+      "zh": "员工",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "word-0007",
+      "en": "application",
+      "zh": "申请",
+      "sourceIds": [
+        4,
+        122
+      ]
+    },
+    {
+      "id": "word-0008",
+      "en": "accommodation",
+      "zh": "住宿",
+      "sourceIds": [
+        4
+      ]
+    },
+    {
+      "id": "word-0009",
+      "en": "submitted",
+      "zh": "提交",
+      "sourceIds": [
+        4,
+        72,
+        111,
+        116
+      ]
+    },
+    {
+      "id": "word-0010",
+      "en": "produce",
+      "zh": "农产品",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "word-0011",
+      "en": "residents",
+      "zh": "居民",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "word-0012",
+      "en": "located",
+      "zh": "位于；坐落于",
+      "sourceIds": [
+        6,
+        29,
+        37,
+        75
+      ]
+    },
+    {
+      "id": "word-0013",
+      "en": "theater",
+      "zh": "剧院",
+      "sourceIds": [
+        6,
+        33,
+        37
+      ]
+    },
+    {
+      "id": "word-0014",
+      "en": "citation",
+      "zh": "引用；引文",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "word-0015",
+      "en": "evidence",
+      "zh": "证据",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "word-0016",
+      "en": "article",
+      "zh": "文章",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "word-0017",
+      "en": "regarded",
+      "zh": "被视为",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "word-0018",
+      "en": "plagiarism",
+      "zh": "抄袭；剽窃",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "word-0019",
+      "en": "access",
+      "zh": "使用权；进入；访问",
+      "sourceIds": [
+        8,
+        99
+      ]
+    },
+    {
+      "id": "word-0020",
+      "en": "facilities",
+      "zh": "设施",
+      "sourceIds": [
+        8
+      ]
+    },
+    {
+      "id": "word-0021",
+      "en": "mineral",
+      "zh": "矿物；矿产的",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "word-0022",
+      "en": "resource",
+      "zh": "资源",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "word-0023",
+      "en": "exploration",
+      "zh": "勘探；探索",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "word-0024",
+      "en": "environment",
+      "zh": "环境",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "word-0025",
+      "en": "degradation",
+      "zh": "退化；恶化；降解",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "word-0026",
+      "en": "download",
+      "zh": "下载",
+      "sourceIds": [
+        10
+      ]
+    },
+    {
+      "id": "word-0027",
+      "en": "calendar",
+      "zh": "日历；活动日程表",
+      "sourceIds": [
+        10
+      ]
+    },
+    {
+      "id": "word-0028",
+      "en": "employee",
+      "zh": "员工",
+      "sourceIds": [
+        12
+      ]
+    },
+    {
+      "id": "word-0029",
+      "en": "garnered",
+      "zh": "收集；获得",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "word-0030",
+      "en": "infinite",
+      "zh": "无限的；极大的",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "word-0031",
+      "en": "invariably",
+      "zh": "总是；无例外地",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "word-0032",
+      "en": "pinch",
+      "zh": "紧要关头",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "word-0033",
+      "en": "requires",
+      "zh": "要求；需要",
+      "sourceIds": [
+        14
+      ]
+    },
+    {
+      "id": "word-0034",
+      "en": "events",
+      "zh": "活动；事件",
+      "sourceIds": [
+        16
+      ]
+    },
+    {
+      "id": "word-0035",
+      "en": "undergraduate",
+      "zh": "本科生；本科的",
+      "sourceIds": [
+        16,
+        55
+      ]
+    },
+    {
+      "id": "word-0036",
+      "en": "postgraduate",
+      "zh": "研究生；研究生的",
+      "sourceIds": [
+        16,
+        19,
+        55
+      ]
+    },
+    {
+      "id": "word-0037",
+      "en": "ratio",
+      "zh": "比例",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "word-0038",
+      "en": "factor",
+      "zh": "因素",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "word-0039",
+      "en": "intelligence",
+      "zh": "智力；情报",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "word-0040",
+      "en": "campus",
+      "zh": "校园",
+      "sourceIds": [
+        18,
+        29,
+        75,
+        117
+      ]
+    },
+    {
+      "id": "word-0041",
+      "en": "evaluation",
+      "zh": "评估",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "word-0042",
+      "en": "term",
+      "zh": "学期",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "word-0043",
+      "en": "discuss",
+      "zh": "讨论",
+      "sourceIds": [
+        20,
+        23
+      ]
+    },
+    {
+      "id": "word-0044",
+      "en": "lecture",
+      "zh": "讲座；课",
+      "sourceIds": [
+        23,
+        32,
+        51,
+        62,
+        92
+      ]
+    },
+    {
+      "id": "word-0045",
+      "en": "digital",
+      "zh": "数字的；数码的",
+      "sourceIds": [
+        23
+      ]
+    },
+    {
+      "id": "word-0046",
+      "en": "technology",
+      "zh": "技术；科技",
+      "sourceIds": [
+        23
+      ]
+    },
+    {
+      "id": "word-0047",
+      "en": "deadline",
+      "zh": "截止时间；截止日期",
+      "sourceIds": [
+        24
+      ]
+    },
+    {
+      "id": "word-0048",
+      "en": "essay",
+      "zh": "文章；论文",
+      "sourceIds": [
+        24,
+        94
+      ]
+    },
+    {
+      "id": "word-0049",
+      "en": "opportunity",
+      "zh": "机会",
+      "sourceIds": [
+        25
+      ]
+    },
+    {
+      "id": "word-0050",
+      "en": "graph",
+      "zh": "图表",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "word-0051",
+      "en": "percentage",
+      "zh": "百分比",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "word-0052",
+      "en": "according",
+      "zh": "依据；按照",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "word-0053",
+      "en": "gender",
+      "zh": "性别",
+      "sourceIds": [
+        26,
+        112
+      ]
+    },
+    {
+      "id": "word-0054",
+      "en": "chemistry",
+      "zh": "化学",
+      "sourceIds": [
+        27
+      ]
+    },
+    {
+      "id": "word-0055",
+      "en": "talented",
+      "zh": "有才能的",
+      "sourceIds": [
+        28
+      ]
+    },
+    {
+      "id": "word-0056",
+      "en": "specialized",
+      "zh": "专业的；专门的",
+      "sourceIds": [
+        28
+      ]
+    },
+    {
+      "id": "word-0057",
+      "en": "marketing",
+      "zh": "市场营销",
+      "sourceIds": [
+        28
+      ]
+    },
+    {
+      "id": "word-0058",
+      "en": "southern",
+      "zh": "南部的",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "word-0059",
+      "en": "construction",
+      "zh": "施工；建造",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "word-0060",
+      "en": "deducted",
+      "zh": "扣除",
+      "sourceIds": [
+        31
+      ]
+    },
+    {
+      "id": "word-0061",
+      "en": "assignments",
+      "zh": "作业；任务",
+      "sourceIds": [
+        31,
+        116
+      ]
+    },
+    {
+      "id": "word-0062",
+      "en": "due",
+      "zh": "到期的；应有的",
+      "sourceIds": [
+        31,
+        125
+      ]
+    },
+    {
+      "id": "word-0063",
+      "en": "postponed",
+      "zh": "推迟",
+      "sourceIds": [
+        32,
+        62
+      ]
+    },
+    {
+      "id": "word-0064",
+      "en": "discussion",
+      "zh": "讨论",
+      "sourceIds": [
+        35,
+        53
+      ]
+    },
+    {
+      "id": "word-0065",
+      "en": "delayed",
+      "zh": "推迟；延误",
+      "sourceIds": [
+        35
+      ]
+    },
+    {
+      "id": "word-0066",
+      "en": "raised",
+      "zh": "提出；举起",
+      "sourceIds": [
+        35
+      ]
+    },
+    {
+      "id": "word-0067",
+      "en": "attend",
+      "zh": "参加；出席",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "word-0068",
+      "en": "protective",
+      "zh": "防护的；保护性的",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "word-0069",
+      "en": "goggles",
+      "zh": "护目镜",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "word-0070",
+      "en": "laboratory",
+      "zh": "实验室",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "word-0071",
+      "en": "museum",
+      "zh": "博物馆",
+      "sourceIds": [
+        37
+      ]
+    },
+    {
+      "id": "word-0072",
+      "en": "delay",
+      "zh": "延迟；延误",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "word-0073",
+      "en": "processing",
+      "zh": "处理",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "word-0074",
+      "en": "enrollment",
+      "zh": "入学登记；注册",
+      "sourceIds": [
+        40,
+        50
+      ]
+    },
+    {
+      "id": "word-0075",
+      "en": "automatically",
+      "zh": "自动地",
+      "sourceIds": [
+        42
+      ]
+    },
+    {
+      "id": "word-0076",
+      "en": "passengers",
+      "zh": "乘客",
+      "sourceIds": [
+        43
+      ]
+    },
+    {
+      "id": "word-0077",
+      "en": "globalization",
+      "zh": "全球化",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "word-0078",
+      "en": "overwhelming",
+      "zh": "压倒性的；势头强劲的",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "word-0079",
+      "en": "urban",
+      "zh": "城市的",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "word-0080",
+      "en": "urbanization",
+      "zh": "城市化",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "word-0081",
+      "en": "phenomenon",
+      "zh": "现象",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "word-0082",
+      "en": "textbook",
+      "zh": "课本；教材",
+      "sourceIds": [
+        45
+      ]
+    },
+    {
+      "id": "word-0083",
+      "en": "discount",
+      "zh": "折扣",
+      "sourceIds": [
+        47
+      ]
+    },
+    {
+      "id": "word-0084",
+      "en": "considering",
+      "zh": "考虑；consider 的 -ing 形式",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "word-0085",
+      "en": "options",
+      "zh": "选项；选择",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "word-0086",
+      "en": "risks",
+      "zh": "冒险；风险",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "word-0087",
+      "en": "following",
+      "zh": "在……之后；接下来的",
+      "sourceIds": [
+        49,
+        93
+      ]
+    },
+    {
+      "id": "word-0088",
+      "en": "freshman",
+      "zh": "大学一年级新生",
+      "sourceIds": [
+        49,
+        93
+      ]
+    },
+    {
+      "id": "word-0089",
+      "en": "seminar",
+      "zh": "研讨会",
+      "sourceIds": [
+        49,
+        93,
+        96,
+        111
+      ]
+    },
+    {
+      "id": "word-0090",
+      "en": "logging",
+      "zh": "登录",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "word-0091",
+      "en": "terms",
+      "zh": "条款",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "word-0092",
+      "en": "conditions",
+      "zh": "条件；状况",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "word-0093",
+      "en": "regarding",
+      "zh": "关于",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "word-0094",
+      "en": "canceled",
+      "zh": "取消",
+      "sourceIds": [
+        51
+      ]
+    },
+    {
+      "id": "word-0095",
+      "en": "consult",
+      "zh": "查阅；咨询",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "word-0096",
+      "en": "mentioned",
+      "zh": "提及",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "word-0097",
+      "en": "bibliography",
+      "zh": "参考文献目录",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "word-0098",
+      "en": "panel",
+      "zh": "专题讨论小组",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "word-0099",
+      "en": "sustainable",
+      "zh": "可持续的",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "word-0100",
+      "en": "development",
+      "zh": "发展",
+      "sourceIds": [
+        53,
+        118
+      ]
+    },
+    {
+      "id": "word-0101",
+      "en": "provide",
+      "zh": "提供",
+      "sourceIds": [
+        54
+      ]
+    },
+    {
+      "id": "word-0102",
+      "en": "throughout",
+      "zh": "贯穿；遍及；在整个……期间",
+      "sourceIds": [
+        54,
+        70
+      ]
+    },
+    {
+      "id": "word-0103",
+      "en": "welcoming",
+      "zh": "欢迎的；迎新的",
+      "sourceIds": [
+        55
+      ]
+    },
+    {
+      "id": "word-0104",
+      "en": "graduate",
+      "zh": "研究生层次的",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "word-0105",
+      "en": "certificate",
+      "zh": "证书",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "word-0106",
+      "en": "diploma",
+      "zh": "文凭",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "word-0107",
+      "en": "realize",
+      "zh": "意识到；实现",
+      "sourceIds": [
+        57
+      ]
+    },
+    {
+      "id": "word-0108",
+      "en": "historical",
+      "zh": "历史的",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "word-0109",
+      "en": "context",
+      "zh": "背景；上下文",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "word-0110",
+      "en": "appreciate",
+      "zh": "欣赏；理解",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "word-0111",
+      "en": "era",
+      "zh": "时代",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "word-0112",
+      "en": "courses",
+      "zh": "课程",
+      "sourceIds": [
+        59
+      ]
+    },
+    {
+      "id": "word-0113",
+      "en": "registration",
+      "zh": "注册；登记",
+      "sourceIds": [
+        59
+      ]
+    },
+    {
+      "id": "word-0114",
+      "en": "identification",
+      "zh": "身份识别；身份证明",
+      "sourceIds": [
+        60,
+        122
+      ]
+    },
+    {
+      "id": "word-0115",
+      "en": "reporting",
+      "zh": "报道；报告",
+      "sourceIds": [
+        61,
+        90
+      ]
+    },
+    {
+      "id": "word-0116",
+      "en": "president",
+      "zh": "总统；校长；会长",
+      "sourceIds": [
+        61
+      ]
+    },
+    {
+      "id": "word-0117",
+      "en": "lecturer",
+      "zh": "讲师",
+      "sourceIds": [
+        62
+      ]
+    },
+    {
+      "id": "word-0118",
+      "en": "sociology",
+      "zh": "社会学",
+      "sourceIds": [
+        63
+      ]
+    },
+    {
+      "id": "word-0119",
+      "en": "fungi",
+      "zh": "真菌",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0120",
+      "en": "decay",
+      "zh": "腐烂；分解；衰退",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0121",
+      "en": "nutrients",
+      "zh": "养分；营养物质",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0122",
+      "en": "enhances",
+      "zh": "提高；增强",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0123",
+      "en": "soil",
+      "zh": "土壤",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0124",
+      "en": "fertility",
+      "zh": "土壤肥力",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "word-0125",
+      "en": "industries",
+      "zh": "行业；产业",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "word-0126",
+      "en": "countryside",
+      "zh": "乡村；农村",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "word-0127",
+      "en": "manufacturing",
+      "zh": "制造；制造业",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "word-0128",
+      "en": "costs",
+      "zh": "成本；费用",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "word-0129",
+      "en": "treasure",
+      "zh": "宝藏",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "word-0130",
+      "en": "hunters",
+      "zh": "猎人；寻找者",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "word-0131",
+      "en": "risk",
+      "zh": "风险；冒险",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "word-0132",
+      "en": "location",
+      "zh": "地点；位置",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "word-0133",
+      "en": "comprises",
+      "zh": "包括；由……组成",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "word-0134",
+      "en": "seminars",
+      "zh": "研讨会",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "word-0135",
+      "en": "tutorials",
+      "zh": "辅导课",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "word-0136",
+      "en": "further",
+      "zh": "进一步的；更远地",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "word-0137",
+      "en": "extension",
+      "zh": "延期",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "word-0138",
+      "en": "education",
+      "zh": "教育",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "word-0139",
+      "en": "executive",
+      "zh": "主管；管理人员",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "word-0140",
+      "en": "cafeteria",
+      "zh": "自助餐厅；食堂",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "word-0141",
+      "en": "accessible",
+      "zh": "可使用的；可到达的",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "word-0142",
+      "en": "technician",
+      "zh": "技术员",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "word-0143",
+      "en": "microscope",
+      "zh": "显微镜",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "word-0144",
+      "en": "biology",
+      "zh": "生物学",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "word-0145",
+      "en": "geography",
+      "zh": "地理学",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "word-0146",
+      "en": "assignment",
+      "zh": "作业；任务",
+      "sourceIds": [
+        72,
+        74,
+        100,
+        104,
+        125
+      ]
+    },
+    {
+      "id": "word-0147",
+      "en": "midday",
+      "zh": "中午",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "word-0148",
+      "en": "cash",
+      "zh": "现金",
+      "sourceIds": [
+        73,
+        103
+      ]
+    },
+    {
+      "id": "word-0149",
+      "en": "credit",
+      "zh": "信用",
+      "sourceIds": [
+        73,
+        103
+      ]
+    },
+    {
+      "id": "word-0150",
+      "en": "required",
+      "zh": "要求；必须的",
+      "sourceIds": [
+        74
+      ]
+    },
+    {
+      "id": "word-0151",
+      "en": "submit",
+      "zh": "提交",
+      "sourceIds": [
+        74
+      ]
+    },
+    {
+      "id": "word-0152",
+      "en": "hypothesis",
+      "zh": "假说；假设",
+      "sourceIds": [
+        76,
+        83,
+        87
+      ]
+    },
+    {
+      "id": "word-0153",
+      "en": "considered",
+      "zh": "被认为",
+      "sourceIds": [
+        76
+      ]
+    },
+    {
+      "id": "word-0154",
+      "en": "moot",
+      "zh": "已无实际意义的",
+      "sourceIds": [
+        76,
+        83
+      ]
+    },
+    {
+      "id": "word-0155",
+      "en": "explanation",
+      "zh": "解释",
+      "sourceIds": [
+        76,
+        83
+      ]
+    },
+    {
+      "id": "word-0156",
+      "en": "astrophysics",
+      "zh": "天体物理学",
+      "sourceIds": [
+        76
+      ]
+    },
+    {
+      "id": "word-0157",
+      "en": "reserve",
+      "zh": "保留馆藏的",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "word-0158",
+      "en": "collection",
+      "zh": "馆藏",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "word-0159",
+      "en": "capacity",
+      "zh": "能力",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "word-0160",
+      "en": "respond",
+      "zh": "回应；响应",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "word-0161",
+      "en": "national",
+      "zh": "国家的；全国的",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "word-0162",
+      "en": "determine",
+      "zh": "决定；确定",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "word-0163",
+      "en": "ability",
+      "zh": "能力",
+      "sourceIds": [
+        78,
+        119
+      ]
+    },
+    {
+      "id": "word-0164",
+      "en": "flourish",
+      "zh": "繁荣；茁壮发展",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "word-0165",
+      "en": "bankruptcy",
+      "zh": "破产",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "word-0166",
+      "en": "skyrocketed",
+      "zh": "猛增；飞涨",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "word-0167",
+      "en": "quarter",
+      "zh": "季度",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "word-0168",
+      "en": "arteries",
+      "zh": "动脉",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "word-0169",
+      "en": "oxygenated",
+      "zh": "含氧的；充氧的",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "word-0170",
+      "en": "hunt",
+      "zh": "捕猎；寻找",
+      "sourceIds": [
+        81
+      ]
+    },
+    {
+      "id": "word-0171",
+      "en": "hesitate",
+      "zh": "犹豫",
+      "sourceIds": [
+        82
+      ]
+    },
+    {
+      "id": "word-0172",
+      "en": "rendered",
+      "zh": "使处于某种状态",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "word-0173",
+      "en": "explosion",
+      "zh": "爆炸",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "word-0174",
+      "en": "prestigious",
+      "zh": "享有盛誉的",
+      "sourceIds": [
+        84
+      ]
+    },
+    {
+      "id": "word-0175",
+      "en": "program",
+      "zh": "课程项目",
+      "sourceIds": [
+        84
+      ]
+    },
+    {
+      "id": "word-0176",
+      "en": "minimal",
+      "zh": "最低限度的",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "word-0177",
+      "en": "distinction",
+      "zh": "优异等级",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "word-0178",
+      "en": "awarded",
+      "zh": "授予；颁发",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "word-0179",
+      "en": "percent",
+      "zh": "百分之……",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "word-0180",
+      "en": "beakers",
+      "zh": "烧杯",
+      "sourceIds": [
+        86,
+        105
+      ]
+    },
+    {
+      "id": "word-0181",
+      "en": "tested",
+      "zh": "检验；测试",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "word-0182",
+      "en": "rigorous",
+      "zh": "严谨的；严格的",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "word-0183",
+      "en": "overnight",
+      "zh": "整夜；在夜间",
+      "sourceIds": [
+        88
+      ]
+    },
+    {
+      "id": "word-0184",
+      "en": "constantly",
+      "zh": "不断地；经常地",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "word-0185",
+      "en": "industry",
+      "zh": "工业；行业",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "word-0186",
+      "en": "agriculture",
+      "zh": "农业",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "word-0187",
+      "en": "presidents",
+      "zh": "总统；校长；会长",
+      "sourceIds": [
+        90
+      ]
+    },
+    {
+      "id": "word-0188",
+      "en": "valleys",
+      "zh": "山谷",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "word-0189",
+      "en": "professor",
+      "zh": "教授",
+      "sourceIds": [
+        92,
+        118
+      ]
+    },
+    {
+      "id": "word-0190",
+      "en": "geology",
+      "zh": "地质学",
+      "sourceIds": [
+        92
+      ]
+    },
+    {
+      "id": "word-0191",
+      "en": "directly",
+      "zh": "直接地；紧接着",
+      "sourceIds": [
+        93
+      ]
+    },
+    {
+      "id": "word-0192",
+      "en": "capture",
+      "zh": "吸引；抓住",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "word-0193",
+      "en": "readers",
+      "zh": "读者",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "word-0194",
+      "en": "attention",
+      "zh": "注意；关注",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "word-0195",
+      "en": "residence",
+      "zh": "住所；居住",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "word-0196",
+      "en": "academic",
+      "zh": "学术的；大学教学的",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "word-0197",
+      "en": "end-of-term",
+      "zh": "期末的；学期结束时的",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "word-0198",
+      "en": "break",
+      "zh": "休息；假期；打破",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "word-0199",
+      "en": "finalize",
+      "zh": "最终确定；完成定稿",
+      "sourceIds": [
+        96
+      ]
+    },
+    {
+      "id": "word-0200",
+      "en": "agricultural",
+      "zh": "农业的",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "word-0201",
+      "en": "goods",
+      "zh": "商品；货物",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "word-0202",
+      "en": "African",
+      "zh": "非洲的；非洲人",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "word-0203",
+      "en": "mammal",
+      "zh": "哺乳动物",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "word-0204",
+      "en": "staff",
+      "zh": "员工；全体工作人员",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "word-0205",
+      "en": "printers",
+      "zh": "打印机",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "word-0206",
+      "en": "scanners",
+      "zh": "扫描仪",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "word-0207",
+      "en": "necessary",
+      "zh": "必要的",
+      "sourceIds": [
+        100
+      ]
+    },
+    {
+      "id": "word-0208",
+      "en": "virus",
+      "zh": "病毒",
+      "sourceIds": [
+        101
+      ]
+    },
+    {
+      "id": "word-0209",
+      "en": "destroyed",
+      "zh": "毁坏；破坏",
+      "sourceIds": [
+        101
+      ]
+    },
+    {
+      "id": "word-0210",
+      "en": "reset",
+      "zh": "重新设置；校准",
+      "sourceIds": [
+        102
+      ]
+    },
+    {
+      "id": "word-0211",
+      "en": "draft",
+      "zh": "草稿；初稿",
+      "sourceIds": [
+        104
+      ]
+    },
+    {
+      "id": "word-0212",
+      "en": "distinguishes",
+      "zh": "区分；使有别于",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "word-0213",
+      "en": "dramatic",
+      "zh": "引人注目的；戏剧性的",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "word-0214",
+      "en": "photography",
+      "zh": "摄影",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "word-0215",
+      "en": "retake",
+      "zh": "重修；重考",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "word-0216",
+      "en": "module",
+      "zh": "课程单元",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "word-0217",
+      "en": "marks",
+      "zh": "分数",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "word-0218",
+      "en": "hypothetically",
+      "zh": "假设地；从假设角度来说",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "word-0219",
+      "en": "insufficient",
+      "zh": "不足的",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "word-0220",
+      "en": "mastery",
+      "zh": "掌握；熟练程度",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "word-0221",
+      "en": "progress",
+      "zh": "进步；进展",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "word-0222",
+      "en": "pressure",
+      "zh": "压力",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0223",
+      "en": "economic",
+      "zh": "经济的",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0224",
+      "en": "necessity",
+      "zh": "必要；需求",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0225",
+      "en": "practice",
+      "zh": "实践",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0226",
+      "en": "outstripped",
+      "zh": "超过；超越",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0227",
+      "en": "theory",
+      "zh": "理论",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "word-0228",
+      "en": "divided",
+      "zh": "划分；分开",
+      "sourceIds": [
+        110
+      ]
+    },
+    {
+      "id": "word-0229",
+      "en": "essays",
+      "zh": "文章；论文",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "word-0230",
+      "en": "emailed",
+      "zh": "通过电子邮件发送",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "word-0231",
+      "en": "tutor",
+      "zh": "导师；辅导教师",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "word-0232",
+      "en": "account",
+      "zh": "考虑；顾及",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "word-0233",
+      "en": "discussing",
+      "zh": "讨论",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "word-0234",
+      "en": "figures",
+      "zh": "数字",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "word-0235",
+      "en": "answering",
+      "zh": "回答；answer 的 -ing 形式",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "word-0236",
+      "en": "complex",
+      "zh": "复杂的",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "word-0237",
+      "en": "absolutely",
+      "zh": "完全地；绝对地",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "word-0238",
+      "en": "impossible",
+      "zh": "不可能的",
+      "sourceIds": [
+        113,
+        117
+      ]
+    },
+    {
+      "id": "word-0239",
+      "en": "anatomy",
+      "zh": "解剖学；身体构造",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "word-0240",
+      "en": "internal",
+      "zh": "内部的",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "word-0241",
+      "en": "external",
+      "zh": "外部的",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "word-0242",
+      "en": "structures",
+      "zh": "结构",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "word-0243",
+      "en": "permit",
+      "zh": "许可证；允许",
+      "sourceIds": [
+        117
+      ]
+    },
+    {
+      "id": "word-0244",
+      "en": "hosting",
+      "zh": "主持；主办",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "word-0245",
+      "en": "conference",
+      "zh": "会议",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "word-0246",
+      "en": "demonstrated",
+      "zh": "展示出的；已证明的",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "word-0247",
+      "en": "concise",
+      "zh": "简洁的",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "word-0248",
+      "en": "obligatory",
+      "zh": "必须的；强制的",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "word-0249",
+      "en": "unfortunately",
+      "zh": "遗憾的是；不幸地",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "word-0250",
+      "en": "economics",
+      "zh": "经济学",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "word-0251",
+      "en": "electives",
+      "zh": "选修课",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "word-0252",
+      "en": "clash",
+      "zh": "时间冲突",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "word-0253",
+      "en": "timetable",
+      "zh": "课表；时间表",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "word-0254",
+      "en": "meteorology",
+      "zh": "气象学",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "word-0255",
+      "en": "detailed",
+      "zh": "详细的",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "word-0256",
+      "en": "atmosphere",
+      "zh": "大气层；气氛",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "word-0257",
+      "en": "acupuncture",
+      "zh": "针灸",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "word-0258",
+      "en": "technique",
+      "zh": "技术；方法",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "word-0259",
+      "en": "involved",
+      "zh": "涉及的；参与的",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "word-0260",
+      "en": "traditional",
+      "zh": "传统的",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "word-0261",
+      "en": "medicine",
+      "zh": "医学；药物",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "word-0262",
+      "en": "constitutional",
+      "zh": "宪法的；符合宪法的",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "word-0263",
+      "en": "monarchy",
+      "zh": "君主制",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "word-0264",
+      "en": "parliamentary",
+      "zh": "议会的",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "word-0265",
+      "en": "democracy",
+      "zh": "民主；民主制度",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "word-0266",
+      "en": "accept",
+      "zh": "接受",
+      "sourceIds": [
+        125
+      ]
+    },
+    {
+      "id": "word-0267",
+      "en": "ancient",
+      "zh": "古代的",
+      "sourceIds": [
+        126
+      ]
+    },
+    {
+      "id": "word-0268",
+      "en": "festival",
+      "zh": "节庆；节日",
+      "sourceIds": [
+        126
+      ]
+    },
+    {
+      "id": "word-0269",
+      "en": "argument",
+      "zh": "论点；争论",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0270",
+      "en": "relies",
+      "zh": "依赖",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0271",
+      "en": "advances",
+      "zh": "进展；进步",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0272",
+      "en": "translation",
+      "zh": "翻译",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0273",
+      "en": "speech",
+      "zh": "言语；讲话",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0274",
+      "en": "recognition",
+      "zh": "识别；认可",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "word-0275",
+      "en": "encouraged",
+      "zh": "鼓励",
+      "sourceIds": [
+        129
+      ]
+    },
+    {
+      "id": "word-0276",
+      "en": "vote",
+      "zh": "投票",
+      "sourceIds": [
+        129
+      ]
+    },
+    {
+      "id": "word-0277",
+      "en": "forthcoming",
+      "zh": "即将到来的",
+      "sourceIds": [
+        129
+      ]
+    },
+    {
+      "id": "word-0278",
+      "en": "elections",
+      "zh": "选举",
+      "sourceIds": [
+        129
+      ]
+    }
+  ]
+}

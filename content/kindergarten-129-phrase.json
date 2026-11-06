@@ -1,0 +1,2005 @@
+{
+  "id": "kindergarten-listening-129-phrase-v38",
+  "category": "kindergarten",
+  "type": "phrase",
+  "titleZh": "幼儿园听力 · 听词组",
+  "titleEn": "Phrases",
+  "items": [
+    {
+      "id": "phrase-0001",
+      "en": "from nine o'clock",
+      "zh": "从九点开始",
+      "sourceIds": [
+        1
+      ]
+    },
+    {
+      "id": "phrase-0002",
+      "en": "until two o'clock",
+      "zh": "直到两点",
+      "sourceIds": [
+        1
+      ]
+    },
+    {
+      "id": "phrase-0003",
+      "en": "provides hot lunches",
+      "zh": "提供热午餐",
+      "sourceIds": [
+        2
+      ]
+    },
+    {
+      "id": "phrase-0004",
+      "en": "hot lunches for students",
+      "zh": "给学生的热午餐",
+      "sourceIds": [
+        2
+      ]
+    },
+    {
+      "id": "phrase-0005",
+      "en": "The telephone booths",
+      "zh": "电话亭",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "phrase-0006",
+      "en": "all employees in the office",
+      "zh": "办公室里的所有员工",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "phrase-0007",
+      "en": "Your application for accommodation",
+      "zh": "你的住宿申请",
+      "sourceIds": [
+        4
+      ]
+    },
+    {
+      "id": "phrase-0008",
+      "en": "before the course starts",
+      "zh": "在课程开始之前",
+      "sourceIds": [
+        4
+      ]
+    },
+    {
+      "id": "phrase-0009",
+      "en": "a small store",
+      "zh": "一家小商店",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "phrase-0010",
+      "en": "to local residents",
+      "zh": "向当地居民",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "phrase-0011",
+      "en": "near the theater",
+      "zh": "在剧院附近",
+      "sourceIds": [
+        6,
+        37
+      ]
+    },
+    {
+      "id": "phrase-0012",
+      "en": "Lack of citation and evidence",
+      "zh": "缺乏引用和证据",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "phrase-0013",
+      "en": "regarded as plagiarism",
+      "zh": "被视为抄袭",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "phrase-0014",
+      "en": "have access to the facilities",
+      "zh": "可以使用这些设施",
+      "sourceIds": [
+        8
+      ]
+    },
+    {
+      "id": "phrase-0015",
+      "en": "during the holidays",
+      "zh": "在假期期间",
+      "sourceIds": [
+        8
+      ]
+    },
+    {
+      "id": "phrase-0016",
+      "en": "Mineral resource exploration",
+      "zh": "矿产资源勘探",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "phrase-0017",
+      "en": "local environment degradation",
+      "zh": "当地环境恶化",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "phrase-0018",
+      "en": "To download the calendar",
+      "zh": "下载日历",
+      "sourceIds": [
+        10
+      ]
+    },
+    {
+      "id": "phrase-0019",
+      "en": "at our university",
+      "zh": "在我们大学",
+      "sourceIds": [
+        10
+      ]
+    },
+    {
+      "id": "phrase-0020",
+      "en": "right out front",
+      "zh": "就在门口",
+      "sourceIds": [
+        11
+      ]
+    },
+    {
+      "id": "phrase-0021",
+      "en": "take you to London",
+      "zh": "带你去伦敦",
+      "sourceIds": [
+        11
+      ]
+    },
+    {
+      "id": "phrase-0022",
+      "en": "This parking space",
+      "zh": "这个停车位",
+      "sourceIds": [
+        12
+      ]
+    },
+    {
+      "id": "phrase-0023",
+      "en": "the employee of the month",
+      "zh": "本月优秀员工",
+      "sourceIds": [
+        12
+      ]
+    },
+    {
+      "id": "phrase-0024",
+      "en": "with such infinite trouble",
+      "zh": "费尽如此多的周折",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "phrase-0025",
+      "en": "at a pinch",
+      "zh": "在紧要关头",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "phrase-0026",
+      "en": "finish the report",
+      "zh": "完成报告",
+      "sourceIds": [
+        14
+      ]
+    },
+    {
+      "id": "phrase-0027",
+      "en": "to visit Canada",
+      "zh": "游览加拿大",
+      "sourceIds": [
+        15
+      ]
+    },
+    {
+      "id": "phrase-0028",
+      "en": "during fall months",
+      "zh": "在秋季月份",
+      "sourceIds": [
+        15
+      ]
+    },
+    {
+      "id": "phrase-0029",
+      "en": "office welcome events",
+      "zh": "办公室迎新活动",
+      "sourceIds": [
+        16
+      ]
+    },
+    {
+      "id": "phrase-0030",
+      "en": "brain and body size",
+      "zh": "大脑与身体大小",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "phrase-0031",
+      "en": "the key factor in intelligence",
+      "zh": "智力的关键因素",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "phrase-0032",
+      "en": "The main library",
+      "zh": "主图书馆",
+      "sourceIds": [
+        18
+      ]
+    },
+    {
+      "id": "phrase-0033",
+      "en": "the heart of the campus",
+      "zh": "校园中心",
+      "sourceIds": [
+        18
+      ]
+    },
+    {
+      "id": "phrase-0034",
+      "en": "complete the evaluation form",
+      "zh": "填写评估表",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "phrase-0035",
+      "en": "the end of the term",
+      "zh": "学期末",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "phrase-0036",
+      "en": "reading and writing skills",
+      "zh": "阅读和写作技巧",
+      "sourceIds": [
+        20
+      ]
+    },
+    {
+      "id": "phrase-0037",
+      "en": "All the messages",
+      "zh": "所有消息",
+      "sourceIds": [
+        21
+      ]
+    },
+    {
+      "id": "phrase-0038",
+      "en": "on the website",
+      "zh": "在网站上",
+      "sourceIds": [
+        21
+      ]
+    },
+    {
+      "id": "phrase-0039",
+      "en": "Please stop writing",
+      "zh": "请停止书写",
+      "sourceIds": [
+        22
+      ]
+    },
+    {
+      "id": "phrase-0040",
+      "en": "as soon as",
+      "zh": "一……就……",
+      "sourceIds": [
+        22
+      ]
+    },
+    {
+      "id": "phrase-0041",
+      "en": "three different areas",
+      "zh": "三个不同领域",
+      "sourceIds": [
+        23
+      ]
+    },
+    {
+      "id": "phrase-0042",
+      "en": "of digital technology",
+      "zh": "数字技术的",
+      "sourceIds": [
+        23
+      ]
+    },
+    {
+      "id": "phrase-0043",
+      "en": "for the essay",
+      "zh": "针对这篇论文",
+      "sourceIds": [
+        24
+      ]
+    },
+    {
+      "id": "phrase-0044",
+      "en": "have the opportunity to share",
+      "zh": "有机会分享",
+      "sourceIds": [
+        25
+      ]
+    },
+    {
+      "id": "phrase-0045",
+      "en": "the common lunch break",
+      "zh": "公共午餐休息时间",
+      "sourceIds": [
+        25
+      ]
+    },
+    {
+      "id": "phrase-0046",
+      "en": "The graph shows",
+      "zh": "图表显示",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "phrase-0047",
+      "en": "according to gender",
+      "zh": "按性别划分",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "phrase-0048",
+      "en": "the chemistry lab",
+      "zh": "化学实验室",
+      "sourceIds": [
+        27
+      ]
+    },
+    {
+      "id": "phrase-0049",
+      "en": "to Mr Mitchell",
+      "zh": "送到米切尔先生那里",
+      "sourceIds": [
+        27
+      ]
+    },
+    {
+      "id": "phrase-0050",
+      "en": "do specialized marketing",
+      "zh": "从事专业化的市场营销",
+      "sourceIds": [
+        28
+      ]
+    },
+    {
+      "id": "phrase-0051",
+      "en": "The bookshop is located",
+      "zh": "书店位于",
+      "sourceIds": [
+        29
+      ]
+    },
+    {
+      "id": "phrase-0052",
+      "en": "the main campus",
+      "zh": "主校区",
+      "sourceIds": [
+        29
+      ]
+    },
+    {
+      "id": "phrase-0053",
+      "en": "at the southern station",
+      "zh": "在南站",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "phrase-0054",
+      "en": "due to the construction",
+      "zh": "由于施工",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "phrase-0055",
+      "en": "Marks will be deducted",
+      "zh": "将会扣分",
+      "sourceIds": [
+        31
+      ]
+    },
+    {
+      "id": "phrase-0056",
+      "en": "after the due date",
+      "zh": "在截止日期之后",
+      "sourceIds": [
+        31
+      ]
+    },
+    {
+      "id": "phrase-0057",
+      "en": "Today's lecture has been postponed",
+      "zh": "今天的讲座已推迟",
+      "sourceIds": [
+        32
+      ]
+    },
+    {
+      "id": "phrase-0058",
+      "en": "because of the lecturer's illness",
+      "zh": "由于讲师生病",
+      "sourceIds": [
+        32
+      ]
+    },
+    {
+      "id": "phrase-0059",
+      "en": "went through the theater",
+      "zh": "穿过了剧院",
+      "sourceIds": [
+        33
+      ]
+    },
+    {
+      "id": "phrase-0060",
+      "en": "their own computer",
+      "zh": "他们自己的电脑",
+      "sourceIds": [
+        34
+      ]
+    },
+    {
+      "id": "phrase-0061",
+      "en": "The discussion was delayed",
+      "zh": "讨论被推迟了",
+      "sourceIds": [
+        35
+      ]
+    },
+    {
+      "id": "phrase-0062",
+      "en": "raised by the university",
+      "zh": "由大学提出的",
+      "sourceIds": [
+        35
+      ]
+    },
+    {
+      "id": "phrase-0063",
+      "en": "attend the safety courses",
+      "zh": "参加安全课程",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "phrase-0064",
+      "en": "wear protective goggles",
+      "zh": "戴上防护眼镜",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "phrase-0065",
+      "en": "before entering the laboratory",
+      "zh": "在进入实验室之前",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "phrase-0066",
+      "en": "The art museum",
+      "zh": "艺术博物馆",
+      "sourceIds": [
+        37
+      ]
+    },
+    {
+      "id": "phrase-0067",
+      "en": "across the street",
+      "zh": "在街对面",
+      "sourceIds": [
+        37
+      ]
+    },
+    {
+      "id": "phrase-0068",
+      "en": "have a meeting",
+      "zh": "开会",
+      "sourceIds": [
+        38
+      ]
+    },
+    {
+      "id": "phrase-0069",
+      "en": "in this room today",
+      "zh": "今天在这个房间里",
+      "sourceIds": [
+        38
+      ]
+    },
+    {
+      "id": "phrase-0070",
+      "en": "in the back hall",
+      "zh": "在后面的大厅",
+      "sourceIds": [
+        39
+      ]
+    },
+    {
+      "id": "phrase-0071",
+      "en": "processing the enrollment",
+      "zh": "处理入学登记",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "phrase-0072",
+      "en": "due to the computer problems",
+      "zh": "由于电脑问题",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "phrase-0073",
+      "en": "for the winter",
+      "zh": "为过冬",
+      "sourceIds": [
+        41
+      ]
+    },
+    {
+      "id": "phrase-0074",
+      "en": "keep the keys with you",
+      "zh": "随身带好钥匙",
+      "sourceIds": [
+        42
+      ]
+    },
+    {
+      "id": "phrase-0075",
+      "en": "often locks automatically",
+      "zh": "经常自动上锁",
+      "sourceIds": [
+        42
+      ]
+    },
+    {
+      "id": "phrase-0076",
+      "en": "Passengers on the train",
+      "zh": "火车上的乘客",
+      "sourceIds": [
+        43
+      ]
+    },
+    {
+      "id": "phrase-0077",
+      "en": "feet on the seat",
+      "zh": "放在座位上的脚",
+      "sourceIds": [
+        43
+      ]
+    },
+    {
+      "id": "phrase-0078",
+      "en": "urban and urbanization phenomenon",
+      "zh": "城市及城市化现象",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "phrase-0079",
+      "en": "pass me the textbook",
+      "zh": "把课本递给我",
+      "sourceIds": [
+        45
+      ]
+    },
+    {
+      "id": "phrase-0080",
+      "en": "on that table",
+      "zh": "在那张桌子上",
+      "sourceIds": [
+        45
+      ]
+    },
+    {
+      "id": "phrase-0081",
+      "en": "The bus for London",
+      "zh": "去伦敦的公交车",
+      "sourceIds": [
+        46
+      ]
+    },
+    {
+      "id": "phrase-0082",
+      "en": "ten minutes later than planned",
+      "zh": "比原计划晚十分钟",
+      "sourceIds": [
+        46
+      ]
+    },
+    {
+      "id": "phrase-0083",
+      "en": "your student card",
+      "zh": "你的学生证",
+      "sourceIds": [
+        47
+      ]
+    },
+    {
+      "id": "phrase-0084",
+      "en": "will get a discount",
+      "zh": "将获得折扣",
+      "sourceIds": [
+        47
+      ]
+    },
+    {
+      "id": "phrase-0085",
+      "en": "considering all the options",
+      "zh": "考虑所有选项",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "phrase-0086",
+      "en": "decided to take risks",
+      "zh": "决定冒险",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "phrase-0087",
+      "en": "following the freshman seminar",
+      "zh": "在新生研讨会之后",
+      "sourceIds": [
+        49,
+        93
+      ]
+    },
+    {
+      "id": "phrase-0088",
+      "en": "By logging in",
+      "zh": "通过登录",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "phrase-0089",
+      "en": "all terms and conditions",
+      "zh": "所有条款和条件",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "phrase-0090",
+      "en": "regarding your enrollment",
+      "zh": "关于你的入学登记",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "phrase-0091",
+      "en": "Tomorrow's lecture has been canceled",
+      "zh": "明天的讲座已取消",
+      "sourceIds": [
+        51
+      ]
+    },
+    {
+      "id": "phrase-0092",
+      "en": "due to the power cut",
+      "zh": "由于停电",
+      "sourceIds": [
+        51
+      ]
+    },
+    {
+      "id": "phrase-0093",
+      "en": "the works you consult",
+      "zh": "你查阅的作品",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "phrase-0094",
+      "en": "in the bibliography",
+      "zh": "在参考文献目录中",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "phrase-0095",
+      "en": "a panel discussion",
+      "zh": "一场专题讨论会",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "phrase-0096",
+      "en": "on sustainable development",
+      "zh": "关于可持续发展",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "phrase-0097",
+      "en": "Eating a healthy breakfast",
+      "zh": "吃一顿健康的早餐",
+      "sourceIds": [
+        54
+      ]
+    },
+    {
+      "id": "phrase-0098",
+      "en": "throughout the day",
+      "zh": "一整天",
+      "sourceIds": [
+        54
+      ]
+    },
+    {
+      "id": "phrase-0099",
+      "en": "many welcoming activities",
+      "zh": "许多迎新活动",
+      "sourceIds": [
+        55
+      ]
+    },
+    {
+      "id": "phrase-0100",
+      "en": "undergraduate and postgraduate students",
+      "zh": "本科生和研究生",
+      "sourceIds": [
+        55
+      ]
+    },
+    {
+      "id": "phrase-0101",
+      "en": "choose graduate certificate",
+      "zh": "选择研究生证书课程",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "phrase-0102",
+      "en": "graduate diploma and master course",
+      "zh": "研究生文凭课程和硕士课程",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "phrase-0103",
+      "en": "a lot of situations",
+      "zh": "很多情况",
+      "sourceIds": [
+        57
+      ]
+    },
+    {
+      "id": "phrase-0104",
+      "en": "Understanding the historical context",
+      "zh": "了解历史背景",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "phrase-0105",
+      "en": "in this era",
+      "zh": "在这个时代",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "phrase-0106",
+      "en": "drop or add your courses",
+      "zh": "退选或增选你的课程",
+      "sourceIds": [
+        59
+      ]
+    },
+    {
+      "id": "phrase-0107",
+      "en": "during the registration week",
+      "zh": "在注册周期间",
+      "sourceIds": [
+        59
+      ]
+    },
+    {
+      "id": "phrase-0108",
+      "en": "your student identification card",
+      "zh": "你的学生身份证",
+      "sourceIds": [
+        60
+      ]
+    },
+    {
+      "id": "phrase-0109",
+      "en": "at the library",
+      "zh": "在图书馆",
+      "sourceIds": [
+        60
+      ]
+    },
+    {
+      "id": "phrase-0110",
+      "en": "Newspapers around the country",
+      "zh": "全国各地的报纸",
+      "sourceIds": [
+        61
+      ]
+    },
+    {
+      "id": "phrase-0111",
+      "en": "stories of the president",
+      "zh": "总统的新闻",
+      "sourceIds": [
+        61
+      ]
+    },
+    {
+      "id": "phrase-0112",
+      "en": "Today's lecture is postponed",
+      "zh": "今天的讲座被推迟了",
+      "sourceIds": [
+        62
+      ]
+    },
+    {
+      "id": "phrase-0113",
+      "en": "the lecturer is ill",
+      "zh": "讲师生病了",
+      "sourceIds": [
+        62
+      ]
+    },
+    {
+      "id": "phrase-0114",
+      "en": "the only subject",
+      "zh": "唯一的研究主题",
+      "sourceIds": [
+        63
+      ]
+    },
+    {
+      "id": "phrase-0115",
+      "en": "the only subject in sociology",
+      "zh": "社会学唯一的研究主题",
+      "sourceIds": [
+        63
+      ]
+    },
+    {
+      "id": "phrase-0116",
+      "en": "the process of decay",
+      "zh": "腐烂分解过程",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "phrase-0117",
+      "en": "nutrients to the soil",
+      "zh": "归还土壤的养分",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "phrase-0118",
+      "en": "enhances soil fertility",
+      "zh": "提高土壤肥力",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "phrase-0119",
+      "en": "moved to the countryside",
+      "zh": "迁往农村",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "phrase-0120",
+      "en": "manufacturing costs are lower",
+      "zh": "制造成本更低",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "phrase-0121",
+      "en": "The treasure hunters",
+      "zh": "寻宝者",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "phrase-0122",
+      "en": "take any risk",
+      "zh": "冒任何风险",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "phrase-0123",
+      "en": "get to the location",
+      "zh": "抵达那个地点",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "phrase-0124",
+      "en": "twenty hours of lectures",
+      "zh": "二十小时的讲座",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "phrase-0125",
+      "en": "seminars and tutorials",
+      "zh": "研讨会和辅导课",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "phrase-0126",
+      "en": "get a further extension",
+      "zh": "获得进一步延期",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "phrase-0127",
+      "en": "call the education executive",
+      "zh": "致电教育主管",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "phrase-0128",
+      "en": "on four o one",
+      "zh": "拨打四零一",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "phrase-0129",
+      "en": "with orange juice",
+      "zh": "配橙汁",
+      "sourceIds": [
+        69
+      ]
+    },
+    {
+      "id": "phrase-0130",
+      "en": "white sandwich bread",
+      "zh": "白色三明治面包",
+      "sourceIds": [
+        69
+      ]
+    },
+    {
+      "id": "phrase-0131",
+      "en": "The cafeteria closes soon",
+      "zh": "自助餐厅很快关门",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "phrase-0132",
+      "en": "throughout the night",
+      "zh": "整晚",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "phrase-0133",
+      "en": "the new microscope",
+      "zh": "新的显微镜",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "phrase-0134",
+      "en": "the biology lab",
+      "zh": "生物实验室",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "phrase-0135",
+      "en": "The geography assignment",
+      "zh": "地理作业",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "phrase-0136",
+      "en": "by midday on Friday",
+      "zh": "在星期五中午之前",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "phrase-0137",
+      "en": "pay by cash",
+      "zh": "用现金付款",
+      "sourceIds": [
+        73
+      ]
+    },
+    {
+      "id": "phrase-0138",
+      "en": "using a credit card",
+      "zh": "使用信用卡",
+      "sourceIds": [
+        73
+      ]
+    },
+    {
+      "id": "phrase-0139",
+      "en": "submit the assignment",
+      "zh": "提交作业",
+      "sourceIds": [
+        74
+      ]
+    },
+    {
+      "id": "phrase-0140",
+      "en": "on the main campus",
+      "zh": "在主校区",
+      "sourceIds": [
+        75
+      ]
+    },
+    {
+      "id": "phrase-0141",
+      "en": "behind the library",
+      "zh": "在图书馆后面",
+      "sourceIds": [
+        75
+      ]
+    },
+    {
+      "id": "phrase-0142",
+      "en": "about black holes",
+      "zh": "关于黑洞",
+      "sourceIds": [
+        76,
+        83
+      ]
+    },
+    {
+      "id": "phrase-0143",
+      "en": "an explanation in astrophysics",
+      "zh": "天体物理学中的一种解释",
+      "sourceIds": [
+        76
+      ]
+    },
+    {
+      "id": "phrase-0144",
+      "en": "the reserve collection of books",
+      "zh": "保留馆藏书籍",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "phrase-0145",
+      "en": "up to three hours",
+      "zh": "最多三个小时",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "phrase-0146",
+      "en": "respond to national needs",
+      "zh": "响应国家需求",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "phrase-0147",
+      "en": "our ability to flourish",
+      "zh": "我们的发展能力",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "phrase-0148",
+      "en": "The number of company bankruptcy",
+      "zh": "公司破产数量",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "phrase-0149",
+      "en": "in the third quarter",
+      "zh": "在第三季度",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "phrase-0150",
+      "en": "carry oxygenated blood",
+      "zh": "输送含氧血液",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "phrase-0151",
+      "en": "from the heart",
+      "zh": "从心脏",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "phrase-0152",
+      "en": "parts of the body",
+      "zh": "身体的部位",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "phrase-0153",
+      "en": "grow larger and stronger",
+      "zh": "长得更大更强壮",
+      "sourceIds": [
+        81
+      ]
+    },
+    {
+      "id": "phrase-0154",
+      "en": "helps them hunt better",
+      "zh": "帮助它们更好地捕猎",
+      "sourceIds": [
+        81
+      ]
+    },
+    {
+      "id": "phrase-0155",
+      "en": "hesitate to email me",
+      "zh": "犹豫是否给我发邮件",
+      "sourceIds": [
+        82
+      ]
+    },
+    {
+      "id": "phrase-0156",
+      "en": "is rendered moot",
+      "zh": "被认为失去实际意义",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "phrase-0157",
+      "en": "the explanation of the explosion",
+      "zh": "对爆炸的解释",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "phrase-0158",
+      "en": "a prestigious program",
+      "zh": "一个享有盛誉的项目",
+      "sourceIds": [
+        84
+      ]
+    },
+    {
+      "id": "phrase-0159",
+      "en": "for our university",
+      "zh": "对我们大学而言",
+      "sourceIds": [
+        84
+      ]
+    },
+    {
+      "id": "phrase-0160",
+      "en": "The minimal mark",
+      "zh": "最低分数",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "phrase-0161",
+      "en": "to be awarded",
+      "zh": "被授予",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "phrase-0162",
+      "en": "seventy five percent",
+      "zh": "百分之七十五",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "phrase-0163",
+      "en": "Number the beakers",
+      "zh": "给烧杯编号",
+      "sourceIds": [
+        86,
+        105
+      ]
+    },
+    {
+      "id": "phrase-0164",
+      "en": "put them away until tomorrow",
+      "zh": "把它们收好，直到明天",
+      "sourceIds": [
+        86
+      ]
+    },
+    {
+      "id": "phrase-0165",
+      "en": "to be tested",
+      "zh": "接受检验",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "phrase-0166",
+      "en": "a more rigorous way",
+      "zh": "一种更严谨的方式",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "phrase-0167",
+      "en": "The cafe will close soon",
+      "zh": "咖啡馆很快关门",
+      "sourceIds": [
+        88
+      ]
+    },
+    {
+      "id": "phrase-0168",
+      "en": "which is running overnight",
+      "zh": "它整夜运行",
+      "sourceIds": [
+        88
+      ]
+    },
+    {
+      "id": "phrase-0169",
+      "en": "industry and agriculture",
+      "zh": "工业和农业",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "phrase-0170",
+      "en": "looking for ways",
+      "zh": "寻找方法",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "phrase-0171",
+      "en": "Newspapers across the world",
+      "zh": "世界各地的报纸",
+      "sourceIds": [
+        90
+      ]
+    },
+    {
+      "id": "phrase-0172",
+      "en": "stories of presidents",
+      "zh": "总统们的新闻",
+      "sourceIds": [
+        90
+      ]
+    },
+    {
+      "id": "phrase-0173",
+      "en": "This small Indian state",
+      "zh": "印度这个小邦",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "phrase-0174",
+      "en": "a land of forests",
+      "zh": "一片森林之地",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "phrase-0175",
+      "en": "valleys and snowy islands",
+      "zh": "山谷和雪岛",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "phrase-0176",
+      "en": "The visiting professor",
+      "zh": "来访教授",
+      "sourceIds": [
+        92
+      ]
+    },
+    {
+      "id": "phrase-0177",
+      "en": "a lecture on geology",
+      "zh": "一场地质学讲座",
+      "sourceIds": [
+        92
+      ]
+    },
+    {
+      "id": "phrase-0178",
+      "en": "on Mondays and Thursdays",
+      "zh": "在每周一和周四",
+      "sourceIds": [
+        93
+      ]
+    },
+    {
+      "id": "phrase-0179",
+      "en": "The first few sentences",
+      "zh": "开头的几句话",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "phrase-0180",
+      "en": "capture the readers' attention",
+      "zh": "吸引读者的注意",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "phrase-0181",
+      "en": "The residence hall",
+      "zh": "宿舍楼",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "phrase-0182",
+      "en": "the academic building",
+      "zh": "教学楼",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "phrase-0183",
+      "en": "during the end-of-term break",
+      "zh": "在学期末假期期间",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "phrase-0184",
+      "en": "finalize the work",
+      "zh": "完成最后的工作",
+      "sourceIds": [
+        96
+      ]
+    },
+    {
+      "id": "phrase-0185",
+      "en": "before the Wednesday seminar",
+      "zh": "在星期三研讨会之前",
+      "sourceIds": [
+        96
+      ]
+    },
+    {
+      "id": "phrase-0186",
+      "en": "receive fair prices",
+      "zh": "获得公平的价格",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "phrase-0187",
+      "en": "for agricultural goods",
+      "zh": "针对农产品",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "phrase-0188",
+      "en": "The African elephant",
+      "zh": "非洲象",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "phrase-0189",
+      "en": "the largest living land mammal",
+      "zh": "最大的现存陆地哺乳动物",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "phrase-0190",
+      "en": "in the world",
+      "zh": "在世界上",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "phrase-0191",
+      "en": "All students and staff",
+      "zh": "所有学生和员工",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "phrase-0192",
+      "en": "to printers and scanners",
+      "zh": "使用打印机和扫描仪",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "phrase-0193",
+      "en": "All necessary information",
+      "zh": "所有必要信息",
+      "sourceIds": [
+        100
+      ]
+    },
+    {
+      "id": "phrase-0194",
+      "en": "in the assignment",
+      "zh": "在作业中",
+      "sourceIds": [
+        100
+      ]
+    },
+    {
+      "id": "phrase-0195",
+      "en": "A computer virus",
+      "zh": "一种电脑病毒",
+      "sourceIds": [
+        101
+      ]
+    },
+    {
+      "id": "phrase-0196",
+      "en": "all my files",
+      "zh": "我所有的文件",
+      "sourceIds": [
+        101
+      ]
+    },
+    {
+      "id": "phrase-0197",
+      "en": "your watch is fast",
+      "zh": "你的表走快了",
+      "sourceIds": [
+        102
+      ]
+    },
+    {
+      "id": "phrase-0198",
+      "en": "to reset it",
+      "zh": "重新设置它",
+      "sourceIds": [
+        102
+      ]
+    },
+    {
+      "id": "phrase-0199",
+      "en": "pay using cash",
+      "zh": "用现金付款",
+      "sourceIds": [
+        103
+      ]
+    },
+    {
+      "id": "phrase-0200",
+      "en": "a credit card",
+      "zh": "信用卡",
+      "sourceIds": [
+        103
+      ]
+    },
+    {
+      "id": "phrase-0201",
+      "en": "a first draft",
+      "zh": "一份初稿",
+      "sourceIds": [
+        104
+      ]
+    },
+    {
+      "id": "phrase-0202",
+      "en": "put them away",
+      "zh": "把它们收好",
+      "sourceIds": [
+        105
+      ]
+    },
+    {
+      "id": "phrase-0203",
+      "en": "distinguishes him from others",
+      "zh": "使他与其他人不同",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "phrase-0204",
+      "en": "black and white photography",
+      "zh": "黑白摄影",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "phrase-0205",
+      "en": "retake the module",
+      "zh": "重修该课程单元",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "phrase-0206",
+      "en": "insufficient mastery in the areas",
+      "zh": "在这些领域掌握不足",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "phrase-0207",
+      "en": "slows future progress",
+      "zh": "拖慢未来进步",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "phrase-0208",
+      "en": "Once more under the pressure",
+      "zh": "再一次在压力之下",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "phrase-0209",
+      "en": "of economic necessity",
+      "zh": "经济需求的",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "phrase-0210",
+      "en": "practice outstripped theory",
+      "zh": "实践超过了理论",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "phrase-0211",
+      "en": "divided into two groups",
+      "zh": "分成两组",
+      "sourceIds": [
+        110
+      ]
+    },
+    {
+      "id": "phrase-0212",
+      "en": "the others stay here",
+      "zh": "其他人留在这里",
+      "sourceIds": [
+        110
+      ]
+    },
+    {
+      "id": "phrase-0213",
+      "en": "essays and seminar papers",
+      "zh": "论文和研讨会报告",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "phrase-0214",
+      "en": "emailed to your tutor",
+      "zh": "通过电子邮件发给你的导师",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "phrase-0215",
+      "en": "take gender into account",
+      "zh": "考虑性别",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "phrase-0216",
+      "en": "when discussing the figures",
+      "zh": "在讨论这些数字时",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "phrase-0217",
+      "en": "such a complex question",
+      "zh": "如此复杂的问题",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "phrase-0218",
+      "en": "is absolutely impossible",
+      "zh": "绝对不可能",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "phrase-0219",
+      "en": "The first person in space",
+      "zh": "第一个进入太空的人",
+      "sourceIds": [
+        114
+      ]
+    },
+    {
+      "id": "phrase-0220",
+      "en": "from the Soviet Union",
+      "zh": "来自苏联",
+      "sourceIds": [
+        114
+      ]
+    },
+    {
+      "id": "phrase-0221",
+      "en": "internal and external body structures",
+      "zh": "身体内部和外部的结构",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "phrase-0222",
+      "en": "should be submitted",
+      "zh": "应该提交",
+      "sourceIds": [
+        116
+      ]
+    },
+    {
+      "id": "phrase-0223",
+      "en": "the end of this week",
+      "zh": "本周末",
+      "sourceIds": [
+        116
+      ]
+    },
+    {
+      "id": "phrase-0224",
+      "en": "Even with the permit",
+      "zh": "即使有许可证",
+      "sourceIds": [
+        117
+      ]
+    },
+    {
+      "id": "phrase-0225",
+      "en": "a parking spot on campus",
+      "zh": "校园里的一个停车位",
+      "sourceIds": [
+        117
+      ]
+    },
+    {
+      "id": "phrase-0226",
+      "en": "Our professor is hosting",
+      "zh": "我们的教授正在主持",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "phrase-0227",
+      "en": "the business development conference",
+      "zh": "商业发展会议",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "phrase-0228",
+      "en": "A demonstrated ability",
+      "zh": "已展现出的能力",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "phrase-0229",
+      "en": "correct and concise English",
+      "zh": "正确且简洁的英语",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "phrase-0230",
+      "en": "economics electives clash",
+      "zh": "经济学选修课时间冲突",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "phrase-0231",
+      "en": "on my timetable",
+      "zh": "在我的课表上",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "phrase-0232",
+      "en": "the detailed study",
+      "zh": "详细研究",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "phrase-0233",
+      "en": "of the Earth's atmosphere",
+      "zh": "对地球大气层的",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "phrase-0234",
+      "en": "your name and identification number",
+      "zh": "你的姓名和身份证明号码",
+      "sourceIds": [
+        122
+      ]
+    },
+    {
+      "id": "phrase-0235",
+      "en": "in the application form",
+      "zh": "在申请表中",
+      "sourceIds": [
+        122
+      ]
+    },
+    {
+      "id": "phrase-0236",
+      "en": "Acupuncture is a technique",
+      "zh": "针灸是一种技术",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "phrase-0237",
+      "en": "traditional Chinese medicine",
+      "zh": "传统中医",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "phrase-0238",
+      "en": "The United Kingdom",
+      "zh": "英国",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "phrase-0239",
+      "en": "a constitutional monarchy",
+      "zh": "君主立宪制",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "phrase-0240",
+      "en": "to accept the assignment",
+      "zh": "接受这份作业",
+      "sourceIds": [
+        125
+      ]
+    },
+    {
+      "id": "phrase-0241",
+      "en": "the due date on Friday",
+      "zh": "星期五的截止日期",
+      "sourceIds": [
+        125
+      ]
+    },
+    {
+      "id": "phrase-0242",
+      "en": "The original Olympic Games",
+      "zh": "最初的奥林匹克运动会",
+      "sourceIds": [
+        126
+      ]
+    },
+    {
+      "id": "phrase-0243",
+      "en": "This part of the book",
+      "zh": "这本书的这一部分",
+      "sourceIds": [
+        127
+      ]
+    },
+    {
+      "id": "phrase-0244",
+      "en": "the story of my father",
+      "zh": "我父亲的故事",
+      "sourceIds": [
+        127
+      ]
+    },
+    {
+      "id": "phrase-0245",
+      "en": "on huge advances",
+      "zh": "依赖于巨大进步",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "phrase-0246",
+      "en": "huge advances in computer translation",
+      "zh": "计算机翻译方面的巨大进步",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "phrase-0247",
+      "en": "translation and speech recognition",
+      "zh": "翻译和语音识别",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "phrase-0248",
+      "en": "All students are encouraged",
+      "zh": "所有学生都受到鼓励",
+      "sourceIds": [
+        129
+      ]
+    },
+    {
+      "id": "phrase-0249",
+      "en": "in the forthcoming elections",
+      "zh": "在即将到来的选举中",
+      "sourceIds": [
+        129
+      ]
+    }
+  ]
+}

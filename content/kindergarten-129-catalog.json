@@ -1,0 +1,44 @@
+{
+  "version": 38,
+  "categories": [
+    {
+      "id": "kindergarten",
+      "zh": "幼儿园听力",
+      "en": "Kindergarten Listening"
+    }
+  ],
+  "books": [
+    {
+      "id": "kindergarten-listening-129-word-v38",
+      "category": "kindergarten",
+      "type": "word",
+      "titleZh": "幼儿园听力 · 听单词",
+      "titleEn": "Key Words",
+      "url": "kindergarten-129-word.json"
+    },
+    {
+      "id": "kindergarten-listening-129-phrase-v38",
+      "category": "kindergarten",
+      "type": "phrase",
+      "titleZh": "幼儿园听力 · 听词组",
+      "titleEn": "Phrases",
+      "url": "kindergarten-129-phrase.json"
+    },
+    {
+      "id": "kindergarten-listening-129-sentence-v38",
+      "category": "kindergarten",
+      "type": "sentence",
+      "titleZh": "幼儿园听力 · 听短句",
+      "titleEn": "Short Sentences",
+      "url": "kindergarten-129-sentence.json"
+    },
+    {
+      "id": "kindergarten-listening-129-passage-v38",
+      "category": "kindergarten",
+      "type": "passage",
+      "titleZh": "幼儿园听力 · 听短文",
+      "titleEn": "Original Sentences",
+      "url": "kindergarten-129-passage.json"
+    }
+  ]
+}

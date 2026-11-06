@@ -1,0 +1,1634 @@
+{
+  "id": "kindergarten-listening-129-sentence-v38",
+  "category": "kindergarten",
+  "type": "sentence",
+  "titleZh": "幼儿园听力 · 听短句",
+  "titleEn": "Short Sentences",
+  "items": [
+    {
+      "id": "sentence-0001",
+      "en": "I have lectures on Tuesday",
+      "zh": "我星期二有课",
+      "sourceIds": [
+        1
+      ]
+    },
+    {
+      "id": "sentence-0002",
+      "en": "from nine o'clock until two o'clock",
+      "zh": "从九点到两点",
+      "sourceIds": [
+        1
+      ]
+    },
+    {
+      "id": "sentence-0003",
+      "en": "The school provides hot lunches for students",
+      "zh": "学校为学生提供热午餐",
+      "sourceIds": [
+        2
+      ]
+    },
+    {
+      "id": "sentence-0004",
+      "en": "The telephone booths are available",
+      "zh": "电话亭可供使用",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "sentence-0005",
+      "en": "available for all employees in the office",
+      "zh": "办公室里的所有员工都可以使用",
+      "sourceIds": [
+        3
+      ]
+    },
+    {
+      "id": "sentence-0006",
+      "en": "Your application for accommodation must be submitted",
+      "zh": "你的住宿申请必须提交",
+      "sourceIds": [
+        4
+      ]
+    },
+    {
+      "id": "sentence-0007",
+      "en": "She runs a small store",
+      "zh": "她经营一家小商店",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "sentence-0008",
+      "en": "provides fresh produce to local residents",
+      "zh": "为当地居民提供新鲜农产品",
+      "sourceIds": [
+        5
+      ]
+    },
+    {
+      "id": "sentence-0009",
+      "en": "The supermarket is located near the theater",
+      "zh": "超市位于剧院附近",
+      "sourceIds": [
+        6
+      ]
+    },
+    {
+      "id": "sentence-0010",
+      "en": "will be regarded as plagiarism",
+      "zh": "将被视为抄袭",
+      "sourceIds": [
+        7
+      ]
+    },
+    {
+      "id": "sentence-0011",
+      "en": "Students also have access to the facilities",
+      "zh": "学生也可以使用这些设施",
+      "sourceIds": [
+        8
+      ]
+    },
+    {
+      "id": "sentence-0012",
+      "en": "the facilities and the library during the holidays",
+      "zh": "假期期间的这些设施和图书馆",
+      "sourceIds": [
+        8
+      ]
+    },
+    {
+      "id": "sentence-0013",
+      "en": "Mineral resource exploration has been rising",
+      "zh": "矿产资源勘探一直在增加",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "sentence-0014",
+      "en": "leading to local environment degradation",
+      "zh": "导致当地环境恶化",
+      "sourceIds": [
+        9
+      ]
+    },
+    {
+      "id": "sentence-0015",
+      "en": "find more activities at our university",
+      "zh": "找到本校更多活动",
+      "sourceIds": [
+        10
+      ]
+    },
+    {
+      "id": "sentence-0016",
+      "en": "The bus right out front",
+      "zh": "就在门口的公交车",
+      "sourceIds": [
+        11
+      ]
+    },
+    {
+      "id": "sentence-0017",
+      "en": "will take you to London",
+      "zh": "会带你去伦敦",
+      "sourceIds": [
+        11
+      ]
+    },
+    {
+      "id": "sentence-0018",
+      "en": "is for the employee of the month",
+      "zh": "是本月优秀员工专用的",
+      "sourceIds": [
+        12
+      ]
+    },
+    {
+      "id": "sentence-0019",
+      "en": "The facts you have garnered",
+      "zh": "你收集到的事实",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "sentence-0020",
+      "en": "invariably fail you at a pinch",
+      "zh": "总在紧要关头派不上用场",
+      "sourceIds": [
+        13
+      ]
+    },
+    {
+      "id": "sentence-0021",
+      "en": "Your boss requires you to finish the report",
+      "zh": "老板要求你完成报告",
+      "sourceIds": [
+        14
+      ]
+    },
+    {
+      "id": "sentence-0022",
+      "en": "finish the report before Friday",
+      "zh": "在星期五之前完成报告",
+      "sourceIds": [
+        14
+      ]
+    },
+    {
+      "id": "sentence-0023",
+      "en": "The best time to visit Canada",
+      "zh": "游览加拿大的最佳时间",
+      "sourceIds": [
+        15
+      ]
+    },
+    {
+      "id": "sentence-0024",
+      "en": "for both undergraduate and postgraduate students",
+      "zh": "供本科生和研究生参加",
+      "sourceIds": [
+        16
+      ]
+    },
+    {
+      "id": "sentence-0025",
+      "en": "The ratio between brain and body size",
+      "zh": "大脑与身体大小的比例",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "sentence-0026",
+      "en": "is the key factor in intelligence",
+      "zh": "是智力的关键因素",
+      "sourceIds": [
+        17
+      ]
+    },
+    {
+      "id": "sentence-0027",
+      "en": "at the heart of the campus",
+      "zh": "在校园中心",
+      "sourceIds": [
+        18
+      ]
+    },
+    {
+      "id": "sentence-0028",
+      "en": "Postgraduate students need to complete the evaluation form",
+      "zh": "研究生需要填写评估表",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "sentence-0029",
+      "en": "before the end of the term",
+      "zh": "在学期结束前",
+      "sourceIds": [
+        19
+      ]
+    },
+    {
+      "id": "sentence-0030",
+      "en": "This course will discuss reading and writing skills",
+      "zh": "这门课程将讨论阅读和写作技巧",
+      "sourceIds": [
+        20
+      ]
+    },
+    {
+      "id": "sentence-0031",
+      "en": "All the messages should be included",
+      "zh": "所有消息都应该被包含在内",
+      "sourceIds": [
+        21
+      ]
+    },
+    {
+      "id": "sentence-0032",
+      "en": "should be included on the website",
+      "zh": "应该放在网站上",
+      "sourceIds": [
+        21
+      ]
+    },
+    {
+      "id": "sentence-0033",
+      "en": "as soon as the teacher asks",
+      "zh": "老师一要求就",
+      "sourceIds": [
+        22
+      ]
+    },
+    {
+      "id": "sentence-0034",
+      "en": "three different areas of digital technology",
+      "zh": "数字技术的三个不同领域",
+      "sourceIds": [
+        23
+      ]
+    },
+    {
+      "id": "sentence-0035",
+      "en": "The deadline for the essay is tomorrow",
+      "zh": "论文的截止日期是明天",
+      "sourceIds": [
+        24
+      ]
+    },
+    {
+      "id": "sentence-0036",
+      "en": "Students have the opportunity to share their lunch",
+      "zh": "学生有机会分享他们的午餐",
+      "sourceIds": [
+        25
+      ]
+    },
+    {
+      "id": "sentence-0037",
+      "en": "during the common lunch break around noon",
+      "zh": "在中午前后的公共午餐休息时间",
+      "sourceIds": [
+        25
+      ]
+    },
+    {
+      "id": "sentence-0038",
+      "en": "the percentage of people who smoke",
+      "zh": "吸烟人口的百分比",
+      "sourceIds": [
+        26
+      ]
+    },
+    {
+      "id": "sentence-0039",
+      "en": "Mr Mitchell in the chemistry lab",
+      "zh": "在化学实验室的米切尔先生",
+      "sourceIds": [
+        27
+      ]
+    },
+    {
+      "id": "sentence-0040",
+      "en": "Please take these up to Mr Mitchell",
+      "zh": "请把这些东西送到米切尔先生那里",
+      "sourceIds": [
+        27
+      ]
+    },
+    {
+      "id": "sentence-0041",
+      "en": "Talented people do specialized marketing",
+      "zh": "有才能的人从事专业化的市场营销",
+      "sourceIds": [
+        28
+      ]
+    },
+    {
+      "id": "sentence-0042",
+      "en": "to the north of the main campus",
+      "zh": "在主校区的北面",
+      "sourceIds": [
+        29
+      ]
+    },
+    {
+      "id": "sentence-0043",
+      "en": "The train will not stop",
+      "zh": "火车不会停车",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "sentence-0044",
+      "en": "will not stop at the southern station",
+      "zh": "不会在南站停车",
+      "sourceIds": [
+        30
+      ]
+    },
+    {
+      "id": "sentence-0045",
+      "en": "assignments handed in after the due date",
+      "zh": "截止日期后提交的作业",
+      "sourceIds": [
+        31
+      ]
+    },
+    {
+      "id": "sentence-0046",
+      "en": "Today's lecture has been postponed",
+      "zh": "今天的讲座已推迟",
+      "sourceIds": [
+        32
+      ]
+    },
+    {
+      "id": "sentence-0047",
+      "en": "postponed because of the lecturer's illness",
+      "zh": "由于讲师生病而推迟",
+      "sourceIds": [
+        32
+      ]
+    },
+    {
+      "id": "sentence-0048",
+      "en": "The music went through the theater",
+      "zh": "音乐声穿过了剧院",
+      "sourceIds": [
+        33
+      ]
+    },
+    {
+      "id": "sentence-0049",
+      "en": "Every student has their own computer",
+      "zh": "每个学生都有自己的电脑",
+      "sourceIds": [
+        34
+      ]
+    },
+    {
+      "id": "sentence-0050",
+      "en": "due to questions raised by the university",
+      "zh": "由于大学提出的问题",
+      "sourceIds": [
+        35
+      ]
+    },
+    {
+      "id": "sentence-0051",
+      "en": "The student must attend the safety courses",
+      "zh": "学生必须参加安全课程",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "sentence-0052",
+      "en": "wear protective goggles before entering the laboratory",
+      "zh": "进入实验室前戴上防护眼镜",
+      "sourceIds": [
+        36
+      ]
+    },
+    {
+      "id": "sentence-0053",
+      "en": "The art museum is located across the street",
+      "zh": "艺术博物馆位于街对面",
+      "sourceIds": [
+        37
+      ]
+    },
+    {
+      "id": "sentence-0054",
+      "en": "across the street and near the theater",
+      "zh": "在街对面并靠近剧院",
+      "sourceIds": [
+        37
+      ]
+    },
+    {
+      "id": "sentence-0055",
+      "en": "The manager will have a meeting",
+      "zh": "经理将开会",
+      "sourceIds": [
+        38
+      ]
+    },
+    {
+      "id": "sentence-0056",
+      "en": "have a meeting in this room today",
+      "zh": "今天在这个房间开会",
+      "sourceIds": [
+        38
+      ]
+    },
+    {
+      "id": "sentence-0057",
+      "en": "You can keep your bag",
+      "zh": "你可以存放你的包",
+      "sourceIds": [
+        39
+      ]
+    },
+    {
+      "id": "sentence-0058",
+      "en": "keep your bag in the back hall",
+      "zh": "把包放在后面的大厅",
+      "sourceIds": [
+        39
+      ]
+    },
+    {
+      "id": "sentence-0059",
+      "en": "There has been a delay",
+      "zh": "一直有所延误",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "sentence-0060",
+      "en": "a delay in processing the enrollment",
+      "zh": "处理入学登记的延误",
+      "sourceIds": [
+        40
+      ]
+    },
+    {
+      "id": "sentence-0061",
+      "en": "You need warm clothes for the winter",
+      "zh": "冬天你需要保暖的衣服",
+      "sourceIds": [
+        41
+      ]
+    },
+    {
+      "id": "sentence-0062",
+      "en": "Please always keep the keys with you",
+      "zh": "请始终随身带好钥匙",
+      "sourceIds": [
+        42
+      ]
+    },
+    {
+      "id": "sentence-0063",
+      "en": "the front door often locks automatically",
+      "zh": "前门经常自动上锁",
+      "sourceIds": [
+        42
+      ]
+    },
+    {
+      "id": "sentence-0064",
+      "en": "must not put feet on the seat",
+      "zh": "不能把脚放在座位上",
+      "sourceIds": [
+        43
+      ]
+    },
+    {
+      "id": "sentence-0065",
+      "en": "an overwhelming urban and urbanization phenomenon",
+      "zh": "一种势头强劲的城市及城市化现象",
+      "sourceIds": [
+        44
+      ]
+    },
+    {
+      "id": "sentence-0066",
+      "en": "Would you pass me the textbook",
+      "zh": "你能把课本递给我吗",
+      "sourceIds": [
+        45
+      ]
+    },
+    {
+      "id": "sentence-0067",
+      "en": "the textbook on that table",
+      "zh": "那张桌子上的课本",
+      "sourceIds": [
+        45
+      ]
+    },
+    {
+      "id": "sentence-0068",
+      "en": "will leave ten minutes later than planned",
+      "zh": "将比原计划晚十分钟出发",
+      "sourceIds": [
+        46
+      ]
+    },
+    {
+      "id": "sentence-0069",
+      "en": "If you show your student card",
+      "zh": "如果你出示学生证",
+      "sourceIds": [
+        47
+      ]
+    },
+    {
+      "id": "sentence-0070",
+      "en": "you will get a discount",
+      "zh": "你就会获得折扣",
+      "sourceIds": [
+        47
+      ]
+    },
+    {
+      "id": "sentence-0071",
+      "en": "After considering all the options",
+      "zh": "在考虑所有选项之后",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "sentence-0072",
+      "en": "she decided to take risks",
+      "zh": "她决定冒险",
+      "sourceIds": [
+        48
+      ]
+    },
+    {
+      "id": "sentence-0073",
+      "en": "The office opens on Monday and Thursday",
+      "zh": "办公室在星期一和星期四开放",
+      "sourceIds": [
+        49
+      ]
+    },
+    {
+      "id": "sentence-0074",
+      "en": "you agree to all terms and conditions",
+      "zh": "你同意所有条款和条件",
+      "sourceIds": [
+        50
+      ]
+    },
+    {
+      "id": "sentence-0075",
+      "en": "Tomorrow's lecture has been canceled",
+      "zh": "明天的讲座已取消",
+      "sourceIds": [
+        51
+      ]
+    },
+    {
+      "id": "sentence-0076",
+      "en": "canceled due to the power cut",
+      "zh": "由于停电而取消",
+      "sourceIds": [
+        51
+      ]
+    },
+    {
+      "id": "sentence-0077",
+      "en": "All the works you consult",
+      "zh": "你查阅过的所有作品",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "sentence-0078",
+      "en": "need to be mentioned in the bibliography",
+      "zh": "需要列在参考文献目录中",
+      "sourceIds": [
+        52
+      ]
+    },
+    {
+      "id": "sentence-0079",
+      "en": "there will be a panel discussion",
+      "zh": "将会有一场专题讨论会",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "sentence-0080",
+      "en": "a panel discussion on sustainable development",
+      "zh": "一场关于可持续发展的专题讨论会",
+      "sourceIds": [
+        53
+      ]
+    },
+    {
+      "id": "sentence-0081",
+      "en": "Eating a healthy breakfast can provide energy",
+      "zh": "吃一顿健康的早餐可以提供能量",
+      "sourceIds": [
+        54
+      ]
+    },
+    {
+      "id": "sentence-0082",
+      "en": "can provide energy throughout the day",
+      "zh": "可以提供一整天的能量",
+      "sourceIds": [
+        54
+      ]
+    },
+    {
+      "id": "sentence-0083",
+      "en": "There are many welcoming activities",
+      "zh": "有许多迎新活动",
+      "sourceIds": [
+        55
+      ]
+    },
+    {
+      "id": "sentence-0084",
+      "en": "for new undergraduate and postgraduate students",
+      "zh": "为新本科生和研究生安排的",
+      "sourceIds": [
+        55
+      ]
+    },
+    {
+      "id": "sentence-0085",
+      "en": "Students can choose graduate certificate",
+      "zh": "学生可以选择研究生证书课程",
+      "sourceIds": [
+        56
+      ]
+    },
+    {
+      "id": "sentence-0086",
+      "en": "you can deal with a lot of situations",
+      "zh": "你能应对很多情况",
+      "sourceIds": [
+        57
+      ]
+    },
+    {
+      "id": "sentence-0087",
+      "en": "will help you appreciate the art",
+      "zh": "将帮助你欣赏艺术",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "sentence-0088",
+      "en": "appreciate the art in this era",
+      "zh": "欣赏这个时代的艺术",
+      "sourceIds": [
+        58
+      ]
+    },
+    {
+      "id": "sentence-0089",
+      "en": "You can drop or add your courses online",
+      "zh": "你可以在线退选或增选课程",
+      "sourceIds": [
+        59
+      ]
+    },
+    {
+      "id": "sentence-0090",
+      "en": "You may use your student identification card",
+      "zh": "你可以使用学生身份证",
+      "sourceIds": [
+        60
+      ]
+    },
+    {
+      "id": "sentence-0091",
+      "en": "to borrow books at the library",
+      "zh": "在图书馆借书",
+      "sourceIds": [
+        60
+      ]
+    },
+    {
+      "id": "sentence-0092",
+      "en": "are reporting the stories of the president",
+      "zh": "正在报道总统的新闻",
+      "sourceIds": [
+        61
+      ]
+    },
+    {
+      "id": "sentence-0093",
+      "en": "because the lecturer is ill",
+      "zh": "因为讲师生病了",
+      "sourceIds": [
+        62
+      ]
+    },
+    {
+      "id": "sentence-0094",
+      "en": "not the only subject in sociology",
+      "zh": "并非社会学唯一的研究主题",
+      "sourceIds": [
+        63
+      ]
+    },
+    {
+      "id": "sentence-0095",
+      "en": "Fungi are important in the process of decay",
+      "zh": "真菌在腐烂分解过程中十分重要",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "sentence-0096",
+      "en": "which returns nutrients to the soil",
+      "zh": "这一过程将养分归还土壤",
+      "sourceIds": [
+        64
+      ]
+    },
+    {
+      "id": "sentence-0097",
+      "en": "Many industries have moved to the countryside",
+      "zh": "许多行业已经迁往农村",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "sentence-0098",
+      "en": "where manufacturing costs are lower",
+      "zh": "那里的制造成本更低",
+      "sourceIds": [
+        65
+      ]
+    },
+    {
+      "id": "sentence-0099",
+      "en": "The treasure hunters were willing",
+      "zh": "寻宝者愿意",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "sentence-0100",
+      "en": "were willing to take any risk",
+      "zh": "愿意冒任何风险",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "sentence-0101",
+      "en": "to get to the location",
+      "zh": "为了抵达那个地点",
+      "sourceIds": [
+        66
+      ]
+    },
+    {
+      "id": "sentence-0102",
+      "en": "The course comprises twenty hours of lectures",
+      "zh": "这门课包括二十小时的讲座",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "sentence-0103",
+      "en": "lectures, seminars and tutorials each week",
+      "zh": "每周的讲座、研讨会和辅导课",
+      "sourceIds": [
+        67
+      ]
+    },
+    {
+      "id": "sentence-0104",
+      "en": "To get a further extension",
+      "zh": "为了获得进一步延期",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "sentence-0105",
+      "en": "call the education executive on four o one",
+      "zh": "拨打四零一联系教育主管",
+      "sourceIds": [
+        68
+      ]
+    },
+    {
+      "id": "sentence-0106",
+      "en": "an egg and tomatoes on white sandwich bread",
+      "zh": "白面包上配鸡蛋和番茄",
+      "sourceIds": [
+        69
+      ]
+    },
+    {
+      "id": "sentence-0107",
+      "en": "I would like an egg and tomatoes",
+      "zh": "我想要一个鸡蛋和一些番茄",
+      "sourceIds": [
+        69
+      ]
+    },
+    {
+      "id": "sentence-0108",
+      "en": "the snack machine is accessible",
+      "zh": "小吃售货机可供使用",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "sentence-0109",
+      "en": "the snack machine is accessible throughout the night",
+      "zh": "小吃售货机整晚都可以使用",
+      "sourceIds": [
+        70
+      ]
+    },
+    {
+      "id": "sentence-0110",
+      "en": "The technician left the new microscope",
+      "zh": "技术员留下了新的显微镜",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "sentence-0111",
+      "en": "the new microscope in the biology lab",
+      "zh": "生物实验室里的新显微镜",
+      "sourceIds": [
+        71
+      ]
+    },
+    {
+      "id": "sentence-0112",
+      "en": "The geography assignment should be submitted",
+      "zh": "地理作业应提交",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "sentence-0113",
+      "en": "should be submitted by midday on Friday",
+      "zh": "应在星期五中午之前提交",
+      "sourceIds": [
+        72
+      ]
+    },
+    {
+      "id": "sentence-0114",
+      "en": "You can pay by cash",
+      "zh": "你可以用现金付款",
+      "sourceIds": [
+        73
+      ]
+    },
+    {
+      "id": "sentence-0115",
+      "en": "by cash or using a credit card",
+      "zh": "用现金或信用卡",
+      "sourceIds": [
+        73
+      ]
+    },
+    {
+      "id": "sentence-0116",
+      "en": "You are required to submit the assignment",
+      "zh": "你必须提交作业",
+      "sourceIds": [
+        74
+      ]
+    },
+    {
+      "id": "sentence-0117",
+      "en": "submit the assignment before Friday",
+      "zh": "在星期五之前提交作业",
+      "sourceIds": [
+        74
+      ]
+    },
+    {
+      "id": "sentence-0118",
+      "en": "The bookstore is located on the main campus",
+      "zh": "书店位于主校区",
+      "sourceIds": [
+        75
+      ]
+    },
+    {
+      "id": "sentence-0119",
+      "en": "on the main campus behind the library",
+      "zh": "在主校区图书馆后面",
+      "sourceIds": [
+        75
+      ]
+    },
+    {
+      "id": "sentence-0120",
+      "en": "Is the hypothesis about black holes considered moot",
+      "zh": "关于黑洞的假说是否被认为没有实际意义",
+      "sourceIds": [
+        76
+      ]
+    },
+    {
+      "id": "sentence-0121",
+      "en": "as an explanation in astrophysics",
+      "zh": "作为天体物理学中的一种解释",
+      "sourceIds": [
+        76
+      ]
+    },
+    {
+      "id": "sentence-0122",
+      "en": "the reserve collection of books can be borrowed",
+      "zh": "保留馆藏书籍可以借阅",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "sentence-0123",
+      "en": "can be borrowed for up to three hours",
+      "zh": "最多可以借阅三个小时",
+      "sourceIds": [
+        77
+      ]
+    },
+    {
+      "id": "sentence-0124",
+      "en": "Our capacity to respond to national needs",
+      "zh": "我们响应国家需求的能力",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "sentence-0125",
+      "en": "will determine our ability to flourish",
+      "zh": "将决定我们的发展能力",
+      "sourceIds": [
+        78
+      ]
+    },
+    {
+      "id": "sentence-0126",
+      "en": "The number of company bankruptcy skyrocketed",
+      "zh": "公司破产数量猛增",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "sentence-0127",
+      "en": "skyrocketed in the third quarter",
+      "zh": "在第三季度猛增",
+      "sourceIds": [
+        79
+      ]
+    },
+    {
+      "id": "sentence-0128",
+      "en": "Arteries carry oxygenated blood from the heart",
+      "zh": "动脉从心脏输送含氧血液",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "sentence-0129",
+      "en": "to other parts of the body",
+      "zh": "到身体其他部位",
+      "sourceIds": [
+        80
+      ]
+    },
+    {
+      "id": "sentence-0130",
+      "en": "Animals grow larger and stronger",
+      "zh": "动物长得更大更强壮",
+      "sourceIds": [
+        81
+      ]
+    },
+    {
+      "id": "sentence-0131",
+      "en": "which helps them hunt better",
+      "zh": "这有助于它们更好地捕猎",
+      "sourceIds": [
+        81
+      ]
+    },
+    {
+      "id": "sentence-0132",
+      "en": "Don't hesitate to email me",
+      "zh": "请随时给我发邮件",
+      "sourceIds": [
+        82
+      ]
+    },
+    {
+      "id": "sentence-0133",
+      "en": "if you have any questions",
+      "zh": "如果你有任何问题",
+      "sourceIds": [
+        82
+      ]
+    },
+    {
+      "id": "sentence-0134",
+      "en": "The hypothesis about black holes",
+      "zh": "关于黑洞的假说",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "sentence-0135",
+      "en": "by the explanation of the explosion",
+      "zh": "通过对爆炸的解释",
+      "sourceIds": [
+        83
+      ]
+    },
+    {
+      "id": "sentence-0136",
+      "en": "This is a prestigious program for our university",
+      "zh": "这是我们大学一个享有盛誉的项目",
+      "sourceIds": [
+        84
+      ]
+    },
+    {
+      "id": "sentence-0137",
+      "en": "The minimal mark for Distinction",
+      "zh": "获得优异等级的最低分数",
+      "sourceIds": [
+        85
+      ]
+    },
+    {
+      "id": "sentence-0138",
+      "en": "Number the beakers and put them away",
+      "zh": "给烧杯编号，然后把它们收好",
+      "sourceIds": [
+        86,
+        105
+      ]
+    },
+    {
+      "id": "sentence-0139",
+      "en": "The hypothesis needs to be tested",
+      "zh": "这个假说需要接受检验",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "sentence-0140",
+      "en": "tested in a more rigorous way",
+      "zh": "以更严谨的方式检验",
+      "sourceIds": [
+        87
+      ]
+    },
+    {
+      "id": "sentence-0141",
+      "en": "you can use the snack machine",
+      "zh": "你可以使用小吃售货机",
+      "sourceIds": [
+        88
+      ]
+    },
+    {
+      "id": "sentence-0142",
+      "en": "the snack machine which is running overnight",
+      "zh": "整夜运行的小吃售货机",
+      "sourceIds": [
+        88
+      ]
+    },
+    {
+      "id": "sentence-0143",
+      "en": "We are constantly looking for ways",
+      "zh": "我们一直在寻找方法",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "sentence-0144",
+      "en": "bring industry and agriculture closer together",
+      "zh": "让工业和农业更紧密结合",
+      "sourceIds": [
+        89
+      ]
+    },
+    {
+      "id": "sentence-0145",
+      "en": "are reporting stories of presidents",
+      "zh": "正在报道总统们的新闻",
+      "sourceIds": [
+        90
+      ]
+    },
+    {
+      "id": "sentence-0146",
+      "en": "This small Indian state is a land",
+      "zh": "印度这个小邦是一片土地",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "sentence-0147",
+      "en": "a land of forests, valleys and snowy islands",
+      "zh": "一片有森林、山谷和雪岛的土地",
+      "sourceIds": [
+        91
+      ]
+    },
+    {
+      "id": "sentence-0148",
+      "en": "is going to give a lecture",
+      "zh": "将举办一场讲座",
+      "sourceIds": [
+        92
+      ]
+    },
+    {
+      "id": "sentence-0149",
+      "en": "give a lecture on geology",
+      "zh": "举办一场地质学讲座",
+      "sourceIds": [
+        92
+      ]
+    },
+    {
+      "id": "sentence-0150",
+      "en": "The office opens on Mondays and Thursdays",
+      "zh": "办公室在每周一和周四开放",
+      "sourceIds": [
+        93
+      ]
+    },
+    {
+      "id": "sentence-0151",
+      "en": "directly following the freshman seminar",
+      "zh": "紧接新生研讨会结束之后",
+      "sourceIds": [
+        93
+      ]
+    },
+    {
+      "id": "sentence-0152",
+      "en": "The first few sentences of an essay",
+      "zh": "一篇论文开头的几句话",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "sentence-0153",
+      "en": "should capture the readers' attention",
+      "zh": "应该吸引读者的注意",
+      "sourceIds": [
+        94
+      ]
+    },
+    {
+      "id": "sentence-0154",
+      "en": "The residence hall closes before the academic building",
+      "zh": "宿舍楼比教学楼更早关闭",
+      "sourceIds": [
+        95
+      ]
+    },
+    {
+      "id": "sentence-0155",
+      "en": "It's time to finalize the work",
+      "zh": "该完成最后的工作了",
+      "sourceIds": [
+        96
+      ]
+    },
+    {
+      "id": "sentence-0156",
+      "en": "Farmers do not always receive fair prices",
+      "zh": "农民并不总能获得公平的价格",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "sentence-0157",
+      "en": "receive fair prices for agricultural goods",
+      "zh": "为农产品获得公平的价格",
+      "sourceIds": [
+        97
+      ]
+    },
+    {
+      "id": "sentence-0158",
+      "en": "the largest living land mammal in the world",
+      "zh": "世界上最大的现存陆地哺乳动物",
+      "sourceIds": [
+        98
+      ]
+    },
+    {
+      "id": "sentence-0159",
+      "en": "All students and staff have access",
+      "zh": "所有学生和员工都享有使用权",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "sentence-0160",
+      "en": "have access to printers and scanners",
+      "zh": "可以使用打印机和扫描仪",
+      "sourceIds": [
+        99
+      ]
+    },
+    {
+      "id": "sentence-0161",
+      "en": "All necessary information is in the assignment",
+      "zh": "所有必要信息都在作业中",
+      "sourceIds": [
+        100
+      ]
+    },
+    {
+      "id": "sentence-0162",
+      "en": "A computer virus has destroyed all my files",
+      "zh": "电脑病毒毁掉了我所有的文件",
+      "sourceIds": [
+        101
+      ]
+    },
+    {
+      "id": "sentence-0163",
+      "en": "I think your watch is fast",
+      "zh": "我觉得你的表走快了",
+      "sourceIds": [
+        102
+      ]
+    },
+    {
+      "id": "sentence-0164",
+      "en": "you need to reset it",
+      "zh": "你需要重新设置它",
+      "sourceIds": [
+        102
+      ]
+    },
+    {
+      "id": "sentence-0165",
+      "en": "You can pay using cash",
+      "zh": "你可以使用现金付款",
+      "sourceIds": [
+        103
+      ]
+    },
+    {
+      "id": "sentence-0166",
+      "en": "using cash or a credit card",
+      "zh": "使用现金或信用卡",
+      "sourceIds": [
+        103
+      ]
+    },
+    {
+      "id": "sentence-0167",
+      "en": "a first draft of the assignment by Monday",
+      "zh": "星期一之前的作业初稿",
+      "sourceIds": [
+        104
+      ]
+    },
+    {
+      "id": "sentence-0168",
+      "en": "We would like a first draft",
+      "zh": "我们想要一份初稿",
+      "sourceIds": [
+        104
+      ]
+    },
+    {
+      "id": "sentence-0169",
+      "en": "What distinguishes him from others",
+      "zh": "他与其他人不同之处",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "sentence-0170",
+      "en": "his dramatic use of black and white photography",
+      "zh": "他对黑白摄影的戏剧性运用",
+      "sourceIds": [
+        106
+      ]
+    },
+    {
+      "id": "sentence-0171",
+      "en": "You can retake the module",
+      "zh": "你可以重修该课程单元",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "sentence-0172",
+      "en": "if your marks are too low",
+      "zh": "如果你的分数太低",
+      "sourceIds": [
+        107
+      ]
+    },
+    {
+      "id": "sentence-0173",
+      "en": "insufficient mastery in the areas slows future progress",
+      "zh": "在这些领域掌握不足会拖慢未来进步",
+      "sourceIds": [
+        108
+      ]
+    },
+    {
+      "id": "sentence-0174",
+      "en": "under the pressure of economic necessity",
+      "zh": "在经济需求的压力之下",
+      "sourceIds": [
+        109
+      ]
+    },
+    {
+      "id": "sentence-0175",
+      "en": "Our class is divided into two groups",
+      "zh": "我们班分成两组",
+      "sourceIds": [
+        110
+      ]
+    },
+    {
+      "id": "sentence-0176",
+      "en": "All essays and seminar papers submitted",
+      "zh": "所有提交的论文和研讨会报告",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "sentence-0177",
+      "en": "must be emailed to your tutor",
+      "zh": "必须通过电子邮件发送给导师",
+      "sourceIds": [
+        111
+      ]
+    },
+    {
+      "id": "sentence-0178",
+      "en": "It is important to take gender into account",
+      "zh": "考虑性别很重要",
+      "sourceIds": [
+        112
+      ]
+    },
+    {
+      "id": "sentence-0179",
+      "en": "with a simple yes or no",
+      "zh": "用简单的是或否",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "sentence-0180",
+      "en": "Answering such a complex question",
+      "zh": "回答如此复杂的问题",
+      "sourceIds": [
+        113
+      ]
+    },
+    {
+      "id": "sentence-0181",
+      "en": "was from the Soviet Union",
+      "zh": "来自苏联",
+      "sourceIds": [
+        114
+      ]
+    },
+    {
+      "id": "sentence-0182",
+      "en": "the study of internal and external body structures",
+      "zh": "对身体内部和外部结构的研究",
+      "sourceIds": [
+        115
+      ]
+    },
+    {
+      "id": "sentence-0183",
+      "en": "All the assignments should be submitted",
+      "zh": "所有作业都应该提交",
+      "sourceIds": [
+        116
+      ]
+    },
+    {
+      "id": "sentence-0184",
+      "en": "by the end of this week",
+      "zh": "在本周结束前",
+      "sourceIds": [
+        116
+      ]
+    },
+    {
+      "id": "sentence-0185",
+      "en": "finding a parking spot on campus",
+      "zh": "在校园里找到停车位",
+      "sourceIds": [
+        117
+      ]
+    },
+    {
+      "id": "sentence-0186",
+      "en": "on campus is still impossible",
+      "zh": "在校园里仍然不可能",
+      "sourceIds": [
+        117
+      ]
+    },
+    {
+      "id": "sentence-0187",
+      "en": "Our professor is hosting the business development conference",
+      "zh": "我们的教授正在主持商业发展会议",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "sentence-0188",
+      "en": "the business development conference next week",
+      "zh": "下周的商业发展会议",
+      "sourceIds": [
+        118
+      ]
+    },
+    {
+      "id": "sentence-0189",
+      "en": "clear, correct and concise English is obligatory",
+      "zh": "清晰、正确且简洁的英语是一项强制要求",
+      "sourceIds": [
+        119
+      ]
+    },
+    {
+      "id": "sentence-0190",
+      "en": "the two most interesting economics electives",
+      "zh": "两门最有趣的经济学选修课",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "sentence-0191",
+      "en": "economics electives clash on my timetable",
+      "zh": "经济学选修课在我的课表上时间冲突",
+      "sourceIds": [
+        120
+      ]
+    },
+    {
+      "id": "sentence-0192",
+      "en": "the detailed study of the Earth's atmosphere",
+      "zh": "对地球大气层的详细研究",
+      "sourceIds": [
+        121
+      ]
+    },
+    {
+      "id": "sentence-0193",
+      "en": "You should include your name and identification number",
+      "zh": "你应该写上姓名和身份证明号码",
+      "sourceIds": [
+        122
+      ]
+    },
+    {
+      "id": "sentence-0194",
+      "en": "a technique involved in traditional Chinese medicine",
+      "zh": "涉及传统中医的一种技术",
+      "sourceIds": [
+        123
+      ]
+    },
+    {
+      "id": "sentence-0195",
+      "en": "a constitutional monarchy and parliamentary democracy",
+      "zh": "君主立宪制和议会民主制",
+      "sourceIds": [
+        124
+      ]
+    },
+    {
+      "id": "sentence-0196",
+      "en": "We are not going to accept the assignment",
+      "zh": "我们不会接受这份作业",
+      "sourceIds": [
+        125
+      ]
+    },
+    {
+      "id": "sentence-0197",
+      "en": "after the due date on Friday",
+      "zh": "在星期五截止日期之后",
+      "sourceIds": [
+        125
+      ]
+    },
+    {
+      "id": "sentence-0198",
+      "en": "a type of ancient festival",
+      "zh": "一种古代节庆",
+      "sourceIds": [
+        126
+      ]
+    },
+    {
+      "id": "sentence-0199",
+      "en": "is the story of my father",
+      "zh": "讲的是我父亲的故事",
+      "sourceIds": [
+        127
+      ]
+    },
+    {
+      "id": "sentence-0200",
+      "en": "This argument relies on huge advances",
+      "zh": "这一论点依赖于巨大进步",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "sentence-0201",
+      "en": "computer translation and speech recognition",
+      "zh": "计算机翻译和语音识别",
+      "sourceIds": [
+        128
+      ]
+    },
+    {
+      "id": "sentence-0202",
+      "en": "All students are encouraged to vote",
+      "zh": "鼓励所有学生投票",
+      "sourceIds": [
+        129
+      ]
+    },
+    {
+      "id": "sentence-0203",
+      "en": "to vote in the forthcoming elections",
+      "zh": "在即将到来的选举中投票",
+      "sourceIds": [
+        129
+      ]
+    }
+  ]
+}
