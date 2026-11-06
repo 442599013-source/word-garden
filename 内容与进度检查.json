@@ -1,0 +1,65 @@
+{
+  "content": {
+    "source_sha256": "770136479e7d5dce8f5bda599508554f9283169943a29896bf546c4b18b9e6eb",
+    "source_sentences": 129,
+    "counts": {
+      "听单词": 278,
+      "听词组": 249,
+      "听短句": 203,
+      "听短文": 129
+    },
+    "source_coverage": {
+      "word": 117,
+      "phrase": 129,
+      "sentence": 129,
+      "passage": 129
+    },
+    "rules": {
+      "category": "幼儿园听力",
+      "levels": false,
+      "words": "人工筛选重点词，排除常见基础词；相同词形去重",
+      "phrases": "3–5词、原句连续片段",
+      "short_sentences": "5–8词、原句连续片段",
+      "passages": "全部129句原型，逐字保留英文与现有中文释义",
+      "playback": "每条先英文后中文",
+      "word_count": "空格分词；o'clock及end-of-term分别按一个词计算；5词片段允许同时出现在词组和短句类别"
+    }
+  },
+  "resume": {
+    "moduleResumeCases": 30,
+    "modules": [
+      "advance",
+      "listening",
+      "speaking",
+      "reading",
+      "writing"
+    ],
+    "singleCategory": true,
+    "counts": {
+      "word": 278,
+      "phrase": 249,
+      "sentence": 203,
+      "passage": 129
+    },
+    "validatedEntries": 859,
+    "originalSentencesPreserved": 129,
+    "basicWordExclusion": "passed",
+    "explicitMapSelection": "passed",
+    "staleLevelOneEntry": "resumes saved level"
+  },
+  "match_resume": [
+    "新存档第三关，旧入口level=1仍恢复第三关",
+    "旧版存档第五关可继承",
+    "第三关已完成时继续第四关",
+    "明确选择第二关时进入第二关"
+  ],
+  "walkman": [
+    "四个分类均有内容",
+    "分类固定幼儿园听力",
+    "第82句位置恢复",
+    "五次重新进入保持位置",
+    "固定内容直接随页面脚本加载，不依赖异步内容目录切换"
+  ],
+  "v37_regression": "提示负分、卡片回池、配对动画、鼓励音效顺序、通关按钮与再玩计分检查通过",
+  "limitations": "程序与模拟界面检查；未在真实iPhone浏览器试听或检验后台播放。"
+}
