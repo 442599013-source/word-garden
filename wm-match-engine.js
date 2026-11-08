@@ -1,11 +1,19 @@
-/* V60: 16 complete bilingual pairs per batch; one target per batch; spaced hint review. */
+/* V60.1: independently shuffle all 32 bilingual cards in every 16-pair batch. */
 (function(root){'use strict';
 class MatchGame{
  constructor(data,{level=1,seed=Date.now(),snapshot=null}={}){
   this.data=data;this.level=Math.max(1,Math.min(data.levels.length,Number(level)||1));this.plan=data.levels[this.level-1];this.targets=new Set(this.plan.targets);this.selected=null;
   const old=snapshot&&typeof snapshot==='object'?snapshot:null;
-  if(old?.schema===60&&this.valid(old)){this.s=JSON.parse(JSON.stringify(old));return;}
-  this.s={schema:60,level:this.level,rng:(Number(old?.rng??seed)>>>0)||350129,serial:Number.isSafeInteger(old?.serial)?old.serial:0,board:[],done:[],released:[],ordinary:0,combo:0,bestCombo:0,score:0,pairs:0,finished:false,cycle:0,pool:[],poolIds:[],poolCursor:0,fillerBag:[],targetCursor:0,reviewPending:[],reviewQueued:[]};
+  if(old?.schema===60&&this.valid(old)){
+   this.s=JSON.parse(JSON.stringify(old));
+   if(!this.s.mixedCardsV601){
+    this.s.board=this.shuffled(this.s.board);
+    this.s.pool=this.shuffled(this.s.pool);
+    this.s.mixedCardsV601=true;
+   }
+   return;
+  }
+  this.s={schema:60,mixedCardsV601:true,level:this.level,rng:(Number(old?.rng??seed)>>>0)||350129,serial:Number.isSafeInteger(old?.serial)?old.serial:0,board:[],done:[],released:[],ordinary:0,combo:0,bestCombo:0,score:0,pairs:0,finished:false,cycle:0,pool:[],poolIds:[],poolCursor:0,fillerBag:[],targetCursor:0,reviewPending:[],reviewQueued:[]};
   // Existing V59 in-progress rounds retain points/progress; redeal to avoid stranded halves.
   if(old&&old.level===this.level&&[35,37].includes(old.schema)){
    for(const key of ['ordinary','combo','bestCombo','score','pairs'])if(Number.isSafeInteger(old[key]))this.s[key]=old[key];
@@ -38,8 +46,8 @@ class MatchGame{
   this.s.reviewPending=this.s.reviewPending.filter(w=>!reminders.includes(w));
   const words=this.shuffled([target,...reminders,...this.takeFillers(15-reminders.length,[target,...reminders])]);
   this.s.poolIds=words.slice();this.s.cycle++;
-  // Pair order is random, but each English/Chinese pair remains together in the queue.
-  return words.flatMap(w=>this.shuffled(this.pair(w)));
+  // Shuffle all 32 individual cards, not just the 16 pair blocks.
+  return this.shuffled(words.flatMap(w=>this.pair(w)));
  }
  draw(count){const cards=[];while(cards.length<count){if(!this.s.pool.length)this.s.pool=this.makeBatch();cards.push(...this.s.pool.splice(0,Math.min(2,count-cards.length)));}
   for(const t of cards)if(this.targets.has(t.word)&&!this.s.released.includes(t.word))this.s.released.push(t.word);return cards;
@@ -49,7 +57,14 @@ class MatchGame{
  availablePairs(board=this.s.board){const groups=new Map();for(const t of board){const key=this.meaning(t),n=groups.get(key)||{en:0,zh:0};n[t.lang]++;groups.set(key,n);}return [...groups.values()].reduce((n,g)=>n+Math.min(g.en,g.zh),0);}
  collapse(removed){const prior=this.s.board.slice(),fresh=this.draw(2),result=Array(32);let pos=0;
   for(let col=0;col<4;col++){const keep=[];for(let row=0;row<8;row++){const t=prior[row*4+col];if(!removed.includes(t.id))keep.push(t);}const holes=8-keep.length;for(let row=0;row<holes;row++)result[row*4+col]=fresh[pos++];for(let i=0;i<keep.length;i++)result[(holes+i)*4+col]=keep[i];}
-  this.s.board=result;return fresh.map(t=>t.id);
+  this.s.board=result;
+  // If random queue boundaries strand the matching halves, redeal a playable batch.
+  if(!this.availablePairs()){
+   this.s.pool=[];
+   this.s.board=this.makeBatch();
+   return this.s.board.map(t=>t.id);
+  }
+  return fresh.map(t=>t.id);
  }
  select(id){
   if(this.s.finished)return {kind:'noop'};const b=this.s.board.find(t=>t.id===id);if(!b)return {kind:'noop'};
@@ -65,10 +80,16 @@ class MatchGame{
  queueReview(word){if(!this.data.words[word])return;
   // Inject into the next prepared batch (if possible), retaining exactly one target.
   const pool=this.s.pool,existing=pool.some(t=>t.word===word);
-  if(!existing&&pool.length>=2){const target=this.targets.has(word);let i=-1;
-   for(let j=0;j<pool.length-1;j+=2){if(this.targets.has(pool[j].word)===target){i=j;break;}}
-   if(i>=0){const replaced=pool[i].word;pool.splice(i,2,...this.shuffled(this.pair(word)));
-    if(target&&!this.s.done.includes(replaced)&&!this.s.reviewPending.includes(replaced))this.s.reviewPending.push(replaced);
+  if(!existing&&pool.length>=2){
+   // The pending queue is fully shuffled: locate the two halves by word, not by adjacency.
+   const eligible=[...new Set(pool.map(t=>t.word))].filter(w=>
+    this.targets.has(w)===this.targets.has(word)&&
+    pool.filter(t=>t.word===w).length===2);
+   if(eligible.length){
+    const replaced=eligible[0],indices=pool.map((t,i)=>t.word===replaced?i:-1).filter(i=>i>=0);
+    const cards=this.shuffled(this.pair(word));
+    indices.forEach((i,j)=>{pool[i]=cards[j];});
+    if(this.targets.has(word)&&!this.s.done.includes(replaced)&&!this.s.reviewPending.includes(replaced))this.s.reviewPending.push(replaced);
     this.s.reviewQueued.push(word);return;
    }
   }
