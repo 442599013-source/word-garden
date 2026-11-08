@@ -1,0 +1,13 @@
+{
+  "version": "V43",
+  "pets": [
+    "phoenix",
+    "ice_cat",
+    "koala"
+  ],
+  "egg": "additional",
+  "koalaSource": "english_growth_assets.zip / elements/koala_pets_icon.png",
+  "runtimeSyntax": "passed",
+  "levels": 129,
+  "words": 665
+}
