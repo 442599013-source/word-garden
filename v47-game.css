@@ -1,0 +1,36 @@
+/* V47 code-drawn widgets: retains V43 game engine and data, removes baked-in frame graphic. */
+.match-stage{background-image:var(--v41-match-background,url('v41-stairs-coast.png'))!important;background-size:100% 100%!important;background-position:center!important}
+.match-stage::before,.match-stage::after{content:none!important;display:none!important}
+.match-stage .game-title{position:absolute!important;left:26%!important;top:9%!important;width:48%!important;height:8%!important;transform:none!important;z-index:7!important;background:linear-gradient(160deg,#fcffff,#b4e8ee)!important;border:3px solid #ffffff!important;border-bottom:6px solid #5b9fb6!important;border-radius:9cqw!important;box-shadow:0 4px 0 #35677a80,0 6px 16px #3f8ca755,inset 0 2px 8px #fff!important;color:#285e78!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important}
+.match-stage .game-title::before,.match-stage .game-title::after{content:'';position:absolute;top:-27%;width:2px;height:35%;background:#578f9f}
+.match-stage .game-title::before{left:13%}.match-stage .game-title::after{right:13%}
+.match-stage .game-title strong{font:800 6cqw/1.15 -apple-system,BlinkMacSystemFont,sans-serif!important;letter-spacing:-.035em;color:#35647c!important;text-shadow:0 1px white!important}
+.match-stage .game-title strong span{display:inline!important;color:inherit!important;text-shadow:none!important;transform:none!important}
+.match-stage .game-title h1{color:#315d72!important;font-size:3.7cqw!important;line-height:1.1!important;text-shadow:none!important;margin:0!important}
+.match-stage .home-button{left:2.5%!important;top:10.5%!important;width:22%!important;height:5%!important;background:linear-gradient(#fffef8,#daf5f8)!important;color:#315d73!important;border:1.5px solid white!important;border-radius:7cqw!important;z-index:8!important;box-shadow:0 2px 5px #548fa755!important}
+.match-stage .home-button b,.match-stage .home-button span{color:#315d73!important}
+.match-stage .settings-button{left:auto!important;right:3%!important;top:10.5%!important;width:10%!important;height:5%!important;background:linear-gradient(#fffef8,#daf4fa)!important;color:#32667a!important;border:1.5px solid white!important;border-radius:50%!important;z-index:8!important}
+.match-stage .level-button{left:3%!important;top:23%!important;width:22%!important;height:6%!important;border:2px solid white!important;border-bottom:4px solid #539aaf!important;border-radius:6cqw!important;background:linear-gradient(#efffff,#a9e0ec)!important;color:#2b5c77!important;box-shadow:0 3px 8px #36698166!important}
+.match-stage .level-button strong{font-size:5.5cqw!important;color:#2f5c73!important}.match-stage .level-button small{font-size:2.8cqw!important;color:#406b7a!important}
+.match-stage .score-label,.match-stage .combo-label{top:23%!important;height:5.5%!important;background:linear-gradient(#69b6c8,#2b708e)!important;border:3px solid white!important;border-bottom:5px solid #376781!important;box-shadow:0 3px 9px #51798a7a!important;border-radius:9cqw!important;color:#faffff!important;text-align:center!important}
+.match-stage .score-label{left:28%!important;width:30%!important}.match-stage .combo-label{left:63%!important;width:30%!important}
+.match-stage .score-label span,.match-stage .combo-label span{font-size:2.65cqw!important;color:#efffff!important}
+.match-stage .score-label output,.match-stage .combo-label output{font-size:6cqw!important;color:white!important}
+.match-stage .match-board{left:5.5%!important;top:31%!important;width:89%!important;height:39.5%!important;background:linear-gradient(145deg,#205c83,#173f67)!important;border:5px solid #91e6f4!important;border-radius:4.4cqw!important;box-shadow:0 0 0 2px #fff4fc,0 5px 15px #3d7d9d55,inset 0 1px 9px #1d426c!important;padding:0!important}
+.match-stage .target-heading{left:29%!important;top:72%!important;width:42%!important;height:3.6%!important;background:linear-gradient(110deg,#7fe1e9,#3b81a8)!important;color:#fff!important;border:1.5px solid #fdfaff!important;border-radius:7cqw!important;box-shadow:0 3px 8px #34678655!important;font-size:3.1cqw!important}
+.match-stage .target-heading small{font-size:1.95cqw!important}
+.match-stage .match-targets{left:8%!important;top:74.6%!important;width:84%!important;height:7.2%!important;background:linear-gradient(#fffefa,#f4fbff)!important;border:2px solid #c8eff8!important;border-radius:3.5cqw!important;box-shadow:0 3px 8px #32698344!important;color:#63426d!important}
+.match-stage .help-heading{left:29%!important;top:83.5%!important;width:42%!important;height:3.0%!important;background:linear-gradient(120deg,#8fe5ec,#408caf)!important;border:1.5px solid white!important;border-radius:6cqw!important;color:white!important;box-shadow:0 2px 5px #5488a34d!important;font-size:2.7cqw!important}
+.match-stage .match-message{left:26%!important;top:86%!important;width:48%!important;height:7%!important;background:linear-gradient(135deg,#fffefa,#f0fbff)!important;border:2px solid #bce9f5!important;border-radius:3.8cqw!important;box-shadow:0 3px 8px #578da34c!important;color:#43789b!important;padding:1cqw!important}
+.match-stage .match-message strong{font-size:2.6cqw!important}.match-stage .match-message span{font-size:2.3cqw!important}
+.match-stage .howto-controls{top:93%!important}
+/* All three controls share white instruction frame bottom 93%. */
+.match-stage .hint-button,.match-stage .shuffle-button{top:90.3%!important;bottom:auto!important;height:2.7%!important;width:20%!important;min-height:0!important;z-index:14!important;display:flex!important;align-items:center!important;justify-content:center!important;padding:0!important;border:1px solid white!important;border-radius:5cqw!important;background:linear-gradient(#fffdfa,#8edce9)!important;box-shadow:0 2px 5px #3f8db44b!important;color:#3f7897!important;font-size:2.4cqw!important;line-height:1!important}
+.match-stage .hint-button{left:3%!important;right:auto!important}.match-stage .shuffle-button{left:auto!important;right:3%!important}
+.match-stage .hint-button small,.match-stage .shuffle-button small{display:block!important;font-size:1.8cqw!important}
+/* Remove any added magic illumination under baby's feet, keep sprite and motion. */
+.match-stage .game-companions .wm-companion::before,.match-stage .game-companions .wm-companion::after,.match-stage .egg-pedestal{content:none!important;display:none!important}
+.match-stage .game-companions .wm-companion{filter:none!important}
+.match-stage #hint-egg{top:83.5%!important;right:1%!important;width:21%!important;height:8%!important}
+.match-stage .game-companions .wm-companion{top:81%!important;width:22%!important}
+.match-stage .game-companions{z-index:12!important}
