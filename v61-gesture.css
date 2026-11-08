@@ -1,0 +1,22 @@
+/* V61 - Safari pinch gesture compatibility only.
+   Keep V60.1 scene dimensions, scrolling, positioning and all game behavior.
+   Allow browser pinch recognition as well as existing single-finger vertical pans.
+   This cannot force Safari's tab overview gesture or disable content zoom separately.
+*/
+html:has(#match-game),
+body:has(#match-game),
+#match-game .match-stage {
+  touch-action: pan-y pinch-zoom !important;
+}
+
+/* Home: do not change the intro animation's touch policy. */
+html:has(#home-stage),
+body:has(#home-stage),
+#home-stage,
+#home-stage .v48-scroll,
+#home-stage .panel-view,
+#home-stage .v49-more-panel,
+#home-stage #picker,
+#home-stage #picker-content {
+  touch-action: pan-y pinch-zoom !important;
+}

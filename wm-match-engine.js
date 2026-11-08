@@ -1,4 +1,4 @@
-/* V60.1: independently shuffle all 32 bilingual cards in every 16-pair batch. */
+/* V61.1: preserve V60.1 shuffle; add wrong-pair bilingual review. */
 (function(root){'use strict';
 class MatchGame{
  constructor(data,{level=1,seed=Date.now(),snapshot=null}={}){
@@ -69,7 +69,15 @@ class MatchGame{
  select(id){
   if(this.s.finished)return {kind:'noop'};const b=this.s.board.find(t=>t.id===id);if(!b)return {kind:'noop'};
   if(this.selected===id){this.selected=null;return {kind:'selected',id:null};}if(!this.selected){this.selected=id;return {kind:'selected',id};}
-  const a=this.s.board.find(t=>t.id===this.selected);this.selected=null;if(!this.matching(a,b)){this.s.combo=0;return {kind:'wrong',ids:[a.id,b.id]};}
+  const a=this.s.board.find(t=>t.id===this.selected);this.selected=null;if(!this.matching(a,b)){
+   // Mistaken cards are two learning signals. Review both complete bilingual
+   // pairs on subsequent falling batches, just like the existing hint queue.
+   // Deduplicate a word if the player selected two cards of the same entry.
+   const reviewWords=[...new Set([a.word,b.word])];
+   for(const word of reviewWords)this.queueReview(word);
+   this.s.combo=0;
+   return {kind:'wrong',ids:[a.id,b.id],reviewWords};
+  }
   const word=(a.lang==='en'?a:b).word,firstTarget=this.targets.has(word)&&!this.s.done.includes(word);if(firstTarget)this.s.done.push(word);else this.s.ordinary++;
   this.s.pairs++;this.s.combo++;this.s.bestCombo=Math.max(this.s.bestCombo,this.s.combo);const phase=this.s.combo%10,bonus=phase===3?2:phase===5?5:phase===0?10:0,base=firstTarget?2:1;this.s.score+=base+bonus;
   this.s.finished=this.s.done.length===10&&this.s.pairs>=160;
