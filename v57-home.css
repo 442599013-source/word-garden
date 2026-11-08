@@ -1,0 +1,25 @@
+/* Original uninterrupted 9:20 scene: remove V53's appended duplicate slice. */
+#home-stage .v48-scroll::after,#home-stage .v48-world::after{content:none!important;display:none!important;height:0!important;background:none!important}
+#home-stage .v48-world{background-repeat:no-repeat!important}
+/* Retain the existing frame size. Transparent iridescent gradient border, no stars. */
+#home-stage .v48-stats{grid-template-columns:1fr 1fr 1fr!important;top:79.3%!important;height:7.2%!important;left:9%!important;width:82%!important;padding:1cqw 0!important;border:1.5px solid transparent!important;background:linear-gradient(140deg,rgba(248,254,251,.75),rgba(224,246,249,.68)) padding-box,linear-gradient(120deg,rgba(235,202,133,.68),rgba(255,255,255,.95) 27%,rgba(126,205,221,.70) 55%,rgba(240,175,209,.67) 80%,rgba(189,156,215,.70)) border-box!important;box-shadow:0 2px 5px #365f7b27,inset 0 1px 2px #fff9!important}
+#home-stage .v48-stats>div{gap:.6cqw!important;padding:0 .35cqw!important}
+#home-stage .v48-stats b{font:650 2.62cqw/1.08 Arial,-apple-system,sans-serif!important;font-variant-numeric:lining-nums tabular-nums!important;white-space:nowrap!important}
+#home-stage .v48-stats .v57-value{font:700 3.36cqw/1.05 Arial,-apple-system,sans-serif!important;font-variant-numeric:lining-nums tabular-nums!important;white-space:nowrap!important;margin:0!important}
+#home-stage .v48-stats .v57-long{font-size:2.35cqw!important;letter-spacing:-.02em!important}
+#home-stage .v57-level,#home-stage .v57-level .v57-value{color:#b58c2e!important;--track:#c59b35}
+#home-stage .v57-score,#home-stage .v57-score .v57-value{color:#328bc9!important;--track:#328bc9}
+#home-stage .v57-ability,#home-stage .v57-ability .v57-value{color:#ca5d6d!important;--track:#d06171}
+#home-stage .v57-progress{width:84%;height:4px;min-height:4px;max-height:4px;overflow:hidden;border-radius:10px;background:color-mix(in srgb,var(--track) 16%,transparent);flex:none}
+#home-stage .v57-progress-fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--track),color-mix(in srgb,var(--track) 55%,white));transition:width .45s ease}
+#home-stage .v57-level .v57-progress-fill[data-started="true"]{min-width:2px}
+#home-stage .milestones a,#home-stage .side-tools .v48-tool,#home-stage .v49-more-item{border:1.5px solid transparent!important;background:linear-gradient(150deg,rgba(255,255,255,.78),rgba(215,242,246,.68)) padding-box,linear-gradient(115deg,rgba(225,191,137,.72),rgba(255,255,255,.95),rgba(127,211,230,.73),rgba(237,177,211,.70)) border-box!important;box-shadow:0 1px 3px #426f8025,inset 0 1px 2px #fff8!important}
+/* DO NOT remove any of the four nav entries, including over the birth video. */
+#home-stage .bottom-nav{background:transparent!important;background-image:none!important;border:0!important;box-shadow:none!important}
+#home-stage .bottom-nav>*{background:transparent!important}
+#home-stage #skip-intro,#home-stage .intro-controls,#home-stage .v48-intro-cta{display:none!important}
+#home-stage .v57-voice-button{position:absolute;right:-1%;top:16%;width:7.3cqw;height:7.3cqw;border:1px solid #fff9;border-radius:50%;background:linear-gradient(150deg,#ffffffba,#d8f0f4ae);color:#43869b;box-shadow:0 1px 4px #437a8b40;pointer-events:auto!important;display:grid;place-items:center;z-index:12;cursor:pointer}
+#home-stage .v57-voice-button svg{width:60%;height:60%}
+#home-stage .v57-voice-button[aria-pressed="true"]{background:linear-gradient(150deg,#fff7dbdf,#a6d9e6dd)}
+/* Match existing home dialog and subpage frames to the same subtle border. */
+#home-stage .panel-view:not([hidden]),#home-stage #picker{border:1.5px solid transparent!important;background:linear-gradient(145deg,rgba(255,250,247,.80),rgba(224,244,246,.72)) padding-box,linear-gradient(120deg,rgba(230,192,134,.68),rgba(255,255,255,.95),rgba(134,206,225,.72),rgba(239,183,215,.68)) border-box!important}

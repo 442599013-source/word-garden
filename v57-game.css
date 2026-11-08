@@ -1,0 +1,6 @@
+/* The egg sits visually closer to New Batch, independently of its button. */
+#match-game .match-stage #v49-game-egg{top:79.4%!important;right:2.5%!important;width:24%!important;height:9.1%!important}
+#match-game .v57-flyer{position:absolute;pointer-events:none;z-index:65;will-change:transform;transform-origin:center;display:flex;align-items:center;justify-content:center}
+#match-game .v57-flyer img{width:100%;height:100%;object-fit:contain;display:block}
+#match-game .v57-dust-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:64}
+#match-game .v57-particle{position:absolute;display:block;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fffdf1 0%,#fff1a3 24%,#edc357 60%,#bb8526 100%);box-shadow:0 0 5px #ffe7a4d6,0 0 8px #e8b6459e;will-change:transform,opacity}
