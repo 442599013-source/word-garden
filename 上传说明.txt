@@ -1,5 +1,25 @@
-V46 (基于V43页面与原功能的修复层)
-将本压缩包内6个文件解压后，全部上传到 word-garden 仓库 main 分支的根目录，与原 index.html 同级。GitHub 上传需要确认 Commit changes。
-本包只替换 index.html、word-match.html，并新增 wm-v46.css、wm-v46.js、wm-v46-game.js（共5个程序文件）；原 V43 其他图片、脚本、词库保持不变。
-确保 GitHub Pages 发布源为 main 分支 / (root)。更新后访问 index.html?v=46 和 word-match.html?v=46。
-本包属于候选测试版：尚无法获取 Work 实际预览源代码；请先核对首页能否滑动、导航是否固定、真实分数和语音功能再推广。
+WordMatch V48 仅首页更新 / Home-only patch
+
+以 GitHub 现有 word-garden/main（V47 首页，基于 V43 游戏）为基础。
+请先不要上传 V43、V47 整套旧资源，也不要覆盖 word-match.html 或任何词库与音频文件。
+
+一、替换 GitHub 根目录现有文件（内容已修改）
+1. index.html
+2. v47-home.css
+3. v47-home.js
+
+二、在 GitHub 根目录新增（当前检查不存在）
+4. v48-magic-golden-egg.png  【新魔法金蛋，首页代码明确引用同名文件】
+5. v47-koala-awake.png       【GitHub 当前未发现此文件，首页显示考拉需要它】
+
+请解压后直接上传上述文件到仓库 main 分支根目录，与 index.html 同层，不要带外层文件夹。
+提交后打开 GitHub 仓库的 index.html 核对 wordmatch-version 为 V48-home-from-V43。
+
+本包不涉及 word-match.html、129关词库、音频、原有人物/宠物数据或游戏引擎。
+首页只调整视觉排版、按钮、阶段牌、金蛋、滚动固定导航和等级信息栏。
+继续使用现有 V43 游戏运行时及已有资源。
+
+发布问题注意：若 GitHub Pages 的发布源不是 main 分支，文件提交成功也不会使网站变化。
+
+检查结果：JS 语法检查通过；本地DOM模拟390×844滚动，底部导航位置未改变；
+没有完成真实 iPhone / GitHub Pages 正式部署验收。若实机效果不符合 Work 图，以 Work 图继续调整。
