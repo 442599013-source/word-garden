@@ -1,0 +1,14 @@
+/* V52 Home: move pets further along staircase; only navigation controls stay pinned. */
+/* Each animal takes the previous animal's stair position. The koala retreats as well. */
+#home-stage .v48-egg{top:43%!important;left:11%!important;width:17%!important;height:9%!important}
+#home-stage #primary-cat{top:31.7%!important;left:15%!important;width:17%!important;height:8.8%!important}
+#home-stage .v48-koala{top:24.6%!important;left:12%!important;width:17%!important;height:8.6%!important}
+#home-stage .v48-phoenix{top:17.6%!important;left:41%!important;width:25%!important;height:12.5%!important}
+/* The scrolled picture, not an opaque pink plate, must remain visible beneath buttons. */
+#home-stage .bottom-nav{position:absolute!important;background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible!important;isolation:isolate!important}
+#home-stage .bottom-nav::before,#home-stage .bottom-nav::after{content:none!important;display:none!important}
+#home-stage .bottom-nav>*{background:transparent!important;border:0!important;box-shadow:none!important;text-shadow:0 1px 3px #ffffff,0 0 3px #ffffff!important;filter:drop-shadow(0 1px 2px #ffffff88)}
+#home-stage .bottom-nav [aria-current]{background:transparent!important;color:#225b78!important}
+#home-stage .bottom-nav [aria-current] .v48-nav-icon{filter:drop-shadow(0 0 4px #ffffff)}
+#home-stage .v48-scroll{bottom:0!important;background:transparent!important}
+#home-stage .v48-world{background-repeat:no-repeat!important}

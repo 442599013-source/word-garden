@@ -1,0 +1,23 @@
+/* V52 Match: remove title-to-branch dead space; reserve the bottom for bigger angel. */
+#match-game .v50-branch{top:17.25%!important;height:5.3%!important}
+#match-game .match-stage .level-button,#match-game .match-stage .score-label,#match-game .match-stage .combo-label{top:21.45%!important;height:5.3%!important}
+#match-game .match-stage .match-board{top:27.9%!important;height:40.0%!important}
+#match-game .match-stage .target-heading{top:69.0%!important}
+#match-game .match-stage .match-targets{top:71.8%!important;height:6.7%!important}
+#match-game .match-stage .help-heading{top:79.4%!important}
+#match-game .match-stage .match-message{top:81.9%!important;height:6.65%!important}
+/* Controls end at 88.55%, aligning with the How-to-Play box's bottom. */
+#match-game .match-stage .hint-button,#match-game .match-stage .shuffle-button{top:85.8%!important;height:2.75%!important}
+#match-game .match-stage .howto-controls{top:88.7%!important}
+/* Angel occupies the cleared lower-left area; egg remains unchanged in size. */
+#match-game .match-stage .game-companions .wm-companion.slot-0{top:87.5%!important;left:.5%!important;width:28%!important}
+#match-game .match-stage .game-companions .wm-companion.slot-1{top:88.2%!important}
+#match-game .match-stage #v49-game-egg{top:89.15%!important;right:.5%!important;width:20%!important;height:8.5%!important}
+/* Magic sprites exist only while their respective original event is running. */
+#match-game .v52-egg-flight{position:absolute;z-index:34;pointer-events:none;display:block;transform-origin:center;will-change:transform}
+#match-game .v52-egg-flight img{display:block;width:100%;height:100%;object-fit:contain}
+#match-game .v52-glitter{position:absolute;z-index:33;pointer-events:none;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fffef3 0%,#fff9ad 24%,#f4bd3b 55%,#c8801b 90%);box-shadow:0 0 5px #fff0ad,0 0 11px #f8cf5c;will-change:transform,opacity}
+#match-game .v52-glitter.v52-star{border-radius:0;clip-path:polygon(50% 0,60% 38%,100% 50%,60% 62%,50% 100%,40% 62%,0 50%,40% 38%)}
+#match-game .v52-glitter-layer{position:absolute;inset:0;z-index:33;overflow:hidden;pointer-events:none}
+#match-game .v52-board-shine{position:absolute;inset:0;pointer-events:none;z-index:7;border-radius:inherit;box-shadow:inset 0 0 26px #fff3ae,0 0 14px #f7d463;opacity:0}
+@media(prefers-reduced-motion:reduce){#match-game .v52-egg-flight{display:none!important}}
