@@ -1,0 +1,16 @@
+/* V44.1: small, flat game controls; button bottoms align with the bottom edge of the blue How to Play panel. */
+.match-stage .hint-button,.match-stage .shuffle-button{top:87%;height:2.85%;width:21%;min-height:0;border-radius:3.5cqw;font-size:2.45cqw;line-height:1.05;padding:0!important;justify-content:center;box-shadow:inset 0 1px 1px #fff,0 1px 4px #875b7a22}
+.match-stage .hint-button{left:3.5%}.match-stage .shuffle-button{left:auto;right:3.5%}
+.match-stage .hint-button small,.match-stage .shuffle-button small{font-size:1.65cqw!important;line-height:1.1}
+/* More navigation: replace the former Pets button while keeping all other items. */
+.home-stage .bottom-nav [data-tab="more"]{position:relative}
+.home-stage .bottom-nav [data-tab="more"]::after{content:'More / 更多';position:absolute;inset:auto 0 8%;font-size:3cqw;font-weight:750;color:#784867;text-shadow:0 1px 3px #fff;white-space:nowrap}
+/* Refined decorative lock shared by the magic cat and Phoenix. */
+.primary-cat .pet-lock,.home-phoenix .pet-lock{position:absolute!important;top:-4%!important;left:43%!important;width:7cqw;height:9cqw;min-width:22px;min-height:27px;z-index:10;font-size:0!important;pointer-events:none;filter:drop-shadow(0 2px 3px #92689a66)}
+.primary-cat .pet-lock::before,.home-phoenix .pet-lock::before{content:'';position:absolute;top:1%;left:27%;width:46%;height:53%;border:2px solid #fff1cf;border-bottom:0;border-radius:60% 60% 0 0;box-shadow:0 0 0 1px #a87bbd}
+.primary-cat .pet-lock::after,.home-phoenix .pet-lock::after{content:'✦';position:absolute;left:7%;bottom:3%;width:86%;height:57%;display:grid;place-items:center;background:linear-gradient(145deg,#f5e2ff,#cba4d9 55%,#a776bc);border:1px solid #ffe9b9;border-radius:26%;font-size:2.4cqw;color:#fff7df;text-shadow:0 0 4px #fff}
+.home-phoenix{position:absolute;top:49%;left:5%;height:13%;width:19%;z-index:5;padding:0;border:0;background:none;cursor:pointer}
+.home-phoenix img{height:100%;width:100%;object-fit:contain;filter:saturate(.7)}
+.home-phoenix.unlocked .pet-lock,.primary-cat.unlocked .pet-lock{display:none!important}
+.home-phoenix.unlocked img{filter:none}
+.v44-more-link{display:block!important;text-align:center!important;background:linear-gradient(#fffaf3,#f3d8eb)!important;border:1px solid #deb5d1!important;border-radius:3cqw!important;padding:3cqw!important;margin:3cqw 0!important;font-weight:700}
