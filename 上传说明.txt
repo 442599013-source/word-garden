@@ -1,12 +1,10 @@
-V50 游戏页小包（已补入确认的慢速金蛋）
+V51 首页小更新包（仅3个文件）
+请解压后上传到 GitHub 仓库 word-garden 的 main 分支根目录：
+1. index.html  替换
+2. v51-home.css  新增
+3. v51-home.js  新增
 
-与之前 V50 的区别：新增 v49-magic-golden-egg.gif，代替原来晃动过快的同名文件。
-
-上传到 442599013-source/word-garden 的 main 分支根目录：
-1. word-match.html — 替换（V50 游戏页）
-2. v50-game.css — 新增（V50 代码化布局）
-3. v49-magic-golden-egg.gif — 替换同名动画（金蛋缓慢小幅晃动）
-
-这版金蛋沿用既有 v49-magic-golden-egg.gif 文件名；首页 v47-home.js 和游戏 v49-match-egg.js 的现有引用不需要修改，因此两个页面将自动使用更新后的同一张金蛋动图。
-
-注意：若仓库缺失 v49-match-egg.js，游戏页金蛋仍不能显示。请先核实该现有文件存在。此包不包含 V43 基础资源。
+不要上传整个外层文件夹，也不要上传本说明文件。
+本包不修改词库、游戏页、图片/GIF、音频和旧的 V43 文件。
+保留 V49 首页已有的考拉、金蛋及 More 逻辑；新增层只修首页定位/文字/图标，并始终播放已有的 15秒 birth.mp4。
+请确保 GitHub Pages 发布来源为 main 分支根目录。

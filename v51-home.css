@@ -1,0 +1,46 @@
+/* V51 homepage refinements. V43 engine, V49 pets and game are unchanged.
+   9:20 world stays scrollable; only the bottom nav is pinned. */
+html,body{height:100%!important;overflow:hidden!important}
+#home-stage{overflow:hidden!important;touch-action:auto!important}
+#home-stage .v48-scroll{inset:0 0 0 0!important;overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;touch-action:pan-y!important;overscroll-behavior-y:contain!important;padding-bottom:0!important}
+#home-stage .v48-world{height:auto!important;min-height:0!important;aspect-ratio:9 / 20!important;background-position:center top!important;background-size:100% 100%!important}
+/* Restore visible title within the complete canvas, not clipped above the viewport. */
+#home-stage .v48-world .journey-title{top:5.4%!important;left:12%!important;width:76%!important;height:12%!important;z-index:9!important}
+#home-stage .journey-title .v48-title{font-size:6.8cqw!important;line-height:1.02!important;letter-spacing:-.04em!important}
+#home-stage .journey-title>p{margin-top:2cqw!important;font-size:3.0cqw!important}
+/* Work design: small elegant labels set back into the stairs. */
+#home-stage .milestones a{left:37%!important;width:26%!important;height:3.05%!important;min-height:0!important;border-width:1px!important;border-radius:55% / 65%!important;box-shadow:inset 0 1px 4px #ffffff,0 1px 3px #5b91a433!important;z-index:5!important}
+#home-stage .milestones .v48-stage-en{font-size:2.55cqw!important;line-height:1.07!important}
+#home-stage .milestones small{font-size:1.75cqw!important;margin-top:.15cqw!important}
+#home-stage .milestones a::before,#home-stage .milestones a::after{font-size:1.75cqw!important}
+#home-stage .milestones .junior{top:34.1%!important;left:38%!important;width:27%!important}
+#home-stage .milestones .primary{top:45.5%!important;left:37%!important;width:27%!important}
+#home-stage .milestones .kindergarten{top:56.7%!important;left:32%!important;width:26%!important}
+/* Keep sprites in the same stair perspective, not overlapping the baby. */
+#home-stage .v48-phoenix{top:19.4%!important;left:39%!important;width:17.5%!important;height:9.3%!important}
+#home-stage .v48-koala{top:31.7%!important;left:15%!important;width:16%!important;height:8.8%!important}
+#home-stage #primary-cat{top:43%!important;left:11%!important;width:17%!important;height:9%!important}
+#home-stage .v48-egg{top:53.5%!important;left:8%!important;width:16.5%!important;height:9%!important}
+#home-stage .v48-lock{width:2.7cqw!important;height:3.4cqw!important;min-width:10px!important;min-height:12px!important;left:71%!important;top:0!important}
+#home-stage .v48-lock::after{font-size:1.8cqw!important}
+#home-stage .home-platform{top:63.2%!important;left:27%!important;right:27%!important;height:15.3%!important}
+#home-stage .home-companions .wm-companion{width:100%!important;left:0!important;bottom:0!important}
+#home-stage .home-companions[data-count="2"] .wm-companion{width:62%!important;left:-12%!important}
+#home-stage .home-companions[data-count="2"] .slot-1{left:48%!important}
+/* Three aligned lines: English heading / Chinese heading / dynamic value. */
+#home-stage .v48-stats{top:79.8%!important;height:6.8%!important;left:9%!important;width:82%!important;grid-template-columns:1.24fr 1fr .84fr!important;border-radius:2.8cqw!important;padding:1cqw 0!important}
+#home-stage .v48-stats>div{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5cqw;padding:0 .4cqw!important;min-width:0;height:100%}
+#home-stage .v48-stats b,#home-stage .v48-stats span{font:600 2.48cqw/1.05 Georgia,serif!important;white-space:nowrap!important;color:#356b80!important}
+#home-stage .v48-stats small{font:1.84cqw/1.1 sans-serif!important;margin:0!important}
+#home-stage .v48-stats strong{font:700 3.05cqw/1.1 Georgia,serif!important;margin:0!important}
+#home-stage .v48-level b{font-weight:600!important}
+/* Bottom navbar pinned to viewport, scroll content remains freely movable. */
+#home-stage .bottom-nav{position:absolute!important;left:2.5%!important;right:2.5%!important;width:95%!important;bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;height:8.2%!important;z-index:80!important;overflow:hidden!important;border-radius:5cqw!important}
+#home-stage .bottom-nav>*{gap:.3cqw!important;padding:1cqw 0!important;min-height:0!important}
+#home-stage .bottom-nav .v48-nav-icon{width:6.2cqw!important;height:6.2cqw!important}
+#home-stage .bottom-nav .v48-nav-en{font-size:3cqw!important}
+#home-stage .bottom-nav .v48-nav-zh{font-size:2.2cqw!important}
+#home-stage .v48-scroll{scroll-padding-bottom:22cqw!important}
+#home-stage .v48-world::after{content:'';position:absolute;left:0;right:0;top:95%;height:10%;pointer-events:none}
+#home-stage .panel-view{top:12%!important;bottom:4%!important}
+@media(prefers-reduced-motion:reduce){#home-stage .v48-phoenix{animation:none!important}}
