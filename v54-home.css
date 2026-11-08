@@ -1,20 +1,23 @@
-/* V54 targeted fixes: KEEP the 4-button transparent nav on the REAL home. */
-/* The intro is the only state allowed to hide navigation. */
+/* V55 correction: transparent Home/Growth/More/Me bottom navigation MUST
+   remain visible in the intro as well as the normal homepage. */
 #home-stage #intro[hidden]{display:none!important;visibility:hidden!important;pointer-events:none!important}
 #home-stage #intro:not([hidden]){display:block!important}
+#home-stage .bottom-nav,
 #home-stage #intro[hidden]~.bottom-nav,
-#home-stage:has(#intro[hidden]) .bottom-nav{
+#home-stage:has(#intro[hidden]) .bottom-nav,
+#home-stage:has(#intro:not([hidden])) .bottom-nav,
+#home-stage #intro:not([hidden])~.bottom-nav{
  display:grid!important;visibility:visible!important;opacity:1!important;
  pointer-events:auto!important;position:absolute!important;z-index:200!important;
  left:2.5%!important;right:2.5%!important;width:95%!important;
  bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;
- background:transparent!important;border:0!important;box-shadow:none!important;
+ background:transparent!important;background-image:none!important;
+ background-color:transparent!important;border:0!important;box-shadow:none!important;
  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
 }
-#home-stage #intro:not([hidden])~.bottom-nav{display:none!important}
 #home-stage .bottom-nav>*{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;background:transparent!important}
 #home-stage .bottom-nav .v48-nav-icon,#home-stage .bottom-nav .v48-nav-en,#home-stage .bottom-nav .v48-nav-zh{visibility:visible!important;opacity:1!important}
-/* All three labels: MUCH SMALLER, slender rectangular tags, no oval frames. */
+/* Keep V54's SMALL rectangular milestone labels unchanged. */
 #home-stage .milestones a{
  width:19%!important;height:2.35%!important;min-height:0!important;
  border:1px solid #ffffffd9!important;border-radius:7px!important;
@@ -26,10 +29,8 @@
 #home-stage .milestones a::before,#home-stage .milestones a::after{display:none!important;content:none!important}
 #home-stage .milestones .v48-stage-en{font:italic 1.72cqw/1.05 Georgia,serif!important;letter-spacing:-.015em!important;white-space:nowrap!important}
 #home-stage .milestones small{font:1.35cqw/1.04 sans-serif!important;margin:.15cqw 0 0!important}
-/* Pair each school with its pet IN THE SAME HORIZONTAL STAIR ROW.
-   Egg ~ 43-52%, cat ~ 32-41%, koala ~ 24-33%. Baby remains unobstructed. */
 #home-stage .milestones .kindergarten{top:46.4%!important;left:35%!important;width:19%!important}
 #home-stage .milestones .primary{top:35.6%!important;left:39%!important;width:19%!important}
 #home-stage .milestones .junior{top:27.8%!important;left:48%!important;width:18%!important}
-/* Never show the old original nav image/pink background behind transparent controls. */
-#home-stage .bottom-nav{background-image:none!important;background-color:transparent!important}
+/* No Skip, no redundant Go to Growth CTA; navigation is the way in. */
+#home-stage #skip-intro,#home-stage .intro-controls,#home-stage .v48-intro-cta{display:none!important}
