@@ -5,6 +5,11 @@
   stage.dataset.v48Ready='true';
   const $=id=>document.getElementById(id);
   const C=window.WMCompanions, S=window.WM42;
+  // Show the same blinking koala on the homepage and inside the V43 Pets view.
+  if(C&&!C.__v49Koala){const originalSetImage=C.setImage.bind(C);
+    C.setImage=function(img,id,...rest){if(id==='koala'&&img){img.src='v49-koala-blink.gif';img.style.visibility='';return;}
+      return originalSetImage(img,id,...rest);};C.__v49Koala=true;}
+
   const home=$('home-view'),header=stage.querySelector('.journey-title'),panel=$('panel-view'),nav=stage.querySelector('.bottom-nav');
   if(!home||!header||!panel||!nav)return;
   const scroll=document.createElement('div');scroll.className='v48-scroll';
@@ -42,12 +47,51 @@
   const cat=$('primary-cat');decorateLock(cat);
   function pet(cls,id,label,source){const b=document.createElement('button');b.className=cls;b.type='button';b.setAttribute('aria-label',label);const img=document.createElement('img');img.alt=label;img.draggable=false;b.append(img);if(source)img.src=source;else C?.setImage?.(img,id);decorateLock(b);home.append(b);return b;}
   const phoenix=pet('v48-phoenix','phoenix','Phoenix 凤凰');
-  const koala=pet('v48-koala','koala','Koala 考拉','v47-koala-awake.png');
-  const egg=document.createElement('div');egg.className='v48-egg';egg.innerHTML='<img src="v48-magic-golden-egg.png" alt="Magic Golden Egg 魔法金蛋">';home.append(egg);
+  const koala=pet('v48-koala','koala','Koala 考拉','v49-koala-blink.gif');
+  const egg=document.createElement('div');egg.className='v48-egg';egg.innerHTML='<img src="v49-magic-golden-egg.gif" alt="Magic Golden Egg 魔法金蛋">';home.append(egg);
   const stats=document.createElement('section');stats.className='v48-stats';stats.setAttribute('aria-label','Angel progress 天使成长数据');
   stats.innerHTML='<div class="v48-level"><b id="v48-level-en">Level 0 Angel Baby</b><small id="v48-level-zh">0级天使宝宝</small></div><div><span>Baby Score</span><small>宝宝分数</small><strong id="v48-score">0.0</strong></div><div><span>Ability</span><small>能力</small><strong id="v48-ability">待评</strong></div>';
   home.append(stats);
-  [...nav.children].forEach((item,i)=>{const key=['home','growth','pets','me'][i],en=['Home','Growth','Pets','Me'][i],zh=['首页','成长','宠物','我的'][i];if(!key)return;item.innerHTML='<span class="v48-nav-icon">'+svg(key)+'</span><span class="v48-nav-en">'+en+'</span><span class="v48-nav-zh">'+zh+'</span>';item.setAttribute('aria-label',en+' '+zh);});
+  [...nav.children].forEach((item,i)=>{const key=['home','growth','more','me'][i],en=['Home','Growth','More','Me'][i],zh=['首页','成长','更多','我的'][i];if(!key)return;item.innerHTML='<span class="v48-nav-icon">'+svg(key)+'</span><span class="v48-nav-en">'+en+'</span><span class="v48-nav-zh">'+zh+'</span>';item.setAttribute('aria-label',en+' '+zh);});
+
+  // The third original V43 navigation button now opens More; its old Pets
+  // view stays accessible as a submenu, and the original homepage is linked.
+  const moreTab=nav.children[2];
+  if(moreTab){
+    moreTab.dataset.tab='more';
+    const oldPetsHandler=moreTab.onclick;
+    function showMore(){
+      const intro=$('intro'),video=$('intro-video');
+      if(intro)intro.hidden=true;
+      try{video?.pause();}catch{}
+      home.hidden=true;panel.hidden=false;
+      stage.dataset.tab='more';
+      nav.querySelectorAll('[data-tab]').forEach(b=>b.toggleAttribute('aria-current',b===moreTab));
+      panel.className='panel-view v49-more-panel';
+      panel.replaceChildren();
+      const heading=document.createElement('h1');heading.textContent='More / 更多';panel.append(heading);
+      const sub=document.createElement('p');sub.className='panel-subtitle';sub.textContent='Pets & More / 宠物与更多功能';panel.append(sub);
+      const choices=[
+        ['Pets / 宠物',()=>{const was=moreTab.dataset.tab;moreTab.dataset.tab='pets';try{oldPetsHandler?.call(moreTab);panel.querySelector('.egg-spot img')?.setAttribute('src','v49-magic-golden-egg.gif');}finally{moreTab.dataset.tab=was;}}],
+        ['Original Home / 原版主页',()=>{location.href='legacy-home.html';}],
+        ['Change Scene / 切换场景',()=>{$('scenes-button')?.click();}],
+        ['My Baby / 选择宝宝',()=>{$('characters-button')?.click();}],
+        ['Listening / 听力练习',()=>{location.href='listening.html';}]
+      ];
+      const list=document.createElement('div');list.className='v49-more-list';
+      for(const [label,fn] of choices){const btn=document.createElement('button');btn.type='button';btn.className='v49-more-item';btn.textContent=label;btn.onclick=fn;list.append(btn);}panel.append(list);
+      const back=document.createElement('button');back.type='button';back.className='panel-back';back.textContent='Home / 返回首页';back.onclick=()=>nav.querySelector('[data-tab="home"]')?.click();panel.append(back);
+    }
+    // Capture stops V43's old Pets click dispatcher from overwriting More.
+    moreTab.addEventListener('click',event=>{event.stopImmediatePropagation();showMore();},true);
+    const requested=new URLSearchParams(location.search).get('tab');
+    if(requested==='more')showMore();
+  }
+  const moreStyle=document.createElement('style');moreStyle.textContent=`
+    #home-stage .v49-more-panel{background:#fff8f0ef!important;border:1px solid #fff!important;border-radius:5cqw!important;padding:4cqw!important;overflow-y:auto!important;touch-action:pan-y!important}
+    #home-stage .v49-more-list{display:grid;gap:2.5cqw;margin:4cqw 0}
+    #home-stage .v49-more-item{width:100%;padding:3cqw 2cqw;border-radius:3cqw;border:1px solid #fff6ef;background:linear-gradient(145deg,#fef7f7,#d8f4f6);color:#356e82;font:600 3.1cqw Georgia,'Songti SC',sans-serif;text-align:center}
+  `;document.head.append(moreStyle);
 
   // The standard V43 storage key is the only score source; do not reset existing progress.
   function ability(level,score){if(level<=0)return '待评';const ratio=score/(level*10);return ratio<.6?'薄弱':ratio<1?'欠缺':Math.abs(ratio-1)<1e-9?'普通':ratio<1.2?'良好':ratio<1.5?'优秀':ratio<1.8?'卓越':'传奇';}

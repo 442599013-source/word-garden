@@ -1,25 +1,15 @@
-WordMatch V48 仅首页更新 / Home-only patch
+V49 金蛋 + 眨眼考拉 + 更多菜单｜小补丁说明
 
-以 GitHub 现有 word-garden/main（V47 首页，基于 V43 游戏）为基础。
-请先不要上传 V43、V47 整套旧资源，也不要覆盖 word-match.html 或任何词库与音频文件。
+本包只含 6 个需要新增或替换的文件，均上传到 GitHub 仓库 main 分支根目录，保留原有 V43/V47 其他资源：
 
-一、替换 GitHub 根目录现有文件（内容已修改）
-1. index.html
-2. v47-home.css
-3. v47-home.js
+替换：index.html、word-match.html、v47-home.js
+新增：v49-match-egg.js、v49-magic-golden-egg.gif、v49-koala-blink.gif
 
-二、在 GitHub 根目录新增（当前检查不存在）
-4. v48-magic-golden-egg.png  【新魔法金蛋，首页代码明确引用同名文件】
-5. v47-koala-awake.png       【GitHub 当前未发现此文件，首页显示考拉需要它】
+修改内容：
+- 首页幼儿园的金蛋改用左右摇晃的透明动画 GIF。
+- 单词消消乐页新增相同 GIF 金蛋，不再被 V43 的小学解锁条件隐藏。
+- 首页考拉替换成眨眼 GIF。
+- 底部第三栏由 Pets／宠物改为 More／更多，更多菜单包含宠物页面及 legacy-home.html 原版主页入口。
+- 游戏原题库、分数、配对、人物及其他界面不变。
 
-请解压后直接上传上述文件到仓库 main 分支根目录，与 index.html 同层，不要带外层文件夹。
-提交后打开 GitHub 仓库的 index.html 核对 wordmatch-version 为 V48-home-from-V43。
-
-本包不涉及 word-match.html、129关词库、音频、原有人物/宠物数据或游戏引擎。
-首页只调整视觉排版、按钮、阶段牌、金蛋、滚动固定导航和等级信息栏。
-继续使用现有 V43 游戏运行时及已有资源。
-
-发布问题注意：若 GitHub Pages 的发布源不是 main 分支，文件提交成功也不会使网站变化。
-
-检查结果：JS 语法检查通过；本地DOM模拟390×844滚动，底部导航位置未改变；
-没有完成真实 iPhone / GitHub Pages 正式部署验收。若实机效果不符合 Work 图，以 Work 图继续调整。
+提醒：必须等 6 个文件全部成功提交后再检查，浏览器可强制刷新。
