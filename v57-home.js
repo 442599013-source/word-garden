@@ -23,10 +23,57 @@ function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed
 const index=tier(lv,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
 set(0,'Level '+lv,lv/600*100);refs[0].fill.dataset.started=String(lv>0);set(1,score.toFixed(1),score/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
 for(const evt of ['pageshow','storage','wm-companions-change'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
-const title=stage.querySelector('.journey-title');let playing=false,epoch=0,btn;
-function cancel(){epoch++;playing=false;try{window.speechSynthesis?.cancel();}catch{}btn?.setAttribute('aria-pressed','false');}
-function say(text,lang,t){return new Promise(resolve=>{if(t!==epoch||!('speechSynthesis' in window))return resolve();const utterance=new SpeechSynthesisUtterance(text);utterance.lang=lang;utterance.rate=lang==='en-GB'?.88:.94;let done=false;const complete=()=>{if(!done){done=true;resolve();}};utterance.onend=complete;utterance.onerror=complete;try{speechSynthesis.speak(utterance);}catch{complete();}});}
-async function speakWelcome(){if(playing){cancel();return;}if(!('speechSynthesis' in window))return;cancel();const token=epoch;playing=true;btn?.setAttribute('aria-pressed','true');for(const [en,zh]of pairs){if(token!==epoch)break;await say(en,'en-GB',token);if(token!==epoch)break;await say(zh,'zh-CN',token);}if(token===epoch){playing=false;btn?.setAttribute('aria-pressed','false');}}
-if(title){btn=document.createElement('button');btn.type='button';btn.className='v57-voice-button';btn.setAttribute('aria-label','Replay welcome / 重播欢迎语');btn.setAttribute('aria-pressed','false');btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/></svg>';btn.onclick=(event)=>{event.stopPropagation();speakWelcome();};title.append(btn);}
-let autoStarted=false;stage.addEventListener('pointerdown',event=>{if(autoStarted||intro&&!intro.hidden||event.target.closest('button,a,nav,dialog'))return;autoStarted=true;speakWelcome();},{capture:true});window.addEventListener('pagehide',cancel);document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
+// V58: use the existing Microsoft Azure TTS service, never browser speechSynthesis.
+const title=stage.querySelector('.journey-title');
+const audio=document.createElement('audio');
+audio.id='home-microsoft-welcome-audio';audio.preload='none';audio.playsInline=true;audio.hidden=true;stage.append(audio);
+const voice=window.WMMicrosoftVoice?new window.WMMicrosoftVoice(audio):null;
+let playing=false,finished=false,started=false,epoch=0,btn=null,launchTimer=null;
+function cancel(){epoch++;playing=false;try{voice?.stop();}catch{}btn?.setAttribute('aria-pressed','false');}
+async function speakWelcome(force=false){
+ if(!voice)return;
+ if(force){finished=false;cancel();}
+ else if(started||playing||finished)return;
+ if(playing)return;
+ started=true;playing=true;const token=++epoch;
+ btn?.setAttribute('aria-pressed','true');
+ try{
+  for(const [en,zh] of pairs){
+   if(token!==epoch)break;
+   await voice.play(en,'en-GB',.88);
+   if(token!==epoch)break;
+   await voice.play(zh,'zh-CN',.94);
+  }
+  if(token===epoch)finished=true;
+ }catch(err){
+  // Safari/WebKit may block audible autoplay without a trusted gesture.
+  // Do NOT replace Microsoft's voice with low-quality browser TTS.
+  if(token===epoch){started=false;stage.dataset.welcomeAudioBlocked='true';}
+ }finally{if(token===epoch){playing=false;btn?.setAttribute('aria-pressed','false');}}
+}
+if(title){
+ btn=document.createElement('button');btn.type='button';btn.className='v57-voice-button';
+ btn.setAttribute('aria-label','Play Microsoft welcome / 播放微软欢迎语');btn.setAttribute('aria-pressed','false');
+ btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/></svg>';
+ btn.onclick=e=>{e.stopPropagation();void speakWelcome(true);};title.append(btn);
+}
+function onHomeReady(){
+ if(intro&&!intro.hidden)return;
+ if(stage.dataset.tab&&stage.dataset.tab!=='home')return;
+ if(!document.getElementById('home-view')||document.getElementById('home-view').hidden)return;
+ clearTimeout(launchTimer);
+ launchTimer=setTimeout(()=>{if(!intro||intro.hidden)void speakWelcome();},120);
+}
+if(intro){new MutationObserver(onHomeReady).observe(intro,{attributes:true,attributeFilter:['hidden']});}
+// A delayed check also covers direct entry when there is no intro to play.
+window.addEventListener('load',()=>setTimeout(onHomeReady,600));
+// If autoplay was blocked, the first ordinary user gesture can unlock Microsoft audio.
+// Keep the loudspeaker as a dedicated manual replay control too.
+document.addEventListener('pointerdown',event=>{
+ if(!stage.dataset.welcomeAudioBlocked||intro&&!intro.hidden||finished||playing||event.target.closest('.v57-voice-button'))return;
+ delete stage.dataset.welcomeAudioBlocked;
+ void speakWelcome();
+},{capture:true});
+window.addEventListener('pagehide',cancel);
+document.addEventListener('visibilitychange',()=>{if(document.hidden)cancel();});
 })();
