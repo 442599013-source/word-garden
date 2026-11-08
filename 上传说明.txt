@@ -1,15 +1,12 @@
-V49 金蛋 + 眨眼考拉 + 更多菜单｜小补丁说明
+V50 游戏页小包（已补入确认的慢速金蛋）
 
-本包只含 6 个需要新增或替换的文件，均上传到 GitHub 仓库 main 分支根目录，保留原有 V43/V47 其他资源：
+与之前 V50 的区别：新增 v49-magic-golden-egg.gif，代替原来晃动过快的同名文件。
 
-替换：index.html、word-match.html、v47-home.js
-新增：v49-match-egg.js、v49-magic-golden-egg.gif、v49-koala-blink.gif
+上传到 442599013-source/word-garden 的 main 分支根目录：
+1. word-match.html — 替换（V50 游戏页）
+2. v50-game.css — 新增（V50 代码化布局）
+3. v49-magic-golden-egg.gif — 替换同名动画（金蛋缓慢小幅晃动）
 
-修改内容：
-- 首页幼儿园的金蛋改用左右摇晃的透明动画 GIF。
-- 单词消消乐页新增相同 GIF 金蛋，不再被 V43 的小学解锁条件隐藏。
-- 首页考拉替换成眨眼 GIF。
-- 底部第三栏由 Pets／宠物改为 More／更多，更多菜单包含宠物页面及 legacy-home.html 原版主页入口。
-- 游戏原题库、分数、配对、人物及其他界面不变。
+这版金蛋沿用既有 v49-magic-golden-egg.gif 文件名；首页 v47-home.js 和游戏 v49-match-egg.js 的现有引用不需要修改，因此两个页面将自动使用更新后的同一张金蛋动图。
 
-提醒：必须等 6 个文件全部成功提交后再检查，浏览器可强制刷新。
+注意：若仓库缺失 v49-match-egg.js，游戏页金蛋仍不能显示。请先核实该现有文件存在。此包不包含 V43 基础资源。
