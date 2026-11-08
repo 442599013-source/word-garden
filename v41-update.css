@@ -1,0 +1,66 @@
+/* V41 additive theme and layout; original course data is untouched. */
+/* One navigation only: homepage. Hide it on the Home-hosted Pets/Me panels. */
+.home-stage:has(#home-view[hidden]) .bottom-nav{display:none!important}
+.home-stage .bottom-nav{bottom:1.8%;height:6.1%;left:3%;width:94%;border-radius:7cqw;box-shadow:0 2px 10px #ab74753a,inset 0 0 0 2px #fff8e2}
+.home-stage .bottom-nav button,.home-stage .bottom-nav a{font-size:3cqw}
+.home-stage .bottom-nav span{font-size:4.8cqw}
+.home-stage .bottom-nav small{font-size:2.4cqw}
+.home-stage{background-image:var(--v41-home-background)!important;background-size:cover!important;background-position:center!important}
+.home-stage .scene-shade{background:linear-gradient(#fff9f10f,transparent 65%,#fff8d710);pointer-events:none}
+.home-stage .journey-title{top:7.5%!important;text-shadow:0 2px 12px #7f406e99,0 1px #fbdaca}
+/* The learning markers lie on different stair treads, never float as two unrelated blocks. */
+.home-stage .milestones{left:19%;top:43.5%;width:58%;height:29%;display:block;transform:none;pointer-events:none}
+.home-stage .milestones a{position:absolute;display:block;width:76%;left:9%;font-style:normal;font-size:4cqw;font-weight:700;line-height:1.12;padding:2cqw 1cqw;border:2px solid #fae0ac;border-radius:8cqw;background:linear-gradient(130deg,#fff6e6ec,#ffddc8ea);color:#91546a;box-shadow:0 4px 12px #75517d55,inset 0 1px 3px #fffaf2;text-shadow:0 1px white;pointer-events:auto;transform:rotate(-2deg)}
+.home-stage .milestones a:before{content:'✦';position:absolute;left:4%;top:18%;color:#d991b6}
+.home-stage .milestones a:first-child{top:6%;left:18%;width:76%}
+.home-stage .milestones a:last-child{top:45%;left:3%;width:76%}
+.home-stage .milestones small{font-size:3cqw;margin-top:.6cqw}
+.home-stage .home-platform{top:68%;height:16%;left:10%;right:10%;background:radial-gradient(ellipse at center 95%,#fff9d9bb,transparent 75%);border:0}
+.home-stage .home-companions .wm-companion{width:54%;left:22%;bottom:5%}
+.home-stage .home-companions[data-count="2"] .wm-companion{width:45%;left:3%;bottom:5%}
+.home-stage .home-companions[data-count="2"] .slot-1{left:51%;bottom:5%}
+.home-stage .level-badge{bottom:-10%;left:26%;width:48%;font-size:4.6cqw}
+.home-stage .start-learning{display:none!important}
+.home-stage .panel-view{top:23%;bottom:12%}
+.v41-panel-back{display:block;border:1px solid #d8ab75;border-radius:50px;padding:8px 16px;background:#fff4e6;color:#754a60;font-size:14px;margin-bottom:10px}
+.wm-companion{animation:none!important;translate:0 0!important}
+/* Game background entirely separate from frame and cards. */
+.match-stage{background-image:var(--v41-match-background)!important;background-position:center!important;background-size:cover!important;--v41-edge:#b65bf2;--v41-core:#51218d;--v41-panel:#fff1fc;--v41-gold:#ffe99d}
+.match-stage .match-board{background:linear-gradient(160deg,var(--v41-core),color-mix(in srgb,var(--v41-core) 75%,#220b40));border:5px solid var(--v41-edge);border-radius:3.6cqw;box-shadow:0 0 0 2px #f9d3ff,inset 0 0 20px #0f082867,0 7px 19px #35124555;padding:0}
+.match-stage .match-tile{border-radius:2.6cqw;box-shadow:inset 0 2px 3px #ffffffad,0 3px 5px #25064677}
+.match-stage .target-heading{background:linear-gradient(125deg,var(--v41-edge),var(--v41-core));border:2px solid #ffeeb2;border-radius:6cqw;left:29%;width:42%;height:4.4%;top:68.5%;box-shadow:0 2px 7px #8a388975}
+.match-stage .match-targets{background:linear-gradient(#fff9f3f5,var(--v41-panel));border:3px solid #ffd991;border-radius:4cqw;left:12%;width:76%;top:71.5%;height:8%;padding:1.7cqw 2.1cqw;box-shadow:0 0 8px #ffcfcf88}
+.match-stage .help-heading{background:linear-gradient(130deg,var(--v41-edge),var(--v41-core));border-radius:5cqw;top:80.3%;left:29%;width:42%;height:3.5%;border:1.5px solid #ffe5a7}
+.match-stage .match-message{background:linear-gradient(#fffdf8ef,var(--v41-panel));border:3px solid #ffd796;border-radius:4cqw;left:25%;width:50%;top:83.1%;height:8%;box-shadow:0 3px 10px #ac6e7740;padding:1cqw}
+.match-stage .home-button{background:linear-gradient(130deg,#c770f1,#7625bf);border:2px solid #fff2d9;border-radius:7cqw;top:8.8%;left:3%;height:4.5%;width:24%;padding:0;box-shadow:0 2px 5px #3f275e5c}
+.match-stage .home-button:before{content:'←';font-size:5cqw;margin-right:1cqw}
+.match-stage .level-button{background:linear-gradient(#ffe6ac,#e8b477);border:2px solid #e3a567;border-radius:3cqw;top:18.9%;height:6.5%;box-shadow:0 3px 5px #6e463b77}
+.match-stage .score-label,.match-stage .combo-label{background:linear-gradient(#ab6b23,#643317);border:3px solid #e8bc46;border-radius:6cqw;top:20.2%;height:5.7%;box-shadow:0 2px 7px #55290c80}
+.match-stage .game-title{top:10.1%;left:29%;width:43%;height:6.2%;background:linear-gradient(155deg,#ffedbc,#d8a265);border:2px solid #b98646;border-radius:6cqw;box-shadow:0 3px 6px #6741286b}
+.match-stage .settings-button{background:linear-gradient(#cb86ee,#7337ac);border:2px solid #fff1cb;border-radius:50%;}
+.match-stage .settings-button:after{content:'⚙';font-size:7cqw;color:white}
+/* Existing buttons remain as accessible functional fallback when second companion is locked. */
+.match-stage .hint-button,.match-stage .shuffle-button{background:linear-gradient(#e4bdff,#a46fdf);border:2px solid #fff4e2;border-radius:8cqw;top:92.6%;height:4.2%;box-shadow:0 2px 7px #673b8566}
+.match-stage .hint-button{left:7%;width:27%;padding:0}
+.match-stage .shuffle-button{left:66%;width:28%;padding:0}
+.match-stage .game-companions{z-index:11;pointer-events:none}
+.match-stage .game-companions .wm-companion{pointer-events:auto;cursor:pointer;width:24%;top:79.5%;left:1%;touch-action:manipulation;filter:drop-shadow(0 3px 3px #3a185351)}
+.match-stage .game-companions .slot-1{left:75%}
+.match-stage .game-companions .wm-companion:after{content:attr(data-action-label);position:absolute;bottom:-1cqw;left:5%;width:90%;border-radius:4cqw;text-align:center;background:#fff1f4df;color:#7f3d83;font-size:2.7cqw;font-weight:750;padding:.5cqw;box-shadow:0 1px 4px #72486788}
+.match-stage .game-companions .wm-companion:active{filter:drop-shadow(0 0 8px #ffdc8d)}
+.v41-spark{position:absolute;left:50%;top:45%;z-index:50;pointer-events:none;font-size:10cqw;color:#ffe37e;text-shadow:0 0 10px #f7c135;animation:v41-spark 1.1s ease-out forwards}
+@keyframes v41-spark{0%{opacity:0;transform:scale(.25) rotate(-30deg)}40%{opacity:1;transform:scale(1.5) rotate(35deg)}100%{opacity:0;transform:scale(2) rotate(90deg)}}
+@media(prefers-reduced-motion:reduce){.v41-spark{animation:none}}
+.match-stage.v41-left-ready .hint-button{opacity:0;pointer-events:none}
+.match-stage.v41-right-ready .shuffle-button{opacity:0;pointer-events:none}
+.match-stage .match-targets.v41-glow,.match-stage .match-board.v41-glow{animation:v41-glow .95s ease-in-out 2}
+@keyframes v41-glow{50%{box-shadow:0 0 24px 11px #fff6a8,0 0 9px #ffc667}}
+.home-stage .side-tools{z-index:6}
+/* Original hand-drawn wooden title, branch, hanging signs and buttons, isolated from the landscape. */
+.match-stage::before{content:'';position:absolute;z-index:2;left:0;top:0;width:100%;height:26.95%;background:url('v41-original-header.png') center top/100% 100% no-repeat;pointer-events:none}
+.match-stage .home-button,.match-stage .settings-button,.match-stage .level-button,.match-stage .score-label,.match-stage .combo-label,.match-stage .game-title{background:transparent!important;border:0!important;box-shadow:none!important}
+.match-stage .home-button:before,.match-stage .settings-button:after{content:none!important}
+.match-stage .home-button span{font-size:0!important;opacity:0}
+.match-stage .game-title{transform:rotate(-1deg);z-index:4}
+.match-stage .level-button{z-index:4}
+.match-stage .score-label,.match-stage .combo-label{z-index:4}
