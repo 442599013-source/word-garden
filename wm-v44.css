@@ -1,16 +1,34 @@
-/* V44: small, flat game controls, closer to the two companions. */
-.match-stage .hint-button,.match-stage .shuffle-button{top:91.5%;height:2.85%;width:21%;min-height:0;border-radius:3.5cqw;font-size:2.45cqw;line-height:1.05;padding:0!important;justify-content:center;box-shadow:inset 0 1px 1px #fff,0 1px 4px #875b7a22}
-.match-stage .hint-button{left:3.5%}.match-stage .shuffle-button{left:auto;right:3.5%}
-.match-stage .hint-button small,.match-stage .shuffle-button small{font-size:1.65cqw!important;line-height:1.1}
-/* More navigation: replace the former Pets button while keeping all other items. */
-.home-stage .bottom-nav [data-tab="more"]{position:relative}
-.home-stage .bottom-nav [data-tab="more"]::after{content:'More / 更多';position:absolute;inset:auto 0 8%;font-size:3cqw;font-weight:750;color:#784867;text-shadow:0 1px 3px #fff;white-space:nowrap}
-/* Refined decorative lock shared by the magic cat and Phoenix. */
-.primary-cat .pet-lock,.home-phoenix .pet-lock{position:absolute!important;top:-4%!important;left:43%!important;width:7cqw;height:9cqw;min-width:22px;min-height:27px;z-index:10;font-size:0!important;pointer-events:none;filter:drop-shadow(0 2px 3px #92689a66)}
-.primary-cat .pet-lock::before,.home-phoenix .pet-lock::before{content:'';position:absolute;top:1%;left:27%;width:46%;height:53%;border:2px solid #fff1cf;border-bottom:0;border-radius:60% 60% 0 0;box-shadow:0 0 0 1px #a87bbd}
-.primary-cat .pet-lock::after,.home-phoenix .pet-lock::after{content:'✦';position:absolute;left:7%;bottom:3%;width:86%;height:57%;display:grid;place-items:center;background:linear-gradient(145deg,#f5e2ff,#cba4d9 55%,#a776bc);border:1px solid #ffe9b9;border-radius:26%;font-size:2.4cqw;color:#fff7df;text-shadow:0 0 4px #fff}
-.home-phoenix{position:absolute;top:49%;left:5%;height:13%;width:19%;z-index:5;padding:0;border:0;background:none;cursor:pointer}
-.home-phoenix img{height:100%;width:100%;object-fit:contain;filter:saturate(.7)}
-.home-phoenix.unlocked .pet-lock,.primary-cat.unlocked .pet-lock{display:none!important}
-.home-phoenix.unlocked img{filter:none}
-.v44-more-link{display:block!important;text-align:center!important;background:linear-gradient(#fffaf3,#f3d8eb)!important;border:1px solid #deb5d1!important;border-radius:3cqw!important;padding:3cqw!important;margin:3cqw 0!important;font-weight:700}
+/* V44.3 reviewed delta, layered after original V43 CSS. */
+/* Blue information panel: top 82.4%, height 7.3%, bottom 89.7%. Buttons: bottom 89.7%. */
+.match-stage .hint-button,.match-stage .shuffle-button{top:86.85%!important;bottom:auto!important;height:2.85%!important;width:21%!important;min-height:0!important;z-index:7!important;display:flex!important;justify-content:center!important;align-items:center!important;padding:0!important;border-radius:3.3cqw!important;font-size:2.45cqw!important;line-height:1.06!important;box-shadow:inset 0 1px 1px #fff,0 1px 4px #875b7a22!important}
+.match-stage .hint-button{left:3.5%!important;right:auto!important}
+.match-stage .shuffle-button{left:auto!important;right:3.5%!important}
+.match-stage .hint-button small,.match-stage .shuffle-button small{display:block;font-size:1.65cqw!important;line-height:1.1!important}
+/* Decorative lock: no replacement of original artwork. */
+.primary-cat .pet-lock,.home-phoenix .pet-lock,.home-koala .pet-lock{position:absolute!important;top:-5%!important;left:43%!important;width:7cqw;height:9cqw;min-width:22px;min-height:27px;z-index:10;font-size:0!important;pointer-events:none;filter:drop-shadow(0 2px 3px #92689a66)}
+.primary-cat .pet-lock::before,.home-phoenix .pet-lock::before,.home-koala .pet-lock::before{content:'';position:absolute;top:1%;left:27%;width:46%;height:53%;border:2px solid #fff1cf;border-bottom:0;border-radius:60% 60% 0 0;box-shadow:0 0 0 1px #a87bbd}
+.primary-cat .pet-lock::after,.home-phoenix .pet-lock::after,.home-koala .pet-lock::after{content:'✦';position:absolute;left:7%;bottom:3%;width:86%;height:57%;display:grid;place-items:center;background:linear-gradient(145deg,#f5e2ff,#cba4d9 55%,#a776bc);border:1px solid #ffe9b9;border-radius:26%;font-size:2.4cqw;color:#fff7df;text-shadow:0 0 4px #fff}
+.primary-cat.unlocked .pet-lock,.home-phoenix.unlocked .pet-lock,.home-koala.unlocked .pet-lock{display:none!important}
+.home-phoenix,.home-koala{position:absolute;z-index:5;padding:0;border:0;background:none;cursor:pointer}
+.home-phoenix{top:28%;left:5%;width:19%;height:12%}
+.home-koala{top:29%;left:69%;width:17%;height:10%}
+.home-phoenix img,.home-koala img{height:100%;width:100%;object-fit:contain;filter:saturate(.66)}
+.home-phoenix.unlocked img,.home-koala.unlocked img{filter:none}
+/* Replace the third tab's embedded Pets graphic label with an opaque patch, not text laid over it. */
+.home-stage .bottom-nav [data-tab="more"]{position:relative!important;isolation:isolate}
+.home-stage .bottom-nav [data-tab="more"]::before{content:'';position:absolute;inset:2% 4%;background:linear-gradient(#f7e5ec,#eed0e1);border-radius:2cqw;z-index:0}
+.home-stage .bottom-nav [data-tab="more"]::after{content:'✦ More\A 更多';white-space:pre;position:absolute;inset:7% 0 0;display:grid;place-content:center;text-align:center;font:700 3.3cqw/1.45 Georgia,serif;color:#784867;text-shadow:0 1px #fff;z-index:1}
+/* Only two tools requested on the homepage; keep existing wardrobe code intact but hide its button. */
+.home-view #wardrobe-button{display:none!important}
+.v443-more-link{display:block!important;text-align:center!important;background:linear-gradient(#fffaf3,#f3d8eb)!important;border:1px solid #deb5d1!important;border-radius:3cqw!important;padding:3cqw!important;margin:3cqw 0!important;font-weight:700}
+/* Original launch video runs normally. The intro's heading and Growth CTA stay on screen. */
+#intro{bottom:0!important;isolation:isolate}
+#intro-video{width:100%;height:100%;object-fit:cover}
+.intro-static{position:absolute;top:max(10%,calc(env(safe-area-inset-top,0px) + 7%));left:5%;right:5%;z-index:2;pointer-events:none;text-align:center;color:#fff7dc;text-shadow:0 2px 5px #634065,0 0 8px #67466a;font-family:Georgia,'Songti SC',serif}
+.intro-static strong{display:block;font-size:5.7cqw;line-height:1.15;font-style:italic}
+.intro-static span{display:block;font-size:3.5cqw;margin-top:1cqw}
+.intro-static p{font-size:4.7cqw;font-style:italic;font-weight:bold;margin:3cqw 0 .5cqw}
+.intro-static small{font-size:3.1cqw}
+.intro-controls{z-index:3!important}
+.intro-to-growth{position:absolute;z-index:4;bottom:max(16%,calc(env(safe-area-inset-bottom,0px) + 12%));left:20%;width:60%;min-height:11cqw;border:1px solid #fff5da;border-radius:9cqw;display:flex;flex-direction:column;justify-content:center;align-items:center;background:linear-gradient(#fff9eeed,#f3c9e6f2);box-shadow:0 3px 10px #684c6870;color:#784967;font:700 4.1cqw Georgia,serif;text-decoration:none}
+.intro-to-growth small{display:block;font-size:2.9cqw;margin-top:.5cqw}
