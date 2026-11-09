@@ -1,0 +1,37 @@
+/* V62: brand display, shared original four-item nav and theme-responsive CSS borders.
+   Layered AFTER V61 so game rules, animation, gestures and 9:20 stage stay intact. */
+:root { --v62-edge:#8bd8e7; --v62-deep:#427ca4; --v62-light:#f1fbff; }
+#home-stage .journey-title{top:2.2%!important;left:12%!important;width:76%!important;height:18%!important;overflow:visible!important;pointer-events:none!important;z-index:22!important}
+#home-stage .journey-title .v48-title,#home-stage .journey-title>p,#home-stage .journey-title>img:not(.v62-brand-logo){display:none!important}
+#home-stage .journey-title .v62-brand-logo{display:block!important;position:absolute;left:50%;top:0;width:auto!important;max-width:100%!important;height:100%!important;object-fit:contain!important;transform:translateX(-50%);mix-blend-mode:multiply;clip-path:none!important;pointer-events:none}
+#home-stage .journey-title .v62-tagline{position:absolute;left:-10%;right:-10%;bottom:-1.3cqw;text-align:center;font:italic 2.1cqw/1.1 Georgia,serif;color:var(--v62-deep);text-shadow:0 1px 2px white;white-space:nowrap}
+/* The logo only appears at the end of the existing birth video. */
+#home-stage #intro .v62-intro-brand{position:absolute;z-index:25;top:34%;left:14%;width:72%;height:auto;max-height:44%;object-fit:contain;mix-blend-mode:multiply;opacity:0;transform:scale(.95);transition:opacity .55s ease,transform .55s ease;pointer-events:none}
+#home-stage #intro.v62-show-brand .v62-intro-brand{opacity:1;transform:scale(1)}
+#home-stage #intro.v62-show-brand .v48-intro-copy{opacity:0;pointer-events:none}
+/* Game top-right emblem: crop the SAME original image; no redraw. */
+#match-game .match-stage .v62-logo-icon{position:absolute;top:3.7%;right:3%;width:13.5%;aspect-ratio:1.7;z-index:19;pointer-events:none;overflow:hidden;display:block;mix-blend-mode:multiply}
+#match-game .v62-logo-icon img{display:block;width:100%;height:100%;position:absolute;inset:0;object-fit:contain}
+#match-game .match-stage .game-title{top:9.2%!important;height:5.3%!important;left:28%!important;width:44%!important;border-color:var(--v62-edge)!important;border-bottom-color:var(--v62-deep)!important}
+#match-game .match-stage .game-title strong{display:none!important}
+#match-game .match-stage .game-title h1{font-size:3.7cqw!important;line-height:1.2!important}
+/* Use same 4 home navigation entries, icon paths, bilingual labels and button shape. */
+body:has(#match-game){padding-bottom:calc(70px + env(safe-area-inset-bottom,0px))!important}
+#v62-game-nav{position:fixed!important;z-index:200!important;bottom:max(7px,env(safe-area-inset-bottom,0px))!important;left:2.5%!important;width:95%!important;max-width:calc(540px * .95);margin-inline:auto;right:2.5%;height:clamp(58px,8.2dvh,78px)!important;display:grid!important;grid-template-columns:repeat(4,1fr)!important;align-items:stretch!important;border-radius:20px!important;background:rgba(255,252,247,.12)!important;box-shadow:0 1px 5px color-mix(in srgb,var(--v62-deep),transparent 70%)!important;border:1.5px solid var(--v62-edge)!important;backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);font-family:Georgia,serif}
+#v62-game-nav>*{min-width:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:2px;border:0;background:transparent;color:var(--v62-deep);text-decoration:none;padding:3px 0;cursor:pointer}
+#v62-game-nav .v48-nav-icon{width:clamp(24px,6.2vw,34px);height:clamp(24px,6.2vw,34px);display:block}
+#v62-game-nav .v48-nav-icon svg{display:block;width:100%;height:100%}
+#v62-game-nav .v48-nav-en{font-size:clamp(11px,3vw,15px);line-height:1}
+#v62-game-nav .v48-nav-zh{font:clamp(9px,2.2vw,12px)/1.1 sans-serif}
+#v62-game-nav [aria-current]{color:var(--v62-deep);filter:drop-shadow(0 0 4px var(--v62-edge));font-weight:bold}
+/* Home nav stays the original design; only its border/selection takes the scene hue. */
+#home-stage .bottom-nav{border:1.5px solid var(--v62-edge)!important;border-radius:5cqw!important;box-shadow:0 1px 5px color-mix(in srgb,var(--v62-deep),transparent 75%)!important}
+#home-stage .bottom-nav [aria-current]{filter:drop-shadow(0 0 5px var(--v62-edge))!important}
+/* Theme borders: code-drawn shapes, not decorative outlines embedded in PNG files. */
+#home-stage .v48-stats,#home-stage .milestones a,#home-stage .side-tools .v48-tool,#home-stage .v49-more-item,#home-stage .panel-view:not([hidden]),#home-stage #picker,#home-stage .panel-back,#home-stage .v57-voice-button{border-color:var(--v62-edge)!important}
+#home-stage .v48-stats>div+div{border-left-color:var(--v62-edge)!important}
+#match-game .match-stage :is(.home-button,.settings-button,.level-button,.score-label,.combo-label,.match-board,.match-targets,.help-heading,.match-message,.hint-button,.shuffle-button,.howto-controls button,.match-tile){border-color:var(--v62-edge)!important}
+#match-game .match-stage :is(.game-title,.level-button,.score-label,.combo-label){border-bottom-color:var(--v62-deep)!important}
+@media(max-width:360px){#match-game .match-stage .v62-logo-icon{width:12%}}
+
+#match-game .match-dialog,#match-game .match-dialog button,#match-game .setting-row button{border-color:var(--v62-edge)!important}
