@@ -60,7 +60,7 @@
   function setIdle(img){
    css();const token={timer:null};idleByImage.set(img,token);
    img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v637';img.alt='Jack';
-   img.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+   img.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221%22 height=%221%22 viewBox=%220 0 1 1%22%3E%3C/svg%3E';img.alt='';
    img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
    img.style.width='75%';img.style.height='100%';img.style.marginLeft='12.5%';
    // No timer or secondary image decode until idle motion is actually needed.

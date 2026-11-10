@@ -1,0 +1,78 @@
+/* V63.9: Magic Match only. Keep the HOME navigation unaffected. */
+
+/* The last CSS layers used to hide the only English title, producing a blank sign. */
+#match-game .match-stage .game-title strong {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  font: 900 5.1cqw/1.04 -apple-system, BlinkMacSystemFont, sans-serif !important;
+  letter-spacing: -0.045em !important;
+  color: var(--v50-core, #704b87) !important;
+  text-shadow: 0 1px 2px #fff !important;
+  white-space: nowrap !important;
+  transform: none !important;
+}
+#match-game .match-stage .game-title {
+  overflow: visible !important;
+}
+
+/* Anchor the one game nav INSIDE the game's own 9:20 background.
+   Never fix to the phone viewport; leave #home-stage and all other pages alone. */
+#match-game .match-stage > #v62-game-nav {
+  position: absolute !important;
+  inset: auto auto 0.6% 2.5% !important;
+  left: 2.5% !important;
+  right: auto !important;
+  top: auto !important;
+  bottom: 0.6% !important;
+  width: 95% !important;
+  height: 6.1% !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: none !important;
+  z-index: 60 !important;
+  display: grid !important;
+  grid-template-columns: repeat(4, minmax(0,1fr)) !important;
+  align-items: stretch !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  pointer-events: auto !important;
+}
+#match-game .match-stage > #v62-game-nav > a {
+  min-width: 0 !important;
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 0 !important;
+  padding: 0 !important;
+}
+#match-game .match-stage > #v62-game-nav .v48-nav-icon {
+  width: 5.0cqw !important;
+  height: 5.0cqw !important;
+}
+#match-game .match-stage > #v62-game-nav .v48-nav-en {
+  font: 700 2.45cqw/1.15 -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+#match-game .match-stage > #v62-game-nav .v48-nav-zh {
+  font: 500 1.9cqw/1.15 -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+/* Ensure background-sprite Jack uses a real, transparent image element:
+   no broken image badge, alt text, frame or obscuring fill. */
+#match-game .match-stage .wm-companion img[data-jack-angel="1"] {
+  border: 0 !important;
+  outline: 0 !important;
+  box-shadow: none !important;
+  background-color: transparent !important;
+  object-fit: contain !important;
+}
+
+/* The game alone no longer needs viewport padding for a fixed footer. */
+body:has(#match-game) {
+  padding-bottom: 0 !important;
+}
