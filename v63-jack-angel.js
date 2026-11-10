@@ -1,11 +1,11 @@
-/* V63.4: Jack/杰克天使. Eight *unmodified* RGBA originals in 4x2 sprite.
+/* V63.5: Jack angel. Six source-derived transparent frames, resized 50% in both dimensions; no background removal.
    Hint sequence: English card -> Chinese card, one hint charge, 2 seconds of enlarged magic.
    V59 retains the authoritative non-Jack animations, game rules and speech. */
 (()=>{'use strict';
  const C=window.WMCompanions;
  if(!C)return;
  const ID='jack_angel',OLD_ID='golden_staff_angel',KEY='wm-companions-v39';
- const FILE='jack-angel-frames.png?v=63.4';
+ const FILE='jack-angel-frames.png?v=63.5';
  let framesPromise=null,hintBusy=false;
  const idleByImage=new WeakMap();
  const baseSet=C.setImage.bind(C);
@@ -37,17 +37,30 @@
   }catch(e){console.warn('Jack migration failed',e);}
  }
  for(let i=C.catalog.length-1;i>=0;i--)if(C.catalog[i].id===OLD_ID)C.catalog.splice(i,1);
- if(!C.catalog.some(x=>x.id===ID))C.catalog.push({id:ID,name:'Jack 杰克天使',kind:'baby'});
+ if(!C.catalog.some(x=>x.id===ID))C.catalog.push({id:ID,name:'Jack',kind:'baby'});
+ // Preserve every established character ID and all gameplay; only replace displayed angel labels.
+ const angelNames={blond_angel:'Cal',brown_angel:'Coco',purple_angel:'Violet',school_girl:'Bella',school_boy:'Leo',jack_angel:'Jack'};
+ C.catalog.forEach(c=>{if(c.kind==='baby'&&angelNames[c.id])c.name=angelNames[c.id];});
  migrate();
  async function getFrames(){if(framesPromise)return framesPromise;framesPromise=new Promise((resolve,reject)=>{
-  const img=new Image();img.onload=()=>{try{const w=img.naturalWidth/4,h=img.naturalHeight/2,all=[];for(let i=0;i<8;i++){
-   const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,(i%4)*w,Math.floor(i/4)*h,w,h,0,0,w,h);all.push(c.toDataURL('image/png'));
-  }resolve(all);}catch(e){reject(e)}};img.onerror=()=>reject(new Error('Jack RGBA sprite failed to load'));img.src=FILE;
+  const img=new Image();img.onload=async()=>{try{
+   const w=img.naturalWidth/3,h=img.naturalHeight/2;
+   if(w!==543||h!==724)throw new Error('Unexpected Jack sprite size');
+   const all=[];
+   for(let i=0;i<6;i++){
+    const c=document.createElement('canvas');c.width=w;c.height=h;
+    c.getContext('2d').drawImage(img,(i%3)*w,Math.floor(i/3)*h,w,h,0,0,w,h);
+    const blob=await new Promise((ok,bad)=>c.toBlob(b=>b?ok(b):bad(Error('Jack frame encode failed')),'image/png'));
+    all.push(URL.createObjectURL(blob));
+    c.width=c.height=0;
+   }
+   resolve(all);
+  }catch(e){reject(e)}};img.onerror=()=>reject(new Error('Jack RGBA sprite failed to load'));img.src=FILE;
  });return framesPromise;}
  function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';delete img.dataset.jackAngel;}}
- async function setIdle(img){css();const token={timer:null};idleByImage.set(img,token);img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v634';img.alt='Jack 杰克天使';img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
+ async function setIdle(img){css();const token={timer:null};idleByImage.set(img,token);img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v635';img.alt='Jack';img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
   const all=await getFrames().catch(()=>null);if(idleByImage.get(img)!==token)return;
-  if(!all){img.alt='Jack 杰克天使（素材加载失败）';return;}
+  if(!all){img.alt='Jack (image unavailable)';return;}
   // One understated wing motion every ~7 s; brief blink is independent.
   const seq=[0,0,0,1,2,1,0,0,0,0,0,0,3,0,0,0,0,0];let i=0;
   function render(){if(idleByImage.get(img)!==token||!img.isConnected){clearInterval(token.timer);return;}img.src=all[seq[i++%seq.length]];}
@@ -86,18 +99,18 @@
    for(let index=0;index<2;index++){
     const tile=index===0?en:zh;if(!tile.isConnected)break;const r=bounds(tile,stage);
     const target={x:r.x+r.w/2,y:r.y+r.h/2};
-    // Image 7 is the right-facing turn; image 8 is the extended spell staff.
+    // Frame 5 is the right-facing turn; frame 6 is the extended spell staff.
     // Wand tip near 88% of artwork width and 24% of artwork height; land left of tile to keep text visible.
     const destX=target.x-start.w*.84-start.x,destY=target.y-start.h*.26-start.y;
-    sprite.src=all[6];
+    sprite.src=all[4];
     await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:`translate(${destX}px,${destY}px) scale(1)`}],index===0?560:440,'cubic-bezier(.3,.75,.25,1)');
-    tx=destX;ty=destY;sprite.src=all[7];
+    tx=destX;ty=destY;sprite.src=all[5];
     await pause(70);
     // Effect originates at the wand gem and ends at the word card; one full second for each card.
     const origin={x:start.x+tx+start.w*.88,y:start.y+ty+start.h*.24};
     await makeEffect(stage,origin,target,r);
    }
-   sprite.src=all[6];await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');
+   sprite.src=all[4];await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');
   }finally{flyer.remove();source.style.visibility=oldVisibility;}
  }
  function installHint(){const hint=document.getElementById('hint'),stage=document.querySelector('#match-game .match-stage');if(!hint||!stage||hint.dataset.jack633Ready)return;
