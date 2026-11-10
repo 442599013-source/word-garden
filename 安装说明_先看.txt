@@ -1,16 +1,13 @@
-Goldy Magic English V64.3 合并更新包（替代未上传的 V64/V64.1/V64.2）
-
-基于 GitHub V63.10 主版本。不要先上传旧包。
-
-根目录覆盖：v62-brand.js。
-根目录新增：v64-magic-system.js、v64-magic-system.css、magic-classroom.html、v64-cal-01.png～v64-cal-06.png。
-
-Cal 六张原图最终顺序：旧 1、旧 2、旧 3、新 8 作为 4、旧 5、旧 6。6幅均置于统一透明画布，第4帧放大调整以接近其他帧视觉比例；保留原透明通道，不重新抠图。
-
-第一选择位：只有新 Cal（ID cal_angel）和 Jack（ID jack_angel）。
-第二选择位：原 Cal 即 blond_angel 已恢复名字 Sunny 阳光天使，和其他天使、动物、金蛋一起选择。
-Jack 现有的 v63-jack-angel.js 和 jack-angel-frames.png 不修改、不覆盖。
-
-魔法课堂依旧为先播放短句、随后中文语法讲解，最后跟读或输入；喇叭可重播短句。课堂边框和按钮随首页场景颜色变化；底部导航 Home/Growth/Class/My。
-
-此增量包未在真实 iPhone 上测试，请上传后首先检查角色选择和动画。
+Goldy Magic English V64.4 合并增量更新说明
+目标：GitHub 442599013-source/word-garden，分支 main，仓库根目录。
+本包以已存在的 V64.3（仓库中现有 v64-cal-01~06、v64-magic-system.js、magic-classroom.html）为基础，只打包相对 V64.3 需要变更的6个文件。
+1. 覆盖根目录：magic-classroom.html
+2. 覆盖根目录：v62-brand.js
+3. 覆盖根目录：v64-magic-system.js
+4. 覆盖根目录：v64-magic-system.css
+5. 新增根目录：v64-cal-jack-match.js
+6. 覆盖根目录：v64-cal-06.png（用户确认的新微张嘴帧，原透明素材无重复抠图，等比例放入900x1080透明画布）
+其余Cal第1~5帧沿用现有 V64.3，不用重新上传。Jack的 v63-jack-angel.js 和 jack-angel-frames.png 完全不在更新包内，不修改。
+魔法课堂复用原129句每关10题的数据加载和语法说明，不加载旧背景里的框框；HTML/CSS代码画边框，场景沿用首页主题；导航直接使用Magic Match的 v62-game-nav 组件。
+注意：浏览器自动播放语音可能因 iOS Safari 许可限制而失败；顶部小喇叭可点击重播。
+已进行JS语法和ZIP完整性检查；尚未在真实iOS Safari及网页部署环境实测。
