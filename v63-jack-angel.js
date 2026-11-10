@@ -1,16 +1,16 @@
-/* V63.3: Jack/杰克天使. Eight *unmodified* RGBA originals in 4x2 sprite.
+/* V63.4: Jack/杰克天使. Eight *unmodified* RGBA originals in 4x2 sprite.
    Hint sequence: English card -> Chinese card, one hint charge, 2 seconds of enlarged magic.
    V59 retains the authoritative non-Jack animations, game rules and speech. */
 (()=>{'use strict';
  const C=window.WMCompanions;
  if(!C)return;
  const ID='jack_angel',OLD_ID='golden_staff_angel',KEY='wm-companions-v39';
- const FILE='jack-angel-frames.png?v=63.3';
+ const FILE='jack-angel-frames.png?v=63.4';
  let framesPromise=null,hintBusy=false;
  const idleByImage=new WeakMap();
  const baseSet=C.setImage.bind(C);
- function css(){if(document.getElementById('jack-v633-style'))return;
-  const st=document.createElement('style');st.id='jack-v633-style';st.textContent=`
+ function css(){if(document.getElementById('jack-v634-style'))return;
+  const st=document.createElement('style');st.id='jack-v634-style';st.textContent=`
   @keyframes jack633Float{0%,100%{translate:0 0}50%{translate:0 -9px}}
   .jack633-flyer{position:absolute;z-index:90;pointer-events:none;transform-origin:50% 50%;will-change:transform;}
   .jack633-flyer img{display:block;width:100%;height:100%;object-fit:contain;}
@@ -21,7 +21,21 @@
   .jack633-glow{border-radius:12px;box-shadow:0 0 0 5px rgba(255,218,79,.95),0 0 25px 10px rgba(80,211,255,.88),inset 0 0 21px 4px rgba(255,229,116,.64);background:rgba(105,220,255,.14);}
   `;document.head.append(st);
  }
- function migrate(){try{const raw=localStorage.getItem(KEY),s=JSON.parse(raw||'{}');if(!Array.isArray(s.slots))return;let updated=false;s.slots=s.slots.map(x=>{if(x===OLD_ID){updated=true;return ID}return x});if(updated){s.slots=[...new Set(s.slots)].slice(0,2);localStorage.setItem(KEY,JSON.stringify(s));}}catch{}}
+ // Once-only migration: replace the invalid previous Jack (and the legacy default Sunny)
+ // in the saved primary companion slot. A deliberate choice of another angel is preserved.
+ function migrate(){
+  try{
+   const done='wm-jack-angel-v634-migrated';
+   if(localStorage.getItem(done)==='1')return;
+   const s=JSON.parse(localStorage.getItem(KEY)||'{}')||{};
+   const oldSlots=Array.isArray(s.slots)?s.slots:[];
+   const slots=oldSlots.length?oldSlots.map(x=>x===OLD_ID||x==='blond_angel'?ID:x):[ID];
+   if(!slots.some(x=>x===ID||C.catalog.some(c=>c.id===x&&c.kind==='baby')))slots.unshift(ID);
+   s.slots=[...new Set(slots)].slice(0,2);
+   localStorage.setItem(KEY,JSON.stringify(s));
+   localStorage.setItem(done,'1');
+  }catch(e){console.warn('Jack migration failed',e);}
+ }
  for(let i=C.catalog.length-1;i>=0;i--)if(C.catalog[i].id===OLD_ID)C.catalog.splice(i,1);
  if(!C.catalog.some(x=>x.id===ID))C.catalog.push({id:ID,name:'Jack 杰克天使',kind:'baby'});
  migrate();
@@ -31,12 +45,13 @@
   }resolve(all);}catch(e){reject(e)}};img.onerror=()=>reject(new Error('Jack RGBA sprite failed to load'));img.src=FILE;
  });return framesPromise;}
  function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';delete img.dataset.jackAngel;}}
- async function setIdle(img){css();const token={timer:null};idleByImage.set(img,token);img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v633';img.alt='Jack 杰克天使';img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
+ async function setIdle(img){css();const token={timer:null};idleByImage.set(img,token);img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v634';img.alt='Jack 杰克天使';img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
   const all=await getFrames().catch(()=>null);if(idleByImage.get(img)!==token)return;
-  if(!all){img.src=FILE;return;}
-  const seq=[0,0,1,2,1,0,0,0,0,3,0,0,1,2,1,0];let i=0;
+  if(!all){img.alt='Jack 杰克天使（素材加载失败）';return;}
+  // One understated wing motion every ~7 s; brief blink is independent.
+  const seq=[0,0,0,1,2,1,0,0,0,0,0,0,3,0,0,0,0,0];let i=0;
   function render(){if(idleByImage.get(img)!==token||!img.isConnected){clearInterval(token.timer);return;}img.src=all[seq[i++%seq.length]];}
-  render();token.timer=setInterval(render,240);
+  render();token.timer=setInterval(render,380);
  }
  C.setImage=function(img,id,action='idle'){if(!img)return;if(img.dataset.jackAngel==='1')clearIdle(img);if(id!==ID)return baseSet(img,id,action);return setIdle(img);};
  const pause=t=>new Promise(r=>setTimeout(r,t));
@@ -98,13 +113,13 @@
    const hiddenActors=[...new Set([jack,otherBaby].filter(Boolean))].map(n=>({node:n,hidden:n.hidden}));
    hiddenActors.forEach(({node})=>{node.hidden=true;});
    try{
-    await original.call(this,event);
-   }finally{hiddenActors.forEach(({node,hidden})=>{node.hidden=hidden;});hint.disabled=false;}
-   try{
+    try{await original.call(this,event);}
+    finally{hiddenActors.forEach(({node,hidden})=>{node.hidden=hidden;});}
     const hints=[...document.querySelectorAll('#board .match-tile.hinted')];
     const en=hints.find(n=>n.dataset.lang==='en'),zh=hints.find(n=>n.dataset.lang==='zh');
     if(en&&zh&&jack.isConnected)await performHint(jack,en,zh);
-   }catch(err){console.warn('Jack V63.3 hint animation',err);}finally{hintBusy=false;}
+   }catch(err){console.warn('Jack V63.4 hint sequence',err);}
+   finally{hint.disabled=false;hintBusy=false;}
   };
  }
  css();
