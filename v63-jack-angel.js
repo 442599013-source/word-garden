@@ -1,16 +1,16 @@
-/* V63.5: Jack angel. Six source-derived transparent frames, resized 50% in both dimensions; no background removal.
+/* V63.7: Jack angel. Eight original transparent frames scaled to 50% resolution. Render via CSS sprite: no canvas, Blob or per-frame image allocations.
    Hint sequence: English card -> Chinese card, one hint charge, 2 seconds of enlarged magic.
    V59 retains the authoritative non-Jack animations, game rules and speech. */
 (()=>{'use strict';
  const C=window.WMCompanions;
  if(!C)return;
  const ID='jack_angel',OLD_ID='golden_staff_angel',KEY='wm-companions-v39';
- const FILE='jack-angel-frames.png?v=63.5';
- let framesPromise=null,hintBusy=false;
+ const FILE='jack-angel-frames.png?v=63.7';
+ let hintBusy=false,comboBusy=false;
  const idleByImage=new WeakMap();
  const baseSet=C.setImage.bind(C);
- function css(){if(document.getElementById('jack-v634-style'))return;
-  const st=document.createElement('style');st.id='jack-v634-style';st.textContent=`
+ function css(){if(document.getElementById('jack-v637-style'))return;
+  const st=document.createElement('style');st.id='jack-v637-style';st.textContent=`
   @keyframes jack633Float{0%,100%{translate:0 0}50%{translate:0 -9px}}
   .jack633-flyer{position:absolute;z-index:90;pointer-events:none;transform-origin:50% 50%;will-change:transform;}
   .jack633-flyer img{display:block;width:100%;height:100%;object-fit:contain;}
@@ -25,11 +25,11 @@
  // in the saved primary companion slot. A deliberate choice of another angel is preserved.
  function migrate(){
   try{
-   const done='wm-jack-angel-v634-migrated';
+   const done='wm-jack-angel-v637-migrated';
    if(localStorage.getItem(done)==='1')return;
    const s=JSON.parse(localStorage.getItem(KEY)||'{}')||{};
    const oldSlots=Array.isArray(s.slots)?s.slots:[];
-   const slots=oldSlots.length?oldSlots.map(x=>x===OLD_ID||x==='blond_angel'?ID:x):[ID];
+   const slots=oldSlots.length?oldSlots.map(x=>x===OLD_ID?ID:x):[ID];
    if(!slots.some(x=>x===ID||C.catalog.some(c=>c.id===x&&c.kind==='baby')))slots.unshift(ID);
    s.slots=[...new Set(slots)].slice(0,2);
    localStorage.setItem(KEY,JSON.stringify(s));
@@ -42,30 +42,32 @@
  const angelNames={blond_angel:'Cal',brown_angel:'Coco',purple_angel:'Violet',school_girl:'Bella',school_boy:'Leo',jack_angel:'Jack'};
  C.catalog.forEach(c=>{if(c.kind==='baby'&&angelNames[c.id])c.name=angelNames[c.id];});
  migrate();
- async function getFrames(){if(framesPromise)return framesPromise;framesPromise=new Promise((resolve,reject)=>{
-  const img=new Image();img.onload=async()=>{try{
-   const w=img.naturalWidth/3,h=img.naturalHeight/2;
-   if(w!==543||h!==724)throw new Error('Unexpected Jack sprite size');
-   const all=[];
-   for(let i=0;i<6;i++){
-    const c=document.createElement('canvas');c.width=w;c.height=h;
-    c.getContext('2d').drawImage(img,(i%3)*w,Math.floor(i/3)*h,w,h,0,0,w,h);
-    const blob=await new Promise((ok,bad)=>c.toBlob(b=>b?ok(b):bad(Error('Jack frame encode failed')),'image/png'));
-    all.push(URL.createObjectURL(blob));
-    c.width=c.height=0;
-   }
-   resolve(all);
-  }catch(e){reject(e)}};img.onerror=()=>reject(new Error('Jack RGBA sprite failed to load'));img.src=FILE;
- });return framesPromise;}
- function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';delete img.dataset.jackAngel;}}
- async function setIdle(img){css();const token={timer:null};idleByImage.set(img,token);img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v635';img.alt='Jack';img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
-  const all=await getFrames().catch(()=>null);if(idleByImage.get(img)!==token)return;
-  if(!all){img.alt='Jack (image unavailable)';return;}
-  // One understated wing motion every ~7 s; brief blink is independent.
-  const seq=[0,0,0,1,2,1,0,0,0,0,0,0,3,0,0,0,0,0];let i=0;
-  function render(){if(idleByImage.get(img)!==token||!img.isConnected){clearInterval(token.timer);return;}img.src=all[seq[i++%seq.length]];}
-  render();token.timer=setInterval(render,380);
- }
+  const spritePositions=Array.from({length:8},(_,i)=>({x:(i%4)*100/3,y:Math.floor(i/4)*100}));
+  function setFrame(img,index){
+   const pos=spritePositions[index]||spritePositions[0];
+   img.style.backgroundImage=`url("${FILE}")`;
+   img.style.backgroundSize='400% 200%';
+   img.style.backgroundPosition=`${pos.x}% ${pos.y}%`;
+   img.style.backgroundRepeat='no-repeat';
+  }
+  function makeSprite(){
+   const el=document.createElement('div');
+   el.className='jack637-sprite';
+   el.style.cssText='position:absolute;left:12.5%;top:0;width:75%;height:100%;pointer-events:none;';
+   return el;
+  }
+ function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';img.style.backgroundImage='';img.style.backgroundSize='';img.style.backgroundPosition='';img.style.marginLeft='';img.style.width='';img.style.height='';delete img.dataset.jackAngel;}}
+  function setIdle(img){
+   css();const token={timer:null};idleByImage.set(img,token);
+   img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v637';img.alt='Jack';
+   img.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+   img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
+   img.style.width='75%';img.style.height='100%';img.style.marginLeft='12.5%';
+   // No timer or secondary image decode until idle motion is actually needed.
+   const seq=[0,0,0,1,2,1,0,0,0,0,0,0,3,0,0,0,0,0];let i=0,last=-1;
+   function render(){if(idleByImage.get(img)!==token||!img.isConnected){clearInterval(token.timer);return;}const frame=seq[i++%seq.length];if(frame!==last){setFrame(img,frame);last=frame;}}
+   setFrame(img,0);last=0;token.timer=setInterval(render,380);
+  }
  C.setImage=function(img,id,action='idle'){if(!img)return;if(img.dataset.jackAngel==='1')clearIdle(img);if(id!==ID)return baseSet(img,id,action);return setIdle(img);};
  const pause=t=>new Promise(r=>setTimeout(r,t));
  function bounds(n,stage){const a=n.getBoundingClientRect(),s=stage.getBoundingClientRect(),ratio=s.width/(stage.offsetWidth||s.width)||1;return{x:(a.left-s.left)/ratio,y:(a.top-s.top)/ratio,w:a.width/ratio,h:a.height/ratio};}
@@ -89,30 +91,62 @@
   return Promise.all(timers).then(()=>nodes.forEach(n=>n.remove()));
  }
  async function performHint(source,en,zh){const stage=document.querySelector('#match-game .match-stage');if(!stage||!source?.isConnected||!en?.isConnected||!zh?.isConnected)return;
-  const all=await getFrames().catch(()=>null);if(!all)return;
   // All animation coordinates are in actual stage CSS pixels, not viewport pixels (mobile stage is scaled).
   const start=bounds(source,stage);let tx=0,ty=0;
   const flyer=document.createElement('div');flyer.className='jack633-flyer';Object.assign(flyer.style,{left:start.x+'px',top:start.y+'px',width:start.w+'px',height:start.h+'px'});
-  const sprite=document.createElement('img');sprite.src=all[0];sprite.alt='';flyer.append(sprite);stage.append(flyer);
+  const sprite=makeSprite();setFrame(sprite,0);flyer.append(sprite);stage.append(flyer);
   const oldVisibility=source.style.visibility;source.style.visibility='hidden';
   try{
    for(let index=0;index<2;index++){
     const tile=index===0?en:zh;if(!tile.isConnected)break;const r=bounds(tile,stage);
     const target={x:r.x+r.w/2,y:r.y+r.h/2};
-    // Frame 5 is the right-facing turn; frame 6 is the extended spell staff.
+    // Frame 7 turns towards the word; frame 8 taps it with the wand.
     // Wand tip near 88% of artwork width and 24% of artwork height; land left of tile to keep text visible.
     const destX=target.x-start.w*.84-start.x,destY=target.y-start.h*.26-start.y;
-    sprite.src=all[4];
+    setFrame(sprite,6);
     await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:`translate(${destX}px,${destY}px) scale(1)`}],index===0?560:440,'cubic-bezier(.3,.75,.25,1)');
-    tx=destX;ty=destY;sprite.src=all[5];
+    tx=destX;ty=destY;setFrame(sprite,7);
     await pause(70);
     // Effect originates at the wand gem and ends at the word card; one full second for each card.
     const origin={x:start.x+tx+start.w*.88,y:start.y+ty+start.h*.24};
     await makeEffect(stage,origin,target,r);
    }
-   sprite.src=all[4];await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');
+   setFrame(sprite,6);await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');
   }finally{flyer.remove();source.style.visibility=oldVisibility;}
  }
+  async function performCombo(source,bonus){
+   if(comboBusy||hintBusy)return;comboBusy=true;
+   const stage=document.querySelector('#match-game .match-stage');
+   if(!stage||!source?.isConnected){comboBusy=false;return;}
+   const b=bounds(source,stage),board=document.getElementById('board');
+   const point=board?bounds(board,stage):{x:b.x,y:b.y,w:b.w,h:b.h};
+   const target={x:point.x+point.w*.5,y:point.y+point.h*.34};
+   const start={x:b.x+b.w/2,y:b.y+b.h/2};
+   const dx=target.x-start.x,dy=target.y-start.y;
+   const flyer=document.createElement('div');flyer.className='jack633-flyer';
+   Object.assign(flyer.style,{left:b.x+'px',top:b.y+'px',width:b.w+'px',height:b.h+'px'});
+   const sprite=makeSprite();setFrame(sprite,4);flyer.append(sprite);stage.append(flyer);
+   const oldVis=source.style.visibility;source.style.visibility='hidden';
+   try{
+    await motion(flyer,[{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(1.2)`}],550);
+    setFrame(sprite,5);
+    const origin={x:b.x+dx+b.w*.6,y:b.y+dy+b.h*.22};
+    await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
+    if(bonus>=5)await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
+    if(bonus>=10)await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
+    setFrame(sprite,4);
+    await motion(flyer,[{transform:`translate(${dx}px,${dy}px) scale(1.2)`},{transform:'translate(0,0) scale(1)'}],550);
+   }finally{flyer.remove();source.style.visibility=oldVis;comboBusy=false;}
+  }
+  function installReward(){
+   const stage=document.querySelector('#match-game .match-stage');if(!stage||stage.dataset.jack637RewardReady)return;
+   stage.dataset.jack637RewardReady='1';const original=C.reward;
+   C.reward=function(bonus){
+    const jack=stage.querySelector('.game-companions .slot-0[data-character="'+ID+'"]:not([hidden])');
+    if(jack&&[3,5,10].includes(Number(bonus))){void performCombo(jack,Number(bonus));return;}
+    return original?.call(C,bonus);
+   };
+  }
  function installHint(){const hint=document.getElementById('hint'),stage=document.querySelector('#match-game .match-stage');if(!hint||!stage||hint.dataset.jack633Ready)return;
   const original=hint.onclick;if(typeof original!=='function')return;
   hint.dataset.jack633Ready='1';
@@ -136,6 +170,6 @@
   };
  }
  css();
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installHint,0),{once:true});
- else setTimeout(installHint,0);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>{installHint();installReward();},0),{once:true});
+ else setTimeout(()=>{installHint();installReward();},0);
 })();
