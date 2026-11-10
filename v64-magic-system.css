@@ -1,0 +1,78 @@
+/* V64: all skill labels/visual effects have at least 2000 ms fully visible hold. */
+.v64-skill{position:absolute;top:24%;left:50%;transform:translateX(-50%);z-index:180;pointer-events:none;white-space:nowrap;color:#fff7cf;text-align:center;font:bold clamp(16px,4.8cqw,28px)/1.2 Georgia,serif;letter-spacing:.05em;text-shadow:0 2px 3px #74409a,0 0 9px #e5ad4c,0 0 19px #fff;animation:v64-hold 2600ms both}
+.v64-spark{position:absolute;left:50%;top:48%;z-index:179;width:clamp(55px,17cqw,130px);height:clamp(55px,17cqw,130px);transform:translate(-50%,-50%);pointer-events:none;border:4px solid #ffe9a3;border-radius:50%;box-shadow:0 0 22px #ffeaa7,0 0 35px #7deeff,inset 0 0 24px #a5eaff;animation:v64-hold 2600ms both}
+@keyframes v64-hold{0%,4%{opacity:0}10%,88%{opacity:1}100%{opacity:0}}
+.v64-wand-lift{animation:v64-lift 2700ms ease-in-out both!important}
+@keyframes v64-lift{0%,100%{transform:translateY(0)}10%,85%{transform:translateY(-12px) rotate(-4deg)} }
+#home-stage .bottom-nav [data-tab="class"]{cursor:pointer}
+#home-stage .bottom-nav [data-tab="class"] .v48-nav-en{font-family:Georgia,serif}
+#home-stage #home-companions .wm-companion[data-character="magic_egg"] img,#match-game .game-companions .wm-companion[data-character="magic_egg"] img{width:100%;height:100%;object-fit:contain;cursor:pointer}
+#match-game .game-companions .wm-companion[data-character="magic_egg"]{cursor:pointer;pointer-events:auto}
+.v64-classroom-body{margin:0;min-height:100dvh;background:#e5d9f4;color:#604178;font-family:Georgia,'PingFang SC',serif}
+#classroom-stage{position:relative;min-height:100dvh;max-width:540px;margin:0 auto;overflow:hidden;isolation:isolate;background-image:url('v39-scene-forest-stairs.webp');background-size:cover;background-position:center}
+#classroom-stage:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#29143b1c,#fff0 45%,#2c153e39);pointer-events:none}
+.v64-class-title{position:relative;z-index:2;text-align:center;padding:calc(env(safe-area-inset-top) + 8vh) 5% 0}
+.v64-class-title h1{font-size:clamp(27px,7vw,42px);color:#fff4ce;text-shadow:0 3px 3px #5a3b76,0 0 15px #efcb8c;margin:0}
+.v64-class-actors{position:relative;height:38vh;min-height:215px;margin:1vh 8% 0;z-index:3}
+.v64-class-angel{position:absolute;left:17%;top:0;width:64%;height:74%;animation:v64-hover 5s ease-in-out infinite}
+.v64-class-angel img{width:100%;height:100%;object-fit:contain}
+.v64-class-pet{position:absolute;left:36%;bottom:0;width:30%;height:32%;cursor:pointer;animation:v64-egg 5s ease-in-out infinite}
+.v64-class-pet img{width:100%;height:100%;object-fit:contain}
+@keyframes v64-hover{50%{translate:0 -7px}}
+@keyframes v64-egg{50%{rotate:3deg}}
+.v64-class-angel.v64-talking img{animation:v64-speaking 1.9s ease-in-out infinite}
+@keyframes v64-speaking{0%,100%{transform:scaleY(1)}40%{transform:scaleY(.986)}}
+.v64-class-panel{position:relative;z-index:3;margin:0 8% 115px;padding:16px;border:2px solid #f8e6bd;background:#fffaf1e8;border-radius:22px;text-align:center;box-shadow:0 4px 15px #50337034}
+#v64-class-speak{display:flex;gap:12px;align-items:center;justify-content:center;width:100%;padding:11px;border:1px solid #ddb995;border-radius:15px;background:#fff9ec;color:#68458b;font:600 16px Georgia,serif;cursor:pointer}
+.v64-class-stats{display:flex;justify-content:space-between;align-items:center;padding:20px 8px 6px;font-size:18px}.v64-class-stats strong{font-size:32px;color:#bf8a2e}
+#v64-class-note{font-size:14px;color:#8b6b8d}
+#v64-class-effects{position:absolute;inset:0;pointer-events:none;z-index:15}
+.v64-class-nav{position:fixed;left:50%;bottom:max(5px,env(safe-area-inset-bottom));width:min(calc(100vw - 16px),540px);transform:translateX(-50%);display:grid;grid-template-columns:repeat(4,1fr);height:65px;z-index:80;background:#fff8efbe;backdrop-filter:blur(9px);border-radius:17px}
+.v64-class-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;color:#487b94;font:600 14px Georgia,serif}.v64-class-nav a span{font-size:25px}.v64-class-nav [aria-current]{color:#ab6c9e;text-shadow:0 0 5px #fff}
+
+.v64-class-courses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}
+.v64-class-courses a{padding:10px 4px;border:1px solid #d4b9dd;border-radius:12px;background:#fffcf3e6;color:#704b89;text-decoration:none;font:600 12px Georgia,serif}
+.v64-class-courses a:focus-visible{outline:2px solid #8a59ad}
+
+/* V64.1: scene-linked color system, consistent with original V62 theme variables. */
+#classroom-stage{--v62-edge:#d9a7e9;--v62-deep:#8a61ac;--v62-light:#fff5fb;color:var(--v62-deep)}
+#classroom-stage .v64-class-panel{border-color:var(--v62-edge);background:color-mix(in srgb,var(--v62-light) 87%,transparent)}
+#classroom-stage :is(#v64-class-speak,#v64-class-mic,#v64-class-submit,.v64-class-actions button,.v64-class-courses a){border:2px solid var(--v62-edge);color:var(--v62-deep);background:color-mix(in srgb,var(--v62-light) 92%,white)}
+#classroom-stage :is(.v64-class-stats,.v64-class-stats strong,.v64-grammar strong,#v64-class-note){color:var(--v62-deep)}
+#classroom-stage .v64-lesson,#classroom-stage .v64-grammar,#classroom-stage #v64-class-input{border:2px solid var(--v62-edge);background:color-mix(in srgb,var(--v62-light) 85%,white);color:var(--v62-deep)}
+#classroom-stage .v64-class-nav{background:transparent;backdrop-filter:none;border:0;box-shadow:none}
+#classroom-stage .v64-class-nav a{color:var(--v62-deep)}
+#classroom-stage .v64-class-nav [aria-current]{color:var(--v62-deep);filter:drop-shadow(0 0 5px var(--v62-edge))}
+#classroom-stage .v64-lesson{padding:12px;margin-top:12px;border-radius:15px;text-align:left}
+#classroom-stage .v64-lesson-count{display:flex;justify-content:space-between;font-size:12px;gap:10px;opacity:.8}
+#classroom-stage #v64-class-sentence{font:650 clamp(17px,4.7vw,24px)/1.45 Georgia,serif;overflow-wrap:anywhere}
+#classroom-stage #v64-class-translation{font-size:13px;line-height:1.6;opacity:.85}
+#classroom-stage .v64-grammar{margin:12px 0;border-radius:12px;padding:10px;font:13px/1.55 sans-serif}
+#classroom-stage .v64-grammar span{display:block;font-weight:600;margin:5px 0}
+#classroom-stage .v64-grammar p{white-space:pre-line;margin:7px 0 0}
+#classroom-stage .v64-practice{text-align:center;margin:14px 0 0}
+#classroom-stage .v64-practice[hidden]{display:none!important}
+#classroom-stage .v64-practice h2{font:650 clamp(16px,4vw,21px)/1.3 Georgia,serif;margin:8px 0 3px}
+#classroom-stage .v64-practice p{font-size:13px;margin:4px 0 10px}
+#classroom-stage #v64-class-mic{display:block;min-height:47px;width:100%;border-radius:14px;font:600 16px Georgia,serif}
+#classroom-stage #v64-class-mic span{font-size:23px;margin-right:5px}
+#classroom-stage .v64-input-label{display:block;font:12px sans-serif;margin:11px 0 7px;opacity:.8}
+#classroom-stage #v64-class-input{display:block;width:100%;padding:11px;font:16px sans-serif;border-radius:10px;outline-offset:2px}
+#classroom-stage #v64-class-submit{display:block;margin:9px auto 0;padding:9px 24px;border-radius:12px}
+#classroom-stage .v64-class-actions{display:flex;gap:9px;justify-content:space-between;margin-top:15px}
+#classroom-stage .v64-class-actions button{padding:9px 16px;border-radius:12px}
+#classroom-stage .v64-class-panel{margin-bottom:100px}
+#classroom-stage .v64-class-actors{height:min(29vh,250px);min-height:165px}
+#classroom-stage .v64-class-title{padding-top:calc(env(safe-area-inset-top) + 5vh)}
+#classroom-stage .v64-class-nav{bottom:max(5px,env(safe-area-inset-bottom));height:65px}
+#classroom-stage .v64-listening{filter:drop-shadow(0 0 12px var(--v62-edge))}
+@media(max-width:375px){#classroom-stage .v64-class-panel{margin-left:6%;margin-right:6%;padding:10px}}
+
+/* Cal: same transparent character image is shared by Home, Growth and Class; do not touch Jack. */
+#home-stage .wm-companion[data-character="cal_angel"] img,
+#match-game .wm-companion[data-character="cal_angel"] img,
+#classroom-stage .v64-class-angel img[src^="v64-cal-"]{
+  object-fit:contain;filter:drop-shadow(0 5px 6px rgba(100,62,124,.16));
+}
+#classroom-stage .v64-class-angel.v64-talking img[src^="v64-cal-"]{animation:v64-cal-talk 1600ms ease-in-out infinite}
+@keyframes v64-cal-talk{0%,100%{transform:scaleY(1)}45%{transform:scaleY(.989)}}
