@@ -1,5 +1,6 @@
-/* V63.7: Jack angel. Eight original transparent frames scaled to 50% resolution. Render via CSS sprite: no canvas, Blob or per-frame image allocations.
+/* V63.10: Jack angel combo fix. Eight original transparent frames scaled to 50% resolution. Render via CSS sprite: no canvas, Blob or per-frame image allocations.
    Hint sequence: English card -> Chinese card, one hint charge, 2 seconds of enlarged magic.
+   Combo sequence now uses a dedicated celebration effect with no hint box/glow rectangle, and raised-wand pose holds for at least 2 seconds.
    V59 retains the authoritative non-Jack animations, game rules and speech. */
 (()=>{'use strict';
  const C=window.WMCompanions;
@@ -9,8 +10,8 @@
  let hintBusy=false,comboBusy=false;
  const idleByImage=new WeakMap();
  const baseSet=C.setImage.bind(C);
- function css(){if(document.getElementById('jack-v637-style'))return;
-  const st=document.createElement('style');st.id='jack-v637-style';st.textContent=`
+ function css(){if(document.getElementById('jack-v6310-style'))return;
+  const st=document.createElement('style');st.id='jack-v6310-style';st.textContent=`
   @keyframes jack633Float{0%,100%{translate:0 0}50%{translate:0 -9px}}
   .jack633-flyer{position:absolute;z-index:90;pointer-events:none;transform-origin:50% 50%;will-change:transform;}
   .jack633-flyer img{display:block;width:100%;height:100%;object-fit:contain;}
@@ -19,6 +20,10 @@
   .jack633-star{height:24px;width:24px;border-radius:50%;background:radial-gradient(circle,#fff 4%,#faffc8 23%,#78deff 43%,#ffdb56 65%,transparent 76%);filter:drop-shadow(0 0 7px #79eeff);}
   .jack633-beam{height:7px;transform-origin:0 50%;border-radius:9px;background:linear-gradient(90deg,#e8ffff,#5edcff,#ffe994);box-shadow:0 0 13px 5px #84eaff,0 0 22px 8px #ffd970;}
   .jack633-glow{border-radius:12px;box-shadow:0 0 0 5px rgba(255,218,79,.95),0 0 25px 10px rgba(80,211,255,.88),inset 0 0 21px 4px rgba(255,229,116,.64);background:rgba(105,220,255,.14);}
+  .jack633-combo-core,.jack633-combo-ring,.jack633-combo-star{position:absolute;pointer-events:none;z-index:91;}
+  .jack633-combo-core{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle,#fff 0%,#fff6b8 18%,#8de9ff 42%,#ffd968 68%,rgba(255,217,104,0) 100%);filter:drop-shadow(0 0 12px #fff1a8) drop-shadow(0 0 18px #6ee8ff);}
+  .jack633-combo-ring{width:106px;height:106px;border-radius:50%;border:4px solid rgba(255,223,106,.95);box-shadow:0 0 18px 4px rgba(255,216,107,.95),0 0 34px 9px rgba(97,226,255,.8), inset 0 0 16px 4px rgba(255,245,182,.7);}
+  .jack633-combo-star{width:18px;height:18px;border-radius:50%;background:radial-gradient(circle,#fff 10%,#fff0a2 28%,#7ce3ff 55%,rgba(124,227,255,0) 76%);filter:drop-shadow(0 0 6px #fff1b3) drop-shadow(0 0 10px #68e5ff);}
   `;document.head.append(st);
  }
  // Once-only migration: replace the invalid previous Jack (and the legacy default Sunny)
@@ -114,6 +119,20 @@
    setFrame(sprite,6);await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');
   }finally{flyer.remove();source.style.visibility=oldVisibility;}
  }
+  function makeComboCelebrate(stage,origin,bonus=3,holdMs=2000){
+   const nodes=[],timers=[];const add=(name,style)=>{const d=document.createElement('div');d.className=name;Object.assign(d.style,style);stage.append(d);nodes.push(d);return d;};
+   const burstCount=bonus>=10?14:bonus>=5?10:8;
+   const core=add('jack633-combo-core',{left:(origin.x-17)+'px',top:(origin.y-17)+'px'});
+   const ring=add('jack633-combo-ring',{left:(origin.x-53)+'px',top:(origin.y-53)+'px'});
+   timers.push(motion(core,[{opacity:0,transform:'scale(.35)'},{opacity:1,transform:'scale(1.2)',offset:.18},{opacity:1,transform:'scale(1)',offset:.75},{opacity:0,transform:'scale(1.35)'}],holdMs,'ease-out'));
+   timers.push(motion(ring,[{opacity:.05,transform:'scale(.35)'},{opacity:1,transform:'scale(1)',offset:.22},{opacity:.95,transform:'scale(1.08)',offset:.72},{opacity:0,transform:'scale(1.55)'}],holdMs,'ease-out'));
+   for(let i=0;i<burstCount;i++){
+    const a=i*Math.PI*2/burstCount,r=28+(i%3)*16,s=add('jack633-combo-star',{left:(origin.x-9)+'px',top:(origin.y-9)+'px'});
+    timers.push(motion(s,[{opacity:0,transform:'translate(0,0) scale(.2)'},{opacity:1,transform:`translate(${Math.cos(a)*r*.55}px,${Math.sin(a)*r*.55}px) scale(1)`,offset:.22},{opacity:1,transform:`translate(${Math.cos(a)*r*.82}px,${Math.sin(a)*r*.82}px) scale(.95)`,offset:.74},{opacity:0,transform:`translate(${Math.cos(a)*r*1.05}px,${Math.sin(a)*r*1.05}px) scale(.25)`}],holdMs,'ease-out'));
+   }
+   return Promise.all(timers).then(()=>nodes.forEach(n=>n.remove()));
+ }
+
   async function performCombo(source,bonus){
    if(comboBusy||hintBusy)return;comboBusy=true;
    const stage=document.querySelector('#match-game .match-stage');
@@ -131,9 +150,10 @@
     await motion(flyer,[{transform:'translate(0,0) scale(1)'},{transform:`translate(${dx}px,${dy}px) scale(1.2)`}],550);
     setFrame(sprite,5);
     const origin={x:b.x+dx+b.w*.6,y:b.y+dy+b.h*.22};
-    await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
-    if(bonus>=5)await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
-    if(bonus>=10)await makeEffect(stage,origin,target,{x:target.x-33,y:target.y-28,w:66,h:56});
+    // Combo celebrations must not reuse the hint's tile-box effect.
+    // Hold the raised-wand pose long enough to be clearly visible.
+    await makeComboCelebrate(stage,origin,bonus,2000);
+    await pause(120);
     setFrame(sprite,4);
     await motion(flyer,[{transform:`translate(${dx}px,${dy}px) scale(1.2)`},{transform:'translate(0,0) scale(1)'}],550);
    }finally{flyer.remove();source.style.visibility=oldVis;comboBusy=false;}
@@ -165,7 +185,7 @@
     const hints=[...document.querySelectorAll('#board .match-tile.hinted')];
     const en=hints.find(n=>n.dataset.lang==='en'),zh=hints.find(n=>n.dataset.lang==='zh');
     if(en&&zh&&jack.isConnected)await performHint(jack,en,zh);
-   }catch(err){console.warn('Jack V63.4 hint sequence',err);}
+   }catch(err){console.warn('Jack V63.10 hint sequence',err);}
    finally{hint.disabled=false;hintBusy=false;}
   };
  }
