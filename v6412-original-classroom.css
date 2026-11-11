@@ -1,0 +1,54 @@
+/* Original classroom layout, palette/scene/character adjustments only; do not replace original wm-game.css. */
+:root{--v6412-edge:#d7a0df;--v6412-deep:#8b5db0;--v6412-light:#fdf0fb;--v6412-bg:url('v41-stairs-forest.png')}
+#root.wm-screen{background:transparent!important}
+/* Critical fix: wm-game.css sets real scenery on .wm-game and removes .wm-screen background. */
+#root .wm-game{background-image:var(--v6412-bg)!important;background-color:#e8d9ee!important;background-position:center top!important;background-size:100% 100%!important;background-repeat:no-repeat!important}
+#root .wm-game .wm-level,#root .wm-game .wm-focus{border-color:var(--v6412-edge)!important;box-shadow:inset 0 2px 3px #fff,0 3px 5px color-mix(in srgb,var(--v6412-deep) 50%,transparent)}
+#root .wm-game .wm-advance-title{border-color:var(--v6412-edge)!important;min-width:0}
+#root .wm-game .wm-advance-title strong{font-size:clamp(12px,3.3vw,19px);white-space:normal;line-height:1.1}
+#root .wm-game .wm-advance-title span[hidden],#root .wm-game .wm-level small[hidden],#root .wm-game .wm-total small[hidden]{display:none!important}
+#root .wm-game .wm-panel,#root .wm-game .wm-input,#root .wm-game .wm-keyboard{border-color:var(--v6412-edge)!important}
+#root .wm-game .wm-total{border-color:var(--v6412-edge)!important;background:linear-gradient(150deg,var(--v6412-edge),var(--v6412-deep))!important}
+#root .wm-game .wm-gloss.wm-back{border-color:var(--v6412-edge)!important}
+#root .wm-game .wm-sentence-replay{z-index:4}
+#root .v6412-voice-name{position:absolute;left:48px;top:10px;font:bold clamp(11px,3vw,17px)/1.2 Georgia,serif;color:var(--v6412-deep);z-index:4;pointer-events:none;white-space:nowrap}
+#root .wm-game [data-mode="sentence"]{display:none!important}
+#root .wm-game .wm-lesson-header{min-height:21px}
+#root .wm-game .wm-tabs{width:100%;justify-content:space-around;gap:6px}
+#root .wm-game .wm-tabs button{white-space:nowrap;font-size:clamp(10px,2.4vw,13px);padding:2px 7px}
+#root .wm-game .wm-tabs [data-mode="repeat"]{min-width:0;flex:1 1 auto}
+#root .wm-game .wm-tasks,#root .wm-game .wm-learning,#root .wm-game .wm-lesson,#root .wm-game .wm-input,#root .wm-game .wm-keyboard{min-width:0}
+/* Enlarge Cal and Jack to 200% OF THE CURRENT CLASSROOM VISUAL, not 200% of the whole panel. */
+#root .wm-learning.v6410-actors{overflow:visible!important;isolation:isolate!important}
+#root .wm-learning.v6410-actors .v6410-left{left:-8%!important;bottom:0!important;width:54%!important;height:200%!important;z-index:1!important;overflow:visible!important}
+#root .wm-learning.v6410-actors .v6410-left img{height:auto!important;max-height:100%!important;width:auto!important;max-width:100%!important;object-fit:contain!important;object-position:center bottom!important;transform:none!important}
+#root .wm-learning.v6410-actors .v6410-right{right:0!important;width:27%!important;height:100%!important}
+#root .wm-learning.v6410-actors .wm-focus{z-index:2!important;position:relative!important}
+#root .wm-learning.v6410-actors .v6410-left.v6412-celebrating img{animation:none!important}
+#root .wm-learning .v6412-class-skill{position:absolute;bottom:104%;left:50%;transform:translateX(-50%);z-index:20;white-space:nowrap;color:#fff7c6;text-shadow:0 2px 3px #77449b,0 0 12px #ffcd71;font:bold 18px Georgia,serif;pointer-events:none}
+#root .wm-learning .v6412-celebration-glow{position:absolute;inset:8%;z-index:15;border-radius:50%;pointer-events:none;box-shadow:0 0 20px 12px #fff2a6,0 0 35px 18px #83e6ff;animation:v6412CelebrateGlow 2.6s ease-in-out both}
+@keyframes v6412CelebrateGlow{0%,100%{opacity:0}12%,88%{opacity:1}}
+/* Reuse the ORIGINAL match bottom navigation's CSS and icons. Avoid covering the keyboard. */
+#v62-game-nav{position:fixed!important;left:2.5%!important;right:2.5%!important;bottom:max(5px,env(safe-area-inset-bottom,0px))!important;width:95%!important;max-width:560px!important;margin:0 auto;z-index:80!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;height:clamp(52px,7dvh,74px)!important;pointer-events:auto!important}
+#v62-game-nav a{display:flex!important;align-items:center;flex-direction:column;justify-content:center;color:var(--v6412-deep)!important;text-decoration:none!important;font-family:Georgia,serif}
+#v62-game-nav .v48-nav-en{font-size:clamp(12px,3.3vw,17px)}
+#v62-game-nav .v48-nav-icon svg{width:clamp(22px,6vw,31px);height:clamp(22px,6vw,31px)}
+#root .wm-game{padding-bottom:calc(74px + env(safe-area-inset-bottom,0px))!important;min-height:100dvh!important}
+/* The original pastel HTML keyboard remains intact, as requested. */
+/* Original focus plaque artwork was baked into the OLD boy/girl image; redraw only that missing plaque in CSS. */
+#root .wm-learning.v6410-actors .wm-focus{
+ position:absolute!important;top:14%!important;left:27%!important;width:46%!important;height:72%!important;
+ min-height:0!important;max-height:none!important;display:flex!important;justify-content:center!important;align-items:center!important;
+ border:3px solid var(--v6412-edge)!important;border-bottom:6px solid var(--v6412-deep)!important;
+ border-radius:48% / 44%!important;background:linear-gradient(150deg,#fffccd 0%,#ffea7c 47%,#ffd145 100%)!important;
+ box-shadow:inset 0 3px 6px #fff,0 3px 10px #ad702466!important;z-index:3!important;
+}
+#root .wm-learning.v6410-actors .wm-focus strong{font-size:clamp(20px,6vw,34px)!important}
+
+#root .wm-game.v6412-teaching .wm-tabs [data-mode="repeat"]{visibility:hidden!important}
+#root .wm-game.v6412-teaching .wm-keyboard{pointer-events:none;opacity:.7}
+#root .wm-game.v6412-explaining .wm-lesson-body{color:var(--v6412-deep)}
+#root .wm-learning .v6412-raised-pose{position:absolute;inset:0;display:grid;place-items:end center;z-index:10;pointer-events:none;animation:v6412Lift 2.7s ease-in-out both}
+#root .wm-learning .v6412-raised-pose>img{width:100%;height:100%;object-fit:contain;object-position:center bottom;display:block}
+#root .wm-learning .v6412-raised-pose .v6412-jack-raised{display:block;position:absolute;left:12.5%;width:75%;height:100%;background:url('jack-angel-frames.png?v=63.7') 33.333% 100% / 400% 200% no-repeat}
+@keyframes v6412Lift{0%,100%{transform:translateY(0) scale(1)}16%,84%{transform:translateY(-9px) scale(1.08)}}

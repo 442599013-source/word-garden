@@ -1,0 +1,17 @@
+/* V64.12: move ONLY the branch and its three attached plaques; do not move the 32-tile board. */
+#match-game .match-stage .v50-branch{top:15.10%!important;height:5.3%!important}
+#match-game .match-stage .level-button,
+#match-game .match-stage .score-label,
+#match-game .match-stage .combo-label{top:19.30%!important;height:5.3%!important}
+/* Home button ends at 15.10%.  Three plaques end at 24.60%. Board begins at 27.90%. */
+#match-game .match-stage .v648-skill-overlay .v648-skill-title{
+ top:24.83%!important;left:50%!important;width:96%!important;transform:translateX(-50%)!important;
+ font:bold clamp(13px,4vw,22px)/1.15 Georgia,serif!important;white-space:nowrap!important;
+ text-align:center!important;letter-spacing:.01em!important;z-index:220!important;
+}
+#match-game .match-stage .v648-skill-overlay{z-index:155!important;overflow:visible!important}
+#match-game .match-stage .v648-skill-overlay .v648-skill-halo{opacity:.67}
+#match-game .jack633-flyer.v644-cal-flyer{z-index:160!important}
+#match-game .jack633-flyer.v644-cal-flyer img{width:100%!important;height:100%!important;object-fit:contain!important;transform:none!important}
+/* The skill strip stays between the hanging plaques and the board. */
+#match-game .v6412-fallback-wand{position:absolute;z-index:162;pointer-events:none;object-fit:contain;filter:drop-shadow(0 0 9px #ffef9c)}
