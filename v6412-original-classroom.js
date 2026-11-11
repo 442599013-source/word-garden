@@ -29,7 +29,34 @@ function labels(){const root=document.querySelector('#root .wm-game');if(!root)r
  const speaker=root.querySelector('.wm-sentence-replay');if(speaker&&!root.querySelector('.v6412-voice-name')){const v=document.createElement('span');v.className='v6412-voice-name';v.textContent='Voice of Blessing';speaker.after(v)}
  const field=root.querySelector('.wm-input');if(field)field.setAttribute('aria-label','Please Read Aloud or Type');
 }
+/* V64.14: single-owned classroom playback; never leave an audio element alive
+   when dictation starts. Home's intro audio is NOT loaded on this page. */
 let callToken=0,reading=false,spokenStep='',known=null,seenComplete='';
+let activeAudio=null,activeVoice=null,activeTimer=null,mouthTimer=null,failedAutoplayStep='';
+function mouth(on){
+ const cal=document.querySelector('.wm-learning .v6410-cal img');
+ if(mouthTimer){clearInterval(mouthTimer);mouthTimer=null;}
+ if(!cal)return;
+ cal.dataset.v6414Talking=on?'1':'0';
+ if(!on){cal.src='v64-cal-01.png';return;}
+ let open=false;
+ cal.src='v64-cal-01.png';
+ mouthTimer=setInterval(()=>{
+  if(!cal.isConnected||cal.dataset.v6414Talking!=='1'){clearInterval(mouthTimer);mouthTimer=null;return;}
+  open=!open;cal.src=open?'v64-cal-06.png':'v64-cal-01.png';
+ },300);
+}
+function endAutoAudio(){
+ ++callToken;clearTimeout(activeTimer);activeTimer=null;
+ try{activeVoice?.stop?.()}catch{}
+ try{activeAudio?.pause?.()}catch{}
+ try{activeAudio?.remove?.()}catch{}
+ activeVoice=activeAudio=null;
+ try{window.speechSynthesis?.cancel?.()}catch{}
+ reading=false;mouth(false);
+ document.querySelector('.wm-game')?.classList.remove('v6412-teaching','v6412-explaining');
+}
+window.addEventListener('pagehide',endAutoAudio);
 function loadKnown(){if(known)return;const key='wm-v6412-known-learning-words';try{known=new Set(JSON.parse(localStorage.getItem(key)||'null'))}catch{}if(!known){let profile={};try{profile=JSON.parse(localStorage.getItem('word-match-home-preview-v1')||'{}')}catch{}known=new Set((profile.learnedWords||[]).map(w=>String(w).toLowerCase()).filter(Boolean));localStorage.setItem(key,JSON.stringify([...known]));}}
 const norm=s=>String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[.,!?;:]/g,'').trim().replace(/\s+/g,' ');
 function currentLesson(model){return (window.WM_GAME_UNITS?.[Math.max(0,Number(model.level||1)-1)]?.lessons||[]).find(w=>String(w.id)===String(model.stepId))||null}
@@ -50,23 +77,86 @@ function newWords(model){loadKnown();const key=model.level+':'+model.stepId;if(s
  try{localStorage.setItem('wm-v6412-known-learning-words',JSON.stringify([...known]))}catch{}
  if(Math.floor(known.size/10)>Math.floor(before/10))raisedWand();
 }
-function autoRead(model){if(!model||model.phase!=='typing'||model.complete)return;const step=model.level+':'+model.stepId;if(step===spokenStep)return;spokenStep=step;
- const w=currentLesson(model);if(!w)return;const token=++callToken;
- // Reuse the ORIGINAL Microsoft voice implementation and sentence/grammar lesson data.
- const el=document.createElement('audio');el.hidden=true;el.playsInline=true;document.body.append(el);
- const Voice=window.WMMicrosoftVoice;let voice=null;try{if(Voice)voice=new Voice(el)}catch{}
- const state=document.querySelector('.wm-game');if(state)state.classList.add('v6412-teaching');
- const say=async(text,locale)=>{if(token!==callToken||!text)return;
-  if(voice?.play){try{await voice.play(text,locale,1);return}catch(err){console.info('Online voice fallback:',err?.message||err)}}
-  if('speechSynthesis' in window){await new Promise(resolve=>{let ended=false;const done=()=>{if(ended)return;ended=true;resolve()};
-    try{let started=false;const u=new SpeechSynthesisUtterance(text);u.lang=locale;u.rate=.88;u.onstart=()=>{started=true};u.onend=done;u.onerror=done;
-      speechSynthesis.speak(u);setTimeout(()=>{if(!started)done()},1400);setTimeout(done,20000)}catch{done()}})}
+function autoRead(model,{gesture=false}={}){
+ if(!model||model.phase!=='typing'||model.complete)return;
+ const step=model.level+':'+model.stepId;
+ if(step===spokenStep&&!gesture)return;
+ if(gesture&&step!==failedAutoplayStep&&step===spokenStep)return;
+ endAutoAudio();spokenStep=step;failedAutoplayStep='';
+ const w=currentLesson(model);if(!w)return;
+ const token=callToken;
+ const player=document.createElement('audio');player.hidden=true;player.playsInline=true;player.preload='auto';document.body.append(player);
+ activeAudio=player;
+ try{activeVoice=window.WMMicrosoftVoice?new window.WMMicrosoftVoice(player):null}catch{}
+ const voice=activeVoice;
+ const stage=document.querySelector('.wm-game');stage?.classList.add('v6412-teaching');
+ // Return false if iOS disallows autoplay; do not silently run grammar afterwards.
+ const say=async(text,locale)=>{
+   if(token!==callToken||!text)return false;
+   let started=false;
+   try{
+    if(voice){await voice.play(text,locale,1,()=>{if(token!==callToken)return;started=true;mouth(true)});
+      mouth(false);return token===callToken;}
+   }catch(err){if(token!==callToken)return false;console.info('Classroom voice retry:',err?.message||err)}
+   if(!('speechSynthesis' in window))return false;
+   return await new Promise(resolve=>{
+    let done=false,startGuard,finishGuard;
+    const complete=ok=>{if(done)return;done=true;clearTimeout(startGuard);clearTimeout(finishGuard);mouth(false);resolve(ok&&token===callToken)};
+    try{
+      const u=new SpeechSynthesisUtterance(text);u.lang=locale;u.rate=.9;
+      u.onstart=()=>{if(token!==callToken){complete(false);return}started=true;mouth(true)};
+      u.onend=()=>complete(started);u.onerror=()=>complete(false);
+      window.speechSynthesis.speak(u);
+      startGuard=setTimeout(()=>{if(!started)complete(false)},2200);
+      finishGuard=setTimeout(()=>complete(false),Math.max(12000,text.length*500));
+    }catch{complete(false)}
+   });
  };
- const run=async()=>{reading=true;try{await say(w.en,'en-GB');if(token===callToken){document.querySelector('.wm-game')?.classList.add('v6412-explaining');await say(w.grammar,'zh-CN')}}catch(e){console.info('Classroom autoplay unavailable:',e?.message||e)}finally{voice?.stop?.();el.remove();if(token===callToken){reading=false;state?.classList.remove('v6412-teaching','v6412-explaining');labels()}}};
- setTimeout(run,250);
+ const run=async()=>{
+  if(token!==callToken)return;
+  reading=true;
+  try{
+   const english=await say(w.en,'en-GB');
+   if(token!==callToken)return;
+   if(!english){failedAutoplayStep=step;return;}
+   stage?.classList.add('v6412-explaining');
+   await say(w.grammar,'zh-CN');
+  }finally{
+   // Do not clear a newer playback created by rapid navigation or a mic tap.
+   if(token===callToken){
+    try{voice?.stop?.()}catch{}player.remove();activeVoice=activeAudio=null;
+    reading=false;mouth(false);
+    stage?.classList.remove('v6412-teaching','v6412-explaining');
+    labels();
+   }
+  }
+ };
+ // On a deliberate tap, do not defer playback and lose the user activation.
+ if(gesture)void run();else activeTimer=setTimeout(run,150);
 }
 function installOriginalFlow(){const C=window.WordMatchComponents;if(!C||C.__v6412Enhanced)return;C.__v6412Enhanced=true;const base=C.mountGame;
  C.mountGame=function(root,opts){let wrapped=null;let lastPhase='';const appCallbacks={...opts};
+ // IMPORTANT: both the on-screen microphone and the Read Aloud tab enter through
+ // different original callbacks. Stop AND remove automatic lesson audio first.
+ appCallbacks.onMic=(...args)=>{endAutoAudio();return opts.onMic?.(...args)};
+ appCallbacks.onMode=(mode,...args)=>{
+   if(mode==='repeat')endAutoAudio();
+   else endAutoAudio();
+   return opts.onMode?.(mode,...args);
+ };
+ appCallbacks.onSentenceReplay=(...args)=>{
+   if(failedAutoplayStep&&wrapped?._v6412Model?.phase==='typing'){
+     const m=wrapped._v6412Model;
+     // Speaker click supplies the user gesture needed by iOS autoplay policy.
+     autoRead(m,{gesture:true});return;
+   }
+   endAutoAudio();return opts.onSentenceReplay?.(...args);
+ };
+ appCallbacks.onReplay=(...args)=>{endAutoAudio();return opts.onReplay?.(...args)};
+ appCallbacks.onBack=(...args)=>{endAutoAudio();return opts.onBack?.(...args)};
+ appCallbacks.onNext=(...args)=>{endAutoAudio();return opts.onNext?.(...args)};
+ appCallbacks.onKey=(...args)=>{endAutoAudio();return opts.onKey?.(...args)};
+ appCallbacks.onNativeInput=(...args)=>{endAutoAudio();return opts.onNativeInput?.(...args)};
  // Original completion logic is two-stage. A SINGLE correct answer should be enough:
  // when it enters its internal 'learning' phase, finish the same answer in the original engine.
  const finish=()=>{const m=wrapped?._v6412Model;if(!m||m.phase!=='learning')return;const w=currentLesson(m);if(!w)return;const answer=w.answer||w.en;
@@ -74,8 +164,8 @@ function installOriginalFlow(){const C=window.WordMatchComponents;if(!C||C.__v64
  const view=base.call(this,root,appCallbacks);
  wrapped={_v6412Model:opts.model};const origUpdate=view.update;
  view.update=function(m){wrapped._v6412Model=m;const r=origUpdate.call(view,m);labels();theme();nav();
-   if(m.phase==='learning'&&lastPhase!=='learning')finish();
-   if(m.phase==='done'&&lastPhase!=='done')newWords(m);
+   if(m.phase==='learning'&&lastPhase!=='learning'){endAutoAudio();finish();}
+   if(m.phase==='done'&&lastPhase!=='done'){endAutoAudio();newWords(m);}
    if(m.phase==='typing')autoRead(m);
    lastPhase=m.phase;return r;};
  labels();theme();nav();autoRead(opts.model);

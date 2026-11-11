@@ -18,7 +18,10 @@
    if(first==='cal_angel'){
      // Reuse Cal's approved original frames. Idle never includes the turning or talking frame.
      img.src='v64-cal-01.png';let count=0;const timer=setInterval(()=>{
-       if(!img.isConnected){clearInterval(timer);return}count=(count+1)%24;
+       if(!img.isConnected){clearInterval(timer);return}
+       // Classroom audio owns the mouth frames while Cal is speaking.
+       if(img.dataset.v6414Talking==='1')return;
+       count=(count+1)%24;
        img.src=count===8?'v64-cal-02.png':'v64-cal-01.png';
      },850);
    }else{

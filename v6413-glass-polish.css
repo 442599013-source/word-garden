@@ -110,3 +110,14 @@
   pointer-events:none!important;
   z-index:5!important;
 }
+
+/* V64.14: small but visibly legible blessing label above the speaker.
+   No other classroom frames or layout are changed. */
+#root .wm-game .wm-tasks .v6412-voice-name{
+ font:800 11px/1.15 Georgia,'Times New Roman',serif!important;
+ letter-spacing:.015em!important;
+ color:var(--v6412-deep,#63318b)!important;
+ -webkit-text-stroke:.16px currentColor;
+ text-shadow:0 1px 0 #fff,1px 0 0 #fff,-1px 0 0 #fff,0 0 5px rgba(255,255,255,.95)!important;
+ max-width:145px!important;
+}
