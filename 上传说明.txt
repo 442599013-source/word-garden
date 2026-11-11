@@ -1,27 +1,15 @@
-Goldy Magic English / 单词消消乐 — V64.8 合并修复增量包
-版本基准：现有 GitHub main 中已安装的 V64.6 + V64.7，保留原有素材及题库。
+V64.9 — 只改 Class 入口，直接打开原版课堂
+前提：已经上传 V64.8。
+这包只有 4 个游戏文件，上传至 GitHub 仓库 main 根目录并覆盖同名文件：
+index.html
+word-match.html
+v62-brand.js
+v64-magic-system.js
 
-操作：打开 442599013-source/word-garden 仓库 main，把压缩包里的以下 9 个文件上传到【仓库根目录】并覆盖同名文件。无需新建文件夹。压缩包内的说明文件无需上传。
-
-index.html                      覆盖：首页脚本刷新到 V64.8，避免加载旧 JS
-word-match.html                 覆盖：魔法配对脚本刷新到 V64.8
-magic-classroom.html            覆盖：课堂原课程入口及本轮 CSS/JS 加载
-v62-brand.js                    覆盖：统一底部导航与新资源版本号
-v64-magic-system.js             覆盖：角色、技能事件、技能独立显示层、顶部悬挂装饰位置
-v64-magic-system.css            覆盖：Cal 动态待机、角色卡比例、技能显示层、顶部位置
-v64-cal-jack-match.js           覆盖：Cal Hint 使用 Jack 魔法显示样式，不重复技能提示
-v646-classroom-bridge.js        覆盖：原课程和输入组件桥接、原版逐字提示、系统键盘适配
-v646-classroom.css              覆盖：课堂原设计比例、场景、人物、输入区、导航样式
-
-不能覆盖/改动：v63-jack-angel.js、jack-angel-frames.png、wm-game-components.js、wm-game-app.js、wm-rs129-*、wm-match-engine.js、wm-match-app.js、原有进度存储。
-原 Cal 01~06 PNG、本版没有重新抠图、改色或压缩，请继续使用已安装的原文件。
-
-重点验收：
-1 首页 First 的 Jack 和 Cal 角色卡尺寸相同，人物保持 5:6 的图片框纵横比；Second 金蛋默认解锁。
-2 Magic Match 顶部树枝、Level/Score/Combo 悬挂框上移；棋盘不移。
-3 Cal 待机扇翅和浮动，Hint 指词不能挡单词；Jack 自身原动画不改。
-4 Golden Radiance、Light of Wisdom、Guardian Halo、Magic Awakening 恢复独立文字及魔法光效，每次完整显示至少2.85秒；课堂喇叭旁固定 Voice of Blessing。
-5 魔法课堂同步首页场景、人物不拉伸、输入使用原控件逐字变色；系统键盘弹出时保持提示和输入框可见。
-6 Magic Classroom 与 Magic Match 共用 #v62-game-nav 样式。
-
-检验：JavaScript node --check 通过，CSS 解析器无顶层语法错误，网页结构及打包文件校验通过。未在 iPhone Safari 真机上完成交互与布局验收；请上传后截图复核。建议上传后在 Safari 重新载入页面，必要时关闭旧标签页重新打开，以清理缓存。
+新首页底部 Class：点击后跳转 sentence-game.html。
+魔法配对底部 Class：点击后跳转 sentence-game.html。
+旧首页的“晋级之旅”原课堂文件 sentence-game.html 原封不动，未修改。
+没有修改课堂布局、背景、人物、题库、进度、魔法特效或其他页面。
+入口加载的版本参数升级为 64.9 以减少浏览器旧资源缓存。
+测试：JS 语法检查、静态链接检查、ZIP 校验通过；手机端还未实测。
+注意：原版课堂自己的顶部文字和旧版学习界面将如实出现，这是本轮特意恢复的原入口，不是此次改版的其他功能。

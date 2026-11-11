@@ -87,7 +87,7 @@ function setupEgg(){if(!C)return;if(!C.catalog.some(c=>c.id===EGG))C.catalog.pus
 const icons={home:'⌂',growth:'♧',class:'▦',me:'♙'};
 function homeNav(){const nav=document.querySelector('#home-stage .bottom-nav');if(!nav||nav.dataset.v64)return;nav.dataset.v64='1';const third=nav.children[2];if(!third)return;third.dataset.tab='class';third.removeAttribute('aria-current');third.setAttribute('aria-label','Class 课堂');const en=third.querySelector('.v48-nav-en'),zh=third.querySelector('.v48-nav-zh');if(en)en.textContent='Class';if(zh)zh.textContent='课堂';
  // v47 handler intercepts this button on capture. Intercept earlier, and navigate only this control.
- nav.addEventListener('click',e=>{if(e.target.closest('[data-tab="class"]')){e.stopImmediatePropagation();e.preventDefault();location.href='magic-classroom.html'}},true);
+ nav.addEventListener('click',e=>{if(e.target.closest('[data-tab="class"]')){e.stopImmediatePropagation();e.preventDefault();location.href='sentence-game.html'}},true);
 }
 // Independent, non-clipped magic overlay. Each skill remains fully visible > 2s.
 let effectTail=0;
