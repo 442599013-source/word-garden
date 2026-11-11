@@ -1,0 +1,112 @@
+/* V64.13 — ONLY the 5 existing glass plaques, tiny voice label, and the ONE homepage egg position.
+   Loaded after V64.12 and V64.10; preserves the two large teaching panels and all JS. */
+
+/* Home: the existing animated v48-egg was covered by the stats panel at 79.3%.
+   Move it up on the stairs so its full height ends before that panel.
+   Do not create or reposition any duplicate egg. */
+#home-stage .v48-world .v48-egg,
+#home-stage .v48-egg {
+  top:72.0%!important;
+  left:50%!important;
+  width:17%!important;
+  height:7.0%!important;
+  z-index:5!important;
+}
+
+/* Shared glass palette: existing v6412 JS sets --v6412-edge/deep/light
+   on every scene change (forest, coast, blossom). No fixed purple or yellow fill. */
+#root .wm-game{
+  --v6413-glass-bg:linear-gradient(147deg,
+     rgba(255,255,255,.84) 0%,
+     color-mix(in srgb,var(--v6412-light,#fff5fc) 54%,transparent) 49%,
+     rgba(255,255,255,.56) 100%);
+  --v6413-glass-edge:linear-gradient(128deg,
+     rgba(255,255,255,.98) 0%,
+     color-mix(in srgb,var(--v6412-edge,#d7a0df) 72%,white) 21%,
+     rgba(255,255,255,.97) 42%,
+     color-mix(in srgb,var(--v6412-edge,#d7a0df) 78%,white) 73%,
+     rgba(255,255,255,.98) 100%);
+  --v6413-glass-shadow:
+    inset 0 2px 3px rgba(255,255,255,.97),
+    inset 0 -2px 4px rgba(255,255,255,.33),
+    0 3px 9px color-mix(in srgb,var(--v6412-deep,#8b5db0) 22%,transparent),
+    0 0 10px color-mix(in srgb,var(--v6412-edge,#d7a0df) 22%,transparent);
+}
+
+/* Exactly these four HEADER plaques: back, Level, Magic Classroom, Words Cleared.
+   Keep all existing sizes, positions, wording and buttons. */
+#root .wm-game .wm-header .wm-gloss.wm-back,
+#root .wm-game .wm-header .wm-level,
+#root .wm-game .wm-header .wm-advance-title,
+#root .wm-game .wm-header .wm-gloss.wm-total {
+  border:2px solid transparent!important;
+  background:var(--v6413-glass-bg) padding-box,
+             var(--v6413-glass-edge) border-box!important;
+  box-shadow:var(--v6413-glass-shadow)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(1.16);
+  backdrop-filter:blur(10px) saturate(1.16);
+  color:var(--v6412-deep,#8b5db0)!important;
+}
+#root .wm-game .wm-header .wm-gloss.wm-back{border-radius:50%!important}
+#root .wm-game .wm-header .wm-level{
+  border-radius:35% 35% 31% 31% / 30% 30% 33% 33%!important;
+}
+#root .wm-game .wm-header .wm-advance-title{
+  border-radius:38% 38% 32% 32% / 25% 25% 21% 21%!important;
+}
+#root .wm-game .wm-header .wm-gloss.wm-total{
+  border-radius:34% 34% 30% 30% / 27% 27% 33% 33%!important;
+}
+#root .wm-game .wm-header .wm-gloss.wm-total strong{
+  color:var(--v6412-deep,#8b5db0)!important;
+  text-shadow:0 1px 1px rgba(255,255,255,.85);
+}
+
+/* The original centered vocabulary card: ~15% smaller, less tall, never obstructs
+   either character. Frosted white (not opaque yellow), one fine shimmering edge. */
+#root .wm-game .wm-learning.v6410-actors .wm-focus {
+  left:30.5%!important;
+  top:20%!important;
+  width:39%!important;
+  height:60%!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:5px 6px!important;
+  border:2px solid transparent!important;
+  border-radius:42% 42% 40% 40% / 47% 47% 45% 45%!important;
+  background:
+    radial-gradient(ellipse at 26% 15%,rgba(255,255,255,.90),transparent 49%) padding-box,
+    var(--v6413-glass-bg) padding-box,
+    var(--v6413-glass-edge) border-box!important;
+  box-shadow:var(--v6413-glass-shadow),
+      0 0 13px color-mix(in srgb,var(--v6412-edge,#d7a0df) 25%,transparent)!important;
+  -webkit-backdrop-filter:blur(10px) saturate(1.14);
+  backdrop-filter:blur(10px) saturate(1.14);
+  color:var(--v6412-deep,#8b5db0)!important;
+  z-index:3!important;
+}
+#root .wm-game .wm-learning.v6410-actors .wm-focus strong{
+  font-size:clamp(18px,5.2vw,29px)!important;
+  color:var(--v6412-deep,#8b5db0)!important;
+}
+#root .wm-game .wm-learning.v6410-actors .wm-focus span{
+  font-size:clamp(11px,3.1vw,16px)!important;
+  color:var(--v6412-deep,#8b5db0)!important;
+}
+
+/* Keep BOTH large panels (.wm-tasks and .wm-lesson) COMPLETELY unchanged.
+   The tiny voice label floats ABOVE the original speaker, not across progress. */
+#root .wm-game .wm-tasks .v6412-voice-name{
+  position:absolute!important;
+  left:8px!important;
+  top:-14px!important;
+  right:auto!important;
+  max-width:110px!important;
+  font:600 9px/1.12 Georgia,'Times New Roman',serif!important;
+  white-space:nowrap!important;
+  letter-spacing:.01em!important;
+  color:var(--v6412-deep,#8b5db0)!important;
+  text-shadow:0 1px 2px rgba(255,255,255,.96)!important;
+  pointer-events:none!important;
+  z-index:5!important;
+}
