@@ -44,7 +44,7 @@ function mouth(on){
  mouthTimer=setInterval(()=>{
   if(!cal.isConnected||cal.dataset.v6414Talking!=='1'){clearInterval(mouthTimer);mouthTimer=null;return;}
   open=!open;cal.src=open?'v64-cal-06.png':'v64-cal-01.png';
- },300);
+ },1300);
 }
 function endAutoAudio(){
  ++callToken;clearTimeout(activeTimer);activeTimer=null;

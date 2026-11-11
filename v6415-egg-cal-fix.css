@@ -1,8 +1,8 @@
 /* V64.15: restore the original kindergarten egg; add a second visual egg at the angel's feet. */
 #home-stage .v48-world .v48-egg,
 #home-stage .v48-egg {
-  top:58.1%!important;
-  left:5.1%!important;
+  top:43.0%!important;
+  left:14.0%!important;
   width:18.5%!important;
   height:9.3%!important;
   z-index:5!important;
@@ -26,3 +26,5 @@
   object-fit:contain!important;
   display:block!important;
 }
+
+/* V64.16: this is the ORIGINAL Kindergarten egg. JS aligns it beside Kindergarten plaque at runtime; angel-foot egg stays as is. */

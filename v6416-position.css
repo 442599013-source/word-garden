@@ -1,0 +1,7 @@
+/* V64.16: precise Cal placement only. The two large panels and vocabulary card are untouched. */
+/* Put Cal's FEET on the top edge of the LOWER pink classroom teaching panel,
+   rather than letting the head/halo cover the English sentence above. */
+#root .wm-game .wm-learning.v6410-actors .v6410-left {
+  bottom:-20%!important;
+}
+/* Do not reposition the right-hand golden egg or Jack as part of this Cal-only fix. */

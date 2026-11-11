@@ -12,6 +12,33 @@
     img.src=EGG_IMAGE;img.alt='';img.draggable=false;
     egg.append(img);world.append(egg);
   }
+  // V64.16: position the ORIGINAL (Kindergarten) egg alongside its actual
+  // Kindergarten sign rather than hardcoding a scene percentage.
+  // The separate v6415-angel-egg remains at the angel's feet.
+  function alignKindergartenEgg(){
+    const world=document.querySelector('#home-stage .v48-world');
+    const plaque=document.querySelector('#home-stage .milestones .kindergarten');
+    const egg=world?.querySelector('.v48-egg');
+    if(!world||!plaque||!egg)return;
+    const w=world.getBoundingClientRect(), p=plaque.getBoundingClientRect();
+    if(!w.width||!p.width)return;
+    const sx=world.offsetWidth/w.width, sy=world.offsetHeight/w.height;
+    const ew=egg.offsetWidth||world.offsetWidth*.185;
+    const eh=egg.offsetHeight||world.offsetHeight*.093;
+    // Left of the Kindergarten plaque, on the SAME stair/row; not down by Cal.
+    const x=Math.max(8,(p.left-w.left)*sx-ew-8);
+    const y=(p.top-w.top)*sy + ((p.height*sy)-eh)/2;
+    if(Number.isFinite(x)&&Number.isFinite(y)){
+      egg.style.setProperty('left',x+'px','important');
+      egg.style.setProperty('top',Math.max(0,y)+'px','important');
+    }
+  }
+  let alignScheduled=false;
+  function queueEggAlignment(){
+    if(alignScheduled)return;
+    alignScheduled=true;
+    requestAnimationFrame(()=>{alignScheduled=false;alignKindergartenEgg()});
+  }
   function cal(){return document.querySelector('#match-game .game-companions .slot-0[data-character="cal_angel"]')}
   let restoreTimer=0, lastHintAt=0;
   function busy(stage){
@@ -50,8 +77,19 @@
     scheduleRepair();
   }
   function init(){addSecondEgg();setupMatch();
+    queueEggAlignment();
+    window.addEventListener('resize',queueEggAlignment);
+    window.addEventListener('pageshow',queueEggAlignment);
+    window.addEventListener('load',queueEggAlignment);
+    if(document.querySelector('#home-stage')){
+      const home=document.querySelector('#home-stage');
+      const observer=new MutationObserver(queueEggAlignment);
+      observer.observe(home,{childList:true,subtree:true});
+      setTimeout(queueEggAlignment,150);
+      setTimeout(queueEggAlignment,900);
+    }
     if(document.querySelector('#home-stage')&&!document.querySelector('.v48-world')){
-      const o=new MutationObserver(()=>{if(document.querySelector('.v48-world')){o.disconnect();addSecondEgg()}});
+      const o=new MutationObserver(()=>{if(document.querySelector('.v48-world')){o.disconnect();addSecondEgg();queueEggAlignment()}});
       o.observe(document.getElementById('home-stage'),{childList:true,subtree:true});
     }
   }
