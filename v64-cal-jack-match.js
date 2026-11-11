@@ -32,12 +32,18 @@ async function point(source,en,zh){
  const oldVis=source.style.visibility;source.style.visibility='hidden';
  try{
   for(let index=0;index<2;index++){
-   const tile=index===0?en:zh;if(!tile.isConnected)break;const r=bounds(tile,stage),target={x:r.x+r.w/2,y:r.y+r.h/2};
-   const destX=target.x-start.w*.84-start.x,destY=target.y-start.h*.26-start.y;
-   // Same paths, duration and enlarged pose for both English and Chinese.
-   await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(${index===0?1:1.2})`},{transform:`translate(${destX}px,${destY}px) scale(1.2)`}],index===0?560:440,'cubic-bezier(.3,.75,.25,1)');tx=destX;ty=destY;
+   const tile=index===0?en:zh;if(!tile.isConnected)break;const r=bounds(tile,stage);
+   // The wand must point to the LOWER-LEFT EDGE, never through the word text.
+   // Frame 04 Cal's gem is physically at roughly 89% x and 32% y of his 900x1080 artwork.
+   // Compute its actual visible position including the 1.2x centered flyer scale.
+   const target={x:r.x+Math.min(6,r.w*.07),y:r.y+r.h*.77};
+   const scale=1.2,wandX=.89,wandY=.32;
+   const tipDX=start.w*(.5+(wandX-.5)*scale),tipDY=start.h*(.5+(wandY-.5)*scale);
+   const destX=target.x-start.x-tipDX,destY=target.y-start.y-tipDY;
+   // Identical Jack magic primitives; Cal-specific art geometry only.
+   await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(${index===0?1:scale})`},{transform:`translate(${destX}px,${destY}px) scale(${scale})`}],index===0?560:440,'cubic-bezier(.3,.75,.25,1)');tx=destX;ty=destY;
    await pause(70);
-   const from={x:start.x+tx+start.w*.88,y:start.y+ty+start.h*.24};
+   const from={x:start.x+tx+tipDX,y:start.y+ty+tipDY};
    await makeEffect(stage,from,target,r);
   }
   await motion(flyer,[{transform:`translate(${tx}px,${ty}px) scale(1.2)`},{transform:'translate(0px,0px) scale(1)'}],590,'cubic-bezier(.34,.1,.3,1)');

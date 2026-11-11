@@ -1,5 +1,0 @@
-V62 增量更新包，基于已安装的 V61.1。
-GitHub 根目录：覆盖 index.html、word-match.html；新增 v62-brand.css、v62-brand.js、goldy-magic-logo.jpeg、goldy-magic-emblem.png。
-共6个实际文件。其他文件不用重传。
-商标使用上传的原始JPEG字节；右上角图形仅从该图裁剪，未重绘。上传的JPEG是RGB格式、不带透明通道；在非白背景上可能见到白底。
-实际Safari页面仍需测试位置、开机动画结束时的展示和底栏切换。

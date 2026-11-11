@@ -23,7 +23,7 @@ function setupCal(){if(!C)return;
     if(!img.isConnected){clearInterval(timer);return}
     if(img.dataset.v64Talking==='1')return;
     tick=(tick+1)%22;
-    img.src=frames[tick===7?1:tick===15?2:0];
+    img.src=frames[tick===7?1:0];
    },900);timers.set(img,timer);
   }else if(action==='cheer_fist'||action==='thumbs_up'){
    img.src=frames[4];setTimeout(()=>{if(img.isConnected&&img.dataset.v64Talking!=='1')img.src=frames[0]},3000);
@@ -96,10 +96,23 @@ function currentCount(){const progress=get('wm-wordmatch-v35',{}),rounds=progres
 function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prototype.__v64Skills)return;const p=Engine.prototype;p.__v64Skills=true;
  const oldQueue=p.queueReview;p.queueReview=function(word){const ans=oldQueue.call(this,word);if(this.data.words[word]){this.s.v64Reviews??={};this.s.v64Reviews[word]=(Number(this.s.v64Reviews[word])||0)+1}return ans};
  const oldHint=p.useHint;p.useHint=function(){const ids=oldHint.call(this);this._v64AutoAwaken=!ids.length;return ids};
- function returnCheck(engine,tiles){const pending=engine.s.v64Reviews||{};const unique=new Set(tiles.filter(t=>t&&pending[t.word]>0).map(t=>t.word));for(const word of unique){delete pending[word];fx('Guardian Halo',primary())}}
+ function returnCheck(engine,tiles){
+  // Engine returning tiles is NOT the skill event: only the real DOM entering the
+  // visible board after the fall animation counts. EN/ZH halves are independent.
+  const words=new Set((tiles||[]).filter(t=>t?.word).map(t=>t.word));
+  if(!words.size)return;
+  setTimeout(()=>{const board=document.getElementById('board');if(!board)return;
+   const pending=engine.s.v64Reviews||{},b=board.getBoundingClientRect();
+   for(const word of words){if(!(pending[word]>0))continue;
+    const tile=[...board.querySelectorAll('.match-tile')].find(n=>n.dataset.word===word&&n.isConnected&&(()=>{
+      const r=n.getBoundingClientRect();return r.width>0&&r.height>0&&r.bottom>b.top+r.height*.5&&r.top<b.bottom-r.height*.5&&r.right>b.left&&r.left<b.right;})());
+    if(tile){delete pending[word];fx('Guardian Halo',primary());}
+   }
+  },850);
+ }
  const oldSelect=p.select;p.select=function(id){const res=oldSelect.call(this,id);if(res.kind==='match'){
   updateWords(currentCount()+1);
-  if(res.bonus)fx('Golden Radiance',primary());
+  if([3,5,10].includes(Number(res.bonus)))fx('Golden Radiance',primary());
   // Identify the first returned half only. Other half never retriggers.
   const returned=(res.newIds||[]).map(i=>this.s.board.find(t=>t.id===i)).filter(Boolean);returnCheck(this,returned);
  }return res};
@@ -108,7 +121,7 @@ function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prot
 function eggInGame(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;const update=()=>{const egg=stage.querySelector('.game-companions .slot-1[data-character="'+EGG+'"]');if(!egg||egg.dataset.v64Click)return;egg.dataset.v64Click='1';egg.setAttribute('role','button');egg.setAttribute('tabindex','0');egg.setAttribute('aria-label','Magic Awakening — New Batch');const trigger=()=>document.getElementById('shuffle')?.click();egg.addEventListener('click',trigger);egg.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();trigger()}})};update();window.addEventListener('wm-companions-change',update);}
 function suppressOldCheer(){const host=document.getElementById('effects');if(!host)return;const css=document.createElement('style');css.textContent='#match-game:has(.game-companions .slot-0[data-character="cal_angel"]) .combo-cheer{visibility:hidden!important}';document.head.append(css);}
 function classroom(){
- const stage=document.getElementById('classroom-stage');if(!stage)return;
+ const stage=document.getElementById('classroom-stage');if(!stage||stage.dataset.v646Original==='1')return;
  const $=id=>document.getElementById(id),actor=$('v64-class-angel');
  const units=window.WMMainLessons?.units||window.WM_GAME_UNITS||[];
  // Keep the original 129 units and ten-step lesson ordering, never re-sort the raw rows.

@@ -1,0 +1,53 @@
+/* V64.6: RESTORE ORIGINAL wm-game.css, not a new page. Only overrides requested
+ * position, system keyboard, theme and decorative overlay from the approved old UI. */
+:root{--v646-edge:#e7aae6;--v646-deep:#995cae}
+body.v646-classroom{margin:0;background:#eec9ea;overflow-x:hidden;color:#5b287b}
+#classroom-stage{--v646-scene:url('v39-scene-forest-stairs.webp');min-height:100dvh;background:var(--v646-scene) center/cover fixed no-repeat;position:relative;isolation:isolate}
+#classroom-stage .wm-screen{background:transparent!important;min-height:100dvh}
+#classroom-stage .wm-screen::before{display:none!important}
+#classroom-stage .wm-content{max-width:560px!important;box-sizing:border-box}
+#classroom-stage .wm-game{height:calc(100dvh - clamp(65px,9dvh,86px) - env(safe-area-inset-bottom,0px));min-height:620px;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:clamp(73px,12dvh,103px) minmax(125px,21dvh) minmax(148px,23dvh) minmax(115px,22dvh) clamp(49px,8dvh,74px);row-gap:clamp(6px,.9dvh,10px);padding-bottom:3px}
+#classroom-stage .wm-header{grid-template-columns:36px minmax(62px,18%) minmax(0,1fr) minmax(76px,22%);gap:6px}
+#classroom-stage .wm-header .wm-back{width:36px;height:39px}
+#classroom-stage .wm-advance-title{display:flex!important;align-items:center!important;justify-content:center!important;overflow:visible!important;min-width:0!important;border-radius:15px!important;border:2px solid #ffdf83!important;background:linear-gradient(158deg,#fffbd9,#ffe59c 45%,#f5b954 97%)!important;box-shadow:inset 0 2px 6px #ffffff,0 3px 0 #d19b4b,0 0 10px #fff2b9!important;position:relative}
+#classroom-stage .wm-advance-title::before,#classroom-stage .wm-advance-title::after{content:'✧';position:absolute;color:#ffcf64;font-size:18px;top:29%;text-shadow:0 0 6px #fff6d5}
+#classroom-stage .wm-advance-title::before{left:4px}#classroom-stage .wm-advance-title::after{right:4px}
+#classroom-stage .wm-advance-title strong{display:block!important;color:#803166!important;font-size:clamp(15px,4.3vw,24px)!important;line-height:1.08!important;text-align:center!important;white-space:nowrap;letter-spacing:-.3px}
+#classroom-stage .wm-level{border:2px solid #ffe69c!important;background:linear-gradient(#fffbd7,#ffdc60)!important;box-shadow:inset 0 2px 5px white,0 3px 0 #cf9d3c,0 0 9px #fff5ce!important;border-radius:19px!important}
+#classroom-stage .wm-total{border:2px solid #f1cbff!important;background:linear-gradient(#df9aff,#973be2 55%,#782cc4)!important;border-radius:21px!important;box-shadow:inset 0 3px 6px #fff8,0 3px 0 #7736a0,0 0 9px #ffffffb0!important}
+#classroom-stage .wm-tasks{position:relative;display:grid;grid-template-rows:22px minmax(0,1fr) 23px;gap:2px;grid-template-columns:minmax(0,1fr);border-radius:29px!important;border:2px solid var(--v646-edge)!important;background:linear-gradient(160deg,#fffef8ed 0%,#e5edffde 48%,#eddef9eb 100%)!important;box-shadow:inset 0 2px 5px #fff,0 3px 0 #c77fd9,0 0 12px #ffffff90!important;padding:9px 13px!important}
+#classroom-stage .wm-tasks .wm-sentence-replay{position:absolute;left:12px;top:13px;z-index:4;background:none!important;border:0!important;box-shadow:none!important;color:#703c90!important;padding:5px}
+#classroom-stage .wm-sentence-replay svg{width:23px;height:23px;stroke-width:1.8}
+#classroom-stage .v646-voice-label{position:absolute;left:46px;top:22px;font:600 clamp(9px,2.6vw,13px) Georgia,serif;color:#794595;z-index:3;white-space:nowrap}
+#classroom-stage .wm-progress{grid-row:1;display:block;align-self:center;text-align:right;padding-right:4%;font-size:clamp(10px,2.8vw,13px)}
+#classroom-stage .wm-word-grid{grid-row:2;display:flex!important;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px!important;overflow:auto!important}
+#classroom-stage .wm-word-tile{display:inline!important;background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;font-size:var(--wm-sentence-size,clamp(20px,5vw,30px))!important;padding:0 2px!important;min-height:0!important;color:#602783;line-height:1.25}
+#classroom-stage .wm-top-translation{grid-row:3;align-self:center;text-align:center;margin:0!important;font-size:clamp(12px,3.4vw,17px)}
+#classroom-stage .wm-learning{position:relative;height:100%;overflow:visible}
+#classroom-stage .wm-original-learning,#classroom-stage .wm-character,#classroom-stage .wm-boy,#classroom-stage .wm-girl{display:none!important}
+#classroom-stage .wm-focus{width:45%!important;height:76%!important;min-height:0!important;max-height:none!important;align-self:center;z-index:4!important;border:3px solid #fff4ae!important;border-radius:45px!important;background:linear-gradient(160deg,#fffbd3,#ffe66e 54%,#fac13d)!important;box-shadow:inset 0 3px 5px white,0 4px 0 #d2a036,0 0 0 2px #eab64d,0 0 14px #fff5a6!important}
+#classroom-stage .wm-focus strong{font-size:clamp(19px,6vw,33px)!important;line-height:1.06}
+#classroom-stage .v646-actor{position:absolute;bottom:0;height:100%;width:31%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none;z-index:2}
+#classroom-stage .v646-angel{left:0}#classroom-stage .v646-egg{right:0}
+#classroom-stage .v646-actor>img{width:100%;height:100%;max-height:100%;object-fit:contain!important;object-position:center bottom!important;filter:drop-shadow(0 3px 4px #fff3c7bb)}
+#classroom-stage .v646-angel[data-character="cal_angel"] img{transform:scale(1.15);transform-origin:bottom center}
+#classroom-stage .wm-lesson{display:flex;flex-direction:column;gap:5px;overflow:auto!important;background:linear-gradient(155deg,#fff9ffe8,#ffe6f3ec 65%,#edcaf5ec)!important;border:2px solid var(--v646-edge)!important;border-radius:27px!important;box-shadow:inset 0 3px 6px #fff,0 4px 0 #c888d2,0 0 15px #fffc!important;padding:10px 13px!important}
+#classroom-stage .wm-lesson-header{display:none!important}
+#classroom-stage .v646-grammar{flex:1 1 auto;min-height:48px;border-radius:17px;background:#fffaffb4;border:1.5px solid #dfb0ed;padding:7px 11px;font:clamp(11px,2.8vw,13px)/1.5 system-ui,sans-serif;color:#705287;overflow:auto}
+#classroom-stage .v646-grammar strong{display:block;font:bold clamp(14px,4vw,19px) Georgia,serif;color:#683187;margin-bottom:3px}
+#classroom-stage .wm-lesson-body{display:none!important}
+#classroom-stage .v646-practice-label{font:600 clamp(12px,3vw,16px) Georgia,serif;margin:3px 0 0;text-align:center;color:#733d91}
+#classroom-stage .wm-input{position:relative!important;display:flex!important;align-items:center!important;gap:7px!important;border:2px solid var(--v646-edge)!important;border-radius:22px!important;background:linear-gradient(#fffaffee,#f7e7faef)!important;box-shadow:inset 0 2px 6px #ffff,0 3px 0 #b975d4,0 0 13px #fffc!important;padding:5px 10px!important;min-height:48px!important;overflow:visible!important}
+#classroom-stage .wm-input .wm-native-input{display:block!important;position:relative!important;opacity:1!important;pointer-events:auto!important;visibility:visible!important;flex:1 1 auto;min-width:0;width:100%!important;height:100%!important;font:clamp(14px,3.7vw,18px) Georgia,serif!important;color:#542779!important;border:none!important;background:transparent!important;box-shadow:none!important;outline:none!important;touch-action:auto!important}
+#classroom-stage .wm-clear{width:26px!important;order:2}
+#classroom-stage .v646-mic{order:3;flex:0 0 35px;border:none;background:transparent;box-shadow:none;color:#8546a8;display:grid;place-items:center;width:35px;height:38px;padding:6px;cursor:pointer}
+#classroom-stage .v646-mic .wm-icon{width:25px;height:25px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#classroom-stage .v646-mic.is-listening{color:#c74474;filter:drop-shadow(0 0 5px #f87fce)}
+#classroom-stage .wm-keyboard{display:none!important}
+#classroom-stage #v62-game-nav{position:fixed!important;bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;left:2.5%!important;right:2.5%!important;width:95%!important;z-index:200!important}
+#classroom-stage~#v62-game-nav{position:fixed!important;bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;left:2.5%!important;right:2.5%!important;width:95%!important;z-index:200!important}
+@media(max-height:700px){#classroom-stage .wm-game{min-height:560px}#classroom-stage .wm-learning{min-height:125px}}
+/* The original source icon is used beside the fixed blessing label, without a badge. */
+#classroom-stage .wm-tasks .v646-voice-label{pointer-events:none}
+#classroom-stage .wm-input .v646-mic:focus-visible{outline:2px solid var(--v646-deep);outline-offset:2px}
+@media(max-width:360px){#classroom-stage .wm-advance-title strong{font-size:13px!important}#classroom-stage .wm-progress{font-size:10px}#classroom-stage .v646-voice-label{font-size:9px}}
