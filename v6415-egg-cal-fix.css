@@ -1,0 +1,28 @@
+/* V64.15: restore the original kindergarten egg; add a second visual egg at the angel's feet. */
+#home-stage .v48-world .v48-egg,
+#home-stage .v48-egg {
+  top:58.1%!important;
+  left:5.1%!important;
+  width:18.5%!important;
+  height:9.3%!important;
+  z-index:5!important;
+}
+#home-stage .v48-world .v6415-angel-egg {
+  position:absolute!important;
+  top:71.0%!important;
+  left:51.5%!important;
+  width:15.5%!important;
+  height:6.8%!important;
+  display:block!important;
+  pointer-events:none!important;
+  z-index:6!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#home-stage .v6415-angel-egg img{
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  display:block!important;
+}
