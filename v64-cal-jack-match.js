@@ -96,7 +96,7 @@ function install(){
   try{
    await prev.call(this,event);cal.hidden=hidden;
    const hinted=[...stage.querySelectorAll('#board .match-tile.hinted')],en=hinted.find(n=>n.dataset.lang==='en'),zh=hinted.find(n=>n.dataset.lang==='zh');
-   if(en&&zh){const host=document.getElementById('effects');if(host){const label=document.createElement('div');label.className='v64-skill';label.textContent='Light of Wisdom';host.append(label);setTimeout(()=>label.remove(),3000)}await point(cal,en,zh)}
+   if(en&&zh){await point(cal,en,zh)}
   }catch(e){console.warn('Cal Jack-matched Hint animation',e)}finally{cal.hidden=hidden;hint.disabled=false;busy=false}
  };
 }

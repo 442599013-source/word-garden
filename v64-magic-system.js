@@ -17,6 +17,7 @@ function setupCal(){if(!C)return;
   img.style.backgroundPosition='';img.style.backgroundSize='';img.style.visibility='visible';
   img.src=frames[0];img.alt='Cal Angel';
   if(action==='idle'){
+   img.style.animation='v648AngelFloat 4.1s ease-in-out infinite';
    // Home + Match idle: slow hover, one gentle wing motion, occasional blink.
    // Never use turning, wand-pointing or talking frames during idle.
    let tick=0;const timer=setInterval(()=>{
@@ -88,14 +89,30 @@ function homeNav(){const nav=document.querySelector('#home-stage .bottom-nav');i
  // v47 handler intercepts this button on capture. Intercept earlier, and navigate only this control.
  nav.addEventListener('click',e=>{if(e.target.closest('[data-tab="class"]')){e.stopImmediatePropagation();e.preventDefault();location.href='magic-classroom.html'}},true);
 }
+// Independent, non-clipped magic overlay. Each skill remains fully visible > 2s.
 let effectTail=0;
-function fx(label,actor){const stage=document.querySelector('#match-game .match-stage,#classroom-stage');if(!stage)return;const until=Math.max(Date.now(),effectTail),delay=until-Date.now();effectTail=until+MIN;setTimeout(()=>{if(!stage.isConnected)return;const host=document.getElementById('v64-class-effects')||document.getElementById('effects')||stage;const text=document.createElement('div');text.className='v64-skill';text.textContent=label;const spark=document.createElement('div');spark.className='v64-spark';host.append(text);if(!document.querySelector('#match-game .game-companions .slot-0[data-character="cal_angel"]'))host.append(spark);if(actor?.isConnected){actor.classList.add('v64-wand-lift');setTimeout(()=>actor.classList.remove('v64-wand-lift'),MIN)}setTimeout(()=>{text.remove();spark.remove()},MIN)},delay)}
+function fx(label,actor){
+ const stage=document.querySelector('#match-game .match-stage,#classroom-stage');if(!stage)return;
+ const start=Math.max(Date.now(),effectTail),delay=start-Date.now();effectTail=start+3000;
+ setTimeout(()=>{
+  if(!stage.isConnected)return;
+  const root=document.createElement('div');root.className='v648-skill-overlay';root.setAttribute('aria-live','polite');
+  const title=document.createElement('div');title.className='v648-skill-title';title.textContent=label;
+  const halo=document.createElement('div');halo.className='v648-skill-halo';
+  const particles=document.createElement('div');particles.className='v648-skill-particles';
+  for(let i=0;i<12;i++){const star=document.createElement('i');star.style.setProperty('--n',i);star.style.left=(50+(i-6)*3)+'%';star.style.top=(48+(i-6)*1.4)+'%';particles.append(star)}
+  root.append(title,halo,particles);stage.append(root);
+  if(actor?.isConnected)actor.classList.add('v648-casting');
+  setTimeout(()=>{root.remove();actor?.classList.remove('v648-casting')},2850);
+ },delay);
+}
+window.WM64Skill={show:fx};
 const primary=()=>document.querySelector('#match-game .game-companions .slot-0');
 function updateWords(count){let data=get('wm-v64-learning',{count:0,lastBlessed:0});data.count=Math.max(Number(data.count)||0,count);set('wm-v64-learning',data);}
 function currentCount(){const progress=get('wm-wordmatch-v35',{}),rounds=progress.rounds||{};const total=Object.values(rounds).reduce((n,r)=>n+(Number.isSafeInteger(r?.pairs)?r.pairs:0),0);return Math.max(total,Number(get('wm-v64-learning',{}).count)||0)}
 function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prototype.__v64Skills)return;const p=Engine.prototype;p.__v64Skills=true;
  const oldQueue=p.queueReview;p.queueReview=function(word){const ans=oldQueue.call(this,word);if(this.data.words[word]){this.s.v64Reviews??={};this.s.v64Reviews[word]=(Number(this.s.v64Reviews[word])||0)+1}return ans};
- const oldHint=p.useHint;p.useHint=function(){const ids=oldHint.call(this);this._v64AutoAwaken=!ids.length;return ids};
+ const oldHint=p.useHint;p.useHint=function(){const ids=oldHint.call(this);this._v64AutoAwaken=!ids.length;if(ids.length)fx('Light of Wisdom',primary());return ids};
  function returnCheck(engine,tiles){
   // Engine returning tiles is NOT the skill event: only the real DOM entering the
   // visible board after the fall animation counts. EN/ZH halves are independent.
@@ -112,7 +129,7 @@ function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prot
  }
  const oldSelect=p.select;p.select=function(id){const res=oldSelect.call(this,id);if(res.kind==='match'){
   updateWords(currentCount()+1);
-  if([3,5,10].includes(Number(res.bonus)))fx('Golden Radiance',primary());
+  if([3,5,0].includes(Number(res.combo)%10))fx('Golden Radiance',primary());
   // Identify the first returned half only. Other half never retriggers.
   const returned=(res.newIds||[]).map(i=>this.s.board.find(t=>t.id===i)).filter(Boolean);returnCheck(this,returned);
  }return res};
@@ -185,6 +202,17 @@ $('v64-lesson-step').textContent='Completed';$('v64-learned-count').textContent=
  window.addEventListener('pagehide',()=>{stopVoice();stopMic();clearInterval(mouthTimer)});
  if(lessons.length)flow();else status('Lesson data could not be loaded. Please refresh.');
 }
-function init(){setupCal();setupEgg();setupSlotRules();homeNav();matchSkills();eggInGame();suppressOldCheer();classroom()}
+// Use the ACTUAL Jack sprite-sheet cell ratio, not Cal's guessed ratio.
+// Jack asset remains untouched: this changes only the display box geometry.
+function preserveJackRatio(){
+ const sprite=new Image();sprite.onload=()=>{
+  if(sprite.naturalWidth>0&&sprite.naturalHeight>0){
+   const w=sprite.naturalWidth/4,h=sprite.naturalHeight/2;
+   document.documentElement.style.setProperty('--v648-jack-aspect',w+' / '+h);
+  }
+ };sprite.src='jack-angel-frames.png?v=63.7';
+}
+function fixUpperHang(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;const branch=stage.querySelector('.v50-branch');if(branch)branch.style.setProperty('top','15.35%','important');for(const sel of ['.level-button','.score-label','.combo-label']){const n=stage.querySelector(sel);if(n)n.style.setProperty('top','19.55%','important')}}
+function init(){preserveJackRatio();fixUpperHang();setupCal();setupEgg();setupSlotRules();homeNav();matchSkills();eggInGame();suppressOldCheer();classroom()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

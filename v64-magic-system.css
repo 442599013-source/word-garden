@@ -1,0 +1,231 @@
+/* V64: all skill labels/visual effects have at least 2000 ms fully visible hold. */
+.v64-skill{position:absolute;top:24%;left:50%;transform:translateX(-50%);z-index:180;pointer-events:none;white-space:nowrap;color:#fff7cf;text-align:center;font:bold clamp(16px,4.8cqw,28px)/1.2 Georgia,serif;letter-spacing:.05em;text-shadow:0 2px 3px #74409a,0 0 9px #e5ad4c,0 0 19px #fff;animation:v64-hold 2600ms both}
+.v64-spark{position:absolute;left:50%;top:48%;z-index:179;width:clamp(55px,17cqw,130px);height:clamp(55px,17cqw,130px);transform:translate(-50%,-50%);pointer-events:none;border:4px solid #ffe9a3;border-radius:50%;box-shadow:0 0 22px #ffeaa7,0 0 35px #7deeff,inset 0 0 24px #a5eaff;animation:v64-hold 2600ms both}
+@keyframes v64-hold{0%,4%{opacity:0}10%,88%{opacity:1}100%{opacity:0}}
+.v64-wand-lift{animation:v64-lift 2700ms ease-in-out both!important}
+@keyframes v64-lift{0%,100%{transform:translateY(0)}10%,85%{transform:translateY(-12px) rotate(-4deg)} }
+#home-stage .bottom-nav [data-tab="class"]{cursor:pointer}
+#home-stage .bottom-nav [data-tab="class"] .v48-nav-en{font-family:Georgia,serif}
+#home-stage #home-companions .wm-companion[data-character="magic_egg"] img,#match-game .game-companions .wm-companion[data-character="magic_egg"] img{width:100%;height:100%;object-fit:contain;cursor:pointer}
+#match-game .game-companions .wm-companion[data-character="magic_egg"]{cursor:pointer;pointer-events:auto}
+.v64-classroom-body{margin:0;min-height:100dvh;background:#e5d9f4;color:#604178;font-family:Georgia,'PingFang SC',serif}
+#classroom-stage{position:relative;min-height:100dvh;max-width:540px;margin:0 auto;overflow:hidden;isolation:isolate;background-image:url('v39-scene-forest-stairs.webp');background-size:cover;background-position:center}
+#classroom-stage:before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,#29143b1c,#fff0 45%,#2c153e39);pointer-events:none}
+.v64-class-title{position:relative;z-index:2;text-align:center;padding:calc(env(safe-area-inset-top) + 8vh) 5% 0}
+.v64-class-title h1{font-size:clamp(27px,7vw,42px);color:#fff4ce;text-shadow:0 3px 3px #5a3b76,0 0 15px #efcb8c;margin:0}
+.v64-class-actors{position:relative;height:38vh;min-height:215px;margin:1vh 8% 0;z-index:3}
+.v64-class-angel{position:absolute;left:17%;top:0;width:64%;height:74%;animation:v64-hover 5s ease-in-out infinite}
+.v64-class-angel img{width:100%;height:100%;object-fit:contain}
+.v64-class-pet{position:absolute;left:36%;bottom:0;width:30%;height:32%;cursor:pointer;animation:v64-egg 5s ease-in-out infinite}
+.v64-class-pet img{width:100%;height:100%;object-fit:contain}
+@keyframes v64-hover{50%{translate:0 -7px}}
+@keyframes v64-egg{50%{rotate:3deg}}
+.v64-class-angel.v64-talking img{animation:v64-speaking 1.9s ease-in-out infinite}
+@keyframes v64-speaking{0%,100%{transform:scaleY(1)}40%{transform:scaleY(.986)}}
+.v64-class-panel{position:relative;z-index:3;margin:0 8% 115px;padding:16px;border:2px solid #f8e6bd;background:#fffaf1e8;border-radius:22px;text-align:center;box-shadow:0 4px 15px #50337034}
+#v64-class-speak{display:flex;gap:12px;align-items:center;justify-content:center;width:100%;padding:11px;border:1px solid #ddb995;border-radius:15px;background:#fff9ec;color:#68458b;font:600 16px Georgia,serif;cursor:pointer}
+.v64-class-stats{display:flex;justify-content:space-between;align-items:center;padding:20px 8px 6px;font-size:18px}.v64-class-stats strong{font-size:32px;color:#bf8a2e}
+#v64-class-note{font-size:14px;color:#8b6b8d}
+#v64-class-effects{position:absolute;inset:0;pointer-events:none;z-index:15}
+.v64-class-nav{position:fixed;left:50%;bottom:max(5px,env(safe-area-inset-bottom));width:min(calc(100vw - 16px),540px);transform:translateX(-50%);display:grid;grid-template-columns:repeat(4,1fr);height:65px;z-index:80;background:#fff8efbe;backdrop-filter:blur(9px);border-radius:17px}
+.v64-class-nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-decoration:none;color:#487b94;font:600 14px Georgia,serif}.v64-class-nav a span{font-size:25px}.v64-class-nav [aria-current]{color:#ab6c9e;text-shadow:0 0 5px #fff}
+
+.v64-class-courses{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:13px}
+.v64-class-courses a{padding:10px 4px;border:1px solid #d4b9dd;border-radius:12px;background:#fffcf3e6;color:#704b89;text-decoration:none;font:600 12px Georgia,serif}
+.v64-class-courses a:focus-visible{outline:2px solid #8a59ad}
+
+/* V64.1: scene-linked color system, consistent with original V62 theme variables. */
+#classroom-stage{--v62-edge:#d9a7e9;--v62-deep:#8a61ac;--v62-light:#fff5fb;color:var(--v62-deep)}
+#classroom-stage .v64-class-panel{border-color:var(--v62-edge);background:color-mix(in srgb,var(--v62-light) 87%,transparent)}
+#classroom-stage :is(#v64-class-speak,#v64-class-mic,#v64-class-submit,.v64-class-actions button,.v64-class-courses a){border:2px solid var(--v62-edge);color:var(--v62-deep);background:color-mix(in srgb,var(--v62-light) 92%,white)}
+#classroom-stage :is(.v64-class-stats,.v64-class-stats strong,.v64-grammar strong,#v64-class-note){color:var(--v62-deep)}
+#classroom-stage .v64-lesson,#classroom-stage .v64-grammar,#classroom-stage #v64-class-input{border:2px solid var(--v62-edge);background:color-mix(in srgb,var(--v62-light) 85%,white);color:var(--v62-deep)}
+#classroom-stage .v64-class-nav{background:transparent;backdrop-filter:none;border:0;box-shadow:none}
+#classroom-stage .v64-class-nav a{color:var(--v62-deep)}
+#classroom-stage .v64-class-nav [aria-current]{color:var(--v62-deep);filter:drop-shadow(0 0 5px var(--v62-edge))}
+#classroom-stage .v64-lesson{padding:12px;margin-top:12px;border-radius:15px;text-align:left}
+#classroom-stage .v64-lesson-count{display:flex;justify-content:space-between;font-size:12px;gap:10px;opacity:.8}
+#classroom-stage #v64-class-sentence{font:650 clamp(17px,4.7vw,24px)/1.45 Georgia,serif;overflow-wrap:anywhere}
+#classroom-stage #v64-class-translation{font-size:13px;line-height:1.6;opacity:.85}
+#classroom-stage .v64-grammar{margin:12px 0;border-radius:12px;padding:10px;font:13px/1.55 sans-serif}
+#classroom-stage .v64-grammar span{display:block;font-weight:600;margin:5px 0}
+#classroom-stage .v64-grammar p{white-space:pre-line;margin:7px 0 0}
+#classroom-stage .v64-practice{text-align:center;margin:14px 0 0}
+#classroom-stage .v64-practice[hidden]{display:none!important}
+#classroom-stage .v64-practice h2{font:650 clamp(16px,4vw,21px)/1.3 Georgia,serif;margin:8px 0 3px}
+#classroom-stage .v64-practice p{font-size:13px;margin:4px 0 10px}
+#classroom-stage #v64-class-mic{display:block;min-height:47px;width:100%;border-radius:14px;font:600 16px Georgia,serif}
+#classroom-stage #v64-class-mic span{font-size:23px;margin-right:5px}
+#classroom-stage .v64-input-label{display:block;font:12px sans-serif;margin:11px 0 7px;opacity:.8}
+#classroom-stage #v64-class-input{display:block;width:100%;padding:11px;font:16px sans-serif;border-radius:10px;outline-offset:2px}
+#classroom-stage #v64-class-submit{display:block;margin:9px auto 0;padding:9px 24px;border-radius:12px}
+#classroom-stage .v64-class-actions{display:flex;gap:9px;justify-content:space-between;margin-top:15px}
+#classroom-stage .v64-class-actions button{padding:9px 16px;border-radius:12px}
+#classroom-stage .v64-class-panel{margin-bottom:100px}
+#classroom-stage .v64-class-actors{height:min(29vh,250px);min-height:165px}
+#classroom-stage .v64-class-title{padding-top:calc(env(safe-area-inset-top) + 5vh)}
+#classroom-stage .v64-class-nav{bottom:max(5px,env(safe-area-inset-bottom));height:65px}
+#classroom-stage .v64-listening{filter:drop-shadow(0 0 12px var(--v62-edge))}
+@media(max-width:375px){#classroom-stage .v64-class-panel{margin-left:6%;margin-right:6%;padding:10px}}
+
+/* Cal: same transparent character image is shared by Home, Growth and Class; do not touch Jack. */
+#home-stage .wm-companion[data-character="cal_angel"] img,
+#match-game .wm-companion[data-character="cal_angel"] img,
+#classroom-stage .v64-class-angel img[src^="v64-cal-"]{
+  object-fit:contain;filter:drop-shadow(0 5px 6px rgba(100,62,124,.16));
+}
+#classroom-stage .v64-class-angel.v64-talking img[src^="v64-cal-"]{animation:v64-cal-talk 1600ms ease-in-out infinite}
+@keyframes v64-cal-talk{0%,100%{transform:scaleY(1)}45%{transform:scaleY(.989)}}
+
+/* V64.4 final: existing classroom composition, but all frames painted in CSS.
+   The selected Home scene is the ONLY background image; no embedded frame artwork. */
+.v64-classroom-body{margin:0!important;padding:0 0 110px!important;background:#e8d9ef}
+#classroom-stage{box-sizing:border-box;min-height:100dvh;width:min(100%,540px);margin:0 auto;padding:0 0 100px;overflow:visible;background-size:cover;background-position:center top;background-attachment:fixed;isolation:isolate}
+#classroom-stage:before{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,#20153b20,#fff0 46%,#20153b24);pointer-events:none}
+#classroom-stage .v64-class-title{position:relative;z-index:2;box-sizing:border-box;display:grid;grid-template-columns:25% 50% 25%;align-items:center;gap:0;padding:calc(env(safe-area-inset-top,0px) + 16px) 3% 0;height:auto;min-height:85px}
+#classroom-stage .v64-class-title h1{font:700 clamp(19px,5.3vw,31px)/1.12 Georgia,serif;color:#fff9cc;text-align:center;margin:0;text-shadow:0 2px 4px #5d3489,0 0 14px #d2aedf}
+#classroom-stage #v64-class-level,#classroom-stage .v64-header-total{border:2px solid var(--v62-edge);border-radius:15px;background:color-mix(in srgb,var(--v62-light) 88%,white);padding:10px 4px;box-shadow:0 4px 14px #44355827;text-align:center;color:var(--v62-deep);font:bold clamp(11px,2.7vw,15px)/1.2 Georgia,serif}
+#classroom-stage .v64-header-total strong{display:block;font-size:clamp(18px,5vw,25px)}
+#classroom-stage .v64-sentence-panel{position:relative;z-index:3;box-sizing:border-box;margin:4.5vh 6% 0;min-height:145px;padding:15px 14px;background:color-mix(in srgb,var(--v62-light) 90%,white);border:2px solid var(--v62-edge);box-shadow:0 6px 19px #48365a3b;border-radius:20px;text-align:center}
+#classroom-stage #v64-class-speak{display:inline-flex;align-items:center;justify-content:center;gap:7px;width:auto;min-height:38px;padding:6px 10px;border:1.5px solid var(--v62-edge);border-radius:12px;font:bold clamp(12px,3.1vw,15px)/1 Georgia,serif;background:color-mix(in srgb,var(--v62-light) 90%,white);color:var(--v62-deep)}
+#classroom-stage #v64-lesson-index{display:block;margin-top:8px;color:var(--v62-deep);font:11px Georgia,serif}
+#classroom-stage #v64-class-sentence{font:bold clamp(17px,4.6vw,23px)/1.4 Georgia,serif;margin:8px 0 4px;color:var(--v62-deep);overflow-wrap:break-word}
+#classroom-stage #v64-class-translation{font:12px/1.35 sans-serif;color:var(--v62-deep);margin:0}
+#classroom-stage .v64-word-row{position:relative;z-index:4;display:grid;grid-template-columns:27% 46% 27%;align-items:end;margin:1vh 2% 0;height:clamp(140px,20vh,220px);gap:0;isolation:isolate}
+#classroom-stage .v64-class-angel,#classroom-stage .v64-class-pet{position:relative;left:auto;top:auto;bottom:auto;width:100%;height:92%;min-height:0;animation:v64-hover 7.5s ease-in-out infinite;transform-origin:center bottom}
+#classroom-stage .v64-class-pet{height:70%;animation:v64-egg 7s ease-in-out infinite;cursor:default}
+#classroom-stage .v64-class-angel img,#classroom-stage .v64-class-pet img{width:100%;height:100%;object-fit:contain;max-width:100%;display:block}
+#classroom-stage .v64-focus-word{align-self:center;z-index:3;width:100%;min-height:85px;box-sizing:border-box;border:2px solid var(--v62-edge);border-radius:18px;background:color-mix(in srgb,var(--v62-light) 89%,white);color:var(--v62-deep);box-shadow:0 7px 16px #4e37612c;padding:10px 5px;overflow-wrap:anywhere;cursor:pointer}
+#classroom-stage .v64-focus-word strong{display:block;font:bold clamp(16px,4vw,22px)/1.1 Georgia,serif}
+#classroom-stage .v64-focus-word span{display:block;font:12px/1.4 sans-serif;margin-top:6px}
+#classroom-stage .v64-class-panel{position:relative;z-index:3;box-sizing:border-box;margin:0 6% 105px;padding:13px 14px;border:2px solid var(--v62-edge);border-radius:19px;background:color-mix(in srgb,var(--v62-light) 89%,white);box-shadow:0 5px 18px #48365a35;text-align:center}
+#classroom-stage .v64-grammar{margin:0;padding:9px 11px;max-height:25vh;overflow-y:auto;text-align:left;border:1.5px solid var(--v62-edge);border-radius:13px;background:color-mix(in srgb,var(--v62-light) 89%,white);font:13px/1.5 sans-serif}
+#classroom-stage .v64-grammar strong{font:bold 16px Georgia,serif;color:var(--v62-deep)}
+#classroom-stage .v64-practice{margin:11px 0 0;padding:8px 0 0}
+#classroom-stage .v64-practice h2{margin:2px 0 2px;font:bold clamp(16px,4vw,20px)/1.3 Georgia,serif;color:var(--v62-deep)}
+#classroom-stage .v64-practice p{margin:4px 0 6px}
+#classroom-stage #v64-class-mic{display:flex;align-items:center;justify-content:center;min-height:43px;width:64px;margin:0 auto;border:2px solid var(--v62-edge);background:var(--v62-light);border-radius:50%;color:var(--v62-deep)}
+#classroom-stage .v64-input-label{display:block;text-align:left;margin:10px 0 5px;font:12px sans-serif}
+#classroom-stage #v64-class-input{box-sizing:border-box;width:100%;border-radius:12px;padding:10px;background:color-mix(in srgb,var(--v62-light) 94%,white);font:16px/1.3 sans-serif}
+#classroom-stage #v64-class-submit{border:2px solid var(--v62-edge);background:var(--v62-light);color:var(--v62-deep);min-height:36px;margin:9px auto 0;border-radius:10px;padding:5px 24px}
+#classroom-stage #v64-class-note{margin:8px 0 5px;font:12px/1.4 sans-serif;color:var(--v62-deep)}
+#classroom-stage .v64-class-actions{margin:8px 0 0;gap:7px;align-items:center;display:flex;justify-content:space-between}
+#classroom-stage .v64-class-actions button{border:1.5px solid var(--v62-edge);border-radius:9px;background:var(--v62-light);color:var(--v62-deep);font:12px Georgia,serif;min-height:35px}
+#classroom-stage #v64-lesson-step{font:12px Georgia,serif;color:var(--v62-deep)}
+/* Use the exact #v62-game-nav markup and v62-brand.css styling shared by Magic Match. */
+#classroom-stage #v62-game-nav{position:fixed!important;z-index:250!important;bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;background:transparent!important}
+@keyframes v64-hover{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes v64-egg{0%,100%{rotate:0deg}50%{rotate:1.6deg}}
+#classroom-stage .v64-class-angel.v64-talking img[src^="v64-cal-"]{animation:none!important;transform:none!important}
+#match-game .game-companions .wm-companion[data-character="cal_angel"] img{transform:scale(1.13);transform-origin:50% 58%;object-fit:contain}
+#match-game .jack633-flyer.v644-cal-flyer img{width:100%;height:100%;object-fit:contain;transform:scale(1.13);transform-origin:50% 58%}
+#home-stage .wm-companion[data-character="cal_angel"] img{object-fit:contain;animation-duration:8s!important}
+#home-stage .v643-list img{width:100%;height:115px;object-fit:contain}
+@media(max-width:360px){#classroom-stage .v64-class-title{min-height:74px}#classroom-stage .v64-word-row{height:18vh}#classroom-stage .v64-class-panel{padding:10px;margin-left:4%;margin-right:4%}}
+
+/* V64.5 companion picker: equal and roomier art cards. No original asset or Jack animation modification. */
+#home-stage ~ .v643-picker .v643-pane, .v643-picker .v643-pane{
+  width:min(98vw,500px)!important;
+  max-width:98vw;
+  padding:clamp(11px,3.1vw,18px)!important;
+  box-sizing:border-box;
+}
+.v643-picker .v643-list{grid-template-columns:repeat(2,minmax(0,1fr));gap:clamp(8px,2.4vw,13px)!important}
+.v643-picker .v643-list>button{
+  width:100%;min-width:0;min-height:clamp(188px,54vw,255px)!important;
+  padding:10px 5px 12px!important;
+  justify-content:flex-end;overflow:visible;
+  box-sizing:border-box;
+}
+.v643-picker .v643-list>button>img{
+  display:block;flex:1 1 auto;align-self:center;
+  width:100%!important;height:clamp(145px,44vw,200px)!important;
+  max-height:200px;max-width:100%;object-fit:contain!important;
+  object-position:center center;min-width:0;
+  transform:none;aspect-ratio:auto!important;
+}
+/* Cal's artwork has a larger transparent margin: scale the image uniformly inside the same frame. */
+.v643-picker .v643-list>button>img[alt="Cal Angel"]{
+  transform:scale(1.18)!important;
+  transform-origin:center center;
+}
+.v643-picker .v643-list>button>img[alt="Jack Angel"]{
+  transform:none!important;
+}
+.v643-picker .v643-list>button>span:not(.v643-locked){
+  flex:0 0 auto;line-height:1.25;min-height:18px;
+  text-align:center;white-space:normal;
+}
+@media(max-width:370px){
+ .v643-picker{padding:5px!important}
+ .v643-picker .v643-pane{width:calc(100vw - 10px)!important;padding:10px!important}
+ .v643-picker .v643-list>button{min-height:196px!important}
+ .v643-picker .v643-list>button>img{height:151px!important}
+}
+
+/* V64.6: Cal and Jack are proportional and similarly sized, without distorting either.
+   The Cal flyer uses its real image dimensions; the moving element itself scales 1.2x. */
+#match-game .jack633-flyer.v644-cal-flyer img{transform:none!important;width:100%!important;height:100%!important;object-fit:contain!important}
+#match-game .game-companions .wm-companion[data-character="cal_angel"] img{object-fit:contain!important;transform:scale(1.17)!important}
+
+/* V64.7 — Magic Match upper hanging decoration.
+   Move the ENTIRE branch + Level/Score/Combo cluster together.
+   Home/title, board and all gameplay areas deliberately stay unchanged. */
+#match-game .match-stage > .v50-branch {
+  top:13.75% !important;
+}
+#match-game .match-stage > .level-button,
+#match-game .match-stage > .score-label,
+#match-game .match-stage > .combo-label {
+  top:17.95% !important;
+}
+
+/* V64.8: final match visual alignment; no changes to Jack's source sprite. */
+@keyframes v648AngelFloat{0%,100%{translate:0 0}50%{translate:0 -7px}}
+#home-stage .wm-companion[data-character="cal_angel"] img,
+#match-game .wm-companion[data-character="cal_angel"] img{
+ object-fit:contain!important;max-width:100%;max-height:100%;transform-origin:50% 50%;
+ animation:v648AngelFloat 4.1s ease-in-out infinite!important;
+}
+#home-stage .wm-companion[data-character="cal_angel"] img,
+#match-game .game-companions .wm-companion[data-character="cal_angel"] img{transform:scale(1.22)!important}
+#match-game .match-stage>.v50-branch{top:15.35%!important}
+#match-game .match-stage>.level-button,#match-game .match-stage>.score-label,
+#match-game .match-stage>.combo-label{top:19.55%!important}
+/* Equal-height first-slot cards without stretching either portrait. */
+.v643-picker{box-sizing:border-box;padding:clamp(5px,1.5vw,12px)!important}
+.v643-picker .v643-pane{width:min(calc(100vw - 12px),440px)!important;max-width:100%;max-height:85dvh;overflow-y:auto!important;padding:clamp(10px,3vw,16px)!important}
+.v643-picker .v643-list{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+.v643-picker .v643-list>button{width:100%;height:clamp(200px,53vw,235px)!important;min-height:0!important;display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:4px;padding:8px 4px!important;overflow:hidden!important}
+.v643-picker .v643-list>button>img{width:100%!important;height:calc(100% - 28px)!important;max-height:none!important;min-height:0;flex:1 1 auto;object-fit:contain!important;object-position:center!important;aspect-ratio:auto!important;transform-origin:50% 50%;}
+.v643-picker .v643-list>button>img[alt="Cal Angel"]{transform:scale(1.13)!important}
+.v643-picker .v643-list>button>img[alt="Jack Angel"]{transform:none!important}
+.v643-picker .v643-list>button>span:not(.v643-locked){font-size:clamp(11px,3vw,13px);height:20px;flex:0 0 20px;line-height:20px}
+/* Skill names and lights in their OWN independent layer, not the game effects box. */
+.v648-skill-overlay{position:absolute;left:0;top:0;width:100%;height:100%;z-index:180;pointer-events:none;isolation:isolate}
+.v648-skill-title{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:95%;text-align:center;color:#fff6c6;font:800 clamp(17px,5.3cqw,29px)/1.25 Georgia,serif;letter-spacing:.02em;text-shadow:0 2px 3px #58277d,0 0 8px #ffd66c,0 0 18px #72e8ff,0 0 24px #fff;white-space:nowrap;z-index:2}
+.v648-skill-halo{position:absolute;left:50%;top:47%;width:clamp(80px,25cqw,136px);aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #fff0a7;border-radius:50%;box-shadow:0 0 14px 6px #ffe88d,0 0 28px 12px #79e6ff,inset 0 0 26px #bff8ff;background:radial-gradient(circle,#fff9b855,transparent 73%);animation:v648Halo 2.85s ease-in-out infinite}
+.v648-skill-particles{position:absolute;inset:0}
+.v648-skill-particles i{position:absolute;width:9px;height:9px;left:calc(50% + (var(--n) - 6)*18px);top:calc(48% + (var(--n) - 6)*8px);border-radius:50%;background:#fff6ac;box-shadow:0 0 9px 4px #ffed8d,0 0 15px 6px #75dbff;animation:v648Twinkle .85s ease-in-out infinite alternate;animation-delay:calc(var(--n)*.07s)}
+@keyframes v648Halo{50%{filter:brightness(1.18);scale:1.07}}
+@keyframes v648Twinkle{to{opacity:.65;scale:.7}}
+.v648-casting{filter:drop-shadow(0 0 12px #ffe39c)}
+
+/* Jack uses a CSS background sprite rather than an ordinary bitmap. Prevent stretching
+   its sprite box by keeping the original character canvas aspect ratio everywhere. */
+#home-stage .wm-companion[data-character="jack_angel"] img,
+#match-game .game-companions .wm-companion[data-character="jack_angel"] img{
+ width:auto!important;height:100%!important;aspect-ratio:5/6!important;
+ max-height:100%;max-width:100%;margin-left:auto!important;margin-right:auto!important;
+ object-fit:contain!important;
+}
+.v643-picker .v643-list>button>img[alt="Jack Angel"],
+.v643-picker .v643-list>button>img[alt="Cal Angel"]{
+ width:auto!important;max-width:100%!important;height:calc(100% - 28px)!important;
+ aspect-ratio:5/6!important;object-fit:contain!important;flex:1 1 auto;
+}
+
+/* Jack frame box follows the real 4 by 2 original sprite cell ratio. */
+#home-stage .wm-companion[data-character="jack_angel"] img,
+#match-game .game-companions .wm-companion[data-character="jack_angel"] img,
+.v643-picker .v643-list>button>img[alt="Jack Angel"]{aspect-ratio:var(--v648-jack-aspect,5/6)!important}

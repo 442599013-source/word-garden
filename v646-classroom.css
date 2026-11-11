@@ -51,3 +51,57 @@ body.v646-classroom{margin:0;background:#eec9ea;overflow-x:hidden;color:#5b287b}
 #classroom-stage .wm-tasks .v646-voice-label{pointer-events:none}
 #classroom-stage .wm-input .v646-mic:focus-visible{outline:2px solid var(--v646-deep);outline-offset:2px}
 @media(max-width:360px){#classroom-stage .wm-advance-title strong{font-size:13px!important}#classroom-stage .wm-progress{font-size:10px}#classroom-stage .v646-voice-label{font-size:9px}}
+
+/* V64.8: ORIGINAL classroom flow and proportion-safe iPhone layout. */
+body.v646-classroom{overflow-x:hidden!important;overflow-y:auto!important}
+#classroom-stage{max-width:min(100%,450px);margin:0 auto;background-image:var(--v646-scene)!important;background-size:cover!important;background-position:center top!important;background-attachment:scroll!important}
+#classroom-stage .wm-screen{min-height:0;background:transparent!important}
+#classroom-stage .wm-content{max-width:450px!important;width:100%;margin:0 auto;box-sizing:border-box;overflow:visible}
+#classroom-stage .wm-game{height:auto!important;min-height:0!important;max-width:100%;grid-template-rows:clamp(70px,10dvh,85px) clamp(112px,18dvh,157px) clamp(105px,18dvh,155px) clamp(110px,16dvh,154px) clamp(47px,6.2dvh,56px)!important;gap:clamp(6px,.85dvh,10px)!important;padding:calc(env(safe-area-inset-top,0px) + 4px) 8px calc(env(safe-area-inset-bottom,0px) + 82px)!important}
+#classroom-stage .wm-header{grid-template-columns:30px 18% minmax(0,1fr) 21%!important;gap:4px!important;overflow:visible}
+#classroom-stage .wm-advance-title{min-width:0!important;max-width:100%;border-radius:46% 46% 40% 40% / 21% 21% 18% 18%!important;padding:5px 0!important;overflow:hidden!important}
+#classroom-stage .wm-advance-title strong{white-space:normal!important;overflow-wrap:normal;font-size:clamp(12px,3.3vw,19px)!important;line-height:1.05!important}
+#classroom-stage .wm-advance-title::before,#classroom-stage .wm-advance-title::after{display:none!important}
+#classroom-stage .wm-total{font-size:clamp(8px,2.4vw,11px);min-width:0!important}
+#classroom-stage .wm-tasks{max-width:100%;min-height:0!important;border-radius:26px!important}
+#classroom-stage .wm-learning{min-height:0!important;overflow:visible!important}
+#classroom-stage .wm-focus{width:44%!important;height:70%!important;max-width:44%!important;min-height:0!important;border-radius:999px!important;padding:6px 3px!important}
+#classroom-stage .wm-focus strong{font-size:clamp(16px,5.3vw,28px)!important}
+#classroom-stage .v646-actor{height:100%!important;width:40%!important;overflow:visible;display:flex;justify-content:center;align-items:flex-end}
+#classroom-stage .v646-angel{left:0!important}
+#classroom-stage .v646-egg{right:0!important;width:29%!important}
+#classroom-stage .v646-actor>img{max-width:100%!important;max-height:100%!important;object-fit:contain!important;object-position:center bottom!important;transform:none!important;animation:none!important}
+#classroom-stage .v646-angel[data-character="cal_angel"] img{width:auto!important;height:100%!important;transform:none!important}
+#classroom-stage .v646-angel[data-character="jack_angel"] img{width:75%!important;height:100%!important;margin-left:0!important;object-fit:contain!important;transform:none!important}
+#classroom-stage .v646-egg>img{width:100%!important;height:100%!important}
+#classroom-stage .wm-lesson{min-height:0!important;overflow:hidden!important;border-radius:25px!important;padding:8px 10px!important;display:flex!important;flex-direction:column!important;gap:4px!important}
+#classroom-stage .v646-grammar{flex:0 1 auto!important;min-height:0!important;max-height:48%!important;overflow:auto!important;border:0!important;background:transparent!important;padding:0 5px!important;border-radius:0!important;color:#77448b}
+#classroom-stage .v646-grammar strong{font-size:clamp(12px,3.3vw,16px)!important;margin-bottom:2px}
+#classroom-stage .v646-practice-label{display:none!important}
+#classroom-stage .wm-lesson-body{display:block!important;flex:1 1 auto;min-height:35px!important;width:100%;overflow:auto;text-align:center;padding:4px 3px!important;color:#72428e}
+#classroom-stage .wm-lesson-body .wm-english{font-size:clamp(12px,3.3vw,17px)!important;line-height:1.35!important;word-break:break-word}
+#classroom-stage .wm-input{min-height:46px!important;max-width:100%!important}
+#classroom-stage .wm-input .wm-native-input{font-size:16px!important;min-width:0!important}
+#classroom-stage .wm-keyboard{display:none!important}
+#classroom-stage .wm-input .v646-mic{flex:0 0 33px!important}
+/* Reuse the EXACT original match nav (#v62-game-nav), no duplicate. */
+body.v646-classroom #v62-game-nav{position:fixed!important;left:2.5%!important;right:2.5%!important;width:95%!important;max-width:none!important;bottom:max(1.1%,env(safe-area-inset-bottom,0px))!important;height:clamp(58px,8.2dvh,78px)!important}
+/* iOS system keyboard: original answer line + original coloured sentence stay visible. */
+#classroom-stage.v648-keyboard-open .wm-learning{visibility:hidden!important}
+#classroom-stage.v648-keyboard-open .wm-lesson{position:fixed!important;left:4%!important;right:4%!important;top:auto!important;bottom:calc(var(--v648-keyboard-bottom,330px) + 67px)!important;height:clamp(76px,15dvh,113px)!important;z-index:501!important;box-shadow:0 4px 22px #3614475e!important;background:#f9e8f8f7!important}
+#classroom-stage.v648-keyboard-open .v646-grammar{display:none!important}
+#classroom-stage.v648-keyboard-open .wm-lesson-body{display:block!important;min-height:55px!important;max-height:100%!important}
+#classroom-stage.v648-keyboard-open .wm-input{position:fixed!important;left:4%!important;right:4%!important;bottom:calc(var(--v648-keyboard-bottom,330px) + 9px)!important;height:49px!important;z-index:503!important;background:#fff7fc!important}
+#classroom-stage.v648-keyboard-open~#v62-game-nav{visibility:hidden!important;pointer-events:none!important}
+@media(max-height:680px){#classroom-stage .wm-game{grid-template-rows:65px 110px 95px 110px 48px!important;gap:5px!important}}
+
+#classroom-stage .v646-angel[data-character="jack_angel"] img{
+ width:auto!important;height:100%!important;aspect-ratio:5/6!important;max-width:100%!important;max-height:100%!important;
+ margin-left:auto!important;margin-right:auto!important;transform:none!important;
+}
+#classroom-stage .v646-angel[data-character="cal_angel"] img{
+ width:auto!important;height:100%!important;aspect-ratio:5/6!important;max-width:100%!important;max-height:100%!important;transform:none!important;
+}
+#classroom-stage .v646-angel.v648-voice-glow img{filter:drop-shadow(0 0 8px #fff2a5) drop-shadow(0 0 15px #c59cfa)!important}
+
+#classroom-stage .v646-angel[data-character="jack_angel"] img{aspect-ratio:var(--v648-jack-aspect,5/6)!important}
