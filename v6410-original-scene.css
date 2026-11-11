@@ -1,0 +1,47 @@
+/* V64.10 — original Level Up Journey untouched except scene and character layers. */
+.wm-screen.v6410-scene{
+  background-color:#f2d8e9;
+  background-image:var(--v6410-scene-image,none)!important;
+  background-position:center center!important;
+  background-repeat:no-repeat!important;
+  background-size:cover!important;
+}
+.wm-screen.v6410-scene::before{
+  background-image:var(--v6410-scene-image,none)!important;
+  background-position:center center!important;
+  background-size:cover!important;
+}
+/* The original learning artwork contains both children; only that image layer is hidden. */
+.wm-learning.v6410-actors .wm-original-learning,
+.wm-learning.v6410-actors .wm-boy,
+.wm-learning.v6410-actors .wm-girl{display:none!important}
+.wm-learning.v6410-actors{isolation:isolate}
+.wm-learning.v6410-actors .v6410-actor{
+  position:absolute;bottom:0;height:100%;width:27%;
+  display:flex;align-items:flex-end;justify-content:center;
+  z-index:1;pointer-events:none;
+}
+.wm-learning.v6410-actors .v6410-left{left:0}
+.wm-learning.v6410-actors .v6410-right{right:0}
+.wm-learning.v6410-actors .v6410-actor img{
+  display:block;position:relative;max-width:100%;max-height:100%;
+  width:auto;height:auto;object-fit:contain;object-position:bottom center;
+  transform:none!important;filter:drop-shadow(0 2px 3px #4b284343);
+}
+.wm-learning.v6410-actors .v6410-jack-sprite{
+  width:100%;height:100%;background-repeat:no-repeat;
+  background-size:400% 200%;background-position:0 0;
+  flex:0 0 auto;align-self:flex-end;transform:none!important;
+}
+.wm-learning.v6410-actors .v6410-egg img{max-height:88%;}
+/* Preserve the original yellow focus card, lesson panel, on-screen keyboard and typography. */
+.wm-learning.v6410-actors .wm-focus{z-index:2}
+@keyframes v6410CalHover{0%,100%{translate:0 0}50%{translate:0 -5px}}
+.wm-learning.v6410-actors .v6410-cal img{animation:v6410CalHover 4.2s ease-in-out infinite}
+/* The existing homepage egg is repositioned; do not create a duplicate. */
+#home-stage .v48-egg{
+  top:77%!important;left:50%!important;
+  width:17%!important;height:7.2%!important;
+  z-index:5!important;pointer-events:none!important;
+}
+#home-stage .v48-egg img{width:100%!important;height:100%!important;object-fit:contain!important}
