@@ -60,3 +60,15 @@ html{background:#efd7bc!important}body{background-color:#efd7bc!important}
 .me-overview .me-home-stats b{color:#356b80!important}
 .me-overview .me-home-stats .v57-progress{width:84%;height:4px;min-height:4px;max-height:4px;overflow:hidden;border-radius:10px;background:color-mix(in srgb,var(--track) 16%,transparent);flex:none}
 .me-overview .me-home-stats .v57-progress-fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--track),color-mix(in srgb,var(--track) 55%,white))}
+
+/* V64.25: approved compact header, egg at feet and aligned data tracks. */
+.top-bar{background:none!important;border:0!important;box-shadow:none!important;padding:0!important;gap:8px}
+.top-bar .me-brand{justify-content:flex-start}.top-bar .top-action{min-width:48px;min-height:50px;max-width:66px;padding:7px 6px;gap:4px;border:1px solid var(--me-edge);border-radius:14px;background:color-mix(in srgb,var(--me-light) 78%,transparent);box-shadow:none}
+.top-bar .top-action .icon{width:18px;height:18px}.top-bar .top-action span{font-size:11px;font-weight:500}.top-bar .top-action small{display:none}
+.me-overview .me-egg{left:50%;right:auto;translate:-50% 0;bottom:30px}
+.me-overview .me-home-stats{margin-top:-18px!important}
+.me-overview .me-home-stats>button{display:grid!important;grid-template-rows:auto minmax(0,1fr) 4px;justify-items:center;align-items:center;align-content:stretch;gap:.6cqw!important}
+.me-overview .me-home-stats .v57-progress{align-self:end;margin:0!important}
+.me-overview .me-home-stats .v57-value{align-self:center}
+.angel-skills .pte-heading strong{font-size:clamp(13px,3.4vw,20px);line-height:1.15}.angel-skills .pte-heading span{min-width:0}
+.skill-domain{font-size:13px;font-weight:600;line-height:1.2}.skill-domain small{display:block;font-size:11px;font-weight:400;margin-top:3px}.skill-words{margin-top:4px}

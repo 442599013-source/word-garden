@@ -28,8 +28,8 @@ const {header} = (()=>{
 
 function header(logged=false){
  return `<header class="top-bar"><div class="brand me-brand"><img src="goldy-magic-logo.png" alt="Goldy Magic English 金耀魔法英语"></div>
- <button class="top-action" type="button" data-route="login">${icon('user')}<span>${logged?'Account':'Log In'}</span><small>${logged?'账户':'登录'}</small></button>
- <button class="top-action" type="button" data-route="settings">${icon('settings')}<span>Settings</span><small>设置</small></button></header>`;
+ <button class="top-action" type="button" data-route="login">${icon('user')}<span>${logged?'Account':'Log In'}</span></button>
+ <button class="top-action" type="button" data-route="settings">${icon('settings')}<span>Settings</span></button></header>`;
 }
 
 return {header};
@@ -74,13 +74,18 @@ return {journeyButton,journeyPage};
 })();
 const {skills,pteSummary} = (()=>{
 
-const skills=[{id:'listening',cn:'听力',en:'Listening',target:58,icon:'headphones'},{id:'speaking',cn:'口语',en:'Speaking',target:76,icon:'mic'},{id:'reading',cn:'阅读',en:'Reading',target:59,icon:'book'},{id:'writing',cn:'写作',en:'Writing',target:69,icon:'pencil'}];
+const skills=[
+ {id:'listening',cn:'听力',en:'Listening',ability:'Light of Wisdom',abilityCn:'启蒙之光',target:100,icon:'headphones'},
+ {id:'speaking',cn:'口语',en:'Speaking',ability:'Blessed Voice',abilityCn:'祝福之声',target:100,icon:'mic'},
+ {id:'reading',cn:'阅读',en:'Reading',ability:'Magic Awakening',abilityCn:'魔法唤醒',target:100,icon:'book'},
+ {id:'writing',cn:'写作',en:'Writing',ability:'Guardian Halo',abilityCn:'守护之环',target:100,icon:'pencil'}
+];
 function pteSummary(data){
- return `<section class="section"><div class="bilingual-head"><h2>My PTE Scores and Goals</h2><p>我的PTE成绩与目标</p></div><div class="pte-grid">${skills.map(s=>{
- const score=data.pteScores?.[s.id]; const valid=typeof score==='number' && Number.isFinite(score)&&score>=0&&score<=90;
- const gap=valid?Math.max(0,s.target-score):null;
- const progress=valid?Math.max(0,Math.min(100,score/s.target*100)):0;
- return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.en}</strong><small>${s.cn}</small></span>${icon('chevron','pte-chevron')}</div><div class="progress-track" role="progressbar" aria-label="${s.cn}目标完成进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(progress)}"`:'aria-valuetext="待评估"'}><span style="width:${progress}%"></span></div><div class="pte-detail"><span>Current: ${valid?score:'Pending'}</span><small>当前：${valid?score+'分':'待评估'}</small></div><div class="pte-detail"><strong>Target: ${s.target}</strong><small>目标：${s.target}分</small></div><div class="pte-detail"><span>Gap: ${valid?gap:'Pending'}</span><small>差距：${valid?gap+'分':'待计算'}</small></div></button>`;
+ return `<section class="section angel-skills"><div class="bilingual-head"><h2>Angel Magic Skill Levels</h2><p>天使魔法技能等级</p></div><div class="pte-grid">${skills.map(s=>{
+ const record=window.WMPracticeAssessment?.summary(s.id);
+ const score=record?record.score:0,mastered=record?record.mastered:0;
+ const gap=Math.round(Math.max(0,100-score)*100)/100;
+ return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.ability}</strong><small>${s.abilityCn}</small></span>${icon('chevron','pte-chevron')}</div><div class="skill-domain">${s.en}<small>${s.cn}</small></div><div class="progress-track" role="progressbar" aria-label="${s.en} skill progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><span style="width:${score}%"></span></div><div class="pte-detail"><span>Current: ${score.toFixed(2)} / 100</span><small>当前：${score.toFixed(2)} 分</small></div><div class="pte-detail"><strong>Target: 100</strong><small>目标：100 分</small></div><div class="pte-detail"><span>Gap: ${gap.toFixed(2)}</span><small>差距：${gap.toFixed(2)} 分</small></div><div class="pte-detail skill-words"><span>${mastered.toLocaleString('en-US')} / 10,000 Words</span><small>已掌握单词</small></div></button>`;
  }).join('')}</div></section>`;
 }
 
@@ -300,7 +305,7 @@ function meAbilityStats(data){
  const count=Number.isFinite(data.wordsEliminated)?Math.max(0,Math.floor(data.wordsEliminated)):0;
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):null;
- const entries=[['Power of Growth',levels[index],'data-route="journey"','v57-level me-stage-value'],['Light of Wisdom',count+' Words','data-quick="advance"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
+ const entries=[['Magic Academy',levels[index],'data-route="journey"','v57-level me-stage-value'],['Power of Growth',count+' Words','data-quick="advance"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
  return `<nav class="me-home-stats" aria-label="Learning abilities">${entries.map(([label,value,route,cls])=>`<button type="button" class="v57-stat ${cls}" ${route}><b>${label}</b><strong class="v57-value">${escapeHTML(value)}</strong><div class="v57-progress" aria-hidden="true"><div class="v57-progress-fill"></div></div></button>`).join('')}</nav>`;
 }
 function drawHome(){
