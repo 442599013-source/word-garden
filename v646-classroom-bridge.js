@@ -53,7 +53,7 @@ function setupKeyboardViewport(){
  viewport?.addEventListener('resize',update);viewport?.addEventListener('scroll',update);
  window.addEventListener('resize',update);
 }
-function applyModel(m){if(currentModel?.stepId!==m.stepId)skipAfterGrammar=0;const earlier=currentModel;currentModel=m;const n=Number(String(m.progress||'').match(/(\d+)\s*\/\s*10/)?.[1]||0);if(m.phase==='done'&&n===10&&earlier?.phase!=='done'&&previousDone!==m.level){previousDone=m.level;window.WM64Skill?.show('Golden Radiance',$('.v646-angel'))};const g=$('.v646-grammar div');if(g){const unit=window.WM_GAME_UNITS?.[m.level-1];const item=unit?.lessons?.find(l=>l.id===m.stepId);g.textContent=item?.grammar||m.grammar||'';}
+function applyModel(m){if(currentModel?.stepId!==m.stepId)skipAfterGrammar=0;const earlier=currentModel;currentModel=m;const n=Number(String(m.progress||'').match(/(\d+)\s*\/\s*\d+/)?.[1]||0);if(m.phase==='done'&&n===(window.WM_GAME_UNITS?.[m.level-1]?.lessons?.length||10)&&earlier?.phase!=='done'&&previousDone!==m.level){previousDone=m.level;window.WM64Skill?.show('Golden Radiance',$('.v646-angel'))};const g=$('.v646-grammar div');if(g){const unit=window.WM_GAME_UNITS?.[m.level-1];const item=unit?.lessons?.find(l=>l.id===m.stepId);g.textContent=item?.grammar||m.grammar||'';}
  const mic=$('.v646-mic');if(mic){mic.setAttribute('aria-pressed',String(!!m.listening));mic.classList.toggle('is-listening',!!m.listening)}
  // No required first typing: advance from original "typing" into its OWN teaching
  // and assessment flow through the ORIGINAL callback. Never touch progress keys.

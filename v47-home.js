@@ -101,7 +101,7 @@
     world.style.backgroundImage='url("v41-stairs-'+family+'.png")';
     const lv=Number(S?.completed?.())||0;
     let score=0;
-    try{const saved=JSON.parse(localStorage.getItem('wm-wordmatch-v35')||'{}');score=Number(saved.total||0)/10;if(!Number.isFinite(score))score=0;}catch{}
+    try{const saved=JSON.parse(localStorage.getItem(window.WMMatchProgressKey?.()||'wm-wordmatch-v35')||'{}');score=Number(saved.total||0)/10;if(!Number.isFinite(score))score=0;}catch{}
     $('v48-level-en').textContent='Level '+lv+' Angel Baby';
     $('v48-level-zh').textContent=lv+'级天使宝宝';
     $('v48-score').textContent=score.toFixed(1);
