@@ -116,10 +116,12 @@ function autoRead(model,{gesture=false}={}){
   if(token!==callToken)return;
   reading=true;
   try{
+   window.WMClassroomDisplay?.show('sentence');
    const english=await say(w.en,'en-GB');
    if(token!==callToken)return;
    if(!english){failedAutoplayStep=step;return;}
    stage?.classList.add('v6412-explaining');
+   window.WMClassroomDisplay?.show('grammar');
    await say(w.grammar,'zh-CN');
   }finally{
    // Do not clear a newer playback created by rapid navigation or a mic tap.
@@ -172,7 +174,8 @@ function installOriginalFlow(){const C=window.WordMatchComponents;if(!C||C.__v64
  return view;
  };
 }
-function init(){installOriginalFlow();theme();nav();labels();window.addEventListener('pageshow',()=>{theme();labels()});window.addEventListener('focus',theme);window.addEventListener('storage',e=>{if(!e.key||e.key===STORAGE)theme()});}
+window.WMOriginalClassroomUI={refresh(){labels();theme();nav()},mouth};
+function init(){if(!window.WMPhraseLesson)installOriginalFlow();theme();nav();labels();window.addEventListener('pageshow',()=>{theme();labels()});window.addEventListener('focus',theme);window.addEventListener('storage',e=>{if(!e.key||e.key===STORAGE)theme()});}
 // This adapter is loaded directly BEFORE wm-game-app.js: install now, not on DOMContentLoaded.
 if(window.WordMatchComponents)init();else document.addEventListener('DOMContentLoaded',init,{once:true});
 })();

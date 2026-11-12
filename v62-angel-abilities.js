@@ -59,6 +59,7 @@
     overlay.querySelector('.v622-close').focus({preventScroll:true});
     dismissTimer=setTimeout(hide,DURATION_MS);
   }
+  window.WMAngelAbilities={show,hide};
   document.addEventListener('click',e=>{
     const angel=e.target.closest?.('#home-view #home-companions .wm-companion');
     if(!angel || document.getElementById('home-view')?.hidden) return;

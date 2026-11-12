@@ -90,3 +90,7 @@ html{background:#efd7bc!important}body{background-color:#efd7bc!important}
 .angel-skills .skill-domain{font-size:13px;line-height:22px}
 .angel-skills .pte-detail{margin:0;min-height:20px;justify-content:center}
 @media(max-width:360px){.angel-skills .pte-heading strong{font-size:9px!important}.angel-skills .pte-heading>.icon{width:14px}.angel-skills .pte-heading{gap:3px}.angel-skills .pte-heading .pte-chevron{width:9px}}
+
+/* V64.28: reduce the gap below the feet; keep the original background unchanged. */
+.me-overview .me-egg{left:79%!important;bottom:95px!important;right:auto!important;translate:-50% 0}
+.me-overview .me-home-stats{margin-top:clamp(-68px, calc(-104px + 6.7vw), -56px)!important}
