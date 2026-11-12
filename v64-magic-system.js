@@ -109,9 +109,9 @@ function fx(label,actor){
 window.WM64Skill={show:fx};
 const primary=()=>document.querySelector('#match-game .game-companions .slot-0');
 function updateWords(count){let data=get('wm-v64-learning',{count:0,lastBlessed:0});data.count=Math.max(Number(data.count)||0,count);set('wm-v64-learning',data);}
-function currentCount(){const progress=get('wm-wordmatch-v35',{}),rounds=progress.rounds||{};const total=Object.values(rounds).reduce((n,r)=>n+(Number.isSafeInteger(r?.pairs)?r.pairs:0),0);return Math.max(total,Number(get('wm-v64-learning',{}).count)||0)}
+function currentCount(){const progress=get(window.WMMatchProgressKey?.()||'wm-wordmatch-v35',{}),rounds=progress.rounds||{};const total=Object.values(rounds).reduce((n,r)=>n+(Number.isSafeInteger(r?.pairs)?r.pairs:0),0);return Math.max(total,Number(get('wm-v64-learning',{}).count)||0)}
 function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prototype.__v64Skills)return;const p=Engine.prototype;p.__v64Skills=true;
- const oldQueue=p.queueReview;p.queueReview=function(word){const ans=oldQueue.call(this,word);if(this.data.words[word]){this.s.v64Reviews??={};this.s.v64Reviews[word]=(Number(this.s.v64Reviews[word])||0)+1}return ans};
+ const oldQueue=p.queueReview;p.queueReview=function(word){const ans=oldQueue.call(this,word);if(!this.data.courseId&&this.data.words[word]){this.s.v64Reviews??={};this.s.v64Reviews[word]=(Number(this.s.v64Reviews[word])||0)+1}return ans};
  const oldHint=p.useHint;p.useHint=function(){const ids=oldHint.call(this);this._v64AutoAwaken=!ids.length;if(ids.length)fx('Light of Wisdom',primary());return ids};
  function returnCheck(engine,tiles){
   // Engine returning tiles is NOT the skill event: only the real DOM entering the
@@ -127,9 +127,9 @@ function matchSkills(){const Engine=window.WMMatchEngine;if(!Engine||Engine.prot
    }
   },850);
  }
- const oldSelect=p.select;p.select=function(id){const res=oldSelect.call(this,id);if(res.kind==='match'){
+ const oldSelect=p.select;p.select=function(id){if(this.data.courseId&&!this._v6427InitialReviewsChecked){this._v6427InitialReviewsChecked=true;returnCheck(this,this.s.board)}const res=oldSelect.call(this,id);if(res.kind==='match'){
   updateWords(currentCount()+1);
-  if([3,5,0].includes(Number(res.combo)%10))fx('Golden Radiance',primary());
+  if([10,20,30].includes(Number(res.combo)))fx('Golden Radiance',primary());
   // Identify the first returned half only. Other half never retriggers.
   const returned=(res.newIds||[]).map(i=>this.s.board.find(t=>t.id===i)).filter(Boolean);returnCheck(this,returned);
  }return res};

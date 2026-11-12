@@ -1,6 +1,6 @@
 /* V38: resume each module independently; deliberate map selections still work. */
 (()=>{'use strict';
-const p=new URLSearchParams(location.search),raw=p.get('level'),name=location.pathname.split('/').pop(),module=({'sentence-game.html':'advance','listening.html':'listening','speaking.html':'speaking','reading.html':'reading','writing.html':'writing'})[name],bank=window.WM_LISTENING_RS_BANK?.lessons||window.WM_LISTENING_BANK?.levels||window.WM_GAME_UNITS;
+const p=new URLSearchParams(location.search),raw=p.get('level'),name=location.pathname.split('/').pop(),module=({'sentence-game.html':'advance','magic-classroom.html':'advance','listening.html':'listening','speaking.html':'speaking','reading.html':'reading','writing.html':'writing'})[name],bank=window.WM_LISTENING_RS_BANK?.lessons||window.WM_LISTENING_BANK?.levels||window.WM_GAME_UNITS;
 if(!module||!bank?.length)return;
 const scoped=key=>window.WMCourse?.key(key)||key,key=module==='listening'?'wm-listening-rs129-v31':scoped(module==='advance'?'wm-sentences-v9-progress':'wm-'+module+'-progress-v20');
 let saved;try{saved=JSON.parse(localStorage.getItem(key)||'null')}catch{}
