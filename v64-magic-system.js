@@ -173,12 +173,11 @@ function classroom(){
  const status=text=>{$('v64-class-note').textContent=text};
  const clean=t=>String(t||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9' ]/g,' ').replace(/\s+/g,' ').trim();
  const current=()=>lessons[at];
- function stopVoice(){speechToken++;try{window.speechSynthesis?.cancel()}catch{}mouth(false);actor.classList.remove('v64-talking');playing=false;}
+ function stopVoice(){microsoftPlayer?.stop();speechToken++;try{window.speechSynthesis?.cancel()}catch{}mouth(false);actor.classList.remove('v64-talking');playing=false;}
  function stopMic(){try{recognition?.abort()}catch{}recognition=null;actor.classList.remove('v64-listening')}
- function say(text,lang='en-GB',token=speechToken){return new Promise(resolve=>{if(token!==speechToken)return resolve(false);const synth=window.speechSynthesis;if(!synth||!window.SpeechSynthesisUtterance){status('Audio unavailable. You may still read aloud or type.');return resolve(false)}
-   let done=false;const finish=ok=>{if(done)return;done=true;mouth(false);actor.classList.remove('v64-talking');resolve(ok)};
-   try{const u=new SpeechSynthesisUtterance(text);u.lang=lang;u.rate=lang==='zh-CN'?.87:.79;u.onstart=()=>{if(token===speechToken){actor.classList.add('v64-talking');mouth(true)}};u.onend=()=>finish(token===speechToken);u.onerror=()=>finish(false);synth.speak(u)}catch{finish(false)}
- })}
+ let microsoftPlayer=null;
+ async function say(text,lang='en-GB',token=speechToken){if(token!==speechToken)return false;try{if(!window.WMMicrosoftVoice){status('Microsoft audio unavailable. Tap to retry.');return false}microsoftPlayer??=new WMMicrosoftVoice(new Audio());await microsoftPlayer.play(text,lang,.9,()=>{if(token===speechToken){actor.classList.add('v64-talking');mouth(true)}});mouth(false);actor.classList.remove('v64-talking');return token===speechToken}catch{mouth(false);actor.classList.remove('v64-talking');status('Microsoft audio unavailable. Tap to retry.');return false}}
+
  function setPractice(){if(!current())return;$('v64-practice').hidden=false;$('v64-lesson-step').textContent='Practice';status('Please Read Aloud or Type · 请跟读或输入');playing=false;}
  async function flow(){stopMic();stopVoice();const row=current();if(!row)return;const token=speechToken;playing=true;$('v64-practice').hidden=true;$('v64-class-input').value='';$('v64-lesson-index').textContent='Step '+row['小题']+' / 10';$('v64-class-level').textContent='Level '+row['教学关卡序号'];$('v64-focus-en').textContent=row.w||'Word';$('v64-focus-zh').textContent=row.zh||'';$('v64-lesson-step').textContent='Listen';$('v64-class-sentence').textContent=row['顶部展示英文'];$('v64-class-translation').textContent=row['中文含义_完整原句']||'';$('v64-grammar-topic').textContent=row['本题知识点']||'';$('v64-grammar-text').textContent=row['语法或词汇解释']||'';
    status('Listening to the sentence...');await say(row['输入标准答案'],'en-GB',token);if(token!==speechToken)return;

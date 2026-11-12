@@ -98,19 +98,7 @@ function autoRead(model,{gesture=false}={}){
     if(voice){await voice.play(text,locale,1,()=>{if(token!==callToken)return;started=true;mouth(true)});
       mouth(false);return token===callToken;}
    }catch(err){if(token!==callToken)return false;console.info('Classroom voice retry:',err?.message||err)}
-   if(!('speechSynthesis' in window))return false;
-   return await new Promise(resolve=>{
-    let done=false,startGuard,finishGuard;
-    const complete=ok=>{if(done)return;done=true;clearTimeout(startGuard);clearTimeout(finishGuard);mouth(false);resolve(ok&&token===callToken)};
-    try{
-      const u=new SpeechSynthesisUtterance(text);u.lang=locale;u.rate=.9;
-      u.onstart=()=>{if(token!==callToken){complete(false);return}started=true;mouth(true)};
-      u.onend=()=>complete(started);u.onerror=()=>complete(false);
-      window.speechSynthesis.speak(u);
-      startGuard=setTimeout(()=>{if(!started)complete(false)},2200);
-      finishGuard=setTimeout(()=>complete(false),Math.max(12000,text.length*500));
-    }catch{complete(false)}
-   });
+   return false;
  };
  const run=async()=>{
   if(token!==callToken)return;

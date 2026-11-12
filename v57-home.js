@@ -59,8 +59,10 @@ if(title){
  btn.setAttribute('aria-label','Play Microsoft welcome / 播放微软欢迎语');btn.setAttribute('aria-pressed','false');
  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/></svg>';
  const slash=document.createElementNS('http://www.w3.org/2000/svg','path');slash.setAttribute('d','M3 3L21 21');slash.classList.add('v6426-mute-slash');btn.querySelector('svg').append(slash);
- btn.onclick=e=>{e.stopPropagation();enabled=!enabled;try{localStorage.setItem(muteKey,enabled?'0':'1')}catch{}if(!enabled){clearTimeout(launchTimer);delete stage.dataset.welcomeAudioBlocked;cancel();}else{paintVoice();void speakWelcome(true);}};title.append(btn);paintVoice();
+ btn.onclick=e=>{e.stopPropagation();enabled=!enabled;try{localStorage.setItem(muteKey,enabled?'0':'1')}catch{}if(!enabled){clearTimeout(launchTimer);delete stage.dataset.welcomeAudioBlocked;cancel();}else{paintVoice();void speakWelcome(true);}};(stage.querySelector('.v48-world')||stage).append(btn);paintVoice();placeVoice();
 }
+function placeVoice(){if(!btn)return;const hero=stage.querySelector('#home-companions .slot-0'),world=stage.querySelector('.v48-world')||stage;if(!hero)return;const r=hero.getBoundingClientRect(),w=world.getBoundingClientRect();if(!w.width||!w.height)return;const x=Math.max(w.width*.08,Math.min(w.width*.86,r.left-w.left+r.width*.74)),y=Math.max(0,Math.min(w.height*.78,r.top-w.top+r.height*.27));btn.style.setProperty('left',(x/w.width*100)+'%','important');btn.style.setProperty('top',(y/w.height*100)+'%','important');btn.style.setProperty('right','auto','important')}
+let placeFrame;function scheduleVoice(){cancelAnimationFrame(placeFrame);placeFrame=requestAnimationFrame(placeVoice)}for(const name of ['resize','pageshow','wm-companions-change'])window.addEventListener(name,scheduleVoice);const host=stage.querySelector('#home-companions');if(host){new MutationObserver(scheduleVoice).observe(host,{childList:true,subtree:true});if(window.ResizeObserver)new ResizeObserver(scheduleVoice).observe(host)}
 function onHomeReady(){
  if(!enabled)return;
  if(intro&&!intro.hidden)return;

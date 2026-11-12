@@ -24,7 +24,7 @@
       if(b.dataset.v638Ready==='1')continue;
       b.dataset.v638Ready='1'; b.classList.add('v638-person');
       if(key==='jack_angel'){
-        const preview=document.createElement('div');preview.className='v638-jack v638-portrait';preview.setAttribute('aria-hidden','true');img.replaceWith(preview);
+        const preview=document.createElement('img');preview.src='jack-original-01.png?v=64.32';preview.style.setProperty('background','none','important');preview.style.setProperty('object-fit','contain','important');preview.className='v638-jack v638-portrait';preview.setAttribute('aria-hidden','true');img.replaceWith(preview);
       }else if(key==='blond_angel'||key==='brown_angel'){
         // Create a fresh image to prevent the old asynchronous sprite callback from overwriting it.
         const fresh=document.createElement('img');fresh.className='v638-portrait';fresh.src=`v39-${key}-idle.webp`;fresh.alt=labels[key];fresh.decoding='async';fresh.loading='lazy';img.replaceWith(fresh);
