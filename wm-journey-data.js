@@ -6,7 +6,7 @@ let offset=0;const list=stages.map(([id,zh,en,classes])=>{const range=unified?.r
 
 const integer=(value,fallback=1)=>/^\d+$/.test(String(value))&&Number(value)>=1&&Number(value)<=offset?Number(value):fallback;
 function level(value){const n=integer(value),s=list.find(x=>n>=x.start&&n<=x.end),classIndex=Math.floor((n-s.start)/40);return {number:n,stage:s,classIndex,className:s.classes[classIndex],local:(n-s.start)%40+1,theme:unified?{level:n,questionCount:5,themeEn:'Five Sentences · Level '+n,themeZh:'五句课堂 · 等级'+n}:window.WMMainCourse?.levels[n-1]||window.WM_LISTENING_BANK?.levels[n-1]||null,legacyTheme:window.WM_LISTENING_BANK?.levels[n-1]||null}}
-function block(value){const n=integer(value),start=Math.floor((n-1)/20)*20+1,end=start+19;return {id:start+'-'+end,start,end,kind:(Math.floor((start-1)/20)%2===0?'期中测评':'期末测评'),kindEn:(Math.floor((start-1)/20)%2===0?'Midterm Assessment':'Final Assessment')}}
+function block(value){const n=integer(value),stage=list.find(s=>n>=s.start&&n<=s.end),classStart=stage.start+Math.floor((n-stage.start)/40)*40,half=n-classStart>=20?1:0,start=classStart+half*20,end=Math.min(stage.end,start+19),final=half===1||(end===stage.end&&end-classStart<20);return {id:start+'-'+end,start,end,kind:final?'期末测评':'期中测评',kindEn:final?'Final Assessment':'Midterm Assessment'}}
 function read(key,fallback={}){try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch{return fallback}}
 function saveSelected(n){try{localStorage.setItem('wm-journey-selection-v21',String(integer(n)))}catch{}}
 function selected(){return integer(read('wm-journey-selection-v21',1))}

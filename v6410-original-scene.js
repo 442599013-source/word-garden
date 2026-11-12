@@ -32,8 +32,8 @@
        const ratio=(sheet.naturalWidth/4)/(sheet.naturalHeight/2);
        if(!Number.isFinite(ratio)||ratio<=0)return;
        const fit=()=>{if(!img.isConnected)return;
-         const rect=slot.getBoundingClientRect();if(!rect.width||!rect.height)return;
-         const height=Math.min(rect.height,rect.width/ratio),width=height*ratio;
+         const rect={width:slot.clientWidth,height:slot.clientHeight};if(!rect.width||!rect.height)return;
+         const calHeight=Math.min(rect.height,rect.width/(900/1080))*(838/1080);const height=Math.min(rect.height,rect.width/ratio,calHeight/(692/724)),width=height*ratio;
          img.style.setProperty('width',width+'px','important');img.style.setProperty('height',height+'px','important');
          img.style.setProperty('margin-left','0','important');img.style.setProperty('object-fit','contain','important');
        };fit();if(window.ResizeObserver)new ResizeObserver(fit).observe(slot);
