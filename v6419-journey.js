@@ -25,7 +25,7 @@ function vine(){
 let lastActor='';
 function sync(){let saved={};try{saved=JSON.parse(localStorage.getItem('wm-companions-v39')||'{}')||{}}catch{}
  const scene=saved.scene||'forest-stairs',family=scene.startsWith('city')?'blossom':scene.startsWith('coast')?'coast':'forest';let file='v41-stairs-'+family+'.png';try{const home=JSON.parse(localStorage.getItem('wm-home-visible-scene-v6411')||'null');if(home?.scene===scene&&/^v41-stairs-(forest|coast|blossom)\.png$/.test(home.file))file=home.file}catch{}
- document.body.style.backgroundImage='url("'+file+'")';
+ document.getElementById('magic-journey').style.backgroundImage='url("'+file+'")';
  const current=J.level(J.selected()).stage.id,index=Math.max(0,J.stages.findIndex(s=>s.id===current));
  document.querySelectorAll('.magic-stage').forEach(a=>{if(a.dataset.stage===current)a.setAttribute('aria-current','step');else a.removeAttribute('aria-current')});
  const host=document.getElementById('magic-current-angel');host.style.setProperty('--angel-left',index%2?'12%':'54%');host.style.setProperty('--angel-top',(rows[index]+1)+'%');
