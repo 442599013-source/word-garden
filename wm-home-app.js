@@ -77,7 +77,7 @@ const {skills,pteSummary} = (()=>{
 const skills=[{id:'listening',cn:'听力',en:'Listening',target:58,icon:'headphones'},{id:'speaking',cn:'口语',en:'Speaking',target:76,icon:'mic'},{id:'reading',cn:'阅读',en:'Reading',target:59,icon:'book'},{id:'writing',cn:'写作',en:'Writing',target:69,icon:'pencil'}];
 function pteSummary(data){
  return `<section class="section"><div class="bilingual-head"><h2>我的PTE成绩与目标</h2><p>My PTE Scores and Goals</p></div><div class="pte-grid">${skills.map(s=>{
- const score=data.pteScores?.[s.id]; const valid=typeof score==='number' && Number.isFinite(score)&&score>=10&&score<=90;
+ const score=data.pteScores?.[s.id]; const valid=typeof score==='number' && Number.isFinite(score)&&score>=0&&score<=90;
  const gap=valid?Math.max(0,s.target-score):null;
  const progress=valid?Math.max(0,Math.min(100,score/s.target*100)):0;
  return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.cn}</strong><small>${s.en}</small></span>${icon('chevron','pte-chevron')}</div><div class="progress-track" role="progressbar" aria-label="${s.cn}目标完成进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(progress)}"`:'aria-valuetext="待评估"'}><span style="width:${progress}%"></span></div><div class="pte-detail"><span>当前：${valid?score+'分':'待评估'}</span><small>Current: ${valid?score:'Pending'}</small></div><div class="pte-detail"><strong>目标：${s.target}分</strong><small>Target: ${s.target}</small></div><div class="pte-detail"><span>差距：${valid?gap+'分':'待计算'}</span><small>Gap: ${valid?gap:'Pending'}</small></div></button>`;
@@ -294,34 +294,11 @@ let token=0;
 const app=document.getElementById('app');
 
 function drawHome(){
- app.classList.add('beach-home');
- const passes=Array.isArray(data.passedLevels)?data.passedLevels:[];
- const stages=[['幼儿园小班','Kindergarten Junior Class'],['幼儿园中班','Kindergarten Middle Class'],['幼儿园大班','Kindergarten Senior Class'],['小学一年级','Primary School · Grade 1']];
- let stage=0;while(stage<3&&passes.includes(['junior','middle','senior'][stage]))stage++;
- const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
- const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):'待评估';
- const count=Math.max(0,Math.floor(Number(data.wordsEliminated)||0));
- const skillHTML=skills.map((skill,i)=>{
-  const estimate=window.WMPracticeAssessment?.summary(skill.id);const score=estimate?estimate.score:data.pteScores?.[skill.id],valid=Number.isFinite(score)&&score>=0&&score<=90;
-  const x=i%2===0?229:628,y=i<2?1231:1517;
-  return `<button class="home-hot home-skill" data-route="${skill.id}" style="left:${i%2===0?40:438}px;top:${i<2?1113:1395}px;width:376px;height:268px" aria-label="${skill.cn} ${skill.en}"></button>`+
-   [valid?score.toFixed(2):'0.00',skill.target.toFixed(2),(valid?Math.max(0,skill.target-score):skill.target).toFixed(2)].map((value,j)=>`<span class="home-value home-score" style="left:${x}px;top:${y+j*46}px;width:166px;height:35px;flex-direction:column;line-height:20px;font-size:24px" title="${estimate?'PTE练习估算：90 × 加权掌握量 ÷ 总权重；掌握 '+estimate.mastered+' 个不同词。自定学习进度估值。':''}" data-home-value="${skill.id}-${['current','target','gap'][j]}">${escapeHTML(value)}</span>`).join('')+
-   `<div class="home-progress" style="left:${i%2===0?63:460}px;top:${i<2?1195:1480}px;width:332px;height:23px" role="progressbar" aria-label="${skill.cn}进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(Math.min(100,score/skill.target*100))}"`:'aria-valuetext="待评估"'}><span style="width:${valid?Math.min(100,score/skill.target*100):0}%;background:${['#5da5f4','#ed80b6','#75b97a','#edb441'][i]}"></span></div>`;
- }).join('');
- app.innerHTML=`<div class="home-viewport"><section class="home-scene" aria-label="单词消消乐首页">
- <h1 class="sr-only">单词消消乐 Word Match</h1>
- <button class="home-hot" data-route="login" aria-label="账户 Account" style="left:520px;top:85px;width:140px;height:130px"></button>
- <button class="home-hot" data-route="settings" aria-label="设置 Settings" style="left:670px;top:85px;width:140px;height:130px"></button>
- <button class="home-hot" data-quick="learn" aria-label="当前阶段 ${escapeHTML(stages[stage][0])}" style="left:386px;top:465px;width:411px;height:100px"></button>
- <div class="home-value home-stage" style="left:393px;top:474px;width:392px;height:80px"><strong>${stages[stage][0]}</strong><small>${stages[stage][1]}</small></div>
- <button class="home-hot" data-quick="match" aria-label="已消灭的单词数 ${count}，进入新版单词消消乐" style="left:46px;top:610px;width:372px;height:234px"></button>
- <span class="home-value home-count" style="left:70px;top:703px;width:321px;height:58px" data-home-value="words">${count} 个</span>
- <button class="home-hot" data-route="results" aria-label="综合考试成绩 ${average}" style="left:437px;top:610px;width:372px;height:234px"></button>
- <span class="home-value home-count" style="left:463px;top:703px;width:321px;height:58px" data-home-value="average">${escapeHTML(average)}${exams.length?' 分':''}</span>
- <div class="home-entry-splitbg" aria-hidden="true"></div><button class="home-hot home-growth home-growth-half" data-route="journey" aria-label="成长之路 Growth Journey" style="left:24px;top:883px;width:395px;height:97px"><span class="growth-rocket">🚀</span><span><strong>Growth Journey</strong><small>成长之路</small></span><b>›</b></button><button class="home-hot home-growth home-growth-half" data-quick="advance" aria-label="晋级之旅 Level Up" style="left:433px;top:883px;width:395px;height:97px"><span class="growth-rocket">★</span><span><strong>Level Up</strong><small>晋级之旅</small></span><b>›</b></button>
- ${skillHTML}
- </section></div>`;
- fitBeachHome();
+ app.classList.remove('beach-home');
+ const summary={...data,pteScores:{...data.pteScores}};
+ for(const skill of skills){const estimate=window.WMPracticeAssessment?.summary(skill.id);if(estimate)summary.pteScores[skill.id]=estimate.score;}
+ app.innerHTML=`${header(Boolean(data.nickname))}<section class="section"><div class="bilingual-head"><h2>My English Level & Ability</h2><p>我的英语等级与能力</p></div><div class="me-stage-row"><div id="me-companions" aria-label="My angel and golden egg"></div>${stageCard(data)}</div>${progressCards(data)}</section><div class="me-journeys">${journeyButton()}<button type="button" class="journey" data-quick="advance"><span>★</span><span><strong>Magic Classroom</strong><small>魔法课堂</small></span>${icon('chevron')}</button></div>${pteSummary(summary)}`;
+ window.dispatchEvent(new Event('goldy-me-render'));
 }
 function fitBeachHome(){
  const viewport=app.querySelector('.home-viewport'),scene=app.querySelector('.home-scene');if(!viewport||!scene)return;
