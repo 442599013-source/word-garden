@@ -293,11 +293,21 @@ let cleanup=null;
 let token=0;
 const app=document.getElementById('app');
 
+function meAbilityStats(data){
+ const passes=Array.isArray(data.passedLevels)?data.passedLevels:[];
+ const levels=['Kindergarten Junior Class','Kindergarten Middle Class','Kindergarten Senior Class','Primary School · Grade 1'];
+ let index=0;while(index<3&&passes.includes(['junior','middle','senior'][index]))index++;
+ const count=Number.isFinite(data.wordsEliminated)?Math.max(0,Math.floor(data.wordsEliminated)):0;
+ const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
+ const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):null;
+ const entries=[['Power of Growth',levels[index],'data-route="journey"','v57-level me-stage-value'],['Light of Wisdom',count+' Words','data-quick="advance"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
+ return `<nav class="me-home-stats" aria-label="Learning abilities">${entries.map(([label,value,route,cls])=>`<button type="button" class="v57-stat ${cls}" ${route}><b>${label}</b><strong class="v57-value">${escapeHTML(value)}</strong><div class="v57-progress" aria-hidden="true"><div class="v57-progress-fill"></div></div></button>`).join('')}</nav>`;
+}
 function drawHome(){
  app.classList.remove('beach-home');
  const summary={...data,pteScores:{...data.pteScores}};
  for(const skill of skills){const estimate=window.WMPracticeAssessment?.summary(skill.id);if(estimate)summary.pteScores[skill.id]=estimate.score;}
- app.innerHTML=`${header(Boolean(data.nickname))}<section class="section"><div class="bilingual-head"><h2>My English Level & Ability</h2><p>我的英语等级与能力</p></div><div class="me-stage-row"><div id="me-companions" aria-label="My angel and golden egg"></div>${stageCard(data)}</div>${progressCards(data)}</section><div class="me-journeys">${journeyButton()}<button type="button" class="journey" data-quick="advance"><span>★</span><span><strong>Magic Classroom</strong><small>魔法课堂</small></span>${icon('chevron')}</button></div>${pteSummary(summary)}`;
+ app.innerHTML=`${header(Boolean(data.nickname))}<section class="section me-overview"><div class="me-stage-row"><div id="me-companions" aria-label="My angel and golden egg"></div></div>${meAbilityStats(data)}</section>${pteSummary(summary)}`;
  window.dispatchEvent(new Event('goldy-me-render'));
 }
 function fitBeachHome(){

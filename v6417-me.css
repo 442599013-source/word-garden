@@ -25,3 +25,38 @@ html{background:#efd7bc!important}body{background-color:#efd7bc!important}
 .me-egg{width:20%;height:80px;left:auto;right:4%;bottom:7px;z-index:3}
 .me-stage-row>.stage-card{width:100%;margin-left:0;padding:12px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 12px;align-items:center}
 .me-stage-row>.stage-card>.stage-icon{grid-row:1 / 4;margin:auto}.me-stage-row>.stage-card .stage-value{font-size:20px}.me-stage-row>.stage-card .stage-en{font-size:13px}
+
+/* V64.24: homepage stat styling, English contents and transparent actor area. */
+ .me-overview .me-home-stats{position:absolute;left:8%;width:84%;top:82.6%;height:8.5%;min-height:0;z-index:7;display:grid;grid-template-columns:1.55fr .85fr .72fr;align-items:center;border:1.5px solid #fff;background:linear-gradient(118deg,#fafff8ed,#d8f6f7f0);border-radius:3cqw;box-shadow:0 2px 8px #54839855,inset 0 1px 2px white;text-align:center;color:#356b80}
+ .me-overview .me-home-stats>button{padding:1cqw 0;min-width:0}
+ .me-overview .me-home-stats>button+button{border-left:1px solid #bad1d8}
+ .me-overview .me-home-stats b{display:block;font:700 2.7cqw/1.2 Georgia,serif;white-space:nowrap}
+ .me-overview .me-home-stats small{display:block;font:2cqw/1.16 sans-serif;margin-top:.5cqw}
+ .me-overview .me-home-stats span{display:block;font:2.45cqw/1.1 Georgia,serif}
+ .me-overview .me-home-stats strong{display:block;font:700 3.2cqw/1.08 Georgia,serif;margin-top:.8cqw}
+ .me-overview .me-home-stats{top:79.8%!important;height:6.8%!important;left:9%!important;width:82%!important;grid-template-columns:1.24fr 1fr .84fr!important;border-radius:2.8cqw!important;padding:1cqw 0!important}
+ .me-overview .me-home-stats>button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5cqw;padding:0 .4cqw!important;min-width:0;height:100%}
+ .me-overview .me-home-stats b, .me-overview .me-home-stats span{font:600 2.48cqw/1.05 Georgia,serif!important;white-space:nowrap!important;color:#356b80!important}
+ .me-overview .me-home-stats small{font:1.84cqw/1.1 sans-serif!important;margin:0!important}
+ .me-overview .me-home-stats strong{font:700 3.05cqw/1.1 Georgia,serif!important;margin:0!important}
+ .me-overview .me-home-stats{grid-template-columns:1fr 1fr 1fr!important;top:79.3%!important;height:7.2%!important;left:9%!important;width:82%!important;padding:1cqw 0!important;border:1.5px solid transparent!important;background:linear-gradient(140deg,rgba(248,254,251,.75),rgba(224,246,249,.68)) padding-box,linear-gradient(120deg,rgba(235,202,133,.68),rgba(255,255,255,.95) 27%,rgba(126,205,221,.70) 55%,rgba(240,175,209,.67) 80%,rgba(189,156,215,.70)) border-box!important;box-shadow:0 2px 5px #365f7b27,inset 0 1px 2px #fff9!important}
+ .me-overview .me-home-stats>button{gap:.6cqw!important;padding:0 .35cqw!important}
+ .me-overview .me-home-stats b{font:650 2.62cqw/1.08 Arial,-apple-system,sans-serif!important;font-variant-numeric:lining-nums tabular-nums!important;white-space:nowrap!important}
+ .me-overview .me-home-stats .v57-value{font:700 3.36cqw/1.05 Arial,-apple-system,sans-serif!important;font-variant-numeric:lining-nums tabular-nums!important;white-space:nowrap!important;margin:0!important}
+ .me-overview .me-home-stats .v57-long{font-size:2.35cqw!important;letter-spacing:-.02em!important}
+ .me-overview .v57-level, .me-overview .v57-level .v57-value{color:#b58c2e!important;--track:#c59b35}
+ .me-overview .v57-score, .me-overview .v57-score .v57-value{color:#328bc9!important;--track:#328bc9}
+ .me-overview .v57-ability, .me-overview .v57-ability .v57-value{color:#ca5d6d!important;--track:#d06171}
+ .me-overview .v57-progress{width:84%;height:4px;min-height:4px;max-height:4px;overflow:hidden;border-radius:10px;background:color-mix(in srgb,var(--track) 16%,transparent);flex:none}
+ .me-overview .v57-progress-fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--track),color-mix(in srgb,var(--track) 55%,white));transition:width .45s ease}
+ .me-overview .v57-level .v57-progress-fill[data-started="true"]{min-width:2px}
+ .me-overview .me-home-stats>button+button{border-left-color:var(--v62-edge)!important}
+.me-overview{background:transparent!important;border:0!important;box-shadow:none!important}
+.app{container-type:inline-size}
+.me-overview .me-home-stats{position:relative!important;left:auto!important;top:auto!important;width:calc(82cqw + 0px)!important;max-width:100%;height:16cqw!important;margin:0 auto;flex:none;border-color:var(--me-edge)!important}
+.me-overview .me-home-stats>button{appearance:none;width:100%;border:0;background:transparent;box-shadow:none;color:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0;height:100%;text-align:center}
+.me-overview .me-home-stats>button+button{border-left:1px solid var(--me-edge)}
+.me-overview .me-home-stats .me-stage-value .v57-value{font-size:2.35cqw!important;white-space:normal!important;line-height:1.1!important;max-width:100%}
+.me-overview .me-home-stats b{color:#356b80!important}
+.me-overview .me-home-stats .v57-progress{width:84%;height:4px;min-height:4px;max-height:4px;overflow:hidden;border-radius:10px;background:color-mix(in srgb,var(--track) 16%,transparent);flex:none}
+.me-overview .me-home-stats .v57-progress-fill{height:100%;width:0;border-radius:10px;background:linear-gradient(90deg,var(--track),color-mix(in srgb,var(--track) 55%,white))}
