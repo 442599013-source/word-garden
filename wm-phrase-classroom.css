@@ -8,3 +8,12 @@
 #root .wm-phrase-teaching .wm-level{cursor:pointer}#root .wm-phrase-teaching .wm-level:focus-visible{outline:3px solid var(--v6412-deep)}
 #root .wm-phrase-teaching:not([data-phrase-phase="input"]) .wm-keyboard{visibility:hidden}#root .wm-phrase-teaching:not([data-phrase-phase="input"]) .wm-input{visibility:hidden}
 .phrase-level-picker{position:fixed;inset:0;background:#30203699;z-index:2147483000;display:grid;place-items:center;padding:15px}.phrase-level-picker section{max-width:600px;max-height:85dvh;overflow:auto;background:#fffafc;padding:15px;border:2px solid var(--goldy-edge,#d9a7e9);border-radius:20px;display:flex;flex-wrap:wrap;gap:8px}.phrase-level-picker h2{width:100%;font-size:20px}.phrase-level-picker a,.phrase-level-picker button{padding:10px;border:1px solid var(--goldy-edge,#d9a7e9);border-radius:10px;background:#fff;color:var(--goldy-deep,#8a61ac)}.phrase-level-picker a[aria-current]{background:var(--goldy-edge,#d9a7e9)}
+
+/* V64.29: preserve the original per-letter feedback; small actions at the pane bottom. */
+#root .wm-phrase-teaching[data-phrase-phase="input"] .wm-lesson-body{flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px}
+#root .wm-phrase-teaching[data-phrase-phase="input"] .wm-lesson-body .wm-english{width:100%;margin:0;flex:1 1 auto;min-height:0;overflow:auto;white-space:pre-wrap}
+#root .wm-phrase-teaching .phrase-actions{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:auto;padding-top:4px;flex:0 0 auto}
+#root .wm-phrase-teaching .phrase-action{display:inline-flex;align-items:center;justify-content:center;gap:4px;padding:5px 8px;border:1px solid var(--v6412-edge);border-radius:12px;background:var(--v6412-light);color:var(--v6412-deep);font:500 clamp(10px,2.65vw,13px)/1.25 sans-serif;white-space:nowrap;box-shadow:none}
+#root .wm-phrase-teaching .phrase-action .wm-icon{width:14px;height:14px;flex:none}
+#root .wm-phrase-teaching .phrase-action[aria-pressed="true"]{background:var(--v6412-edge)}
+#root .wm-phrase-teaching .wm-tabs .wm-icon{width:12px;height:12px;flex:none}
