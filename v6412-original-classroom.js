@@ -66,7 +66,7 @@ function raisedWand(){const hero=document.querySelector('.wm-learning .v6410-lef
  // invisibly underneath, so it cannot replace the gesture mid-celebration.
  const pose=document.createElement('div');pose.className='v6412-raised-pose';
  if(cal){const picture=document.createElement('img');picture.src='v64-cal-05.png';picture.alt='';pose.append(picture)}
- else{const picture=document.createElement('span');picture.className='v6412-jack-raised';pose.append(picture)}
+ else{const picture=document.createElement('span');picture.className='v6412-jack-raised';const h=Math.min(hero.clientHeight||200,(hero.clientWidth||150)/(543/724));picture.style.width=(h*543/724)+'px';picture.style.height=h+'px';picture.style.left='50%';picture.style.transform='translateX(-50%)';picture.style.aspectRatio='543 / 724';pose.append(picture)}
  hero.append(pose);const old=img.style.visibility;img.style.visibility='hidden';
  const glow=document.createElement('span');glow.className='v6412-celebration-glow';hero.append(glow);
  const title=document.createElement('div');title.className='v6412-class-skill';title.textContent='Golden Radiance';document.querySelector('.wm-learning')?.append(title);

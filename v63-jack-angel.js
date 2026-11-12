@@ -49,6 +49,9 @@
  migrate();
   const spritePositions=Array.from({length:8},(_,i)=>({x:(i%4)*100/3,y:Math.floor(i/4)*100}));
   function setFrame(img,index){
+   // A sprite background is not protected by object-fit; keep each cell at its native 543:724 ratio.
+   img.style.setProperty('aspect-ratio','543 / 724','important');
+   if(!img.dataset.jackAngel){img.style.setProperty('width','auto','important');img.style.setProperty('height','100%','important')}
    const pos=spritePositions[index]||spritePositions[0];
    img.style.backgroundImage=`url("${FILE}")`;
    img.style.backgroundSize='400% 200%';
@@ -61,13 +64,15 @@
    el.style.cssText='position:absolute;left:12.5%;top:0;width:75%;height:100%;pointer-events:none;';
    return el;
   }
- function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';img.style.backgroundImage='';img.style.backgroundSize='';img.style.backgroundPosition='';img.style.marginLeft='';img.style.width='';img.style.height='';delete img.dataset.jackAngel;}}
+ function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);state?.observer?.disconnect();idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';img.style.backgroundImage='';img.style.backgroundSize='';img.style.backgroundPosition='';img.style.removeProperty('aspect-ratio');img.style.marginRight='';img.style.marginLeft='';img.style.width='';img.style.height='';delete img.dataset.jackAngel;}}
   function setIdle(img){
-   css();const token={timer:null};idleByImage.set(img,token);
+   css();const token={timer:null,observer:null};idleByImage.set(img,token);
    img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v637';img.alt='Jack';
    img.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221%22 height=%221%22 viewBox=%220 0 1 1%22%3E%3C/svg%3E';img.alt='';
    img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
+   const fit=()=>{if(idleByImage.get(img)!==token)return;const host=img.parentElement;if(!host)return;const width=host.clientWidth,height=host.clientHeight;if(!width||!height)return;const h=Math.min(height,width/(543/724));img.style.setProperty('width',(h*543/724)+'px','important');img.style.setProperty('height',h+'px','important');img.style.setProperty('aspect-ratio','543 / 724','important');img.style.setProperty('margin-left','auto','important');img.style.setProperty('margin-right','auto','important')};
    img.style.width='75%';img.style.height='100%';img.style.marginLeft='12.5%';
+   requestAnimationFrame(()=>{fit();if(window.ResizeObserver&&img.parentElement&&idleByImage.get(img)===token){token.observer=new ResizeObserver(fit);token.observer.observe(img.parentElement)}});
    // No timer or secondary image decode until idle motion is actually needed.
    const seq=[0,0,0,1,2,1,0,0,0,0,0,0,3,0,0,0,0,0];let i=0,last=-1;
    function render(){if(idleByImage.get(img)!==token||!img.isConnected){clearInterval(token.timer);return;}const frame=seq[i++%seq.length];if(frame!==last){setFrame(img,frame);last=frame;}}
