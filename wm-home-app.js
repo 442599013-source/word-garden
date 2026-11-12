@@ -27,9 +27,9 @@ return {icon,escapeHTML};
 const {header} = (()=>{
 
 function header(logged=false){
- return `<header class="top-bar"><div class="brand"><h1>单词消消乐</h1><p>Word Match</p></div>
- <button class="top-action" type="button" data-route="login">${icon('user')}<span>${logged?'账户':'登录'}</span><small>${logged?'Account':'Log In'}</small></button>
- <button class="top-action" type="button" data-route="settings">${icon('settings')}<span>设置</span><small>Settings</small></button></header>`;
+ return `<header class="top-bar"><div class="brand me-brand"><img src="goldy-magic-logo.png" alt="Goldy Magic English 金耀魔法英语"></div>
+ <button class="top-action" type="button" data-route="login">${icon('user')}<span>${logged?'Account':'Log In'}</span><small>${logged?'账户':'登录'}</small></button>
+ <button class="top-action" type="button" data-route="settings">${icon('settings')}<span>Settings</span><small>设置</small></button></header>`;
 }
 
 return {header};
@@ -43,7 +43,7 @@ function stageCard(data){
  const ordered=['junior','middle','senior'];let index=0;
  while(index<ordered.length&&passes.includes(ordered[index]))index++;
  const [cn,en]=levels[index];
- return `<button type="button" class="stage-card stage-link" data-quick="learn" aria-label="继续当前学习周">${icon('cap','stage-icon')}<div class="stack small"><div class="stage-label">当前阶段</div><small>Current Stage</small></div><div class="stage-value">${escapeHTML(cn)}</div><div class="stage-en">${escapeHTML(en)}</div></button>`;
+ return `<button type="button" class="stage-card stage-link" data-quick="learn" aria-label="继续当前学习周">${icon('cap','stage-icon')}<div class="stack small"><div class="stage-label">Current Stage</div><small>当前阶段</small></div><div class="stage-value">${escapeHTML(en)}</div><div class="stage-en">${escapeHTML(cn)}</div></button>`;
 }
 
 return {stageCard};
@@ -55,8 +55,8 @@ function progressCards(data){
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length? (exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,'') :null;
  return `<div class="metrics-grid">
-  <button type="button" class="metric-card metric-button" data-quick="match">${icon('bookcheck','metric-icon')}<div class="metric-heading"><strong>已消灭的单词数</strong><small>Words Eliminated</small></div><div class="metric-value"><strong>${count} 个</strong><small>${count} Words</small></div><div class="metric-caption"><span>累计学会单词</span><small>Total Words Learned</small></div></button>
-  <button type="button" class="metric-card metric-button" data-route="results">${icon('clipboard','metric-icon')}<div class="metric-heading"><strong>综合考试成绩</strong><small>Average Exam Score</small></div><div class="metric-value"><strong>${average===null?'待评估':average+' 分'}</strong><small>${average===null?'Pending':average+' Points'}</small></div><div class="metric-caption"><span>所有考试的平均分</span><small>Average of All Exams</small></div></button>
+  <button type="button" class="metric-card metric-button" data-quick="match">${icon('bookcheck','metric-icon')}<div class="metric-heading"><strong>Words Eliminated</strong><small>已消灭的单词数</small></div><div class="metric-value"><strong>${count} Words</strong><small>${count} 个</small></div><div class="metric-caption"><span>Total Words Learned</span><small>累计学会单词</small></div></button>
+  <button type="button" class="metric-card metric-button" data-route="results">${icon('clipboard','metric-icon')}<div class="metric-heading"><strong>Average Exam Score</strong><small>综合考试成绩</small></div><div class="metric-value"><strong>${average===null?'Pending':average+' Points'}</strong><small>${average===null?'待评估':average+' 分'}</small></div><div class="metric-caption"><span>Average of All Exams</span><small>所有考试的平均分</small></div></button>
  </div>`;
 }
 
@@ -64,7 +64,7 @@ return {progressCards};
 })();
 const {journeyButton,journeyPage} = (()=>{
 
-function journeyButton(){return `<button type="button" class="journey" data-quick="learn"><span class="journey-icon">${icon('rocket')}</span><span class="journey-text"><strong>成长之路</strong><small>Our Growth Journey</small></span>${icon('chevron','journey-chevron')}</button>`;}
+function journeyButton(){return `<button type="button" class="journey" data-quick="learn"><span class="journey-icon">${icon('rocket')}</span><span class="journey-text"><strong>Our Growth Journey</strong><small>成长之路</small></span>${icon('chevron','journey-chevron')}</button>`;}
 function journeyPage(){
  const stages=[['幼儿园','Kindergarten'],['小学','Primary School'],['初中','Junior High School'],['高中','Senior High School'],['大学','University'],['研究生','Postgraduate']];
  return `<div class="inner-panel"><div class="bilingual-head"><h3>英语学习阶段</h3><p>English Learning Stages</p></div><div class="journey-list">${stages.map((s,i)=>`<div class="stage-item"><span class="stage-num">${i+1}</span><div class="item-name"><strong>${s[0]}</strong><small>${s[1]}</small></div>${icon('chevron','lock-icon')}</div>`).join('')}</div><p class="secondary-info">选择阶段查看课程。幼儿园已开放；其他阶段正在编排题库。</p><p class="secondary-info">Choose a stage. Kindergarten lessons are available now.</p></div>`;
@@ -76,11 +76,11 @@ const {skills,pteSummary} = (()=>{
 
 const skills=[{id:'listening',cn:'听力',en:'Listening',target:58,icon:'headphones'},{id:'speaking',cn:'口语',en:'Speaking',target:76,icon:'mic'},{id:'reading',cn:'阅读',en:'Reading',target:59,icon:'book'},{id:'writing',cn:'写作',en:'Writing',target:69,icon:'pencil'}];
 function pteSummary(data){
- return `<section class="section"><div class="bilingual-head"><h2>我的PTE成绩与目标</h2><p>My PTE Scores and Goals</p></div><div class="pte-grid">${skills.map(s=>{
+ return `<section class="section"><div class="bilingual-head"><h2>My PTE Scores and Goals</h2><p>我的PTE成绩与目标</p></div><div class="pte-grid">${skills.map(s=>{
  const score=data.pteScores?.[s.id]; const valid=typeof score==='number' && Number.isFinite(score)&&score>=0&&score<=90;
  const gap=valid?Math.max(0,s.target-score):null;
  const progress=valid?Math.max(0,Math.min(100,score/s.target*100)):0;
- return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.cn}</strong><small>${s.en}</small></span>${icon('chevron','pte-chevron')}</div><div class="progress-track" role="progressbar" aria-label="${s.cn}目标完成进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(progress)}"`:'aria-valuetext="待评估"'}><span style="width:${progress}%"></span></div><div class="pte-detail"><span>当前：${valid?score+'分':'待评估'}</span><small>Current: ${valid?score:'Pending'}</small></div><div class="pte-detail"><strong>目标：${s.target}分</strong><small>Target: ${s.target}</small></div><div class="pte-detail"><span>差距：${valid?gap+'分':'待计算'}</span><small>Gap: ${valid?gap:'Pending'}</small></div></button>`;
+ return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.en}</strong><small>${s.cn}</small></span>${icon('chevron','pte-chevron')}</div><div class="progress-track" role="progressbar" aria-label="${s.cn}目标完成进度" aria-valuemin="0" aria-valuemax="100" ${valid?`aria-valuenow="${Math.round(progress)}"`:'aria-valuetext="待评估"'}><span style="width:${progress}%"></span></div><div class="pte-detail"><span>Current: ${valid?score:'Pending'}</span><small>当前：${valid?score+'分':'待评估'}</small></div><div class="pte-detail"><strong>Target: ${s.target}</strong><small>目标：${s.target}分</small></div><div class="pte-detail"><span>Gap: ${valid?gap:'Pending'}</span><small>差距：${valid?gap+'分':'待计算'}</small></div></button>`;
  }).join('')}</div></section>`;
 }
 
