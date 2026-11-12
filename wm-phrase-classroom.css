@@ -17,3 +17,9 @@
 #root .wm-phrase-teaching .phrase-action .wm-icon{width:14px;height:14px;flex:none}
 #root .wm-phrase-teaching .phrase-action[aria-pressed="true"]{background:var(--v6412-edge)}
 #root .wm-phrase-teaching .wm-tabs .wm-icon{width:12px;height:12px;flex:none}
+
+/* Keep the close control out of the level grid. */
+.phrase-level-picker section{position:relative;padding-top:48px}.phrase-level-picker h2{margin-top:0;padding-right:30px;box-sizing:border-box}.phrase-level-picker .phrase-picker-close{position:absolute;right:8px;top:8px;width:36px;height:36px;padding:0;border:0;background:transparent;border-radius:50%;font:400 30px/1 sans-serif;display:grid;place-items:center;cursor:pointer}
+
+#root .wm-phrase-teaching[data-phrase-phase="wordbuild"] .wm-word-grid{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:7px;overflow:auto;max-height:100%}
+.phrase-level-picker section{display:block;width:min(100%,600px);padding:18px;position:relative;color:var(--goldy-deep,#8a61ac)}.phrase-level-picker h2{font-size:20px;margin:5px 42px 20px 0;width:auto}.phrase-level-picker .level-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}.phrase-level-picker .level-grid a{display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 2px;background:#fff;border:1px solid var(--goldy-edge,#d4b4e6);border-radius:9px;font-weight:700;text-decoration:none;color:inherit}.phrase-level-picker .level-grid a[aria-current]{background:var(--goldy-deep,#a46ed4);color:white}.phrase-level-picker .phrase-picker-close{right:12px;top:12px;background:var(--goldy-light,#f3e4f8);border:1px solid white;border-radius:12px;width:40px;height:40px}

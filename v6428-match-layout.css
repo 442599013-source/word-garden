@@ -8,3 +8,7 @@
 #match-game .match-stage #v49-game-egg{top:72.65%!important}
 
 #match-game .match-stage #level-pair-progress{position:absolute;top:15.0%;left:39%;width:22%;height:1.95%;z-index:26;display:flex;align-items:center;justify-content:center;border:1px solid var(--v50-edge,#d9a7e9);border-radius:20px;background:color-mix(in srgb,var(--v50-paper,#fffafc) 88%,transparent);color:var(--v50-core,#8a61ac);font:700 2.8cqw/1 sans-serif}
+
+#match-game .match-stage .game-companions .wm-companion.slot-0{width:62%!important;left:-17%!important}
+#match-game .match-stage #hint{border:0!important;background:transparent!important;box-shadow:none!important;text-shadow:0 1px 3px #fff!important}
+#match-game .match-stage #hint small{display:none!important}

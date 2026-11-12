@@ -9,7 +9,7 @@ function decorate(){
   const a=document.querySelector('#home-stage .milestones .'+cls);if(!a)continue;a.href='level-road.html?stage='+id;a.setAttribute('aria-label',name);
   a.querySelectorAll('small').forEach(n=>n.hidden=true);
  }
- document.querySelectorAll('#home-stage .v48-stats>.v57-stat').forEach((n,i)=>{n.setAttribute('role','link');n.setAttribute('tabindex','0');n.setAttribute('aria-label',['Open current level','Open Magic Match','Open Angel Skills'][i]);});
+ document.querySelectorAll('#home-stage .v48-stats>.v57-stat').forEach((n,i)=>{n.style.setProperty('pointer-events','auto','important');n.style.cursor='pointer';n.setAttribute('role','link');n.setAttribute('tabindex','0');n.setAttribute('aria-label',['Open current level','Open Magic Match','Open Angel Skills'][i]);});
 }
 function navigate(e){const plaque=e.target.closest('#home-stage .milestones a');if(plaque){const type=plaque.classList.contains('kindergarten')?'kindergarten':plaque.classList.contains('primary')?'primary':plaque.classList.contains('junior')?'junior':null;if(type){e.preventDefault();e.stopImmediatePropagation();location.href='level-road.html?stage='+type;}return;}
  const n=e.target.closest('#home-stage .v48-stats>.v57-stat');if(!n)return;const nodes=[...n.parentElement.children],i=nodes.indexOf(n);if(i<0||i>2)return;e.preventDefault();e.stopImmediatePropagation();if(i===2){window.WMAngelAbilities?.show();return;}location.href=routeFor(i);
