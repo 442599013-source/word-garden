@@ -29,14 +29,17 @@ const audio=document.createElement('audio');
 audio.id='home-microsoft-welcome-audio';audio.preload='none';audio.playsInline=true;audio.hidden=true;stage.append(audio);
 const voice=window.WMMicrosoftVoice?new window.WMMicrosoftVoice(audio):null;
 let playing=false,finished=false,started=false,epoch=0,btn=null,launchTimer=null;
-function cancel(){epoch++;playing=false;try{voice?.stop();}catch{}btn?.setAttribute('aria-pressed','false');}
+const muteKey='wm-home-welcome-muted-v6426';let enabled=true;try{enabled=localStorage.getItem(muteKey)!=='1'}catch{}
+function paintVoice(){if(!btn)return;btn.setAttribute('aria-pressed',String(enabled));btn.setAttribute('aria-label',enabled?'Turn welcome audio off':'Turn welcome audio on');btn.classList.toggle('is-muted',!enabled);const slash=btn.querySelector('.v6426-mute-slash');if(slash)slash.style.display=enabled?'none':'';audio.muted=!enabled;}
+
+function cancel(){epoch++;playing=false;try{voice?.stop();}catch{}paintVoice();}
 async function speakWelcome(force=false){
- if(!voice)return;
+ if(!voice||!enabled)return;
  if(force){finished=false;cancel();}
  else if(started||playing||finished)return;
  if(playing)return;
  started=true;playing=true;const token=++epoch;
- btn?.setAttribute('aria-pressed','true');
+ paintVoice();
  try{
   for(const [en,zh] of pairs){
    if(token!==epoch)break;
@@ -49,15 +52,17 @@ async function speakWelcome(force=false){
   // Safari/WebKit may block audible autoplay without a trusted gesture.
   // Do NOT replace Microsoft's voice with low-quality browser TTS.
   if(token===epoch){started=false;stage.dataset.welcomeAudioBlocked='true';}
- }finally{if(token===epoch){playing=false;btn?.setAttribute('aria-pressed','false');}}
+ }finally{if(token===epoch){playing=false;paintVoice();}}
 }
 if(title){
  btn=document.createElement('button');btn.type='button';btn.className='v57-voice-button';
  btn.setAttribute('aria-label','Play Microsoft welcome / 播放微软欢迎语');btn.setAttribute('aria-pressed','false');
  btn.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 9a5 5 0 0 1 0 6M18 6a9 9 0 0 1 0 12"/></svg>';
- btn.onclick=e=>{e.stopPropagation();void speakWelcome(true);};title.append(btn);
+ const slash=document.createElementNS('http://www.w3.org/2000/svg','path');slash.setAttribute('d','M3 3L21 21');slash.classList.add('v6426-mute-slash');btn.querySelector('svg').append(slash);
+ btn.onclick=e=>{e.stopPropagation();enabled=!enabled;try{localStorage.setItem(muteKey,enabled?'0':'1')}catch{}if(!enabled){clearTimeout(launchTimer);delete stage.dataset.welcomeAudioBlocked;cancel();}else{paintVoice();void speakWelcome(true);}};title.append(btn);paintVoice();
 }
 function onHomeReady(){
+ if(!enabled)return;
  if(intro&&!intro.hidden)return;
  if(stage.dataset.tab&&stage.dataset.tab!=='home')return;
  if(!document.getElementById('home-view')||document.getElementById('home-view').hidden)return;
@@ -70,7 +75,7 @@ window.addEventListener('load',()=>setTimeout(onHomeReady,600));
 // If autoplay was blocked, the first ordinary user gesture can unlock Microsoft audio.
 // Keep the loudspeaker as a dedicated manual replay control too.
 document.addEventListener('pointerdown',event=>{
- if(!stage.dataset.welcomeAudioBlocked||intro&&!intro.hidden||finished||playing||event.target.closest('.v57-voice-button'))return;
+ if(!enabled||!stage.dataset.welcomeAudioBlocked||intro&&!intro.hidden||finished||playing||event.target.closest('.v57-voice-button'))return;
  delete stage.dataset.welcomeAudioBlocked;
  void speakWelcome();
 },{capture:true});

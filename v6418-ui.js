@@ -10,7 +10,14 @@ function theme(){let scene='forest-stairs';try{scene=JSON.parse(localStorage.get
  const colors={coast:['#8bd8e7','#427ca4','#f1fbff'],blossom:['#eda6ce','#9a609f','#fff3f7'],forest:['#d9a7e9','#8a61ac','#fff5fb']}[family];
  ['edge','deep','light'].forEach((k,i)=>document.documentElement.style.setProperty('--goldy-'+k,colors[i]));
 }
+function levelWording(text){return text.replace(/关卡/g,'等级').replace(/第\s*(\d+(?:\s*[—–-]\s*\d+)?)\s*关/g,'第$1级').replace(/(\d+)关/g,'$1级').replace(/下一关/g,'下一等级').replace(/上一关/g,'上一等级').replace(/本关/g,'本级').replace(/通关之路/g,'等级之路').replace(/闯关/g,'等级挑战');}
+function levelLabels(){
+ const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let text;
+ while((text=walker.nextNode())){if(text.parentElement?.closest('script,style,textarea,[contenteditable]'))continue;const next=levelWording(text.nodeValue||'');if(next!==text.nodeValue)text.nodeValue=next;}
+ for(const n of document.querySelectorAll('[aria-label],[title],[placeholder]'))for(const key of ['aria-label','title','placeholder']){const value=n.getAttribute(key);if(value){const next=levelWording(value);if(next!==value)n.setAttribute(key,next)}}
+}
 function labels(){
+ levelLabels();
  // Reorder interface labels only; leave lesson sentences, answer choices and fields intact.
  const known=[['成长之路','Our Growth Journey'],['当前阶段','Current Stage'],['我的PTE成绩与目标','My PTE Scores and Goals'],['我的英语等级与能力','My English Level & Ability'],['听力','Listening'],['口语','Speaking'],['阅读','Reading'],['写作','Writing'],['设置','Settings'],['账户','Account'],['返回','Back'],['收听','Listen'],['播放','Play'],['上一条','Previous'],['下一条','Next'],['重新拼写','Try again'],['主课主题','Course theme']];
  const scope='h1,h2,h3,button,a,label,.bilingual-head,.metric-heading,.metric-caption,.pte-heading,.stage-card .stack,.item-name';
@@ -42,7 +49,7 @@ function boot(){
  function introState(){nav.hidden=!!document.querySelector('#intro:not([hidden])');}
  introState();const intro=document.getElementById('intro');if(intro)new MutationObserver(introState).observe(intro,{attributes:true,attributeFilter:['hidden']});
  labels();let queued=false;
- const obs=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;labels()})});obs.observe(document.body,{childList:true,subtree:true});
+ const obs=new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;labels()})});obs.observe(document.body,{childList:true,subtree:true,characterData:true});
  for(const event of ['storage','pageshow','wm-companions-change'])window.addEventListener(event,theme);
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();

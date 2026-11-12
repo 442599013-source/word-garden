@@ -81,11 +81,11 @@ const skills=[
  {id:'writing',cn:'写作',en:'Writing',ability:'Guardian Halo',abilityCn:'守护之环',target:100,icon:'pencil'}
 ];
 function pteSummary(data){
- return `<section class="section angel-skills"><div class="bilingual-head"><h2>Angel Magic Skill Levels</h2><p>天使魔法技能等级</p></div><div class="pte-grid">${skills.map(s=>{
+ return `<section class="section angel-skills"><div class="bilingual-head"><h2>Angel Magic Skill Levels</h2></div><div class="pte-grid">${skills.map(s=>{
  const record=window.WMPracticeAssessment?.summary(s.id);
  const score=record?record.score:0,mastered=record?record.mastered:0;
  const gap=Math.round(Math.max(0,100-score)*100)/100;
- return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.ability}</strong><small>${s.abilityCn}</small></span>${icon('chevron','pte-chevron')}</div><div class="skill-domain">${s.en}<small>${s.cn}</small></div><div class="progress-track" role="progressbar" aria-label="${s.en} skill progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><span style="width:${score}%"></span></div><div class="pte-detail"><span>Current: ${score.toFixed(2)} / 100</span><small>当前：${score.toFixed(2)} 分</small></div><div class="pte-detail"><strong>Target: 100</strong><small>目标：100 分</small></div><div class="pte-detail"><span>Gap: ${gap.toFixed(2)}</span><small>差距：${gap.toFixed(2)} 分</small></div><div class="pte-detail skill-words"><span>${mastered.toLocaleString('en-US')} / 10,000 Words</span><small>已掌握单词</small></div></button>`;
+ return `<button type="button" data-route="${s.id}" class="pte-card ${s.id}"><div class="pte-heading">${icon(s.icon)}<span><strong>${s.ability}</strong></span>${icon('chevron','pte-chevron')}</div><div class="skill-domain">${s.en}</div><div class="progress-track" role="progressbar" aria-label="${s.en} skill progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${score}"><span style="width:${score}%"></span></div><div class="pte-detail"><span>Current: ${score.toFixed(2)} / 100</span></div><div class="pte-detail"><strong>Target: 100</strong></div><div class="pte-detail"><span>Gap: ${gap.toFixed(2)}</span></div><div class="pte-detail skill-words"><span>${mastered.toLocaleString('en-US')} / 10,000 Words</span></div></button>`;
  }).join('')}</div></section>`;
 }
 

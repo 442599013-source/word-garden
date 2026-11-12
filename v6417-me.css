@@ -72,3 +72,21 @@ html{background:#efd7bc!important}body{background-color:#efd7bc!important}
 .me-overview .me-home-stats .v57-value{align-self:center}
 .angel-skills .pte-heading strong{font-size:clamp(13px,3.4vw,20px);line-height:1.15}.angel-skills .pte-heading span{min-width:0}
 .skill-domain{font-size:13px;font-weight:600;line-height:1.2}.skill-domain small{display:block;font-size:11px;font-weight:400;margin-top:3px}.skill-words{margin-top:4px}
+
+/* V64.26: approved placement and aligned, English-only skill cards. */
+.top-bar .me-brand{flex:0 0 38%;margin-right:auto;justify-content:flex-start;align-items:flex-start}
+.top-bar .me-brand img{object-position:left top}
+.me-overview .me-angel{top:calc(50% - 28px)!important}
+.me-overview .me-egg{left:74%;right:auto;bottom:58px;translate:-50% 0}
+.me-overview .me-home-stats{margin-top:-46px!important}
+.angel-skills .pte-grid{align-items:stretch}
+.angel-skills .pte-card{display:grid;grid-template-rows:36px 22px 14px repeat(4,auto);gap:9px;align-content:start;height:100%}
+.angel-skills .pte-heading{display:flex;align-items:center;gap:4px;min-width:0;height:36px}
+.angel-skills .pte-heading>.icon{width:17px;height:20px;flex:none}
+.angel-skills .pte-heading>span{min-width:0;flex:1}
+.angel-skills .pte-heading strong{display:block;font-size:clamp(10px,2.6vw,17px)!important;line-height:1.15;white-space:nowrap;letter-spacing:-.02em}
+.angel-skills .pte-heading .pte-chevron{width:11px;height:15px;flex:none}
+.angel-skills .progress-track{margin:2px 0;height:10px;align-self:center}
+.angel-skills .skill-domain{font-size:13px;line-height:22px}
+.angel-skills .pte-detail{margin:0;min-height:20px;justify-content:center}
+@media(max-width:360px){.angel-skills .pte-heading strong{font-size:9px!important}.angel-skills .pte-heading>.icon{width:14px}.angel-skills .pte-heading{gap:3px}.angel-skills .pte-heading .pte-chevron{width:9px}}
