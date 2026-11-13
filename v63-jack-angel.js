@@ -65,13 +65,29 @@
    el.style.cssText='position:absolute;left:12.5%;top:0;width:75%;height:100%;pointer-events:none;';
    return el;
   }
- function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);state?.observer?.disconnect();idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';img.style.backgroundImage='';img.style.backgroundSize='';img.style.backgroundPosition='';img.style.removeProperty('aspect-ratio');img.style.marginRight='';img.style.marginLeft='';img.style.width='';img.style.height='';delete img.dataset.jackAngel;}}
+ function clearIdle(img){const state=idleByImage.get(img);if(state?.timer)clearInterval(state.timer);state?.observer?.disconnect();idleByImage.delete(img);if(img){img.style.animation='';img.style.translate='';img.style.backgroundImage='';img.style.backgroundSize='';img.style.backgroundPosition='';img.style.removeProperty('aspect-ratio');img.style.marginRight='';img.style.marginLeft='';if(img.parentElement?.matches('.v643-list>button')){img.style.position='';img.style.top='';}img.style.width='';img.style.height='';delete img.dataset.jackAngel;}}
   function setIdle(img){
    css();const token={timer:null,observer:null};idleByImage.set(img,token);
    img.dataset.character=ID;img.dataset.jackAngel='1';img.dataset.media='jack-angel-v637';img.alt='Jack';
    img.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%221%22 height=%221%22 viewBox=%220 0 1 1%22%3E%3C/svg%3E';img.alt='';
    img.style.visibility='';img.style.animation='jack633Float 2.6s ease-in-out infinite';
-   const fit=()=>{if(idleByImage.get(img)!==token)return;const host=img.parentElement;if(!host)return;const picker=host.matches('.v643-list>button'),cs=getComputedStyle(host);const width=host.clientWidth-(parseFloat(cs.paddingLeft)||0)-(parseFloat(cs.paddingRight)||0);let height=host.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0);if(picker){for(const other of host.children)if(other!==img)height-=other.getBoundingClientRect().height;height-=(parseFloat(cs.rowGap)||5)*Math.max(0,host.children.length-1)}if(!width||height<=0)return;img.style.setProperty('flex','0 0 auto','important');img.style.setProperty('min-height','0','important');let h=Math.min(height,width/(543/724));if(picker||host.classList.contains('v6410-left'))h=Math.min(h,Math.min(height,width/(900/1080))*(838/1080)/(692/724));img.style.setProperty('width',(h*543/724)+'px','important');img.style.setProperty('height',h+'px','important');img.style.setProperty('aspect-ratio','543 / 724','important');img.style.setProperty('margin-left','auto','important');img.style.setProperty('margin-right','auto','important')};
+   const fit=()=>{if(idleByImage.get(img)!==token)return;const host=img.parentElement;if(!host)return;const picker=host.matches('.v643-list>button'),cs=getComputedStyle(host);const width=host.clientWidth-(parseFloat(cs.paddingLeft)||0)-(parseFloat(cs.paddingRight)||0);let height=host.clientHeight-(parseFloat(cs.paddingTop)||0)-(parseFloat(cs.paddingBottom)||0);if(picker){for(const other of host.children)if(other!==img)height-=other.getBoundingClientRect().height;height-=(parseFloat(cs.rowGap)||5)*Math.max(0,host.children.length-1)}if(!width||height<=0)return;img.style.setProperty('flex','0 0 auto','important');img.style.setProperty('min-height','0','important');let h=Math.min(height,width/(543/724));if(picker||host.classList.contains('v6410-left'))h=Math.min(h,Math.min(height,width/(900/1080))*(838/1080)/(692/724));img.style.setProperty('width',(h*543/724)+'px','important');img.style.setProperty('height',h+'px','important');img.style.setProperty('aspect-ratio','543 / 724','important');img.style.setProperty('margin-left','auto','important');img.style.setProperty('margin-right','auto','important');
+   // Picker placement only: preserve the established image size and native ratio.
+   if(picker){
+    const reference=[...host.parentElement.querySelectorAll('button>img')].find(n=>n!==img&&(/v64-cal-|Cal Angel/.test(n.getAttribute('src')||'')||n.alt==='Cal Angel'));
+    if(reference){
+     const r=reference.getBoundingClientRect(),j=img.getBoundingClientRect();
+     const scale=host.getBoundingClientRect().width/(host.offsetWidth||host.clientWidth||1);
+     if(r.width>0&&r.height>0&&j.height>0&&scale>0){
+      const artworkHeight=Math.min(r.height,r.width*1080/900);
+      const calFeet=r.top+(r.height-artworkHeight)/2+artworkHeight*948/1080;
+      const previous=parseFloat(img.style.top)||0;
+      const jackFeet=j.top-previous*scale+j.height*709/724;
+      img.style.position='relative';img.style.top=((calFeet-jackFeet)/scale)+'px';
+     }
+    }
+   }
+  };
    img.style.width='75%';img.style.height='100%';img.style.marginLeft='12.5%';
    requestAnimationFrame(()=>{fit();if(window.ResizeObserver&&img.parentElement&&idleByImage.get(img)===token){token.observer=new ResizeObserver(fit);token.observer.observe(img.parentElement)}});
    // No timer or secondary image decode until idle motion is actually needed.

@@ -1,6 +1,6 @@
 {
   "name": "Goldy Magic English",
-  "short_name": "Goldy Magic English",
+  "short_name": "Goldy English",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
