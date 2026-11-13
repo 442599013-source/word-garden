@@ -7,7 +7,7 @@
   const C=window.WMCompanions, S=window.WM42;
   // Show the same blinking koala on the homepage and inside the V43 Pets view.
   if(C&&!C.__v49Koala){const originalSetImage=C.setImage.bind(C);
-    C.setImage=function(img,id,...rest){if(id==='koala'&&img){img.src='v49-koala-blink.gif';img.style.visibility='';return;}
+    C.setImage=function(img,id,...rest){if(id==='koala'&&img){img.src='v6438-koala-leaf.webp?v=64.38';img.style.visibility='';return;}
       return originalSetImage(img,id,...rest);};C.__v49Koala=true;}
 
   const home=$('home-view'),header=stage.querySelector('.journey-title'),panel=$('panel-view'),nav=stage.querySelector('.bottom-nav');
@@ -47,7 +47,7 @@
   const cat=$('primary-cat');decorateLock(cat);
   function pet(cls,id,label,source){const b=document.createElement('button');b.className=cls;b.type='button';b.setAttribute('aria-label',label);const img=document.createElement('img');img.alt=label;img.draggable=false;b.append(img);if(source)img.src=source;else C?.setImage?.(img,id);decorateLock(b);home.append(b);return b;}
   const phoenix=pet('v48-phoenix','phoenix','Phoenix 凤凰');
-  const koala=pet('v48-koala','koala','Koala 考拉','v49-koala-blink.gif');
+  const koala=pet('v48-koala','koala','Koala 考拉','v6438-koala-leaf.webp?v=64.38');
   const egg=document.createElement('div');egg.className='v48-egg';egg.innerHTML='<img src="v49-magic-golden-egg.gif" alt="Magic Golden Egg 魔法金蛋">';home.append(egg);
   const stats=document.createElement('section');stats.className='v48-stats';stats.setAttribute('aria-label','Angel progress 天使成长数据');
   stats.innerHTML='<div class="v48-level"><b id="v48-level-en">Level 0 Angel Baby</b><small id="v48-level-zh">0级天使宝宝</small></div><div><span>Baby Score</span><small>宝宝分数</small><strong id="v48-score">0.0</strong></div><div><span>Ability</span><small>能力</small><strong id="v48-ability">待评</strong></div>';
