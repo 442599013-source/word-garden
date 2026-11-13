@@ -34,7 +34,7 @@
   const svg=(name)=>'<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+icon[name]+'</svg>';
   function addTool(button,name,en,zh){if(!button)return;button.replaceChildren();button.classList.add('v48-tool');button.innerHTML='<span class="v48-tool-icon">'+svg(name)+'</span><span class="v48-tool-text">'+en+'<small>'+zh+'</small></span>';button.setAttribute('aria-label',en+' '+zh);}
   addTool($('scenes-button'),'scene','Change<br>Scene','切换场景');
-  addTool($('characters-button'),'baby','My Baby','选择宝宝');
+  addTool($('characters-button'),'baby','My Angel','我的天使');
   if($('wardrobe-button'))$('wardrobe-button').hidden=true;
   const steps=home.querySelector('.milestones');
   const labels=[['primary','Primary School','小学'],['kindergarten','Kindergarten','幼儿园']];

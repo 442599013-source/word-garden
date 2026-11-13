@@ -17,7 +17,7 @@ function tier(lv,score){if(lv<=0)return -1;const r=score/(lv*10);return r<.6?0:r
 const legacy=document.createElement('div');legacy.hidden=true;legacy.style.display='none';
 for(const id of ['v48-level-en','v48-level-zh','v48-score','v48-ability']){const old=document.getElementById(id);if(old){old.remove();legacy.append(old);}else{const n=document.createElement('span');n.id=id;legacy.append(n);}}
 stage.append(legacy);
-const sections=[['Angel Baby','v57-level'],['Baby Score','v57-score'],['Ability','v57-ability']];
+const sections=[['Advance','v57-level'],['Practice','v57-score'],['Ability','v57-ability']];
 stats.replaceChildren();const refs=sections.map(([label,cls])=>{const column=document.createElement('div');column.className='v57-stat '+cls;const title=document.createElement('b');title.textContent=label;const value=document.createElement('strong');value.className='v57-value';const track=document.createElement('div');track.className='v57-progress';const fill=document.createElement('div');fill.className='v57-progress-fill';track.append(fill);column.append(title,value,track);stats.append(column);return{value,fill};});
 function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));let score=0;try{score=Number(JSON.parse(localStorage.getItem(window.WMMatchProgressKey?.()||'wm-wordmatch-v35')||'{}').total||0)/10;}catch{}if(!Number.isFinite(score))score=0;
 const index=tier(lv,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};

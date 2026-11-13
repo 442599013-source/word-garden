@@ -6,7 +6,7 @@
   const style=document.createElement('style');style.id='v638-picker-style';style.textContent=`
     #picker-content .picker-grid:not(.scenes) button.v638-person{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;min-width:0;min-height:0;overflow:hidden;padding:7px 5px 9px!important;}
     #picker-content .picker-grid:not(.scenes) button.v638-person .v638-portrait{width:100%!important;height:auto!important;aspect-ratio:1 / 1!important;object-fit:contain!important;display:block!important;flex:none;}
-    #picker-content .picker-grid:not(.scenes) button.v638-person .v638-jack{width:75%!important;aspect-ratio:543 / 724!important;height:auto!important;background-image:url('jack-angel-frames.png?v=63.7');background-size:400% 200%;background-position:0 0;background-repeat:no-repeat;flex:none;}
+    #picker-content .picker-grid:not(.scenes) button.v638-person .v638-jack{width:60.55%!important;aspect-ratio:543 / 724!important;height:auto!important;background-image:url('jack-angel-frames.png?v=63.7');background-size:400% 200%;background-position:0 0;background-repeat:no-repeat;flex:none;}
     #picker-content .picker-grid:not(.scenes) button.v638-person>.v638-name{display:block;position:static!important;transform:none!important;margin-top:7px;line-height:1.2;white-space:nowrap;font-size:3.1cqw;text-align:center;order:2;}
   `;document.head.append(style);
   function repair(){
