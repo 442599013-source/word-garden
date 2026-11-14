@@ -200,7 +200,8 @@ function preserveJackRatio(){
   }
  };sprite.src='jack-angel-frames.png?v=63.7';
 }
-function fixUpperHang(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;const branch=stage.querySelector('.v50-branch');if(branch)branch.style.setProperty('top','15.35%','important');for(const sel of ['.level-button','.score-label','.combo-label']){const n=stage.querySelector(sel);if(n)n.style.setProperty('top','19.55%','important')}}
+function fixUpperHang(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;if(stage.querySelector('.code-topbar')){for(const selector of ['.level-button','.score-label','.combo-label'])stage.querySelector(selector)?.style.removeProperty('top');return;}const branch=stage.querySelector('.v50-branch');if(branch)branch.style.setProperty('top','15.35%','important');for(const sel of ['.level-button','.score-label','.combo-label']){const n=stage.querySelector(sel);if(n)n.style.setProperty('top','19.55%','important')}}
 function init(){preserveJackRatio();fixUpperHang();setupCal();setupEgg();setupSlotRules();homeNav();matchSkills();eggInGame();suppressOldCheer();classroom()}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
+

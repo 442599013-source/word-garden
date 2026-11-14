@@ -1,6 +1,6 @@
 /* V64.12 final layout + Cal celebration reliability; preserves V63.10 Jack. */
 (()=>{'use strict';
-function place(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;
+function place(){const stage=document.querySelector('#match-game .match-stage');if(!stage)return;if(stage.querySelector('.code-topbar')){for(const selector of ['.level-button','.score-label','.combo-label'])stage.querySelector(selector)?.style.removeProperty('top');return;}
  const branch=stage.querySelector('.v50-branch');if(branch)branch.style.setProperty('top','15.10%','important');
  for(const selector of ['.level-button','.score-label','.combo-label'])stage.querySelector(selector)?.style.setProperty('top','19.30%','important');
 }
@@ -30,3 +30,4 @@ function init(){place();
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
+
