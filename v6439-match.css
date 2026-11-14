@@ -23,15 +23,16 @@
 #match-sentences .sentence-english{display:flex;flex-wrap:wrap;align-content:center;flex:1;gap:3px 4px;min-height:77px;font-size:12px;line-height:1.85;font-weight:650;color:#234b6b;height:auto}
 #match-sentences .sentence-slot{display:inline-flex;align-items:center;justify-content:center;min-width:13px;min-height:22px;padding:0 1px;white-space:nowrap;border-bottom:1.5px solid #9ebbcf}
 #match-sentences .sentence-slot.blank{color:#a0b4c3}#match-sentences .sentence-slot.filled{color:#118ab6;border-bottom-color:#b6e2ef}
-#match-sentences .sentence-slot.landed{animation:sentence-land 1.6s ease-out}
+#match-sentences .sentence-slot.landed{animation:sentence-land 2s ease-out}
 #match-sentences .sentence-chinese{font-size:10px;color:#6c8395;border-top:1px solid #e3eaf0;padding-top:7px;margin-top:6px;white-space:nowrap;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;line-height:1.5;touch-action:pan-x}
 #match-sentences .sentence-chinese::-webkit-scrollbar{display:none}
 #match-sentences .sentence-nav{display:flex;justify-content:center;align-items:center;gap:10px;margin-top:7px;font-size:10px;color:#66869d}
 #match-sentences .sentence-nav button{display:grid;place-items:center;width:23px;height:23px;min-height:0;padding:0;border:1px solid #b9d8e4;border-radius:50%;background:#f4fcff;color:#52809a;font:16px/1 Arial,sans-serif;box-shadow:none}
 #match-game .sentence-flying-word{position:absolute;display:flex;align-items:center;justify-content:center;z-index:45;color:#118ab6;font:650 13px Arial,sans-serif;pointer-events:none;text-shadow:0 0 6px #fff6a4}
-@keyframes sentence-land{0%,50%{background:#fff0a6;box-shadow:0 0 8px #ffdf69}100%{background:transparent;box-shadow:none}}
+@keyframes sentence-land{0%,75%{background:#fff0a6;box-shadow:0 0 8px #ffdf69}100%{background:transparent;box-shadow:none}}
 @media(prefers-reduced-motion:reduce){#match-sentences .sentence-slot.landed{animation:none;background:#fff0a6}}
 
 /* V64.40: title, plain progress, branch and metrics occupy separate rows. */
 #match-game .match-stage #level-pair-progress{top:15.1%!important;height:1.6%!important;left:39%!important;width:22%!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--v50-core)!important;font:700 2.8cqw/1 Arial,sans-serif!important}
 #match-game .match-stage .v50-branch{top:17%!important;height:3%!important}
+

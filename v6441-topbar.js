@@ -32,6 +32,27 @@
 <use href="#wm44-star" x="223" y="351" width="40" height="40"/>
 <path d="M479 394C450 384 461 367 474 353C470 365 480 366 483 349C493 364 503 378 493 389C489 394 485 395 479 394Z" fill="var(--top-accent)" stroke="var(--top-light)" stroke-width="1.5"/><path d="M480 390C467 384 476 375 480 369C480 378 489 379 484 388Z" fill="var(--top-light)"/>
 </svg>`;stage.prepend(header);
+// Only the title letters change shape; other text keeps its existing typography.
+const title=stage.querySelector('.game-title strong');
+if(title&&!title.querySelector('.wm-title-letter')){
+ const text=title.textContent;title.setAttribute('aria-label',text);title.replaceChildren();
+ const tilt=[-6,3,-4,5,-3,0,4,-5,3,-3,4],lift=[0,1,-1,1,0,0,-1,1,-1,0,1];
+ [...text].forEach((letter,i)=>{if(letter===' '){title.append(document.createTextNode(' '));return}const n=document.createElement('span');n.className='wm-title-letter';n.textContent=letter;n.setAttribute('aria-hidden','true');n.style.setProperty('--letter-tilt',tilt[i%tilt.length]+'deg');n.style.setProperty('--letter-lift',lift[i%lift.length]*.18+'cqw');title.append(n)});
+}
+// Interface labels only. Never visit the board, word meanings or sentence panel.
+function englishInterfaceLabels(){
+ for(const selector of ['.home-button small','#level-chinese','#hint small','#shuffle small','.v42-rules small'])for(const n of stage.querySelectorAll(selector))if(n.textContent)n.textContent='';
+ for(const [selector,text]of [['.score-label>span','Score'],['.combo-label>span','Combo']]){const n=stage.querySelector(selector);if(n&&n.textContent!==text)n.textContent=text}
+ const dialog=stage.querySelector('#dialog');if(!dialog)return;
+ const walker=document.createTreeWalker(dialog,NodeFilter.SHOW_TEXT);let n;
+ while((n=walker.nextNode())){if(n.parentElement?.closest('script,style'))continue;const value=n.nodeValue;if(!/[\u3400-\u9fff]/.test(value))continue;
+ let next=value.replace(/Total game points\s*·\s*累计游戏积分：/g,'Total game points: ').replace(/Best combo\s*·\s*最高连消：/g,'Best combo: ').replace(/得分\s*·\s*最高连消\s*/g,'Best combo ').replace(/[\u3400-\u9fff]+/g,'').replace(/\s*[·/]\s*(?=$|[：:])/g,'').replace(/[：]/g,':').replace(/\s+/g,' ').trim();if(next!==value)n.nodeValue=next;
+ }
+}
+englishInterfaceLabels();let labelQueued=false;
+new MutationObserver(()=>{if(labelQueued)return;labelQueued=true;requestAnimationFrame(()=>{labelQueued=false;englishInterfaceLabels()})}).observe(stage,{childList:true,subtree:true,characterData:true});
+
 function syncHeaderTheme(){let scene='forest-stairs';try{scene=window.WMCompanions?.read?.()?.scene||JSON.parse(localStorage.getItem('wm-companions-v39')||'{}').scene||scene}catch{}stage.dataset.headerTheme=scene.startsWith('coast')?'coast':scene.startsWith('city')?'blossom':'forest'}
 syncHeaderTheme();for(const name of ['storage','pageshow','wm-companions-change'])window.addEventListener(name,syncHeaderTheme);
 })();
+

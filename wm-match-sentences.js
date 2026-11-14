@@ -1,4 +1,4 @@
-/* V64.39: five real course sentences. Review words never enter this panel. */
+/* V64.39: five real course sentences. Only words belonging to the current five sentences enter this panel. */
 (()=>{'use strict';
 const stage=document.querySelector('#match-game .match-stage');if(!stage)return;
 const normalize=w=>String(w||'').normalize('NFKC').toLowerCase().replace(/[’‘]/g,"'").replace(/\./g,'').replace(/^[^\p{L}0-9]+|[^\p{L}0-9]+$/gu,'');
@@ -16,11 +16,11 @@ function render(highlight=''){
 }
 panel.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{if(!rows.length)return;current=(current+Number(b.dataset.step)+rows.length)%rows.length;render();window.dispatchEvent(new CustomEvent('wm-match-sentence-selection'))});
 panel.querySelector('.sentence-sound').onclick=()=>{const row=rows[current];if(row)replay(String(row.en||row.answer||''))};
-function init(game,speak){revision++;engine=game;replay=speak||(()=>{});rows=(game.plan.lessons||[]).slice(0,5);abbreviations=(game.plan.sourceWordIds||[]).filter(id=>id.startsWith('abbr:')).map(id=>normalize(game.data.words[id]?.en||id));vocabulary=game.plan.sourceWordIds?new Set(game.plan.sourceWordIds.map(id=>normalize(game.data.words[id]?.en||id))):null;const incoming=new Set((game.s.incomingReviews||[]).map(id=>normalize(game.data.words[id]?.en||id)));const saved=game.s.sentenceView;completed=new Set((saved?.version===6439?saved.filled||[]:(game.s.done||[]).map(id=>game.data.words[id]?.en||id)).map(normalize).filter(w=>w&&!incoming.has(w)));current=Math.max(0,Math.min(rows.length-1,Number(saved?.index)||0));render();}
+function init(game,speak){revision++;engine=game;replay=speak||(()=>{});rows=(game.plan.lessons||[]).slice(0,5);abbreviations=(game.plan.sourceWordIds||[]).filter(id=>id.startsWith('abbr:')).map(id=>normalize(game.data.words[id]?.en||id));vocabulary=game.plan.sourceWordIds?new Set(game.plan.sourceWordIds.map(id=>normalize(game.data.words[id]?.en||id))):null;const saved=game.s.sentenceView;completed=new Set([...(saved?.version===6439?saved.filled||[]:[]),...(game.s.done||[]).filter(id=>!game.plan.sourceWordIds||game.plan.sourceWordIds.includes(id)).map(id=>game.data.words[id]?.en||id)].map(normalize).filter(w=>w&&(!vocabulary||vocabulary.has(w))));current=Math.max(0,Math.min(rows.length-1,Number(saved?.index)||0));render();}
 async function match(result,rects){
  const game=engine,epoch=revision;if(!game)return;
  const en=result.previous.find(t=>result.ids.includes(t.id)&&t.lang==='en');
- if(!en||(game.s.incomingReviews||[]).includes(en.word))return;
+ if(!en||(game.plan.sourceWordIds&&!game.plan.sourceWordIds.includes(en.word)))return;
  const key=normalize(game.data.words[en.word]?.en||en.word),indices=rows.map((r,i)=>words(r).some(w=>w.key===key)?i:-1).filter(i=>i>=0);
  if(!key||!indices.length)return;
  current=indices.includes(current)?current:indices[0];completed.add(key);render(key);
@@ -46,3 +46,4 @@ if(window.ResizeObserver){const observer=new ResizeObserver(schedule);observer.o
 new MutationObserver(schedule).observe(stage,{childList:true,subtree:true});stage.addEventListener('load',schedule,true);window.addEventListener('resize',schedule);window.addEventListener('wm-companions-change',schedule);window.addEventListener('wm-match-round-start',schedule);
 window.WMMatchSentences={init,match};
 })();
+

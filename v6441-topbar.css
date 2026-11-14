@@ -24,3 +24,14 @@
 #match-game .match-stage .home-button{top:14cqw!important;height:9.4cqw!important;color:var(--top-ink)!important;background:linear-gradient(140deg,var(--top-light),var(--top-wood))!important;border-color:var(--top-rim-light)!important}
 #match-game .match-stage .home-button :is(span,b,small){color:var(--top-ink)!important}
 #match-game .match-stage .settings-button{top:13.7cqw!important;width:10%!important;height:10cqw!important;color:var(--top-ink)!important;background:linear-gradient(140deg,var(--top-light),var(--top-wood))!important;border-color:var(--top-rim-light)!important}
+
+
+/* V64.42: pin only live metric text above the late V64.8 placement rules. */
+html body #match-game .match-stage > .level-button{top:35.5cqw!important}
+html body #match-game .match-stage > .score-label,
+html body #match-game .match-stage > .combo-label{top:38.2cqw!important}
+html body #match-game .match-stage .v62-logo-icon{top:0!important}
+#match-game .match-stage .game-title strong .wm-title-letter{display:inline-block!important;transform:translateY(var(--letter-lift)) rotate(var(--letter-tilt))!important;transform-origin:50% 75%}
+#match-game .match-stage #level-chinese,
+#match-game .match-stage .home-button small,
+#match-game .match-stage .v42-rules small{display:none!important}
