@@ -46,7 +46,7 @@ function boot(){
  if(window.top!==window.self)return;
  document.body.classList.add('goldy-unified');theme();
  nav=document.createElement('nav');nav.id='goldy-nav';nav.setAttribute('aria-label','Main navigation 主导航');
- for(const [key,en,zh,url] of entries){const a=document.createElement('a');a.href=url;a.dataset.page=key;a.setAttribute('aria-label',en+' '+zh);if(key===active)a.setAttribute('aria-current','page');a.innerHTML='<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[key]+'</svg><span>'+en+'</span><small>'+zh+'</small>';nav.append(a)}document.body.append(nav);
+ for(const [key,en,zh,url] of entries){const a=document.createElement('a');a.href=url;a.dataset.page=key;a.setAttribute('aria-label',en+' '+zh);if(key===active)a.setAttribute('aria-current','page');a.innerHTML='<svg viewBox="0 0 40 40" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+paths[key]+'</svg><span>'+en+'</span>';nav.append(a)}document.body.append(nav);
  const spacer=document.createElement('div');spacer.className='goldy-nav-space';spacer.setAttribute('aria-hidden','true');document.body.append(spacer);
  function introState(){nav.hidden=!!document.querySelector('#intro:not([hidden])');}
  introState();const intro=document.getElementById('intro');if(intro)new MutationObserver(introState).observe(intro,{attributes:true,attributeFilter:['hidden']});
@@ -56,3 +56,4 @@ function boot(){
 }
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot,{once:true});else boot();
 })();
+

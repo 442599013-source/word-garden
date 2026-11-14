@@ -1,12 +1,12 @@
 /* One viewport-fixed bar, identical sizes and scene palette on every page. */
-:root{--goldy-edge:#d9a7e9;--goldy-deep:#8a61ac;--goldy-light:#fff5fb;--goldy-nav-height:76px;--goldy-nav-space:calc(var(--goldy-nav-height) + 12px + env(safe-area-inset-bottom,0px))}
+:root{--goldy-edge:#d9a7e9;--goldy-deep:#8a61ac;--goldy-light:#fff5fb;--goldy-nav-height:54px;--goldy-nav-space:calc(var(--goldy-nav-height) + 12px + env(safe-area-inset-bottom,0px))}
 html body.goldy-unified #home-stage .bottom-nav,html body.goldy-unified #v62-game-nav,html body.goldy-unified .me-bottom-nav,html body.goldy-unified>.wm-fixed-nav{display:none!important;pointer-events:none!important}
-html body.goldy-unified #goldy-nav{box-sizing:border-box!important;position:fixed!important;inset:auto auto max(6px,env(safe-area-inset-bottom,0px)) 50%!important;transform:translateX(-50%)!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch!important;width:min(calc(100vw - 20px),690px)!important;height:var(--goldy-nav-height)!important;z-index:500!important;margin:0!important;padding:5px!important;border:1.5px solid transparent!important;border-radius:40px!important;background:linear-gradient(125deg,color-mix(in srgb,var(--goldy-light) 86%,white),color-mix(in srgb,var(--goldy-edge) 19%,var(--goldy-light))) padding-box,linear-gradient(125deg,#f3e5b7,#fffaf0 32%,color-mix(in srgb,var(--goldy-edge) 45%,#eddb9f) 72%,#f5e9c2) border-box!important;box-shadow:inset 0 1px 3px #fff,0 5px 17px color-mix(in srgb,var(--goldy-deep) 20%,transparent)!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;overflow:hidden!important}
+html body.goldy-unified #goldy-nav{box-sizing:border-box!important;position:fixed!important;inset:auto auto max(6px,env(safe-area-inset-bottom,0px)) 50%!important;transform:translateX(-50%)!important;display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;align-items:stretch!important;width:min(calc(100vw - 24px),540px)!important;height:var(--goldy-nav-height)!important;z-index:500!important;margin:0!important;padding:3px!important;border:1.5px solid transparent!important;border-radius:40px!important;background:linear-gradient(125deg,color-mix(in srgb,var(--goldy-light) 86%,white),color-mix(in srgb,var(--goldy-edge) 19%,var(--goldy-light))) padding-box,linear-gradient(125deg,#f3e5b7,#fffaf0 32%,color-mix(in srgb,var(--goldy-edge) 45%,#eddb9f) 72%,#f5e9c2) border-box!important;box-shadow:inset 0 1px 3px #fff,0 5px 17px color-mix(in srgb,var(--goldy-deep) 20%,transparent)!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;overflow:hidden!important}
 html body.goldy-unified #goldy-nav[hidden]{display:none!important}
 html body.goldy-unified #goldy-nav>a{box-sizing:border-box!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;gap:3px!important;min-width:0!important;margin:0!important;padding:3px 0!important;border:0!important;border-radius:18px!important;background:transparent!important;color:var(--goldy-deep)!important;text-decoration:none!important;box-shadow:none!important;text-shadow:none!important;font-style:normal!important;line-height:1!important}
 html body.goldy-unified #goldy-nav>a[aria-current]{background:transparent!important;filter:drop-shadow(0 0 3px color-mix(in srgb,var(--goldy-edge) 65%,transparent))!important}
-html body.goldy-unified #goldy-nav svg{width:29px!important;height:29px!important;display:block!important;flex:none!important}
-html body.goldy-unified #goldy-nav span{display:block!important;font:400 16px/1 Georgia,'Times New Roman',serif!important;letter-spacing:0!important;color:inherit!important}
+html body.goldy-unified #goldy-nav svg{width:22px!important;height:22px!important;display:block!important;flex:none!important}
+html body.goldy-unified #goldy-nav span{display:block!important;font:400 14px/1 Georgia,'Times New Roman',serif!important;letter-spacing:0!important;color:inherit!important}
 html body.goldy-unified #goldy-nav small{display:block!important;font:400 11px/1.1 -apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important;letter-spacing:0!important;color:inherit!important}
 .goldy-nav-space{display:block;height:var(--goldy-nav-space);clear:both;flex:none;pointer-events:none}
 body.goldy-unified:has(#home-stage) #home-stage .v48-scroll{bottom:0!important;padding-bottom:var(--goldy-nav-space)!important;box-sizing:border-box!important}
@@ -15,3 +15,8 @@ body.goldy-unified #app{padding-bottom:18px!important}
 body.goldy-unified :is(.bilingual-head,.metric-heading,.metric-caption,.pte-heading span,.stage-card .stack)>:is(small,p){font-weight:400}
 
 html body.goldy-unified #goldy-nav>a:first-child svg path:last-child{fill:currentColor}
+
+
+/* V64.39: hide the old stage nav with higher specificity than V63.9. */
+html body.goldy-unified #match-game .match-stage > #v62-game-nav{display:none!important;pointer-events:none!important}
+html body.goldy-unified #goldy-nav small{display:none!important}

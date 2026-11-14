@@ -5,3 +5,7 @@
 
 /* V64.35: enlarge koala without stretching or lifting its feet. */
 #home-stage .v48-world .v48-koala{scale:3!important;transform-origin:right bottom!important}
+
+
+/* V64.39: double only the home cat, keeping its feet on the same step. */
+#home-stage .v48-world #primary-cat{scale:2!important;transform-origin:left bottom!important}
