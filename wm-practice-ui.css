@@ -5,4 +5,6 @@ html{overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}body{ma
 /* V26: full level labels, including three-digit levels, without native selects. */
 .context label{font-size:0;gap:0;min-width:0;max-width:55%;width:clamp(126px,43vw,176px)}
 .context .wm-select-button{width:100%;max-width:none;min-width:0;font-size:clamp(12px,3.4vw,15px);line-height:1.3;white-space:nowrap;overflow:visible;text-overflow:clip;padding:6px}
-.context #theme{max-width:43%;overflow-wrap:anywhere}.wm-answer-field{caret-color:transparent}
+.context #theme{max-width:43%;overflow-wrap:anywhere}.wm-answer-field{caret-color:#245b78!important}
+
+.wm-answer-field{caret-color:var(--training-deep,#245b78)!important}.wm-word-feedback{padding:10px;line-height:1.9;overflow-wrap:anywhere}.wm-word-feedback span{display:inline-block;padding:1px 4px;margin:2px;border-radius:4px}.wm-word-feedback .match{background:#e1f4e7;color:#185535}.wm-word-feedback .wrong{background:#ffeaed;color:#962c40}.wm-word-feedback .missing{background:#fff0c9;color:#775000;text-decoration:underline}.wm-native-toggle{font-size:12px;margin:5px;border:1px solid currentColor;border-radius:9px;padding:7px;background:#fff9}
