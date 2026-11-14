@@ -37,7 +37,7 @@ function position(){
  const jack=actor.dataset.jackAngel==='1';let feet;
  if(jack)feet=(ar.top-sr.top+ar.height*709/724)/scale;
  else {const ratio=(actor.naturalWidth&&actor.naturalHeight)?actor.naturalWidth/actor.naturalHeight:900/1080;const h=Math.min(ar.height,ar.width/ratio);feet=(ar.top-sr.top+(ar.height-h)/2+h*948/1080)/scale}
- const size=width*.125;set(egg,'left',width*.225+'px');set(egg,'right','auto');set(egg,'width',size+'px');set(egg,'height',size+'px');set(egg,'top',feet-size*176/210+'px');
+ const size=width*.125;set(egg,'left',width*.14+'px');set(egg,'right','auto');set(egg,'width',size+'px');set(egg,'height',size+'px');set(egg,'top',feet-size*176/210+'px');
  set(batch,'left',width*.04+'px');set(batch,'right','auto');set(batch,'top',feet+5+'px');
  const panelBottom=(panel.getBoundingClientRect().bottom-sr.top)/scale,batchBottom=feet+5+Math.max(22,width*.055);const extra=Math.max(0,Math.max(panelBottom,batchBottom)-(stage.clientHeight||sr.height/scale));const main=document.getElementById('match-game');set(main,'padding-bottom',extra+12+'px');
 }
