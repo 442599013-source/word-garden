@@ -8,3 +8,6 @@ html{overflow-x:clip;-webkit-text-size-adjust:100%;text-size-adjust:100%}body{ma
 .context #theme{max-width:43%;overflow-wrap:anywhere}.wm-answer-field{caret-color:#245b78!important}
 
 .wm-answer-field{caret-color:var(--training-deep,#245b78)!important}.wm-word-feedback{padding:10px;line-height:1.9;overflow-wrap:anywhere}.wm-word-feedback span{display:inline-block;padding:1px 4px;margin:2px;border-radius:4px}.wm-word-feedback .match{background:#e1f4e7;color:#185535}.wm-word-feedback .wrong{background:#ffeaed;color:#962c40}.wm-word-feedback .missing{background:#fff0c9;color:#775000;text-decoration:underline}.wm-native-toggle{font-size:12px;margin:5px;border:1px solid currentColor;border-radius:9px;padding:7px;background:#fff9}
+
+/* V64.48 shared custom keyboard: fixed geometry while typing and changing items. */
+.wm-soft-keyboard{height:calc(245px + env(safe-area-inset-bottom,0px));box-sizing:border-box;overflow:hidden;overscroll-behavior:contain;touch-action:manipulation}.wm-keyboard-open{padding-bottom:calc(255px + env(safe-area-inset-bottom,0px))!important;scroll-padding-bottom:255px}.wm-soft-keyboard .wm-key-row button{touch-action:manipulation}.wm-answer-field{scroll-margin-bottom:255px}

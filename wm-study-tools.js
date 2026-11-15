@@ -8,6 +8,8 @@ class Store{
  hasLearned(type,item){return !!this.learned[this.key(type,item)]}
  hasFavorite(type,item){return !!this.favorites[this.key(type,item)]}
  mark(type,item){const next={...this.learned,[this.key(type,item)]:true};localStorage.setItem(this.learnedKey,JSON.stringify(next));this.learned=next}
+ graduate(type,item){const nextLearned={...this.learned,[this.key(type,item)]:true},nextFavorites={...this.favorites};delete nextFavorites[this.key(type,item)];const previous=localStorage.getItem(this.favoriteKey);try{localStorage.setItem(this.favoriteKey,JSON.stringify(nextFavorites));localStorage.setItem(this.learnedKey,JSON.stringify(nextLearned))}catch(error){try{if(previous===null)localStorage.removeItem(this.favoriteKey);else localStorage.setItem(this.favoriteKey,previous)}catch{}throw error}this.learned=nextLearned;this.favorites=nextFavorites}
+ favorite(type,item){const next={...this.favorites,[this.key(type,item)]:true};localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next}
  toggle(type,item){const next={...this.favorites},key=this.key(type,item);if(next[key])delete next[key];else next[key]=true;localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next;return !!next[key]}
  remaining(type,items,only=false){return items.filter(x=>!this.hasLearned(type,x)&&(!only||this.hasFavorite(type,x)))}
  counts(type,items){const unique=[...new Map(items.map(x=>[this.key(type,x),x])).values()];return {learned:unique.filter(x=>this.hasLearned(type,x)).length,favorites:unique.filter(x=>this.hasFavorite(type,x)).length}}

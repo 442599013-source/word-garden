@@ -13,3 +13,9 @@
 .wm-study-page .study-progress-row>button[aria-pressed=true]{background:var(--training-deep,#8950b0);color:#fff}
 .wm-study-page .study-top-tools #learned{margin:0;font-size:clamp(10px,3.1vw,14px);padding:6px 4px;min-height:40px;width:100%}
 .wm-study-page #pieces:empty,.wm-study-page #built:empty{display:none}
+
+/* V64.48 compact actions beside the input, no empty top toolbar. */
+.wm-study-page .study-entry-actions{display:flex;align-items:center;gap:6px;width:100%;margin-top:8px;flex-wrap:nowrap}
+.wm-study-page .study-entry-actions>button{display:inline-flex;align-items:center;justify-content:center;gap:3px;flex:1;min-width:0;min-height:36px;height:auto;padding:6px 4px;margin:0;border:1px solid var(--training-edge,#c8a2da);border-radius:10px;background:var(--training-light,#fff5fb);color:var(--training-deep,#542877);font-size:clamp(10px,2.8vw,13px);line-height:1.3;white-space:nowrap}
+.wm-study-page .study-entry-actions>button:first-child{flex:1.5}.wm-study-page .study-entry-actions svg{width:14px;height:14px;flex:none}
+.wm-study-page .scene{gap:10px}.wm-study-page .question{gap:8px}.wm-study-page .study-top-tools{margin-bottom:4px}.wm-study-page .study-progress-row{margin-bottom:5px}
