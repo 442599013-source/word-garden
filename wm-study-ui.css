@@ -24,3 +24,5 @@
 .wm-study-page #types{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 10px;position:static;width:100%}
 .wm-study-page #types button{min-width:0;min-height:50px;padding:7px 2px;font-size:clamp(11px,3.2vw,15px);border:1px solid var(--training-edge,#c8a2da);border-radius:14px;background:var(--training-light,#fff5fb);color:var(--training-deep,#542877)}
 .wm-study-page #types small,.wm-study-page #types .type-zh{display:block;font-size:10px;margin-top:3px}.wm-study-page #types button[aria-pressed=true]{background:var(--training-deep,#8950b0);color:white}
+
+.learned-word-total{margin:0 0 10px;text-align:right;font-size:13px;line-height:1.5;color:var(--training-deep,#542877)}

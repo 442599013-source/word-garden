@@ -1,20 +1,16 @@
-/* V64.49 classroom typing stays in fixed viewport positions. */
-body{--class-keyboard-height:0px;--class-nav-space:calc(68px + env(safe-area-inset-bottom,0px))}body.wm-classroom-keyboard-open{--class-keyboard-height:clamp(164px,26svh,200px)}
-#root .wm-game{height:auto!important;grid-template-rows:clamp(68px,12svh,110px) minmax(115px,auto) auto minmax(120px,auto)!important;padding-bottom:calc(145px + var(--class-keyboard-height) + env(safe-area-inset-bottom,0px))!important;overflow-anchor:none}
-#root .wm-game .wm-keyboard{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:var(--class-nav-space)!important;transform:translateX(-50%)!important;width:min(calc(100% - 20px),540px)!important;height:var(--class-keyboard-height)!important;max-height:var(--class-keyboard-height)!important;min-height:var(--class-keyboard-height)!important;z-index:300!important;box-sizing:border-box;grid-template-rows:20px repeat(4,minmax(0,1fr)) 18px!important;visibility:hidden!important;overscroll-behavior:contain;touch-action:manipulation}
-body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{visibility:visible!important}
-#root .wm-game .wm-input{position:fixed!important;left:50%!important;right:auto!important;top:auto!important;bottom:calc(var(--class-nav-space) + 5px + var(--class-keyboard-height))!important;transform:translateX(-50%)!important;width:min(calc(100% - 20px),540px)!important;height:44px!important;min-height:44px!important;max-height:44px!important;visibility:visible!important;z-index:301!important}
-.wm-classroom-keyboard-heading{display:flex;align-items:center;justify-content:space-between;font-size:12px;padding:0 6px}.wm-classroom-keyboard-heading button{min-height:20px;border:0;border-radius:7px;padding:2px 9px;background:#fff9;color:inherit;font:inherit}
-.wm-classroom-keyboard-toggle{position:fixed;z-index:302;right:max(10px,calc((100vw - 540px)/2));bottom:calc(var(--class-nav-space) + 5px);min-height:36px;padding:5px 10px;border:1px solid var(--goldy-edge,#c8a2da);border-radius:10px;background:var(--goldy-light,#fff5fb);color:var(--goldy-deep,#542877);font-size:12px}.wm-classroom-keyboard-toggle[hidden]{display:none!important}
-#root .wm-game .wm-keyboard button{touch-action:manipulation}#root .wm-game .wm-native-input{font-size:17px!important;caret-color:var(--goldy-deep,#542877);scroll-behavior:auto}
-
-.wm-classroom-keyboard-heading,.wm-classroom-keyboard-heading button{pointer-events:auto!important}
-
-#root .wm-game .wm-keyboard{padding:4px 4px 3px!important;gap:3px!important;border-radius:16px!important}
-#root .wm-game .wm-key-row{gap:3px!important}#root .wm-game .wm-key{font-size:clamp(16px,4.6vw,23px)!important;border-radius:9px!important;border-bottom-width:2px!important;min-height:0!important}
-#root .wm-game .wm-key-row.row-4 .wm-key{font-size:18px!important}.wm-classroom-keyboard-heading{font-size:11px}
-
-/* V64.51: preserve viewport during automatic lesson/selection changes; users can still scroll. */
+/* V64.52: lesson, input and compact keyboard share one flowing column. */
 html,body{overflow-anchor:none;scroll-behavior:auto}
-#root .wm-game{min-height:max(100svh,var(--class-content-min-height,0px))!important;scroll-behavior:auto}
+body{--class-keyboard-height:clamp(164px,26svh,200px)}
+#root .wm-game{height:auto!important;min-height:100svh!important;display:grid!important;grid-template-rows:auto auto auto auto 44px auto!important;align-content:start!important;gap:6px!important;padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))!important;overflow-anchor:none;scroll-behavior:auto}
 #root .wm-game .wm-tasks,#root .wm-game .wm-learning,#root .wm-game .wm-lesson{overflow-anchor:none}
+#root .wm-game .wm-lesson{margin-bottom:0!important;min-height:120px}
+#root .wm-game .wm-input{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;height:44px!important;min-height:44px!important;max-height:44px!important;margin:0!important;visibility:visible!important;z-index:2!important}
+#root .wm-game .wm-keyboard{position:relative!important;inset:auto!important;left:auto!important;right:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;height:var(--class-keyboard-height)!important;min-height:var(--class-keyboard-height)!important;max-height:var(--class-keyboard-height)!important;margin:0!important;box-sizing:border-box;grid-template-rows:20px repeat(4,minmax(0,1fr)) 18px!important;gap:3px!important;padding:4px 4px 3px!important;border-radius:16px!important;z-index:2!important;visibility:visible!important;display:none!important;touch-action:manipulation}
+body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{display:grid!important}
+#root .wm-game .wm-key-row{gap:3px!important}#root .wm-game .wm-key{font-size:clamp(16px,4.6vw,23px)!important;border-radius:9px!important;border-bottom-width:2px!important;min-height:0!important;touch-action:manipulation}
+#root .wm-game .wm-key-row.row-4 .wm-key{font-size:18px!important}
+#root .wm-game .wm-native-input{font-size:17px!important;caret-color:var(--goldy-deep,#542877);scroll-behavior:auto}
+.wm-classroom-keyboard-heading{display:flex;align-items:center;justify-content:space-between;font-size:11px;padding:0 6px;pointer-events:auto!important}
+.wm-classroom-keyboard-heading button{min-height:20px;border:0;border-radius:7px;padding:2px 9px;background:#fff9;color:inherit;font:inherit;pointer-events:auto!important}
+.wm-classroom-keyboard-toggle{position:static!important;min-height:36px;justify-self:end;margin:0;padding:5px 10px;border:1px solid var(--goldy-edge,#c8a2da);border-radius:10px;background:var(--goldy-light,#fff5fb);color:var(--goldy-deep,#542877);font-size:12px}
+.wm-classroom-keyboard-toggle[hidden]{display:none!important}

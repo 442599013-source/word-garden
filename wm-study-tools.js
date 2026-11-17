@@ -11,12 +11,13 @@ class Store{
  key(type,item){return type+'|'+normalize(item.en)}
  hasLearned(type,item){return !!this.learned[this.key(type,item)]}
  hasFavorite(type,item){return !!this.favorites[this.key(type,item)]}
- mark(type,item){const next={...this.learned,[this.key(type,item)]:true};localStorage.setItem(this.learnedKey,JSON.stringify(next));this.learned=next;changed()}
- graduate(type,item){const nextLearned={...this.learned,[this.key(type,item)]:true},nextFavorites={...this.favorites};delete nextFavorites[this.key(type,item)];const previous=localStorage.getItem(this.favoriteKey);try{localStorage.setItem(this.favoriteKey,JSON.stringify(nextFavorites));localStorage.setItem(this.learnedKey,JSON.stringify(nextLearned))}catch(error){try{if(previous===null)localStorage.removeItem(this.favoriteKey);else localStorage.setItem(this.favoriteKey,previous)}catch{}throw error}this.learned=nextLearned;this.favorites=nextFavorites;changed()}
- favorite(type,item){const next={...this.favorites,[this.key(type,item)]:true};localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next}
- toggle(type,item){const next={...this.favorites},key=this.key(type,item);if(next[key])delete next[key];else next[key]=true;localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next;return !!next[key]}
- remaining(type,items,only=false){return items.filter(x=>only?this.hasFavorite(type,x):!this.hasLearned(type,x))}
- counts(type,items){const unique=[...new Map(items.map(x=>[this.key(type,x),x])).values()];return {learned:unique.filter(x=>this.hasLearned(type,x)).length,favorites:unique.filter(x=>this.hasFavorite(type,x)).length}}
+ refresh(){this.learned=read(this.learnedKey);this.favorites=read(this.favoriteKey);return this}
+ mark(type,item){return this.graduate(type,item)}
+ graduate(type,item){const oldLearned=localStorage.getItem(this.learnedKey),oldFavorites=localStorage.getItem(this.favoriteKey),nextLearned={...read(this.learnedKey),[this.key(type,item)]:true},nextFavorites={...read(this.favoriteKey)};delete nextFavorites[this.key(type,item)];try{localStorage.setItem(this.favoriteKey,JSON.stringify(nextFavorites));localStorage.setItem(this.learnedKey,JSON.stringify(nextLearned))}catch(error){for(const [key,value]of [[this.favoriteKey,oldFavorites],[this.learnedKey,oldLearned]]){try{if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value)}catch{}}throw error}this.learned=nextLearned;this.favorites=nextFavorites;changed()}
+ favorite(type,item){this.refresh();const next={...this.favorites,[this.key(type,item)]:true};localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next}
+ toggle(type,item){this.refresh();const next={...this.favorites},key=this.key(type,item);if(next[key])delete next[key];else next[key]=true;localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next;return !!next[key]}
+ remaining(type,items,only=false){this.refresh();return items.filter(x=>only?this.hasFavorite(type,x):!this.hasLearned(type,x))}
+ counts(type,items){this.refresh();const unique=[...new Map(items.map(x=>[this.key(type,x),x])).values()];return {learned:unique.filter(x=>this.hasLearned(type,x)).length,favorites:unique.filter(x=>this.hasFavorite(type,x)).length}}
 }
 let context=null;
 function audio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!context||context.state==='closed')context=new C();return context}
