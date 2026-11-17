@@ -1,0 +1,36 @@
+/* V64.60 shared compact learning layout; counts retain their original 16px. */
+.wm-study-page .study-top-tools{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:7px!important;margin-bottom:6px!important}
+.wm-study-page .wm-study-split{height:38px;min-height:38px;border-radius:11px;align-items:stretch}
+.wm-study-page .wm-study-split>button:first-child{display:flex!important;align-items:center;justify-content:center;gap:3px!important;font-size:clamp(10px,2.8vw,12px)!important;line-height:1!important;padding:5px 3px!important;min-height:36px!important;white-space:nowrap!important;font-weight:500;flex:1 1 auto;overflow:visible}
+.wm-study-page .wm-study-split>.wm-study-count{font-size:16px!important;line-height:1.1!important;font-weight:700;min-height:36px!important;min-width:calc(6ch + 8px);width:auto;flex:0 0 auto;padding:5px 4px!important;white-space:nowrap;font-variant-numeric:tabular-nums}
+.wm-study-page .wm-header-category{border:0!important;background:none!important;box-shadow:none!important;padding:0!important;min-height:0!important;margin:0!important;display:block!important}
+.wm-study-page .wm-header-category select,.wm-study-page .wm-header-category #stage,.wm-study-page .wm-header-category #category{width:100%!important;min-width:0!important;max-width:100%!important;height:38px!important;min-height:38px!important;font-size:12px!important;padding:4px 5px!important;margin:0!important;white-space:nowrap;text-overflow:ellipsis}
+.wm-study-page .wm-header-category label{display:block!important;width:100%!important;margin:0!important}
+.wm-study-page .header{grid-template-columns:36px minmax(0,1fr) 105px;gap:7px;min-height:46px}
+.wm-study-page .header .title{font-size:clamp(16px,4.25vw,20px)}
+.wm-listening-header{display:grid;grid-template-columns:36px minmax(0,1fr) 105px;align-items:center;gap:7px;margin:0 0 12px;min-height:46px}
+.wm-listening-header>a{width:36px!important;height:38px!important;min-width:36px!important;min-height:38px!important;padding:0!important;display:grid!important;place-items:center;font-size:28px!important}
+.wm-listening-header h1{font-size:clamp(16px,4.25vw,20px)!important;line-height:1.2;margin:0!important;text-align:center}.wm-listening-header h1 small{display:none}
+.wm-listening-header .study-category-row{min-width:0;margin:0!important}.wm-listening-header #book-title{display:none}
+.wm-study-page .question,.wm-study-page .study-content,.wm-study-page .settings{padding:12px!important;margin-top:10px!important;margin-bottom:10px!important;border-radius:20px!important}
+.wm-study-page .scene{gap:8px!important}.wm-study-page .question{gap:7px!important}
+.wm-study-page #english,.wm-study-page .question #prompt{font-size:20px!important;line-height:1.4!important;margin:10px 0!important}
+.wm-study-page #chinese,.wm-study-page .question #translation{font-size:15px!important;line-height:1.4!important;margin:7px 0!important}
+.wm-study-page .settings label{font-size:12px!important;margin:6px 0!important}
+.wm-study-page .settings select{font-size:14px!important;height:36px!important;padding:5px 7px!important;margin-top:4px!important}
+.wm-study-page .settings #timer-status:empty{display:none}.wm-study-page #status:empty{display:none}
+.wm-study-page .answers button{font-size:14px!important;min-height:40px!important;padding:9px 11px!important}
+.wm-study-page #types button{min-height:42px!important;padding:6px 2px!important;font-size:12px!important;border-radius:12px!important}.wm-study-page #types small,.wm-study-page #types .type-zh{font-size:10px!important;line-height:1.2}
+.wm-study-page #input-area{padding:10px!important}.wm-study-page .wm-entry-shell{min-height:64px!important}.wm-study-page textarea{font-size:16px!important;min-height:64px!important}
+.wm-study-page .study-entry-actions{display:flex!important;gap:6px!important;align-items:stretch;margin-top:7px!important}
+.wm-study-page .study-entry-actions>button,.wm-study-page .controls>button{height:36px!important;min-height:36px!important;padding:6px!important;flex:1 1 0!important;display:flex!important;align-items:center;justify-content:center;border-radius:10px!important;font-size:14px!important;line-height:1!important;margin:0!important}
+.wm-study-page .wm-action-icon{width:19px;height:19px;flex:none;display:block;pointer-events:none}
+.wm-study-page #audio,.wm-study-page audio{display:none!important}
+.wm-study-page .learned-word-total{display:none!important}
+.wm-study-page .wm-icon-action{display:inline-flex;align-items:center;justify-content:center}
+#root .wm-game .phrase-actions .wm-action-icon{width:18px;height:18px;display:block}.wm-study-list-row{font-size:14px}
+@media(max-width:350px){.wm-study-page .wm-study-split>button:first-child{padding-inline:2px!important;gap:2px!important;font-size:10px!important}.wm-study-page .wm-study-split>.wm-study-count{padding-inline:3px!important;min-width:calc(6ch + 6px)}}
+
+.wm-study-page .wm-study-label-icon{font-size:11px!important;line-height:1;flex:none}.wm-study-page .wm-study-split>button:first-child>span:last-child{white-space:nowrap}
+
+.wm-study-page .question #prompt[lang="zh-CN"]{font-size:15px!important}

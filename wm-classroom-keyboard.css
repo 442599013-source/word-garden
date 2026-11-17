@@ -44,3 +44,14 @@ body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{display:grid!importa
 #root .wm-game .wm-learning .wm-focus{top:auto!important;bottom:0!important}
 #root .wm-game .wm-lesson{z-index:2;position:relative;margin-top:0!important}
 #root .wm-game .wm-learning .v6410-actor{pointer-events:none!important}
+
+/* V64.60: moderate room for two card rows; scrolling fixes live in JS separately. */
+#root .wm-game{--class-sentence-height:clamp(164px,23svh,194px);--class-lesson-height:clamp(124px,18svh,156px)}
+#root .wm-game .wm-tasks{grid-template-rows:22px minmax(0,1fr) auto!important}
+#root .wm-game .wm-tasks .wm-word-grid{align-content:start!important;gap:5px!important;scrollbar-width:thin}
+#root .wm-game .phrase-placed{padding:5px 8px!important;gap:2px!important;line-height:1.2}
+#root .wm-game .phrase-placed strong{font-size:clamp(12px,3.2vw,16px)!important;line-height:1.2!important}
+#root .wm-game .phrase-placed small{font-size:clamp(11px,2.8vw,14px)!important;line-height:1.2!important}
+#root .wm-game .wm-tasks .wm-word-tile{font-size:clamp(16px,4.4vw,22px)!important}
+#root .wm-game .wm-tasks .wm-top-translation:empty{display:none!important}
+#root .wm-game .phrase-actions .phrase-action{min-width:48px;height:30px;padding:5px 10px}
