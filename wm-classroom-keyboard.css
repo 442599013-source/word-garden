@@ -14,3 +14,18 @@ body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{display:grid!importa
 .wm-classroom-keyboard-heading button{min-height:20px;border:0;border-radius:7px;padding:2px 9px;background:#fff9;color:inherit;font:inherit;pointer-events:auto!important}
 .wm-classroom-keyboard-toggle{position:static!important;min-height:36px;justify-self:end;margin:0;padding:5px 10px;border:1px solid var(--goldy-edge,#c8a2da);border-radius:10px;background:var(--goldy-light,#fff5fb);color:var(--goldy-deep,#542877);font-size:12px}
 .wm-classroom-keyboard-toggle[hidden]{display:none!important}
+
+/* V64.55: stable teaching regions across demo/build/input/done.
+   Long sentences and phrase choices scroll inside their existing panels. */
+#root .wm-game{
+ --class-header-height:clamp(68px,10svh,90px);
+ --class-sentence-height:clamp(150px,24svh,210px);
+ --class-actors-height:clamp(110px,19svh,165px);
+ --class-lesson-height:clamp(140px,22svh,190px);
+ grid-template-rows:var(--class-header-height) var(--class-sentence-height) var(--class-actors-height) var(--class-lesson-height) 44px auto!important;
+}
+#root .wm-game .wm-tasks{height:var(--class-sentence-height)!important;max-height:var(--class-sentence-height)!important;grid-template-rows:24px minmax(0,1fr) minmax(0,3.8em)!important}
+#root .wm-game .wm-learning{height:var(--class-actors-height)!important}
+#root .wm-game .wm-lesson{height:var(--class-lesson-height)!important;max-height:var(--class-lesson-height)!important;min-height:0!important}
+#root .wm-game .wm-word-grid,#root .wm-game .wm-top-translation,#root .wm-game .wm-lesson-body{min-height:0!important;overflow:auto;overscroll-behavior:contain}
+#root .wm-game .wm-lesson-body{max-height:none!important}
