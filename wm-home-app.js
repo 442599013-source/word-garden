@@ -51,7 +51,7 @@ return {stageCard};
 const {progressCards} = (()=>{
 
 function progressCards(data){
- const count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;
+ let count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;try{count=window.WMLearningStats?.summary('all').total??count}catch{}
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length? (exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,'') :null;
  return `<div class="metrics-grid">
@@ -302,11 +302,11 @@ function meAbilityStats(data){
  const passes=Array.isArray(data.passedLevels)?data.passedLevels:[];
  const levels=['Kindergarten Junior Class','Kindergarten Middle Class','Kindergarten Senior Class','Primary School · Grade 1'];
  let index=0;while(index<3&&passes.includes(['junior','middle','senior'][index]))index++;
- const count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;
+ let count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;try{count=window.WMLearningStats?.summary('all').total??count}catch{}
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):null;
- const entries=[['Magic Academy',levels[index],'data-route="journey"','v57-level me-stage-value'],['Power of Growth',count+' Words','data-quick="advance"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
- return `<nav class="me-home-stats" aria-label="Learning abilities">${entries.map(([label,value,route,cls])=>`<button type="button" class="v57-stat ${cls}" ${route}><b>${label}</b><strong class="v57-value">${escapeHTML(value)}</strong><div class="v57-progress" aria-hidden="true"><div class="v57-progress-fill"></div></div></button>`).join('')}</nav>`;
+ const entries=[['Magic Academy',levels[index],'data-route="journey"','v57-level me-stage-value'],['Words Learned',count+' Words','data-learning-stats="true"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
+ return `<nav class="me-home-stats" aria-label="Learning abilities">${entries.map(([label,value,route,cls])=>{const stats=cls==='v57-score',tag=stats?'a':'button',attrs=stats?'href="learning-stats.html?v=64.56" data-learning-stats="true"':'type="button" '+route;return `<${tag} class="v57-stat ${cls}" ${attrs}><b>${label}</b><strong class="v57-value">${escapeHTML(value)}</strong><div class="v57-progress" aria-hidden="true"><div class="v57-progress-fill"></div></div></${tag}>`}).join('')}</nav>`;
 }
 function drawHome(){
  app.classList.remove('beach-home');

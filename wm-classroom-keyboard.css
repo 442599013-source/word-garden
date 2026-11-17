@@ -19,13 +19,18 @@ body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{display:grid!importa
    Long sentences and phrase choices scroll inside their existing panels. */
 #root .wm-game{
  --class-header-height:clamp(68px,10svh,90px);
- --class-sentence-height:clamp(150px,24svh,210px);
+ --class-sentence-height:clamp(200px,30svh,260px);
  --class-actors-height:clamp(110px,19svh,165px);
  --class-lesson-height:clamp(140px,22svh,190px);
  grid-template-rows:var(--class-header-height) var(--class-sentence-height) var(--class-actors-height) var(--class-lesson-height) 44px auto!important;
 }
-#root .wm-game .wm-tasks{height:var(--class-sentence-height)!important;max-height:var(--class-sentence-height)!important;grid-template-rows:24px minmax(0,1fr) minmax(0,3.8em)!important}
+#root .wm-game .wm-tasks{height:var(--class-sentence-height)!important;max-height:var(--class-sentence-height)!important;grid-template-rows:24px minmax(0,1fr) auto!important}
 #root .wm-game .wm-learning{height:var(--class-actors-height)!important}
 #root .wm-game .wm-lesson{height:var(--class-lesson-height)!important;max-height:var(--class-lesson-height)!important;min-height:0!important}
 #root .wm-game .wm-word-grid,#root .wm-game .wm-top-translation,#root .wm-game .wm-lesson-body{min-height:0!important;overflow:auto;overscroll-behavior:contain}
 #root .wm-game .wm-lesson-body{max-height:none!important}
+
+/* V64.56: sentence owns remaining space; translation only uses its actual height. */
+#root .wm-game .wm-tasks .wm-word-grid{line-height:1.35!important;align-content:start!important;padding:6px 5px!important;scroll-padding-block:6px}
+#root .wm-game .wm-tasks .wm-word-tile{line-height:1.35!important;vertical-align:baseline!important}
+#root .wm-game .wm-tasks .wm-top-translation{margin:4px 10px 0!important;padding:0 0 5px!important;max-height:4.2em!important;line-height:1.4!important;flex-shrink:0}
