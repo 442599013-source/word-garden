@@ -12,7 +12,7 @@ const pairs=[
  ['Let our magical adventure begin!','让我们的魔法之旅开始吧！']
 ];
 const names=['Poor','Weak','Basic','Good','Excellent','Amazing','Exceptional'];
-function tier(lv,score){if(lv<=0)return -1;const r=score/(lv*10);return r<.6?0:r<1?1:Math.abs(r-1)<1e-9?2:r<1.2?3:r<1.5?4:r<1.8?5:6;}
+function tier(lv,score){if(lv<=0)return -1;const r=score/(lv*5);return r<.6?0:r<1?1:Math.abs(r-1)<1e-9?2:r<1.2?3:r<1.5?4:r<1.8?5:6;}
 // Existing V49 sync() still writes these IDs. Preserve them offscreen, not in the visible card.
 const legacy=document.createElement('div');legacy.hidden=true;legacy.style.display='none';
 for(const id of ['v48-level-en','v48-level-zh','v48-score','v48-ability']){const old=document.getElementById(id);if(old){old.remove();legacy.append(old);}else{const n=document.createElement('span');n.id=id;legacy.append(n);}}

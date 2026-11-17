@@ -94,7 +94,7 @@
   `;document.head.append(moreStyle);
 
   // The standard V43 storage key is the only score source; do not reset existing progress.
-  function ability(level,score){if(level<=0)return '待评';const ratio=score/(level*10);return ratio<.6?'薄弱':ratio<1?'欠缺':Math.abs(ratio-1)<1e-9?'普通':ratio<1.2?'良好':ratio<1.5?'优秀':ratio<1.8?'卓越':'传奇';}
+  function ability(level,score){if(level<=0)return '待评';const ratio=score/(level*5);return ratio<.6?'薄弱':ratio<1?'欠缺':Math.abs(ratio-1)<1e-9?'普通':ratio<1.2?'良好':ratio<1.5?'优秀':ratio<1.8?'卓越':'传奇';}
   function sync(){
     const scene=C?.read?.().scene||'forest-stairs';
     const family=scene.startsWith('city')?'blossom':scene.startsWith('coast')?'coast':'forest';

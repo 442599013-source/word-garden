@@ -51,7 +51,7 @@ return {stageCard};
 const {progressCards} = (()=>{
 
 function progressCards(data){
- const count=Number.isFinite(data.wordsEliminated)?Math.max(0,Math.floor(data.wordsEliminated)):0;
+ const count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length? (exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,'') :null;
  return `<div class="metrics-grid">
@@ -302,7 +302,7 @@ function meAbilityStats(data){
  const passes=Array.isArray(data.passedLevels)?data.passedLevels:[];
  const levels=['Kindergarten Junior Class','Kindergarten Middle Class','Kindergarten Senior Class','Primary School · Grade 1'];
  let index=0;while(index<3&&passes.includes(['junior','middle','senior'][index]))index++;
- const count=Number.isFinite(data.wordsEliminated)?Math.max(0,Math.floor(data.wordsEliminated)):0;
+ const count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):null;
  const entries=[['Magic Academy',levels[index],'data-route="journey"','v57-level me-stage-value'],['Power of Growth',count+' Words','data-quick="advance"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
@@ -414,4 +414,4 @@ window.addEventListener('wordmatch:data-changed', e=>updateHomeData(e.detail||{}
 window.WordMatchPreviewAzure=async()=>{try{const locale=data.accent;const voice=data.azureVoice||(locale==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural');const response=await fetch(window.wordMatchOnlineTtsUrl+'/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text:'Hello! Welcome to our English learning game.',locale,voice})});if(!response.ok)throw Error('HTTP '+response.status);const u=URL.createObjectURL(await response.blob());const a=new Audio(u);a.playbackRate=data.voiceSpeed||1;a.onended=()=>URL.revokeObjectURL(u);await a.play()}catch(e){alert('语音试听失败：'+e.message)}};window.WordMatchOpenExam=(g,w,b)=>{const ci={junior:0,middle:1,senior:2}[g]||0;const n=/^\d+-\d+$/.test(b||'')?Number(b.split('-')[0]):ci*40+(Number(w)===20?1:21);location.href='assessment.html?level='+n};window.WordMatchHome={navigate,updateHomeData};window.WordMatchVoiceSettings=()=>({accent:data.accent,sound:data.sound,voiceChoice:data.voiceChoice,voiceSpeed:data.voiceSpeed,azureVoice:data.azureVoice|| (data.accent==='en-GB'?'en-GB-SoniaNeural':'en-US-JennyNeural'),azureChineseVoice:data.azureChineseVoice});
 drawHome();
 
-window.addEventListener('wm-assessment-updated',()=>{if(page==='home')drawHome()});window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13')&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});
+window.addEventListener('wm-assessment-updated',()=>{if(page==='home')drawHome()});window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13'||e.key==='wm-listening-learned-v6444'||e.key?.startsWith('wm-study-learned-v6446-'))&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});

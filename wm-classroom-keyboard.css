@@ -13,3 +13,8 @@ body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{visibility:visible!i
 #root .wm-game .wm-keyboard{padding:4px 4px 3px!important;gap:3px!important;border-radius:16px!important}
 #root .wm-game .wm-key-row{gap:3px!important}#root .wm-game .wm-key{font-size:clamp(16px,4.6vw,23px)!important;border-radius:9px!important;border-bottom-width:2px!important;min-height:0!important}
 #root .wm-game .wm-key-row.row-4 .wm-key{font-size:18px!important}.wm-classroom-keyboard-heading{font-size:11px}
+
+/* V64.51: preserve viewport during automatic lesson/selection changes; users can still scroll. */
+html,body{overflow-anchor:none;scroll-behavior:auto}
+#root .wm-game{min-height:max(100svh,var(--class-content-min-height,0px))!important;scroll-behavior:auto}
+#root .wm-game .wm-tasks,#root .wm-game .wm-learning,#root .wm-game .wm-lesson{overflow-anchor:none}
