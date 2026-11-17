@@ -13,9 +13,11 @@ function sync(){
 function summary(period='all',now=new Date()){
  const state=sync(),today=day(now),monday=new Date(now.getFullYear(),now.getMonth(),now.getDate());monday.setDate(monday.getDate()-((monday.getDay()+6)%7));
  const start=period==='today'?today:period==='week'?day(monday):period==='month'?today.slice(0,7)+'-01':null;
- const current={},union=new Map(),counts={};
- for(const skill of skills){current[skill]=words(skill);counts[skill]=0;for(const word of current[skill]){const date=state.first[skill][word];if(!start||(date&&date>=start&&date<=today))counts[skill]++;if(!union.has(word))union.set(word,date);else{const old=union.get(word);union.set(word,old===null||date===null?null:(old<date?old:date))}}}
- let total=0;for(const date of union.values())if(!start||(date&&date>=start&&date<=today))total++;
+ // Union the qualifying words AFTER each skill's date filter.
+ // An older/undated mark in another skill must not hide today's new mastery.
+ const union=new Set(),counts={};
+ for(const skill of skills){counts[skill]=0;for(const word of words(skill)){const date=state.first[skill][word];if(!start||(date&&date>=start&&date<=today)){counts[skill]++;union.add(word)}}}
+ const total=union.size;
  return {total,...counts,goals:state.goals,trackingSince:state.trackingSince||null};
 }
 function saveGoals(values){const state=sync();for(const k of ['today','week','month']){const n=Number(values[k]);if(!Number.isSafeInteger(n)||n<1||n>100000)throw Error('Enter whole numbers from 1 to 100,000.');state.goals[k]=n}localStorage.setItem(KEY,JSON.stringify(state));window.dispatchEvent(new Event('wm-learning-stats-updated'))}
@@ -24,5 +26,5 @@ window.WMLearningStats={summary,saveGoals,sync,day};safeSync();
 for(const event of ['wm-study-updated','pageshow'])window.addEventListener(event,safeSync);
 window.addEventListener('storage',e=>{if(e.key?.startsWith('wm-study-learned-')||e.key==='wm-listening-learned-v6444')safeSync()});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden)safeSync()});
-document.addEventListener('click',e=>{if(e.target.closest('[data-learning-stats]')){e.preventDefault();location.href='learning-stats.html?v=64.56'}},true);
+document.addEventListener('click',e=>{if(e.target.closest('[data-learning-stats]')){e.preventDefault();location.href='learning-stats.html?v=64.57'}},true);
 })();
