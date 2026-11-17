@@ -23,5 +23,5 @@ $('sleep').onchange=applySleep;
 document.addEventListener('visibilitychange',()=>{if(deadline&&Date.now()>=deadline){stop();$('status').textContent='Timer ended · 定时已停止'}});window.addEventListener('pagehide',()=>{persist();stop()});
 try{catalog=window.WMKindergartenListening129;if(!catalog?.books?.length)throw Error('听力内容未加载，请刷新重试');
 catalog.categories.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.en+' · '+c.zh;$('category').append(o)});
-tabs();$('category').value=catalog.categories.some(c=>c.id===saved.category)?saved.category:'kindergarten';listBooks(saved.bookId);
+tabs();const routeParams=new URLSearchParams(location.search),routeStage=routeParams.get('stage')||window.WMUnifiedCourseData?.units.find(u=>u.level===Number(routeParams.get('level')))?.stage;$('category').value=catalog.categories.some(c=>c.id===routeStage)?routeStage:catalog.categories.some(c=>c.id===saved.category)?saved.category:'kindergarten';listBooks(saved.bookId);
 }catch(e){$('status').textContent=e.message}show();})();
