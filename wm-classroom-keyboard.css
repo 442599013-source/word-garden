@@ -34,3 +34,13 @@ body.wm-classroom-keyboard-open #root .wm-game .wm-keyboard{display:grid!importa
 #root .wm-game .wm-tasks .wm-word-grid{line-height:1.35!important;align-content:start!important;padding:6px 5px!important;scroll-padding-block:6px}
 #root .wm-game .wm-tasks .wm-word-tile{line-height:1.35!important;vertical-align:baseline!important}
 #root .wm-game .wm-tasks .wm-top-translation{margin:4px 10px 0!important;padding:0 0 5px!important;max-height:4.2em!important;line-height:1.4!important;flex-shrink:0}
+
+/* V64.59 compact teaching layout, independent of sentence/phrase phase. */
+#root .wm-game{--class-header-height:clamp(56px,8svh,72px);--class-sentence-height:clamp(126px,19svh,164px);--class-actors-height:clamp(88px,13svh,116px);--class-lesson-height:clamp(124px,19svh,160px);gap:4px!important;--class-keyboard-height:clamp(164px,25svh,192px)}
+#root .wm-game .wm-tasks .wm-word-tile{font-size:clamp(15px,4.35vw,22px)!important;line-height:1.25!important}
+#root .wm-game .wm-tasks .wm-top-translation{font-size:clamp(10px,2.7vw,14px)!important;line-height:1.3!important;max-height:2.6em!important}
+#root .wm-game .wm-learning{z-index:5!important;isolation:isolate!important;overflow:visible!important;transform:translateY(8px)}
+#root .wm-game .wm-learning .v6410-left{z-index:8!important;bottom:-8px!important}
+#root .wm-game .wm-learning .wm-focus{top:auto!important;bottom:0!important}
+#root .wm-game .wm-lesson{z-index:2;position:relative;margin-top:0!important}
+#root .wm-game .wm-learning .v6410-actor{pointer-events:none!important}

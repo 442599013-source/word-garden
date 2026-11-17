@@ -7,7 +7,7 @@ function words(skill){const key=skill==='listening'?'wm-listening-learned-v6444'
 function day(d=new Date()){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
 function sync(){
  const state=read(KEY),initial=!state.initialized;state.first=state.first||{};state.goals=state.goals||{today:30,week:150,month:600};
- for(const skill of skills){const map=state.first[skill]||(state.first[skill]={});for(const word of words(skill))if(!Object.prototype.hasOwnProperty.call(map,word))Object.defineProperty(map,word,{value:initial?null:day(),enumerable:true,writable:true,configurable:true})}
+ for(const skill of skills){const map=state.first[skill]||(state.first[skill]={});const currentWords=words(skill);for(const word of Object.keys(map))if(!currentWords.has(word))delete map[word];for(const word of currentWords)if(!Object.prototype.hasOwnProperty.call(map,word))Object.defineProperty(map,word,{value:initial?null:day(),enumerable:true,writable:true,configurable:true})}
  state.initialized=true;localStorage.setItem(KEY,JSON.stringify(state));return state;
 }
 function summary(period='all',now=new Date()){

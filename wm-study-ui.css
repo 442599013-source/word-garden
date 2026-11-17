@@ -26,3 +26,13 @@
 .wm-study-page #types small,.wm-study-page #types .type-zh{display:block;font-size:10px;margin-top:3px}.wm-study-page #types button[aria-pressed=true]{background:var(--training-deep,#8950b0);color:white}
 
 .learned-word-total{margin:0 0 10px;text-align:right;font-size:13px;line-height:1.5;color:var(--training-deep,#542877)}
+
+/* V64.59: one outlined frame with two independent click regions. */
+.study-top-tools .wm-study-split,.wm-study-split{display:flex!important;align-items:stretch;min-width:0;border:1.5px solid var(--goldy-edge,#b7cfe0);border-radius:14px;overflow:hidden;background:#ffffffa8}
+.wm-study-split>button{border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;margin:0!important;min-width:0;min-height:40px;padding:8px!important;flex:1;font:inherit;color:inherit}
+.wm-study-split>.wm-study-count{flex:0 0 auto;min-width:42px;border-left:1px solid var(--goldy-edge,#b7cfe0)!important;font-weight:700}
+.wm-study-list-overlay{position:fixed;inset:0;z-index:2000;background:#30203688;display:grid;place-items:center;padding:18px}
+.wm-study-list{background:#fffafc;color:#54366b;border:2px solid var(--goldy-edge,#c8a2da);border-radius:20px;width:min(100%,580px);max-height:82svh;overflow:auto;padding:18px;overscroll-behavior:contain}
+.wm-study-list h2{margin:0 0 12px}.wm-study-list button{border:1px solid var(--goldy-edge,#c8a2da);border-radius:9px;background:#f6f0fa;color:inherit;padding:8px;margin:3px;font:inherit}
+.wm-study-list-row{display:flex;align-items:center;gap:6px;padding:10px 0;border-bottom:1px solid #e4d8ed}.wm-study-list-row span{flex:1;min-width:0;overflow-wrap:anywhere}
+#favorites-only,#study-favorites-only{display:none!important}
