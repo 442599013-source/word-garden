@@ -34,3 +34,73 @@
 .wm-study-page .wm-study-label-icon{font-size:11px!important;line-height:1;flex:none}.wm-study-page .wm-study-split>button:first-child>span:last-child{white-space:nowrap}
 
 .wm-study-page .question #prompt[lang="zh-CN"]{font-size:15px!important}
+
+/* Short status messages should not reserve a full control row. */
+.wm-study-page :is(#status,#timer-status, .wm-word-feedback) {
+  min-height:0!important;
+  font-size:13px!important;
+  line-height:1.4;
+}
+.wm-study-page :is(#status,#timer-status, .wm-word-feedback):empty {
+  display:none!important;
+}
+
+/* Compact actions and short feedback on the active study and assessment screens. */
+.wm-study-page [hidden],.assessment-page [hidden]{display:none!important}
+.wm-study-page .study-progress-row #favorites-only:not([hidden]),
+.wm-study-page .study-progress-row #study-favorites-only:not([hidden]){
+  display:inline-flex!important;
+  min-height:34px;
+  align-items:center;
+  white-space:nowrap;
+}
+.is-favorites{color:var(--training-deep,#542877);font-weight:700}
+.is-favorites::before{content:"☆ ";color:inherit}
+.wm-study-page .study-progress-row{min-height:22px}
+.wm-study-page #status,.wm-study-page #timer-status,.wm-study-page .wm-word-feedback{margin:5px 0!important;padding-block:0!important}
+.wm-study-page .settings>label{line-height:1.25}
+.wm-study-page .note {font-size:12px;line-height:1.4;margin:6px 0}
+.wm-study-page .wm-entry-shell textarea,.assessment-page .wm-entry-shell textarea{box-sizing:border-box;padding-right:46px!important}
+.wm-study-page .wm-entry-shell .wm-clear-inside,.assessment-page .wm-entry-shell .wm-clear-inside{
+  left:auto!important;right:5px!important;display:grid;place-items:center
+}
+.assessment-page .assessment-card{padding:12px}
+.assessment-page .assessment-card h2{margin:6px 0 10px}
+.assessment-page .assessment-tools{display:flex;flex-wrap:nowrap;align-items:center;gap:5px;margin:6px 0}
+.assessment-page .wm-icon-action{display:inline-grid;place-items:center;flex:0 0 auto;width:36px;min-width:36px;height:36px;min-height:36px;padding:0;margin:0;border:1px solid #ba99cc;border-radius:9px;background:#f5eefa;color:#613c77}
+.assessment-page .assessment-status,.assessment-page .assessment-note,.assessment-page .assessment-source{min-height:0;margin:5px 0;font-size:13px;line-height:1.4}
+.assessment-page .assessment-source{padding:6px 8px}
+.assessment-page .assessment-status:empty,.assessment-page .assessment-options:empty{display:none}
+.assessment-page .assessment-options{margin:7px 0;gap:6px}
+.assessment-page .assessment-options button{padding:8px 10px;font-size:14px}
+.wm-listening-lesson-entry,.wm-listening-lessons button,.wm-listening-lessons select{
+  color:inherit;background:var(--training-light,#fff5fb);border:1px solid var(--training-edge,#c8a2da);
+  border-radius:10px;min-height:38px;padding:6px 9px;font:inherit;font-size:14px;
+}
+.wm-listening-lesson-entry{width:100%;margin:0 0 8px;font-weight:650}
+.wm-listening-lessons{
+  color:var(--training-deep,#542877);background:var(--training-light,#fff5fb);
+  border:1px solid var(--training-edge,#c8a2da);border-radius:16px;padding:10px;
+  line-height:1.45;margin:0 0 24px;overflow-wrap:anywhere;
+}
+.wm-listening-lessons h2{font-size:18px;margin:0 0 6px}
+.wm-listening-lessons h3{font-size:16px;margin:0 0 6px}
+.wm-listening-lessons .wm-lesson-card{border-top:1px solid var(--training-edge,#c8a2da);padding:10px 0;margin-top:6px}
+.wm-lesson-toolbar{display:flex;align-items:center;gap:5px;min-width:0;margin:4px 0}
+.wm-lesson-toolbar select{flex:1;min-width:0}
+.wm-lesson-toolbar>span{font-size:13px}
+.wm-listening-lessons .wm-icon-action{display:grid;place-items:center;min-width:38px;padding:0}
+.wm-lesson-line{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 6px;padding:6px 0;border-bottom:1px solid #8883}
+.wm-lesson-line p{margin:0;grid-column:1;font-size:14px}
+.wm-lesson-line p[lang="zh-CN"]{font-size:13px}
+.wm-lesson-line button{grid-row:1/3;grid-column:2;align-self:center}
+.wm-lesson-options{display:flex;flex-wrap:wrap;gap:5px;margin:4px 0}
+.wm-lesson-match{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.wm-lesson-match>div{display:grid;align-content:start;gap:5px;min-width:0}
+.wm-lesson-match button{text-align:start}
+.wm-lesson-match button[aria-pressed="true"]{outline:2px solid currentColor}
+.wm-listening-lessons button[data-state="correct"]{background:#e4f4e8;color:#285942}
+.wm-listening-lessons button[data-state="wrong"]{background:#ffeded;color:#843139}
+.wm-lesson-question{padding:5px 0;border-bottom:1px solid #8883}
+.wm-lesson-feedback,.wm-lesson-status{font-size:13px;line-height:1.4;margin:4px 0}
+.wm-lesson-feedback:empty,.wm-lesson-status:empty{display:none}

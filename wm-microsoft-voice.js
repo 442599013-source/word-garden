@@ -5,6 +5,7 @@ window.WMMicrosoftVoice=class{
  static voiceFor(locale){let actor='jack_angel';try{const c=window.WMCompanions?.read?.()||JSON.parse(localStorage.getItem('wm-companions-v39')||'{}');actor=c.slots?.[0]||actor}catch{}const male=['jack_angel','golden_staff_angel','cal_angel','blond_angel','school_boy'].includes(actor);return String(locale).startsWith('zh')?(male?'zh-CN-YunxiNeural':'zh-CN-XiaoxiaoNeural'):(male?'en-GB-RyanNeural':'en-GB-SoniaNeural')}
  static verifyVoice(response,voice){const actual=response.headers.get('X-Microsoft-Voice');window.WMVoiceDiagnostics={requested:voice,actual,status:response.status,service:response.headers.get('X-Voice-Service')};if(actual!==voice)throw Error('语音服务尚未确认所选音色，请更新语音服务。')}
  static audioMode(type){try{if(navigator.audioSession)navigator.audioSession.type=type}catch{}}
+ destroy(){this.stop();this.prefetchController?.abort();window.WMMicrosoftVoice.instances.delete(this)}
  static stopForMicrophone(){for(const instance of this.instances)instance.stop();this.audioMode('auto')}
  constructor(audio){this.audio=audio;this.token=0;audio.volume=1;audio.muted=false;window.WMMicrosoftVoice.instances.add(this)}
  preload(items){const queue=items.filter(([text])=>text).slice(0,90);if(this.prefetchController)this.prefetchController.abort();const controller=this.prefetchController=new AbortController();let cursor=0;const run=async()=>{let cache;try{cache=await caches.open('wordmatch-microsoft-bilingual-v9')}catch{}while(cursor<queue.length&&!controller.signal.aborted){const [text,requestedLocale]=queue[cursor++],locale=String(requestedLocale).startsWith('en')?'en-GB':requestedLocale,voice=window.WMMicrosoftVoice.voiceFor(locale),key=new URL('./__microsoft_audio_v6432__/'+voice+'/'+encodeURIComponent(text),location.href).href;try{if(cache&&await cache.match(key))continue;const response=await fetch('https://wordmatch-voice.442599013.workers.dev/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice}),signal:controller.signal});if(!response.ok)continue;window.WMMicrosoftVoice.verifyVoice(response,voice);const blob=await response.blob();if(blob.size&&blob.type.startsWith('audio/')&&cache)await cache.put(key,new Response(blob))}catch{}}};void Promise.all([run(),run()])}
@@ -16,6 +17,9 @@ window.WMMicrosoftVoice=class{
  locale=String(locale).startsWith('en')?'en-GB':locale;
  this.stop();const token=this.token;this.controller=new AbortController();const signal=this.controller.signal;
  const check=()=>{if(token!==this.token)throw new DOMException('Stopped','AbortError')};
+ const preparePlayback=window.WMSpeechInput?.preparePlayback;
+ if(preparePlayback)await preparePlayback();
+ check();window.WMMicrosoftVoice.audioMode('playback');
  const voice=window.WMMicrosoftVoice.voiceFor(locale);
  const key=new URL('./__microsoft_audio_v6432__/'+voice+'/'+encodeURIComponent(text),location.href).href;
  const boostedKey=key.replace('__microsoft_audio_v6432__','__microsoft_audio_louder_v6432__');let boosted=false;let cache,response;try{cache=await deadline(caches.open('wordmatch-microsoft-bilingual-v9'),600,'Cache timeout');response=await deadline(cache.match(boostedKey),600,'Cache timeout');boosted=!!response;if(!response)response=await deadline(cache.match(key),600,'Cache timeout')}catch{}
