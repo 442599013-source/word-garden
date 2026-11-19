@@ -31,5 +31,16 @@
 
 /* Lower the classroom angel to clear the translation above. */
 #root .wm-game .wm-learning.v6410-actors .v6410-actor.v6410-left {
-  bottom: calc(-20% - clamp(46px, 15vw, 62px)) !important;
+  bottom: calc(-20% - clamp(32px, 11vw, 47px)) !important;
+}
+
+#root .wm-phrase-teaching[data-phrase-phase="quiz"] .wm-input,
+#root .wm-phrase-teaching[data-phrase-phase="quiz"] .wm-keyboard {
+  visibility: hidden !important;
+}
+.classroom-quiz-prompt {
+  color: var(--v6412-deep);
+  font: 650 clamp(16px, 4.4vw, 22px)/1.4 sans-serif;
+  margin: 4px 8px;
+  overflow-wrap: anywhere;
 }

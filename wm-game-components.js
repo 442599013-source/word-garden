@@ -21,8 +21,42 @@ const reopen=document.createElement('button');reopen.className='wm-classroom-key
  root.addEventListener('click',e=>{if(!popup.hidden&&!popup.contains(e.target)&&!e.target.closest('[data-lookup]'))popup.hidden=true});
 
  function fitFocusWord(){const el=q('.wm-focus strong');if(!el)return;el.style.fontSize='';const available=el.clientWidth;if(available<=0)return;const base=parseFloat(window.getComputedStyle?.(el)?.fontSize)||33;let size=base;while(el.scrollWidth>available+1&&size>10){size=Math.max(10,size-.5);el.style.fontSize=size+'px'}}
- function followCaret(field){if(!field)return;const caret=field.selectionEnd??field.value.length;if(caret===field.value.length){field.scrollLeft=field.scrollWidth;return}const probe=document.createElement('span');probe.style.cssText='position:absolute;visibility:hidden;white-space:pre;pointer-events:none';const css=window.getComputedStyle?.(field);if(css){probe.style.font=css.font;probe.style.letterSpacing=css.letterSpacing}probe.textContent=field.value.slice(0,caret);root.append(probe);const x=probe.getBoundingClientRect?.().width||0;probe.remove();const width=field.clientWidth;if(width){if(x<field.scrollLeft+12)field.scrollLeft=Math.max(0,x-12);else if(x>field.scrollLeft+width-24)field.scrollLeft=Math.max(0,x-width+24)}}
- const field=q('.wm-native-input');window.WMViewportStability?.bind(field);const selection=()=>{onSelection(field.selectionStart??field.value.length,field.selectionEnd??field.value.length);followCaret(field)};for(const event of ['click','select','keyup','pointerup'])field.addEventListener(event,selection);field.oninput=()=>onNativeInput(field.value,field.selectionStart,field.selectionEnd);field.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();onKey('CONFIRM')}};
+ function followCaret(field,caret=field?.selectionEnd??field?.value.length){
+  if(!field?.clientWidth)return;
+  const css=window.getComputedStyle(field);
+  const paddingLeft=parseFloat(css.paddingLeft)||0;
+  const paddingRight=parseFloat(css.paddingRight)||0;
+  const width=field.clientWidth-paddingLeft-paddingRight;
+  if(caret===field.value.length){field.scrollLeft=field.scrollWidth;return}
+  if(caret===0){field.scrollLeft=0;return}
+  const probe=document.createElement('span');
+  probe.style.cssText='position:absolute;visibility:hidden;white-space:pre;pointer-events:none';
+  probe.style.font=css.font;
+  probe.style.letterSpacing=css.letterSpacing;
+  probe.textContent=field.value.slice(0,caret);
+  root.append(probe);
+  const x=probe.getBoundingClientRect().width;
+  probe.remove();
+  const inset=Math.min(12,width/4);
+  if(x<field.scrollLeft+inset)field.scrollLeft=Math.max(0,x-inset);
+  else if(x>field.scrollLeft+width-inset)field.scrollLeft=Math.max(0,x-width+inset);
+ }
+ const field=q('.wm-native-input');
+ let caretFrame=0;
+ function queueCaret(caret){
+  cancelAnimationFrame(caretFrame);
+  followCaret(field,caret);
+  caretFrame=requestAnimationFrame(()=>followCaret(field,caret));
+ }
+ window.WMViewportStability?.bind(field);
+ const selection=()=>{
+  onSelection(field.selectionStart??field.value.length,field.selectionEnd??field.value.length);
+  queueCaret(field.selectionEnd??field.value.length);
+ };
+ for(const event of ['focus','click','select','keyup','pointerup','selectionchange'])field.addEventListener(event,selection);
+ document.addEventListener('selectionchange',()=>{if(document.activeElement===field)selection()});
+ field.oninput=()=>onNativeInput(field.value,field.selectionStart,field.selectionEnd);
+ field.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();onKey('CONFIRM')}};
  q('.wm-sentence-replay').onclick=onSentenceReplay;
  q('.wm-clear').onpointerdown=e=>e.preventDefault();q('.wm-clear').onclick=()=>onKey('CLEAR');q('.wm-back').onclick=onBack;q('.wm-focus').onclick=onReplay;q('.wm-completion button').onclick=onNext;
  for(const b of root.querySelectorAll('[data-mode]'))b.onclick=()=>onMode(b.dataset.mode);
@@ -42,7 +76,20 @@ const reopen=document.createElement('button');reopen.className='wm-classroom-key
  q('.wm-top-translation').textContent=state.complete?'':state.translation||'';
 
  grid.style.setProperty('--wm-sentence-size',((state.sentence||'').length>105?17:(state.sentence||'').length>65?20:25)+'px');
- q('.wm-focus strong').textContent=state.focusWord||'';fitFocusWord();q('.wm-focus span').replaceChildren();const meaning=String(state.focusMeaning||''),bracket=meaning.search(/[（(]/);q('.wm-focus span').append(document.createTextNode(bracket<0?meaning:meaning.slice(0,bracket).trim()));if(bracket>=0){const note=document.createElement('small');note.className='wm-focus-detail';note.textContent=meaning.slice(bracket);q('.wm-focus span').append(note);}const native=q('.wm-native-input');if(native&&native.value!==(state.input||''))native.value=state.input||'';if(native&&!native.disabled&&document.activeElement===native&&Number.isInteger(state.selectionStart)){if(native.selectionStart!==state.selectionStart||native.selectionEnd!==(state.selectionEnd??state.selectionStart))native.setSelectionRange(state.selectionStart,state.selectionEnd??state.selectionStart);followCaret(native);}
+ q('.wm-focus strong').textContent=state.focusWord||'';fitFocusWord();q('.wm-focus span').replaceChildren();const meaning=String(state.focusMeaning||''),bracket=meaning.search(/[（(]/);q('.wm-focus span').append(document.createTextNode(bracket<0?meaning:meaning.slice(0,bracket).trim()));if(bracket>=0){const note=document.createElement('small');note.className='wm-focus-detail';note.textContent=meaning.slice(bracket);q('.wm-focus span').append(note);}const native=q('.wm-native-input');
+ if(native){
+  const value=state.input||'';
+  const changed=native.value!==value;
+  if(changed)native.value=value;
+  if(Number.isInteger(state.selectionStart)){
+   const end=state.selectionEnd??state.selectionStart;
+   if(native.selectionStart!==state.selectionStart||native.selectionEnd!==end){
+    native.setSelectionRange(state.selectionStart,end);
+   }
+   if(changed||document.activeElement===native)queueCaret(end);
+  }
+ }
+
  const isRepeat=state.mode==='repeat';const isGrammar=state.mode==='grammar';for(const b of root.querySelectorAll('[data-mode]')){b.setAttribute('aria-pressed',String(b.dataset.mode===(isRepeat?'repeat':isGrammar?'grammar':'sentence')));b.disabled=state.phase==='done';if(b.dataset.mode==='repeat'){b.innerHTML=icon('mic')+(state.listening?' Stop 停止':' Please read aloud 请跟读');b.setAttribute('aria-label',state.listening?'停止跟读 Stop reading aloud':'跟读并录音 Read aloud and record');}}
  const body=q('.wm-lesson-body');const contentKey=JSON.stringify([isRepeat,state.phase,isGrammar,state.grammar,state.completedSentence,state.stepId]);body.classList.toggle('is-sentence',!isGrammar);if(body.dataset.content!==contentKey){body.dataset.content=contentKey;body.style.whiteSpace=isGrammar?'pre-line':'';if(isGrammar)body.textContent=state.grammar||'';else body.innerHTML=`${isRepeat&&state.phase==='done'?'<p class="wm-feedback-correct" role="status">✓ You got it! · 跟读正确</p>':''}<p class="wm-english"></p>`;body.scrollTop=0;}
  if(!isGrammar){const english=body.querySelector('.wm-english'),text=state.completedSentence||state.sentence||'',wanted=clean(text),typed=clean(state.input);let matched=0,position=0;while(matched<wanted.length&&matched<typed.length&&wanted[matched]===typed[matched])matched++;english.replaceChildren();for(const character of text){const part=clean(character),letter=document.createElement('span');letter.className='wm-letter';letter.textContent=character;if(part&&position+part.length<=matched)letter.classList.add('is-matched');if(part)position+=part.length;else if(!window.WMMainLessons&&character===' ')position++;english.append(letter)}}
