@@ -28,3 +28,8 @@
 #root .wm-foundation-lesson .foundation-guide button { text-align:left; min-height:2.3em; width:100%; }
 #root .wm-foundation-lesson .wm-lesson-body { overscroll-behavior:contain; }
 #root .wm-foundation-lesson .wm-progress { font-size:clamp(10px, 3vw, 13px); }
+
+/* Lower the classroom angel to clear the translation above. */
+#root .wm-game .wm-learning.v6410-actors .v6410-actor.v6410-left {
+  bottom: calc(-20% - clamp(46px, 15vw, 62px)) !important;
+}
