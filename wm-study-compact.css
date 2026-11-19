@@ -104,3 +104,31 @@
 .wm-lesson-question{padding:5px 0;border-bottom:1px solid #8883}
 .wm-lesson-feedback,.wm-lesson-status{font-size:13px;line-height:1.4;margin:4px 0}
 .wm-lesson-feedback:empty,.wm-lesson-status:empty{display:none}
+
+/* Word roots are the Kindergarten Passages page itself. */
+.wm-listening-lessons{scroll-margin-top:16px}
+.wm-listening-lessons .wm-lesson-heading{justify-content:flex-start;gap:2px}
+.wm-listening-lessons .wm-lesson-heading h3{margin:0}
+.wm-listening-lessons button.wm-lesson-speaker{
+  display:inline-grid;place-items:center;flex:0 0 40px;min-width:40px;width:40px;min-height:40px;
+  padding:0!important;border:0!important;border-radius:0;background:transparent!important;box-shadow:none!important
+}
+.wm-listening-lessons button.wm-mini-speaker .wm-action-icon{width:15px;height:15px}
+.wm-lesson-example{margin:8px 0 0;padding:0}
+.wm-lesson-example p{margin:0;font-size:14px}
+.wm-lesson-example p[lang="zh-CN"]{font-size:13px}
+.wm-lesson-example-term{display:flex;align-items:center;flex-wrap:wrap;gap:0 3px;font-weight:650}
+.wm-context-card{touch-action:pan-y;border:1px solid var(--training-edge,#c8a2da);border-radius:12px;padding:8px}
+.wm-context-nav{justify-content:space-between}
+.wm-context-sentence-row{display:flex;align-items:flex-start;margin:5px 0}
+.wm-context-sentence{flex:1;min-width:0;margin:0;font-size:16px;line-height:1.75}
+.wm-context-blank{display:inline-block;min-width:2.6em;text-align:center;font-weight:700}
+.wm-listening-lessons button.wm-word-tap{
+  display:inline;padding:0;border:0;background:none;color:inherit;text-align:inherit;
+  font:inherit;line-height:inherit;min-height:0;border-radius:0;box-shadow:none
+}
+.wm-listening-lessons button.wm-word-tap:hover{text-decoration:underline}
+.wm-listening-lessons button.wm-word-tap:focus-visible{outline:2px solid currentColor;outline-offset:2px}
+.wm-context-definition{display:flex;align-items:center;gap:4px;font-size:13px}
+.wm-context-options{margin-block:6px}
+.wm-lesson-older-passages{border-top:1px solid var(--training-edge,#c8a2da);margin-top:10px;padding-top:8px;font-size:13px}

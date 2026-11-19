@@ -1,7 +1,7 @@
 /* Fixed, bilingual lessons for the Listening → Passages entry point. */
 (() => {
   'use strict';
-  const ROOTS_URL = 'content/pte-root-lessons.json?v=64.62';
+  const ROOTS_URL = 'content/pte-root-lessons.json?v=64.63';
   const KEY = 'wm-root-lesson-progress-v6462';
   const languages = ['en-GB', 'zh-CN'];
   const legacyQuestions = {
@@ -24,7 +24,7 @@
       return response.json();
     }).then(data => {
       if (data.lessons?.length !== 60) throw Error('Lesson file incomplete');
-      return data.lessons;
+      return data;
     }).catch(error => {
       rootRequest = null;
       throw error;
@@ -56,9 +56,9 @@
   function readProgress() {
     try {
       const saved = JSON.parse(localStorage.getItem(KEY));
-      return {last: saved?.last, complete: new Set(Array.isArray(saved?.complete) ? saved.complete : [])};
+      return {last: saved?.last, complete: new Set(Array.isArray(saved?.complete) ? saved.complete : []), sessions: saved?.sessions && typeof saved.sessions === 'object' && !Array.isArray(saved.sessions) ? saved.sessions : {}};
     } catch {
-      return {complete: new Set()};
+      return {complete: new Set(), sessions: {}};
     }
   }
   function lessonRows(lesson) {
@@ -97,44 +97,45 @@
     });
   }
 
-  function mount(host, {kind, passages, onClose}) {
+  function mount(host, {passages = []} = {}) {
     const status = node('p', '', 'wm-lesson-status');
     status.setAttribute('role', 'status');
-    const voicePlayer = new WMMicrosoftVoice(node('audio'));
+    const voice = new WMMicrosoftVoice(node('audio'));
     const pane = node('div', '', 'wm-lesson-pane');
     const picker = node('select');
     picker.setAttribute('aria-label', 'Select lesson · 选择课程');
     const header = node('div', '', 'wm-lesson-toolbar');
-    const back = button('Back to passages · 返回听短文', onClose, 'previous');
     const reviewButton = button('Mixed review · 总复习', showReview);
     reviewButton.hidden = true;
-    header.append(back, picker, reviewButton);
-    host.replaceChildren(node('h2', kind === 'roots' ? 'Word Roots · 词根小课堂' : 'Passage Lessons · 短文课堂'), header, status, pane);
+    header.append(picker, reviewButton);
+    host.replaceChildren(node('h2', 'Word Roots · 词根小课堂'), header, status, pane);
     const progress = readProgress();
-    let lessons = [], epoch = 0, current = null, closed = false, stopDelay, playingButton;
-    let pendingReview = [], reviewGroup = [];
+    const lessonOptions = new Map();
+    let lessons = [], glossary = {}, current = null, closed = false;
+    let epoch = 0, stopDelay, playingButton, pendingReview = [], reviewGroup = [];
 
-    function stopPlayback() {
-      epoch++;
-      stopDelay?.();
-      stopDelay = null;
-      voicePlayer.stop();
-      if (playingButton) {
-        WMStudyIcons.set(playingButton, 'speaker', playingButton.dataset.playLabel);
-        playingButton = null;
+    function setPlaying(control, playing) {
+      if (control?.dataset.playLabel) {
+        WMStudyIcons.set(control, playing ? 'stop' : 'speaker', playing ? 'Stop audio · 停止播放' : control.dataset.playLabel);
       }
     }
+    function stopPlayback() {
+      epoch++;
+      const cancelDelay = stopDelay;
+      stopDelay = null;
+      cancelDelay?.();
+      voice.stop();
+      setPlaying(playingButton, false);
+      playingButton = null;
+    }
     async function play(clips, control) {
-      if (playingButton === control) {
-        stopPlayback();
-        status.textContent = '';
-        return;
-      }
+      const wasPlaying = playingButton === control;
       stopPlayback();
+      status.textContent = '';
+      if (wasPlaying || closed) return;
       const token = epoch;
       playingButton = control;
-      WMStudyIcons.set(control, 'stop', 'Stop audio · 停止播放');
-      status.textContent = 'Playing · 播放中';
+      setPlaying(control, true);
       try {
         for (const clip of clips) {
           if (token !== epoch || closed) return;
@@ -143,29 +144,33 @@
               const handle = setTimeout(resolve, clip.pause_ms);
               stopDelay = () => {clearTimeout(handle);resolve()};
             });
-            stopDelay = null;
+            if (token === epoch) stopDelay = null;
           } else if (clip.text) {
-            await voicePlayer.play(clip.text, clip.lang);
+            await voice.play(clip.text, clip.lang);
           }
         }
-        if (token === epoch) status.textContent = '';
       } catch (error) {
         if (token === epoch && error.name !== 'AbortError') status.textContent = 'Audio unavailable · 语音未播放，请重试';
       } finally {
         if (token === epoch) {
-          WMStudyIcons.set(control, 'speaker', control.dataset.playLabel);
+          setPlaying(control, false);
           playingButton = null;
         }
       }
     }
-    function speaker(label, clips) {
-      const control = button(label, () => void play(clips, control), 'speaker');
+    function speaker(label, clips, size = '') {
+      const control = button(label, () => void play(typeof clips === 'function' ? clips() : clips, control), 'speaker');
       control.dataset.playLabel = label;
+      control.classList.add('wm-lesson-speaker');
+      if (size) control.classList.add(size);
       return control;
+    }
+    function english(text) {
+      return [{lang: languages[0], text}];
     }
     function section(title) {
       const el = node('section', '', 'wm-lesson-card');
-      el.append(node('h3', title));
+      if (title) el.append(node('h3', title));
       pane.append(el);
       return el;
     }
@@ -175,97 +180,295 @@
       return el;
     }
     function mixedAvailable() {
-      return kind === 'roots' && lessons.length > 0 && lessons.every(lesson => progress.complete.has(lesson.id));
+      return lessons.length > 0 && lessons.every(lesson => progress.complete.has(lesson.id));
+    }
+    function updateOption(lesson) {
+      const option = lessonOptions.get(lesson.id);
+      if (option) option.textContent = lesson.number + '. ' + lesson.root_family + (progress.complete.has(lesson.id) ? ' ✓' : '');
     }
     function persist() {
-      if (kind !== 'roots') return;
       try {
-        localStorage.setItem(KEY, JSON.stringify({last:current?.id, complete:[...progress.complete]}));
-      } catch {}
-    }
-    function markComplete(lesson, done, completion) {
-      const required = lesson.listening.length + (lesson.root_quiz ? 1 : 0) + (lesson.matching?.english.length || 0);
-      if (done.size !== required) return;
-      progress.complete.add(lesson.id);
-      persist();
-      completion.textContent = '✓ Lesson complete · 本课已完成';
-      reviewButton.hidden = !mixedAvailable();
+        localStorage.setItem(KEY, JSON.stringify({last:current?.id, complete:[...progress.complete], sessions:progress.sessions}));
+      } catch {
+        status.textContent = 'Progress not saved · 本次进度未能保存';
+      }
     }
 
-    function quiz(host, question, number, mark) {
-      const isListening = !!question.audio_with_gap;
-      const box = node('div', '', 'wm-lesson-question');
-      const toolbar = node('div', '', 'wm-lesson-toolbar');
-      toolbar.append(node('span', isListening ? `${number}. 听句选词` : question.prompt));
-      if (isListening) toolbar.append(speaker('Play question · 播放题目', question.audio_with_gap));
-      box.append(toolbar);
+    function rootQuiz(host, question, done, mark) {
+      host.append(node('p', question.prompt));
       const controls = node('div', '', 'wm-lesson-options');
       const result = feedback();
+      function reveal() {
+        for (const control of controls.children) {
+          control.disabled = true;
+          control.dataset.state = control.dataset.optionId === question.correct_option_id ? 'correct' : '';
+        }
+        result.textContent = '✓ ' + question.answer.zh;
+      }
       for (const option of question.options) {
         const control = button(option.text, () => {
-          for (const sibling of controls.children) delete sibling.dataset.state;
-          if (option.id !== question.correct_option_id) {
-            control.dataset.state = 'wrong';
-            result.textContent = '再试一次。';
-            return;
-          }
-          stopPlayback();
-          status.textContent = '';
-          control.dataset.state = 'correct';
-          for (const sibling of controls.children) sibling.disabled = true;
-          if (isListening) {
-            result.textContent = question.answer.sentence_en + ' · ' + question.answer.sentence_zh;
-            const answerClips = rowsToAudio([{en:question.answer.sentence_en, zh:question.answer.sentence_zh}]);
-            const answerSpeaker = speaker('Play answer · 听完整答案', answerClips);
-            toolbar.append(answerSpeaker);
-            void play(answerClips, answerSpeaker);
-          } else {
-            result.textContent = '✓ ' + question.answer.zh;
-          }
-          mark(question.id);
+          if (option.id === question.correct_option_id) {reveal();mark(question.id);return}
+          for (const other of controls.children) delete other.dataset.state;
+          control.dataset.state = 'wrong';
+          result.textContent = '再试一次。';
         });
+        control.dataset.optionId = option.id;
         controls.append(control);
       }
-      box.append(controls, result);
-      host.append(box);
+      host.append(controls, result);
+      if (done.has(question.id)) reveal();
     }
 
-    function match(host, model, mark, whenDone = () => {}) {
+    function match(host, model, done, mark, whenDone = () => {}) {
       const result = feedback();
-      const grid = node('div', '', 'wm-lesson-match');
       const left = node('div'), right = node('div');
-      const matched = new Set();
-      let active = null;
+      const grid = node('div', '', 'wm-lesson-match');
+      const matched = new Set(model.english.filter(item => done.has(item.id)).map(item => item.id));
       const englishButtons = new Map();
-      host.append(node('p', model.prompt || '先选英文，再选对应的中文。'), grid, result);
+      let active = null;
+      function showCount() {
+        result.textContent = matched.size ? `✓ ${matched.size} / ${model.english.length}` : '';
+      }
+      host.append(node('p', model.prompt || '先点英文听读，再选中文释义。'), grid, result);
       grid.append(left, right);
       for (const item of model.english) {
         const control = button(item.text, () => {
+          void play(english(item.text), control);
+          if (matched.has(item.id)) return;
           if (active) englishButtons.get(active)?.setAttribute('aria-pressed', 'false');
           active = item.id;
           control.setAttribute('aria-pressed', 'true');
-          result.textContent = '';
+          showCount();
         });
+        control.lang = 'en-GB';
         control.setAttribute('aria-pressed', 'false');
+        if (matched.has(item.id)) control.dataset.state = 'correct';
         englishButtons.set(item.id, control);
         left.append(control);
       }
       for (const item of model.chinese) {
         const control = button(item.zh, () => {
-          if (!active) {result.textContent = '请先选择一个英文词。';return}
+          if (!active) {result.textContent = '请先选一个英文词组。';return}
           if (model.answer_key[active] !== item.id) {result.textContent = '这一组还不匹配，再试一次。';return}
           const selected = englishButtons.get(active);
           selected.setAttribute('aria-pressed', 'false');
-          selected.disabled = control.disabled = true;
           selected.dataset.state = control.dataset.state = 'correct';
+          control.disabled = true;
           matched.add(active);
           mark(active);
           active = null;
-          result.textContent = `✓ ${matched.size} / ${model.english.length}`;
+          showCount();
           if (matched.size === model.english.length) whenDone();
         });
+        control.disabled = matched.has(item.pair_id);
+        if (control.disabled) control.dataset.state = 'correct';
         right.append(control);
       }
+      showCount();
+    }
+
+    function showContext(host, lesson, state, done, mark, sync) {
+      const questions = lesson.context_questions;
+      const byId = new Map(questions.map(question => [question.id,question]));
+      if (!Array.isArray(state.order) || state.order.length !== questions.length || new Set(state.order).size !== questions.length || state.order.some(id => !byId.has(id))) {
+        state.order = shuffled(questions).map(question => question.id);
+      }
+      const currentIndex = state.order.indexOf(state.current);
+      let index = currentIndex < 0 ? 0 : currentIndex;
+      const card = node('div', '', 'wm-context-card');
+      const nav = node('div', '', 'wm-lesson-toolbar wm-context-nav');
+      const previous = button('Previous question · 上一题', () => move(-1), 'previous');
+      const next = button('Next question · 下一题', () => move(1), 'next');
+      const position = node('span');
+      position.setAttribute('aria-live', 'polite');
+      nav.append(previous, position, next);
+      const sentence = node('p', '', 'wm-context-sentence');
+      sentence.lang = 'en-GB';
+      const hintToggle = button('中文提示', () => {
+        const question = byId.get(state.order[index]);
+        hint.hidden = !hint.hidden;
+        hintToggle.setAttribute('aria-expanded', String(!hint.hidden));
+        hint.textContent = hint.hidden ? '' : question.translationGap;
+      });
+      const hint = node('p', '', 'wm-lesson-feedback');
+      hint.hidden = true;
+      const definition = node('div', '', 'wm-context-definition');
+      definition.hidden = true;
+      definition.setAttribute('role', 'status');
+      const result = feedback();
+      const bank = node('div', '', 'wm-lesson-options wm-context-options');
+      const bankOptions = [];
+      let swipeStart = null, lastSwipe = 0;
+      function clips() {
+        const question = byId.get(state.order[index]);
+        if (done.has(question.id)) return rowsToAudio([{en:question.completedEnglish,zh:question.completedChinese}]);
+        return [...english(question.before.trim()), {pause_ms:600}, ...english(question.after.trim())];
+      }
+      const read = speaker('Read sentence · 读句子', clips);
+      const sentenceRow = node('div', '', 'wm-context-sentence-row');
+      sentenceRow.append(sentence, read);
+      card.append(nav, sentenceRow, hintToggle, hint, definition);
+      host.append(card, node('p', '从下面选词组填空。点句子里的词可以查意思。', 'wm-lesson-feedback'), bank, result);
+
+      function addWords(text) {
+        const fragments = text.split(/([A-Za-z]+(?:['’-][A-Za-z]+)*)/g);
+        for (let i=0; i<fragments.length; i++) {
+          const part = fragments[i];
+          if (!part) continue;
+          if (i % 2 === 0) {
+            sentence.append(document.createTextNode(part));
+            continue;
+          }
+          const word = button(part, () => {
+            if (Date.now()-lastSwipe < 280) return;
+            const meaning = glossary[part.toLowerCase()] || '可用下方的中文提示理解整句。';
+            const readWord = speaker('Read word · 读 ' + part, english(part), 'wm-mini-speaker');
+            definition.replaceChildren(node('span', part + ' · ' + meaning), readWord);
+            definition.hidden = false;
+          });
+          word.classList.add('wm-word-tap');
+          sentence.append(word);
+        }
+      }
+      function render() {
+        const question = byId.get(state.order[index]);
+        const correct = done.has(question.id);
+        state.current = question.id;
+        position.textContent = `${index+1} / ${questions.length}`;
+        previous.disabled = index === 0;
+        next.disabled = index === questions.length-1;
+        hint.hidden = definition.hidden = true;
+        hintToggle.hidden = correct;
+        hintToggle.setAttribute('aria-expanded','false');
+        definition.replaceChildren();
+        sentence.replaceChildren();
+        if (correct) {
+          addWords(question.before);
+          sentence.append(node('strong', lesson.matching.english.find(item => item.id === question.phraseId).text.replace(/^./, letter => question.before.trim() ? letter : letter.toUpperCase())));
+          addWords(question.after);
+        } else {
+          addWords(question.before);
+          const blank = node('span', '___', 'wm-context-blank');
+          blank.setAttribute('aria-label','blank');
+          sentence.append(blank);
+          addWords(question.after);
+        }
+        result.textContent = correct ? '✓ ' + question.completedChinese : '';
+        for (const {control,item} of bankOptions) {
+          delete control.dataset.state;
+          if (correct && item.id === question.phraseId) control.dataset.state = 'correct';
+        }
+      }
+      function move(step) {
+        const destination = index + step;
+        if (destination < 0 || destination >= questions.length) return;
+        stopPlayback();
+        status.textContent = '';
+        index = destination;
+        render();
+        sync();
+      }
+      for (const item of shuffled(lesson.matching.english)) {
+        const control = button(item.text, () => {
+          const question = byId.get(state.order[index]);
+          if (done.has(question.id)) {
+            void play(english(item.text), control);
+            return;
+          }
+          for (const pair of bankOptions) delete pair.control.dataset.state;
+          if (item.id === question.phraseId) {
+            stopPlayback();
+            status.textContent = '';
+            mark(question.id);
+            render();
+          } else {
+            control.dataset.state = 'wrong';
+            result.textContent = '再读读句子，试另一个词组。';
+          }
+        });
+        bankOptions.push({control,item});
+        bank.append(control);
+      }
+      card.addEventListener('pointerdown', event => {
+        swipeStart = event.pointerType === 'touch' ? {x:event.clientX,y:event.clientY} : null;
+      });
+      card.addEventListener('pointerup', event => {
+        if (!swipeStart) return;
+        const dx = event.clientX-swipeStart.x, dy = event.clientY-swipeStart.y;
+        swipeStart = null;
+        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)*1.4) {
+          lastSwipe = Date.now();
+          move(dx < 0 ? 1 : -1);
+        }
+      });
+      card.addEventListener('pointercancel', () => {swipeStart = null});
+      card.addEventListener('click', event => {
+        if (Date.now()-lastSwipe < 280) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+      }, true);
+      render();
+      sync();
+    }
+
+    function teachingBlock(content, lesson) {
+      const text = node('div', '', 'wm-lesson-teaching');
+      for (const row of lesson.teaching) {
+        const line = node('div', '', 'wm-lesson-line');
+        const en = node('p', row.en); en.lang = 'en-GB';
+        const zh = node('p', row.zh); zh.lang = 'zh-CN';
+        line.append(en, zh, speaker('Replay this explanation · 重听这段', rowsToAudio([row]), 'wm-mini-speaker'));
+        text.append(line);
+      }
+      for (const {word, zh, example} of lesson.vocabulary || []) {
+        const item = node('div', '', 'wm-lesson-example');
+        const term = node('p', '', 'wm-lesson-example-term');
+        const label = node('span', word); label.lang = 'en-GB';
+        term.append(label, document.createTextNode(' · ' + zh));
+        term.append(speaker('Read example · 读 ' + word, rowsToAudio([{en:word,zh},example]), 'wm-mini-speaker'));
+        const en = node('p', example.en); en.lang = 'en-GB';
+        const translation = node('p', example.zh); translation.lang = 'zh-CN';
+        item.append(term,en,translation);
+        text.append(item);
+      }
+      content.append(text);
+    }
+
+    function appendLegacy() {
+      const originals = legacyLessons(passages);
+      if (!originals.length) return;
+      const details = node('details', '', 'wm-lesson-older-passages');
+      details.append(node('summary', '原有两篇短文'));
+      const area = node('div');
+      details.append(area);
+      details.ontoggle = () => {
+        if (!details.open) {stopPlayback();return}
+        if (area.children.length) return;
+        for (const lesson of originals) {
+          const block = node('section', '', 'wm-lesson-card');
+          const heading = node('div', '', 'wm-lesson-toolbar');
+          heading.append(node('h3', lesson.title), speaker('Read passage · 播放短文',rowsToAudio(lesson.teaching)));
+          block.append(heading);
+          teachingBlock(block, lesson);
+          for (const question of lesson.listening) {
+            const row = node('div', '', 'wm-lesson-toolbar');
+            row.append(speaker('Play question · 播放题目',question.audio_with_gap));
+            const result = feedback();
+            for (const option of question.options) {
+              const control = button(option.text, () => {
+                if (option.id !== question.correct_option_id) {result.textContent = '再试一次。';return}
+                result.textContent = '✓ ' + question.answer.sentence_en + ' · ' + question.answer.sentence_zh;
+                for (const sibling of row.children) if (!sibling.dataset.playLabel) sibling.disabled = true;
+              });
+              row.append(control);
+            }
+            block.append(row,result);
+          }
+          area.append(block);
+        }
+      };
+      pane.append(details);
     }
 
     function showLesson(lesson) {
@@ -274,32 +477,40 @@
       current = lesson;
       picker.value = lesson.id;
       pane.replaceChildren();
-      const content = section(lesson.title || `${lesson.root_family} · ${lesson.core_meaning.zh}`);
-      const rows = lessonRows(lesson);
-      const headings = node('div', '', 'wm-lesson-toolbar');
-      const completion = node('span', progress.complete.has(lesson.id) ? '✓ Lesson complete · 本课已完成' : '');
-      headings.append(speaker('Play lesson · 播放整课', rowsToAudio(rows)), completion);
+      const state = progress.sessions[lesson.id] ||= {};
+      const done = new Set(Array.isArray(state.done) ? state.done : []);
+      const required = [lesson.root_quiz.id, ...lesson.matching.english.map(x => x.id), ...lesson.context_questions.map(x => x.id)];
+      const content = section();
+      const headings = node('div', '', 'wm-lesson-toolbar wm-lesson-heading');
+      headings.append(node('h3', `${lesson.number}. ${lesson.root_family} · ${lesson.core_meaning.zh}`),
+        speaker('Play lesson · 播放整课', rowsToAudio(lessonRows(lesson))));
       content.append(headings);
-      const text = node('details');
-      text.open = true;
-      text.append(node('summary', 'Lesson text · 讲解文本'));
-      for (const row of rows) {
-        const line = node('div', '', 'wm-lesson-line');
-        const en = node('p', row.en); en.lang = 'en';
-        const zh = node('p', row.zh); zh.lang = 'zh-CN';
-        line.append(en, zh, speaker('Replay this line · 重听本句', rowsToAudio([row])));
-        text.append(line);
-      }
-      content.append(text);
-      const done = new Set();
-      const mark = id => {done.add(id);markComplete(lesson, done, completion)};
-      if (lesson.root_quiz) quiz(section('1 · Word root · 词根释义'), lesson.root_quiz, 1, mark);
-      if (lesson.matching) match(section('2 · Match · 中英配对'), lesson.matching, mark);
-      const practice = section(lesson.root_quiz ? '3 · Listening · 听句选词' : 'Listening · 听句选词');
-      lesson.listening.forEach((item, i) => quiz(practice, item, i+1, mark));
+      teachingBlock(content,lesson);
+      const completion = feedback();
+      const sync = () => {
+        state.done = [...done];
+        if (required.every(id => done.has(id))) progress.complete.add(lesson.id);
+        completion.textContent = progress.complete.has(lesson.id) ? '✓ Lesson complete · 本课已完成' : '';
+        updateOption(lesson);
+        reviewButton.hidden = !mixedAvailable();
+        persist();
+      };
+      const mark = id => {done.add(id);sync()};
+      rootQuiz(section('1 · Word root · 词根释义'), lesson.root_quiz, done, mark);
+      match(section('2 · Match · 中英配对'), lesson.matching, done, mark);
+      const practice = section('3 · Complete the sentence · 看句子选词组');
+      showContext(practice, lesson, state, done, mark, sync);
+      const footer = node('div', '', 'wm-lesson-toolbar');
+      footer.append(completion, button('重做本课', () => {
+        delete progress.sessions[lesson.id];
+        progress.complete.delete(lesson.id);
+        showLesson(lesson);
+        host.scrollIntoView?.({block:'start'});
+      }));
       const next = lessons[lessons.indexOf(lesson)+1];
-      if (next) practice.append(button('Next lesson · 下一课', () => {showLesson(next);host.scrollIntoView?.({block:'start'})}));
-      persist();
+      if (next) footer.append(button('下一课', () => {showLesson(next);host.scrollIntoView?.({block:'start'})}));
+      practice.append(footer);
+      appendLegacy();
     }
 
     function showReview() {
@@ -307,6 +518,7 @@
       status.textContent = '';
       pane.replaceChildren();
       const panel = section('Mixed review · 词根总复习');
+      panel.append(button('返回本课', () => showLesson(current)));
       if (!pendingReview.length && !reviewGroup.length) {
         pendingReview = shuffled(lessons.flatMap(lesson => lesson.matching.english.map(item => ({
           id:item.id, en:item.text, zh:lesson.matching.chinese.find(option => option.pair_id === item.id).zh,
@@ -328,31 +540,33 @@
       match(panel, {
         english:group.map(item => ({id:item.id,text:item.en})), chinese:options,
         answer_key:Object.fromEntries(options.map(item => [item.pair_id,item.id])),
-      }, () => {}, () => {
+      }, new Set(), () => {}, () => {
         reviewGroup = [];
-        panel.append(button(pendingReview.length ? 'Next group · 下一组' : 'Start again · 再练一轮', showReview));
+        panel.append(button(pendingReview.length ? '下一组' : '再练一轮', showReview));
       });
     }
+
     picker.onchange = () => {
       const lesson = lessons.find(item => item.id === picker.value);
       if (lesson) showLesson(lesson);
     };
-    const request = kind === 'roots' ? loadRoots : () => Promise.resolve(legacyLessons(passages));
     async function open() {
       status.textContent = 'Loading lessons · 正在加载课程';
       picker.disabled = true;
       try {
-        lessons = await request();
+        const data = await loadRoots();
         if (closed) return;
-        if (!lessons.length) throw Error('No lessons');
+        lessons = data.lessons;
+        glossary = data.glossary || {};
         picker.replaceChildren();
-        lessons.forEach(lesson => {
-          const option = node('option', lesson.title || lesson.number + '. ' + lesson.root_family);
+        for (const lesson of lessons) {
+          const option = node('option');
           option.value = lesson.id;
+          lessonOptions.set(lesson.id, option);
+          updateOption(lesson);
           picker.append(option);
-        });
+        }
         picker.disabled = false;
-        reviewButton.hidden = !mixedAvailable();
         showLesson(lessons.find(lesson => lesson.id === progress.last) || lessons[0]);
       } catch {
         if (closed) return;
@@ -361,7 +575,7 @@
       }
     }
     void open();
-    return {stop:stopPlayback, destroy(){closed=true;stopPlayback();voicePlayer.destroy();host.replaceChildren()}};
+    return {stop:stopPlayback, destroy(){closed=true;stopPlayback();voice.destroy();host.replaceChildren()}};
   }
   window.WMListeningLessons = {mount, legacyAudio};
 })();
