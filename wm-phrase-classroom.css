@@ -44,3 +44,19 @@
   margin: 4px 8px;
   overflow-wrap: anywhere;
 }
+
+/* Kindergarten junior uses the space formerly occupied by the writing controls. */
+#root .wm-game.wm-junior-classroom {
+ --class-sentence-height:clamp(195px,29svh,275px);
+ --class-lesson-height:clamp(165px,26svh,245px);
+ grid-template-rows:var(--class-header-height) var(--class-sentence-height) var(--class-actors-height) var(--class-lesson-height)!important;
+}
+body #root .wm-game.wm-junior-classroom .wm-input,
+body #root .wm-game.wm-junior-classroom .wm-keyboard,
+body #root .wm-game.wm-junior-classroom .wm-classroom-keyboard-toggle,
+#root .wm-game.wm-junior-classroom [data-mode="repeat"] {
+ display:none!important;
+}
+#root .wm-game.wm-junior-classroom [data-mode="grammar"] {
+ flex:1;
+}
