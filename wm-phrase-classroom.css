@@ -28,4 +28,3 @@
 #root .wm-foundation-lesson .foundation-guide button { text-align:left; min-height:2.3em; width:100%; }
 #root .wm-foundation-lesson .wm-lesson-body { overscroll-behavior:contain; }
 #root .wm-foundation-lesson .wm-progress { font-size:clamp(10px, 3vw, 13px); }
-#root .wm-grammar-teaching .wm-focus { visibility:hidden; }

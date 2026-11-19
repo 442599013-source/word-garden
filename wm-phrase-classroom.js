@@ -1,17 +1,27 @@
 /* V64.28: demonstration -> bilingual phrase building -> speech or typing -> feedback. */
 (()=>{'use strict';const $=s=>document.querySelector(s),units=window.WM_GAME_UNITS;if(!units?.length)return;
 const key=window.WMCourse.key('wm-sentences-v9-progress'),cacheKey=window.WMCourse.key('wm-journey-game-progress-v21');
-const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')}catch{return {}}};let cache=read(cacheKey),last=read(key),level=Number.isInteger(window.WMRequestedLevel)?window.WMRequestedLevel:Number.isInteger(last.level)?last.level:0;level=Math.max(0,Math.min(units.length-1,level));let completed=new Set(),at=0,lesson,view,busy=false,token=0,input='',start=0,end=0,listening=false,note='',wrong='',needsGesture=false,paused=false,inputSource='keyboard';let speechChain=Promise.resolve();
+const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'{}')}catch{return {}}};let cache=read(cacheKey),last=read(key),level=Number.isInteger(window.WMRequestedLevel)?window.WMRequestedLevel:Number.isInteger(last.level)?last.level:0;level=Math.max(0,Math.min(units.length-1,level));let completed=new Set(),at=0,lesson,view,busy=false,token=0,input='',start=0,end=0,listening=false,note='',wrong='',needsGesture=false,paused=false,inputSource='keyboard';let speechChain=Promise.resolve(),reviewing=false;
+const cards=window.WMClassroomLessonCards||{};
 const audio=new WMMicrosoftVoice(document.getElementById('microsoft-player'));const norm=window.WMCourse.normalizeInput;
 function stop(){token++;speechChain=Promise.resolve();audio.stop();window.WMOriginalClassroomUI?.mouth(false)}
-function row(){return units[level].lessons[at]}
+function row(){
+ const original=units[level].lessons[at];
+ const card=cards[original.id];
+ return card?{...original,...card}:original;
+}
 function length(){return units[level].lessons.length}
 function progressLabel(){const unit=units[level];if(unit.kind==='root')return row().rootIntro?unit.themeEn+' · Introduction':unit.themeEn+' · '+at+'/'+(length()-1);return (unit.kind?unit.themeEn:'Five Sentences')+' · '+(at+1)+'/'+length()}
 function contextGlossary(){if(window.WMWordGlossary){const words=window.WMWordGlossary.words;Object.assign(words,units[level].meanings||{});for(const [id,zh] of Object.entries(units[level].meanings||{})){if(id.startsWith('abbr:')){const label=window.WMUnifiedCourseData.words[id]?.en?.toLowerCase()||id.slice(5);words[label.replace(/\.$/,'')]=zh;words[label.replace(/\./g,'')]=zh}}}}
-function save(){const value={courseRevision:32,level,completed:[...completed],targetIndex:at,phraseLesson:lesson?.snapshot(),phase:lesson?.phase==='input'?'repeat':'typing'};cache[level]=value;try{localStorage.setItem(key,JSON.stringify(value));localStorage.setItem(cacheKey,JSON.stringify(cache));void 0}catch{}}
+function save(){
+ const state={level,foundationExercises:true,completed:[...completed],targetIndex:at,phraseLesson:lesson?.snapshot(),phase:lesson?.phase==='input'?'repeat':'typing'};
+ const value=reviewing?{...cache[level],courseRevision:32,level,review:state}:{...state,courseRevision:32};
+ cache[level]=value;
+ try{localStorage.setItem(key,JSON.stringify(value));localStorage.setItem(cacheKey,JSON.stringify(cache))}catch{}
+}
 function total(){const p=read('word-match-home-preview-v1');return Math.max(Number(p.wordsEliminated)||0,(p.learnedWords||[]).length)}
-function model(){return {level:level+1,total:total(),progress:progressLabel(),sentence:['build','wordbuild'].includes(lesson.phase)?'':row().en,completedSentence:row().en,translation:['build','wordbuild'].includes(lesson.phase)?'':row().cn,input,selectionStart:start,selectionEnd:end,focusWord:row().w,focusMeaning:row().zh,stepId:row().id,mode:lesson.phase==='input'?'repeat':'grammar',grammar:'',phase:'typing',complete:completed.size===length(),lastLevel:level===units.length-1,listening,micMessage:note}}
-function block(p,cls='phrase-block'){const b=document.createElement('button');b.type='button';b.className=cls;const en=document.createElement('strong'),cn=document.createElement('small');en.textContent=p.en;cn.textContent=p.cn;b.append(en,cn);return b}
+function model(){return {level:level+1,total:total(),progress:progressLabel(),sentence:['build','wordbuild'].includes(lesson.phase)?'':row().en,completedSentence:row().en,translation:['build','wordbuild'].includes(lesson.phase)&&!row().rootExample?'':row().cn,input,selectionStart:start,selectionEnd:end,focusWord:row().w,focusMeaning:row().zh,stepId:row().id,mode:lesson.phase==='input'?'repeat':'grammar',grammar:'',phase:'typing',complete:completed.size===length(),lastLevel:level===units.length-1,listening,micMessage:note}}
+function block(p,cls='phrase-block'){const b=document.createElement('button');b.type='button';b.className=cls;const en=document.createElement('strong'),cn=document.createElement('small');en.textContent=p.en;cn.textContent=p.cn;b.append(en);if(p.cn)b.append(cn);return b}
 function icon(name){const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');svg.setAttribute('stroke-width','1.8');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');svg.setAttribute('aria-hidden','true');svg.classList.add('wm-icon');svg.innerHTML=name==='speaker'?'<path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>':'<rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>';return svg}
 function render(){const settle=view?.holdViewport?.()||(()=>{});try{renderContent()}finally{settle()}}
 function renderContent(){const activeField=$('.wm-native-input');if((lesson.phase!=='input'||busy)&&document.activeElement===activeField)activeField.blur();view?.update(model(),false);window.WMOriginalClassroomUI?.refresh();const root=document.querySelector('.wm-game');if(!root)return;root.dataset.phrasePhase=lesson.phase;root.classList.add('wm-phrase-teaching');const tab=$('[data-mode="grammar"]');tab.textContent=lesson.phase==='wordbuild'?'Build with Words · 单词组句':'Build with Phrases · 词组组句';const repeat=$('[data-mode="repeat"]');repeat.replaceChildren(icon('mic'),document.createTextNode(listening?'Stop · 停止':'Read or Type · 跟读或输入'));repeat.disabled=lesson.phase!=='input';tab.setAttribute('aria-pressed',String(lesson.phase!=='input'));repeat.setAttribute('aria-pressed',String(lesson.phase==='input'));const body=$('.wm-lesson-body');if(lesson.phase!=='input')body.replaceChildren();else body.querySelector('.phrase-actions')?.remove();
@@ -21,7 +31,6 @@ function renderContent(){const activeField=$('.wm-native-input');if((lesson.phas
  const levelButton=$('.wm-level');levelButton.setAttribute('role','button');levelButton.tabIndex=0;levelButton.setAttribute('aria-label','Choose classroom level · 选择课堂等级');levelButton.onclick=chooseLevel;levelButton.onkeydown=e=>{if(['Enter',' '].includes(e.key)){e.preventDefault();chooseLevel()}};
  const current=row();
  root.classList.toggle('wm-foundation-lesson',!!units[level].kind);
- root.classList.toggle('wm-grammar-teaching',units[level].kind==='grammar');
  if(!lesson.phase || lesson.phase==='demo'){
   const guide=document.createElement('div');guide.className='foundation-guide';
   if(current.titleEn){const title=document.createElement('strong');title.textContent=current.titleEn+' · '+current.titleZh;guide.append(title)}
@@ -29,40 +38,73 @@ function renderContent(){const activeField=$('.wm-native-input');if((lesson.phas
    const b=block(pair,'phrase-block');b.onclick=()=>replayPair(pair);guide.append(b)
   }
   if(guide.childNodes.length)body.append(guide);
-  if(current.explanation||units[level].kind){
-   const next=document.createElement('button');next.type='button';next.className='phrase-start';
-   next.textContent=current.explanation?'Continue · 继续':'Start practice · 开始练习';
-   next.onclick=()=>{if(current.explanation){completeStep(false);return}stop();busy=false;needsGesture=false;lesson.begin();prepareWords();save();render()};
-   body.append(next);
-  }
  }
- const field=$('.wm-native-input');field.disabled=lesson.phase!=='input'||busy;document.querySelectorAll('.wm-keyboard .wm-key').forEach(b=>b.disabled=lesson.phase!=='input'||busy);const done=$('.wm-completion');done.hidden=completed.size!==length();const to=window.WMClassGroups?.forLevel(level+2);const promoted=to&&to.start===level+2;const next=done.querySelector('button');next.textContent=promoted?'Promoted · 晋升'+to.zh:level===units.length-1?'Course complete · 已完成全部关卡':'Next Level · 下一关';next.disabled=level===units.length-1;const p=$('.wm-top-translation');if(p)p.hidden=false;
+ const field=$('.wm-native-input');field.disabled=lesson.phase!=='input'||busy;document.querySelectorAll('.wm-keyboard .wm-key').forEach(b=>b.disabled=lesson.phase!=='input'||busy);const done=$('.wm-completion');done.hidden=completed.size!==length();const to=window.WMClassGroups?.forLevel(level+2);const promoted=to&&to.start===level+2;const next=done.querySelector('button');next.textContent=promoted?'Promoted · 晋升'+to.zh:level===units.length-1?'Course complete · 已完成全部关卡':'Next Level · 下一关';next.disabled=level===units.length-1;
+ if(!done.querySelector('.phrase-review-level')){
+  const review=document.createElement('button');review.type='button';review.className='wm-gloss phrase-review-level';
+  review.textContent='Study again · 重学本关';review.onclick=startReview;done.append(review);
+ }
+ done.querySelector('.phrase-review-level').disabled=busy;
+ const p=$('.wm-top-translation');if(p)p.hidden=false;
 }
 async function say(items,t){await dictation.releasePromise;for(const [text,lang] of items){if(t!==token||paused)return false;if(!text)continue;try{await audio.play(text,lang,1,()=>window.WMOriginalClassroomUI?.mouth(true));window.WMOriginalClassroomUI?.mouth(false)}catch{window.WMOriginalClassroomUI?.mouth(false);return false}}return t===token&&!paused}
-async function demo(){stop();paused=false;busy=true;needsGesture=false;lesson.phase='demo';render();const t=token;const ok=await say(demoAudio(),t);if(t!==token)return;busy=false;if(ok){if(!row().explanation){lesson.begin();prepareWords();warm()}note=''}else{needsGesture=true;note='Tap Listen to start audio · 请点击开始朗读'}save();render()}
+async function demo(){stop();paused=false;busy=true;needsGesture=false;lesson.phase='demo';render();const t=token;const ok=await say(demoAudio(),t);if(t!==token)return;busy=false;if(ok){lesson.begin();prepareWords();warm();note=''}else{needsGesture=true;note='Tap Listen to start audio · 请点击开始朗读'}save();render()}
 function demoAudio(){
  const current=row(), extra=[...(current.examples||[]),...(current.tip?[current.tip]:[])];
- return [[current.en,'en-GB'],[current.cn,'zh-CN'],...((units[level].kind==='grammar'||current.rootIntro)?[]:[[current.w,'en-GB'],[current.zh,'zh-CN']]),...extra.flatMap(pair=>[[pair.en,'en-GB'],[pair.cn,'zh-CN']])];
+ return [[current.en,'en-GB'],[current.cn,'zh-CN'],[current.w,'en-GB'],[current.zh,'zh-CN'],...extra.flatMap(pair=>[[pair.en,'en-GB'],[pair.cn,'zh-CN']])];
 }
 async function replayPair(pair){stop();busy=true;paused=false;const t=token;await say([[pair.en,'en-GB'],[pair.cn,'zh-CN']],t);if(t===token){busy=false;render()}}
 function prepareWords(){for(const w of lesson.words){const key=w.en.toLowerCase().replace(/[’]/g,"'");w.cn=units[level].meanings?.[key]||window.WMWordGlossary?.words?.[key]||window.WMUnifiedCourseData?.words?.[key]?.zh||''}}
 function warm(){const current=row(),items=[...(current.phrases||[]).flatMap(p=>[[p.en,'en-GB'],[p.cn,'zh-CN']]),[current.en,'en-GB']];audio.preload?.(items)}
-function choose(i){if(!['build','wordbuild'].includes(lesson.phase)||lesson.assembled)return;if(!lesson.canAccept(i)){wrong='Try the next item in order · 请重新选择接下来的内容';render();return}wrong='';const t=token,phase=lesson.phase,p={...lesson.phrases[i]};lesson.accept(i);const isLast=lesson.assembled;save();render();speechChain=speechChain.then(async()=>{if(t!==token)return;const ok=await say([[p.en,'en-GB'],[p.cn,'zh-CN']],t);if(t!==token)return;if(!ok)note='Audio unavailable; tap the speaker to retry · 语音暂不可用，可点击喇叭重听';if(isLast&&lesson.phase===phase&&lesson.assembled){await say([[row().en,'en-GB']],t);if(t!==token)return;if(phase==='build'){lesson.beginWords();prepareWords();audio.preload?.(lesson.words.flatMap(w=>[[w.en,'en-GB'],[w.cn,'zh-CN']]))}else{lesson.phase='input';input='';start=end=0}save();render()}}).catch(()=>{if(t===token){note='Tap the speaker to retry · 点击喇叭重试';render()}})}
+function choose(i){if(busy||!['build','wordbuild'].includes(lesson.phase)||lesson.assembled)return;if(!lesson.canAccept(i)){wrong='Try the next item in order · 请重新选择接下来的内容';render();return}wrong='';const t=token,phase=lesson.phase,p={...lesson.phrases[i]};lesson.accept(i);const isLast=lesson.assembled;save();render();speechChain=speechChain.then(async()=>{if(t!==token)return;const ok=await say([[p.en,'en-GB'],[p.cn,'zh-CN']],t);if(t!==token)return;if(!ok)note='Audio unavailable; tap the speaker to retry · 语音暂不可用，可点击喇叭重听';if(isLast&&lesson.phase===phase&&lesson.assembled){await say([[row().en,'en-GB']],t);if(t!==token)return;if(phase==='build'){lesson.beginWords();prepareWords();audio.preload?.(lesson.words.flatMap(w=>[[w.en,'en-GB'],[w.cn,'zh-CN']]))}else{lesson.phase='input';input='';start=end=0}save();render()}}).catch(()=>{if(t===token){note='Tap the speaker to retry · 点击喇叭重试';render()}})}
 
 function record(){const p=read('word-match-home-preview-v1'),words=new Set(p.learnedWords||[]);const text=row().en.replace(/\b(?:Ph\.D\.|[A-Za-z]\.(?:[A-Za-z]\.)+)/g,m=>{words.add(m.toLowerCase().replace(/\./g,''));return ' '});for(const w of (text.match(/[A-Za-z]+(?:[-'’][A-Za-z]+)*/g)||[])){if(w.length>1||/^[ai]$/i.test(w))words.add(w.toLowerCase())}p.learnedWords=[...words];p.wordsEliminated=Math.max(Number(p.wordsEliminated)||0,words.size);try{localStorage.setItem('word-match-home-preview-v1',JSON.stringify(p))}catch{}}
-async function check(){if(lesson.phase!=='input'||busy||!input)return;const target=row().answer||row().en;if(norm(input)!==norm(target)&&!(inputSource==='voice'&&window.WMSpeechMatch?.equivalent(input,target))){note='Keep trying · 请再试一次';render();return}await completeStep(true)}
-async function completeStep(replay){if(lesson.phase==='done'||(busy&&replay))return;const transitionSettle=view?.holdViewport?.()||(()=>{});const activeInput=$('.wm-native-input');if(document.activeElement===activeInput)activeInput.blur();busy=true;stop();const t=token;await dictation.cancel();transitionSettle();if(t!==token)return;listening=false;note='';lesson.phase='done';completed.add(at);if(replay)record();save();render();if(replay)await say([[row().en,'en-GB']],t);if(t!==token)return;busy=false;if(completed.size<length()){at=units[level].lessons.findIndex((_,i)=>!completed.has(i));lesson=new WMPhraseLesson(row());input='';start=end=0;note='';save();render();void demo()}else render()}
+async function check(){if(lesson.phase!=='input'||busy||!input)return;const target=row().answer||row().en;if(norm(input)!==norm(target)&&!(inputSource==='voice'&&window.WMSpeechMatch?.equivalent(input,target))){note='Keep trying · 请再试一次';render();return}await completeStep()}
+async function completeStep(){if(lesson.phase!=='input'||busy)return;const transitionSettle=view?.holdViewport?.()||(()=>{});const activeInput=$('.wm-native-input');if(document.activeElement===activeInput)activeInput.blur();busy=true;stop();const t=token;await dictation.cancel();transitionSettle();if(t!==token)return;listening=false;note='';lesson.phase='done';completed.add(at);record();if(reviewing&&completed.size===length())reviewing=false;save();render();await say([[row().en,'en-GB']],t);if(t!==token)return;busy=false;if(completed.size<length()){at=units[level].lessons.findIndex((_,i)=>!completed.has(i));lesson=new WMPhraseLesson(row());input='';start=end=0;note='';save();render();void demo()}else render()}
 function native(text,a,b){inputSource='keyboard';if(lesson.phase!=='input'||busy)return;if(listening)dictation.cancel();input=String(text).slice(0,1500);start=a??input.length;end=b??start;render();void check()}
 function enter(k){inputSource='keyboard';if(lesson.phase!=='input'||busy)return;if(k==='CONFIRM'){void check();return}if(listening)dictation.cancel();const a=Math.min(start,input.length),b=Math.min(end,input.length);if(k==='CLEAR'){input='';start=end=0}else if(k==='BACK'){const x=a===b?Math.max(0,a-1):a;input=input.slice(0,x)+input.slice(b);start=end=x}else{if(k==='SPACE')k=' ';input=input.slice(0,a)+k+input.slice(b);start=end=a+k.length}render();void check()}
 // Focus card is word-only. Sentence speakers retain their original separate replay.
-async function replayFocusWord(){stop();paused=false;busy=true;const t=token;await dictation.cancel();if(t!==token)return;listening=false;render();await say([[row().w,'en-GB']],t);if(t===token){busy=false;render()}}
-async function replaySentence(){stop();paused=false;busy=true;render();const t=token;await dictation.cancel();if(t!==token)return;listening=false;note='';render();await say([[row().en,'en-GB'],[row().cn,'zh-CN']],t);if(t===token){if(lesson.phase==='build'&&lesson.assembled){lesson.beginWords();prepareWords()}else if(lesson.phase==='wordbuild'&&lesson.assembled){lesson.phase='input';input='';start=end=0}busy=false;save();render()}}
-function load(n){stop();dictation?.cancel();busy=false;note='';input='';paused=false;level=Math.max(0,Math.min(units.length-1,n));contextGlossary();const saved=cache[level]||{};completed=new Set((saved.completed||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<length()));at=units[level].lessons.findIndex((_,i)=>!completed.has(i));if(at<0)at=length()-1;lesson=new WMPhraseLesson(row(),saved.targetIndex===at?saved.phraseLesson:undefined);prepareWords();if(completed.size===length())lesson.phase='done';save();render();window.WMLevelRoute?.sync(level);if(lesson.phase==='demo')void demo()}
+async function replayFocusWord(){if(lesson.phase==='done'&&busy)return;stop();paused=false;busy=true;const t=token;await dictation.cancel();if(t!==token)return;listening=false;render();await say([[row().w,'en-GB']],t);if(t===token){advanceAssembled();busy=false;save();render()}}
+function advanceAssembled(){
+ if(!lesson.assembled)return;
+ if(lesson.phase==='build'){lesson.beginWords();prepareWords()}
+ else if(lesson.phase==='wordbuild'){lesson.phase='input';input='';start=end=0}
+}
+async function replaySentence(){if(lesson.phase==='done'&&busy)return;stop();paused=false;busy=true;render();const t=token;await dictation.cancel();if(t!==token)return;listening=false;note='';render();await say(units[level].kind?demoAudio():[[row().en,'en-GB'],[row().cn,'zh-CN']],t);if(t===token){advanceAssembled();busy=false;save();render()}}
+function restore(saved){
+ const review=saved.review;
+ reviewing=!!review;
+ const state=review||saved;
+ completed=new Set((state.completed||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<length()));
+ if(!state.foundationExercises&&completed.size<length()){
+  units[level].lessons.forEach((item,index)=>{if(item.explanation)completed.delete(index)});
+ }
+ at=units[level].lessons.findIndex((_,i)=>!completed.has(i));
+ if(at<0)at=length()-1;
+ const snapshot=state.targetIndex===at?state.phraseLesson:undefined;
+ const resized=snapshot?.order?.length!==row().phrases.length;
+ const interrupted=snapshot?.phase==='done'&&!completed.has(at);
+ lesson=new WMPhraseLesson(row(),interrupted||(resized&&cards[row().id])?undefined:snapshot);
+ prepareWords();
+ if(completed.size===length())lesson.phase='done';
+}
+function load(n){
+ stop();dictation.cancel();busy=false;note='';input='';start=end=0;paused=false;
+ level=Math.max(0,Math.min(units.length-1,n));contextGlossary();restore(cache[level]||{});
+ save();render();window.WMLevelRoute?.sync(level);
+ if(lesson.phase==='demo')void demo();
+}
+function startReview(){
+ if(completed.size!==length()||busy)return;
+ stop();input='';start=end=0;note='';
+ restore({...cache[level],review:{completed:[]}});
+ save();render();void demo();
+}
 function classroomFinished(i){const done=cache[i]?.completed;return Array.isArray(done)&&new Set(done.filter(n=>Number.isInteger(n)&&n>=0&&n<units[i].lessons.length)).size===units[i].lessons.length}
 function chooseLevel(){stop();busy=false;dictation.cancel();if(lesson.phase==='demo')needsGesture=true;save();render();const layer=document.createElement('div');layer.className='phrase-level-picker';layer.setAttribute('role','dialog');layer.setAttribute('aria-modal','true');layer.setAttribute('aria-label','Choose classroom level');const panel=document.createElement('section'),title=document.createElement('h2'),close=document.createElement('button');title.textContent='Choose a Level · 选择等级';close.className='phrase-picker-close';close.type='button';close.textContent='×';close.setAttribute('aria-label','Close');close.onclick=()=>layer.remove();const grid=document.createElement('div');grid.className='level-grid';panel.append(title,close,grid);for(let i=0;i<units.length;i++){const a=document.createElement('a');const done=classroomFinished(i);a.textContent=String(i+1)+(done?' ✓':'');a.dataset.completed=String(done);a.setAttribute('aria-label','Level '+(i+1)+(done?' completed':''));a.href='sentence-game.html?level='+(i+1)+'&choose=1';if(i===level)a.setAttribute('aria-current','page');grid.append(a)}layer.append(panel);document.body.append(layer);close.focus({preventScroll:true});layer.onkeydown=e=>{if(e.key==='Escape')layer.remove()}}
 const dictation=new WMSpeechInput.Session({prepare(){stop()},target:()=>row().en,onState:s=>{listening=s!=='idle';render()},onStatus:s=>{note=s;render()},onText:(text,final)=>{if(lesson.phase!=='input')return;inputSource='voice';input=text;start=end=input.length;render();if(final)void check()}});
 function mic(){if(lesson.phase!=='input'||busy)return;dictation.toggle()}
-contextGlossary();const saved=cache[level]||{};completed=new Set((saved.completed||[]).filter(i=>Number.isInteger(i)&&i>=0&&i<length()));at=units[level].lessons.findIndex((_,i)=>!completed.has(i));if(at<0)at=length()-1;lesson=new WMPhraseLesson(row(),saved.targetIndex===at?saved.phraseLesson:undefined);prepareWords();if(completed.size===length())lesson.phase='done';
+contextGlossary();restore(cache[level]||(last.level===level?last:{}));
 view=WordMatchComponents.mountGame(document.getElementById('root'),{model:model(),onKey:enter,onReplay:replayFocusWord,onSentenceReplay:()=>lesson.phase==='demo'?demo():replaySentence(),onMode:m=>{if(m==='repeat')mic()},onBack:()=>{stop();save();location.href='level-activities.html?level='+(level+1)},onNext:()=>{if(level+1<units.length)load(level+1)},onMic:mic,onNativeInput:native,onSelection:(a,b)=>{start=a;end=b},onSpeakLookup:text=>{if(!busy){stop();void say([[text,'en-GB'],[units[level].meanings?.[text]||window.WMWordGlossary?.words?.[text]||'','zh-CN']],token)}}});render();save();if(lesson.phase==='demo')void demo();
 document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea')||e.ctrlKey||e.metaKey||e.altKey||lesson.phase!=='input')return;if(e.key==='Enter'&&!e.target.closest('button')){e.preventDefault();enter('CONFIRM')}else if(/^[a-z0-9.,!?;'’:-]$/i.test(e.key)){e.preventDefault();enter(e.key)}else if(['Backspace',' '].includes(e.key)){e.preventDefault();enter(e.key==='Backspace'?'BACK':'SPACE')}});
 window.addEventListener('pagehide',()=>{paused=true;stop();dictation.cancel();save()});document.addEventListener('visibilitychange',()=>{if(document.hidden){paused=true;stop();busy=false;dictation.cancel();save()}else{paused=false;render()}});

@@ -36,3 +36,11 @@
 #match-game .match-stage #level-pair-progress{top:15.1%!important;height:1.6%!important;left:39%!important;width:22%!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;color:var(--v50-core)!important;font:700 2.8cqw/1 Arial,sans-serif!important}
 #match-game .match-stage .v50-branch{top:17%!important;height:3%!important}
 
+
+/* The level chooser sits above the sentence card and the match artwork. */
+#match-game .match-stage #dialog[data-kind="levels"] {
+  z-index: 60;
+}
+body:has(#match-game #dialog[data-kind="levels"]:not([hidden])) #goldy-nav {
+  visibility: hidden;
+}
