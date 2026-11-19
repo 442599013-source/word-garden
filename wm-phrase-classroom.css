@@ -23,3 +23,9 @@
 
 #root .wm-phrase-teaching[data-phrase-phase="wordbuild"] .wm-word-grid{display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:7px;overflow:auto;max-height:100%}
 .phrase-level-picker section{display:block;width:min(100%,600px);padding:18px;position:relative;color:var(--goldy-deep,#8a61ac)}.phrase-level-picker h2{font-size:20px;margin:5px 42px 20px 0;width:auto}.phrase-level-picker .level-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;margin-top:12px}.phrase-level-picker .level-grid a{display:flex;align-items:center;justify-content:center;min-height:42px;padding:10px 2px;background:#fff;border:1px solid var(--goldy-edge,#d4b4e6);border-radius:9px;font-weight:700;text-decoration:none;color:inherit}.phrase-level-picker .level-grid a[aria-current]{background:var(--goldy-deep,#a46ed4);color:white}.phrase-level-picker .phrase-picker-close{right:12px;top:12px;background:var(--goldy-light,#f3e4f8);border:1px solid white;border-radius:12px;width:40px;height:40px}
+
+#root .wm-foundation-lesson .foundation-guide { display:grid; grid-template-columns:1fr; gap:6px; width:100%; }
+#root .wm-foundation-lesson .foundation-guide button { text-align:left; min-height:2.3em; width:100%; }
+#root .wm-foundation-lesson .wm-lesson-body { overscroll-behavior:contain; }
+#root .wm-foundation-lesson .wm-progress { font-size:clamp(10px, 3vw, 13px); }
+#root .wm-grammar-teaching .wm-focus { visibility:hidden; }

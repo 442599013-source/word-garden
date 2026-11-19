@@ -42,7 +42,8 @@ function stageCard(data){
  const passes=Array.isArray(data.passedLevels)?data.passedLevels:[];
  const ordered=['junior','middle','senior'];let index=0;
  while(index<ordered.length&&passes.includes(ordered[index]))index++;
- const [cn,en]=levels[index];
+ const group=window.WMClassGroups?.earned();
+ const [cn,en]=group?[group.zh,group.en]:levels[index];
  return `<button type="button" class="stage-card stage-link" data-quick="learn" aria-label="继续当前学习周">${icon('cap','stage-icon')}<div class="stack small"><div class="stage-label">Current Stage</div><small>当前阶段</small></div><div class="stage-value">${escapeHTML(en)}</div><div class="stage-en">${escapeHTML(cn)}</div></button>`;
 }
 
@@ -305,7 +306,7 @@ function meAbilityStats(data){
  let count=window.WMPracticeAssessment?.allSkillsMastered?.()||0;try{count=window.WMLearningStats?.summary('all').total??count}catch{}
  const exams=(Array.isArray(data.examScores)?data.examScores:[]).filter(n=>typeof n==='number'&&Number.isFinite(n)&&n>=0&&n<=100);
  const average=exams.length?(exams.reduce((a,b)=>a+b,0)/exams.length).toFixed(1).replace(/\.0$/,''):null;
- const entries=[['Magic Academy',levels[index],'data-route="journey"','v57-level me-stage-value'],['Words Learned',count+' Words','data-learning-stats="true"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
+ const entries=[['Magic Academy',window.WMClassGroups?.earned().en||levels[index],'data-route="journey"','v57-level me-stage-value'],['Words Learned',count+' Words','data-learning-stats="true"','v57-score'],['Golden Radiance',average===null?'Pending':average+' Points','data-route="results"','v57-ability']];
  return `<nav class="me-home-stats" aria-label="Learning abilities">${entries.map(([label,value,route,cls])=>{const stats=cls==='v57-score',tag=stats?'a':'button',attrs=stats?'href="learning-stats.html?v=64.56" data-learning-stats="true"':'type="button" '+route;return `<${tag} class="v57-stat ${cls}" ${attrs}><b>${label}</b><strong class="v57-value">${escapeHTML(value)}</strong><div class="v57-progress" aria-hidden="true"><div class="v57-progress-fill"></div></div></${tag}>`}).join('')}</nav>`;
 }
 function drawHome(){

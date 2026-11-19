@@ -1,16 +1,50 @@
-/* Shared, cumulative curriculum navigation. Content availability comes from the real bank. */
-(()=>{'use strict';
-const stages=[['kindergarten','幼儿园','Kindergarten',['小班','中班','大班']],['primary','小学','Primary School',['一年级','二年级','三年级','四年级','五年级','六年级']],['junior','初中','Junior Secondary',['初一','初二','初三']],['senior','高中','Senior Secondary',['高一','高二','高三']],['university','大学','University',['一年级','二年级','三年级']],['postgraduate','研究生','Postgraduate',['一年级','二年级','三年级']]];
-const unified=window.WMUnifiedCourseMeta;
-let offset=0;const list=stages.map(([id,zh,en,classes])=>{const range=unified?.ranges.find(r=>r.id===id);const s=range?{id,zh,en,classes:Array.from({length:Math.ceil((range.end-range.start+1)/40)},(_,i)=>'Levels '+(range.start+i*40)+'–'+Math.min(range.end,range.start+i*40+39)),start:range.start,end:range.end,unified:true}:{id,zh,en,classes,start:offset+1,end:offset+classes.length*40};offset=s.end;return s});if(unified)offset=unified.levelCount;
-
-const integer=(value,fallback=1)=>/^\d+$/.test(String(value))&&Number(value)>=1&&Number(value)<=offset?Number(value):fallback;
-function level(value){const n=integer(value),s=list.find(x=>n>=x.start&&n<=x.end),classIndex=Math.floor((n-s.start)/40);return {number:n,stage:s,classIndex,className:s.classes[classIndex],local:(n-s.start)%40+1,theme:unified?{level:n,questionCount:5,themeEn:'Five Sentences · Level '+n,themeZh:'五句课堂 · 等级'+n}:window.WMMainCourse?.levels[n-1]||window.WM_LISTENING_BANK?.levels[n-1]||null,legacyTheme:window.WM_LISTENING_BANK?.levels[n-1]||null}}
-function block(value){const n=integer(value),stage=list.find(s=>n>=s.start&&n<=s.end),classStart=stage.start+Math.floor((n-stage.start)/40)*40,half=n-classStart>=20?1:0,start=classStart+half*20,end=Math.min(stage.end,start+19),final=half===1||(end===stage.end&&end-classStart<20);return {id:start+'-'+end,start,end,kind:final?'期末测评':'期中测评',kindEn:final?'Final Assessment':'Midterm Assessment'}}
-function read(key,fallback={}){try{return JSON.parse(localStorage.getItem(key)||'null')||fallback}catch{return fallback}}
-function saveSelected(n){try{localStorage.setItem('wm-journey-selection-v21',String(integer(n)))}catch{}}
-function selected(){return integer(read('wm-journey-selection-v21',1))}
-function progress(n){const i=integer(n)-1,k=x=>window.WMCourse?.key(x)||x,game=read((unified||window.WMMainCourse)?'wm-journey-game-progress-v21::'+(unified?.id||WMMainCourse.id):k('wm-journey-game-progress-v21')),legacy=read((unified||window.WMMainCourse)?'wm-sentences-v9-progress::'+(unified?.id||WMMainCourse.id):k('wm-sentences-v9-progress')),li=read('wm-listening-rs129-v31',null)||read(k('wm-listening-progress-v13')),r={};r.classroom=game[i]?.completed?.length||((legacy.level===i)?legacy.completed?.length||0:0);r.match=unified?(read('wm-wordmatch-v35::'+unified.id).completed?.[n]?5:0):r.classroom;r.listening=Number(li.progress?.[i+':passage'])||0;for(const s of ['speaking','reading','writing'])r[s]=Number(read(k('wm-'+s+'-progress-v20')).progress?.[i])||0;return r}
-function href(n,activity){n=integer(n);if(activity==='assessment')return 'assessment.html?block='+block(n).start+'&level='+n;return ({classroom:'sentence-game',match:unified?'word-match':'sentence-game',listening:'listening',speaking:'speaking',reading:'reading',writing:'writing'}[activity])+'.html?level='+n+'&from=journey'}
-window.WMJourney={stages:list,total:offset,integer,level,block,read,selected,saveSelected,progress,href};
+/* Navigation and progress for the shared Magic Classroom curriculum. */
+(() => {
+  'use strict';
+  const meta = window.WMUnifiedCourseMeta;
+  const {groups, forLevel, classSize} = window.WMClassGroups;
+  const stages = meta.ranges.map(stage => ({...stage, unified: true}));
+  const themes = window.WMUnifiedCourseData?.units || window.WMFoundationData?.units || [];
+  function read(key, fallback = {}) {
+    try {return JSON.parse(localStorage.getItem(key) || 'null') ?? fallback} catch {return fallback}
+  }
+  function integer(value, fallback = 1) {
+    const n = Number(value);
+    return /^\d+$/.test(String(value)) && forLevel(n) ? n : fallback;
+  }
+  function level(value) {
+    const n = integer(value), group = forLevel(n);
+    const stage = stages.find(stage => stage.id === group.stage);
+    const theme = themes[n - 1] || {level: n, questionCount: 5, themeEn: 'Level ' + n, themeZh: '第 ' + n + ' 关'};
+    return {number: n, stage, group, classIndex: group.classIndex, className: group.className, local: n - group.start + 1, theme};
+  }
+  function block(value) {
+    const group = forLevel(integer(value));
+    const half = classSize / 2, isFinal = value >= group.start + half;
+    const start = isFinal ? group.start + half : group.start;
+    const end = start + half - 1;
+    return {id: start + '-' + end, start, end, kind: isFinal ? '期末测评' : '期中测评', kindEn: isFinal ? 'Final Assessment' : 'Midterm Assessment'};
+  }
+  function saveSelected(n) {
+    try {localStorage.setItem(window.WMJourneySelectionKey, String(integer(n)))} catch {}
+  }
+  function selected() {return integer(read(window.WMJourneySelectionKey, 1))}
+  function progress(n) {
+    n = integer(n);
+    const i = n - 1;
+    const game = read('wm-journey-game-progress-v21::' + meta.id);
+    const last = read('wm-sentences-v9-progress::' + meta.id);
+    const match = read('wm-wordmatch-v35::' + meta.id);
+    return {
+      classroom: game[i]?.completed?.length || (last.level === i ? last.completed?.length || 0 : 0),
+      match: match.completed?.[n] || match.rounds?.[n]?.finished ? level(n).theme.questionCount : 0
+    };
+  }
+  function href(n, activity) {
+    n = integer(n);
+    if (activity === 'assessment') return 'assessment.html?block=' + block(n).start + '&level=' + n;
+    const file = {classroom:'sentence-game', match:'word-match', listening:'walkman', speaking:'speaking-study', reading:'reading-study', writing:'writing-study'}[activity];
+    return file + '.html?level=' + n + '&from=journey';
+  }
+  window.WMJourney = {stages, groups, classSize, total: meta.levelCount, integer, level, block, read, selected, saveSelected, progress, href};
 })();

@@ -1,9 +1,24 @@
-(()=>{'use strict';const J=window.WMJourney,C=window.WMSkillCore,$=id=>document.getElementById(id),p=new URLSearchParams(location.search),n=J.integer(p.get('level')||p.get('block')||J.selected()),block=J.block(n),units=window.WM_LISTENING_BANK.levels.filter(u=>u.level>=block.start&&u.level<=block.end),completeRange=units.length===block.end-block.start+1;
+(()=>{'use strict';const J=window.WMJourney,C=window.WMSkillCore,$=id=>document.getElementById(id),p=new URLSearchParams(location.search),n=J.integer(p.get('level')||p.get('block')||J.selected()),block=J.block(n),units=window.WMUnifiedCourseData.units.slice(block.start-1,block.end),completeRange=units.length===block.end-block.start+1;
 const loc=J.level(n),voice=new WMMicrosoftVoice($('exam-audio'));$('exam-back').href='level-activities.html?level='+n;$('exam-return').href='level-road.html?stage='+loc.stage.id+'&group='+Math.floor(loc.classIndex/3);$('exam-title').replaceChildren(document.createTextNode(block.kind));const subtitle=document.createElement('small');subtitle.textContent=block.kindEn;$('exam-title').append(subtitle);$('exam-range').textContent='第'+block.start+'—'+block.end+'关 · Levels '+block.start+'–'+block.end;
 if(!units.length){$('exam-question').textContent='本阶段内容待编排 · Coming later';document.querySelector('.assessment-tools').hidden=true;return}
 $('exam-note').textContent='10 questions from Levels '+block.start+'–'+block.end+' · 满分100分，60分通过。';
-const KEY=window.WMCourse?.key('wm-assessment-blocks-v21')||'wm-assessment-blocks-v21',all=J.read(KEY),active=all[block.id]?.active;
-const questions=window.WM_LISTENING_BANK.courseId?(active?.questionIds?.length===10&&active.questionIds.every(x=>WMRSExam.resolve(block,x.id,x.skill))?active.questionIds.map(x=>WMRSExam.resolve(block,x.id,x.skill)):WMRSExam.choose(block)):Array.from({length:10},(_,i)=>{const u=units[Math.min(units.length-1,Math.floor(i*units.length/10))],item=u.sourceLessons[(i*3)%10],base=u.questions[(i*3)%10],skill=i<3?'listening':i<6?'reading':i<8?'writing':'speaking';return {skill,unit:u.level,word:item.w,en:skill==='writing'||skill==='speaking'?item.w:base.audioText,cn:item.zh,options:base.options,correctIndex:base.correctIndex,question:base.questionEn}});
+const KEY='wm-assessment-blocks-v21::'+window.WMUnifiedCourseMeta.id,all=J.read(KEY),active=all[block.id]?.active;
+const pool=units.flatMap(unit=>unit.lessons.flatMap(row=>[row,...(row.examples||[]).map((example,i)=>({...example,id:row.id+'-example-'+i}))].map(item=>({row:item,level:unit.level}))));
+const uniqueTranslations=[...new Set(pool.map(x=>x.row.cn))];
+function makeQuestion(item,skill,i){
+ const {row,level}=item;
+ const different=uniqueTranslations.filter(zh=>zh!==row.cn);
+ const options=Array.from({length:Math.min(3,different.length)},(_,j)=>different[(i*11+j)%different.length]);
+ const correctIndex=i%(options.length+1);
+ options.splice(correctIndex,0,row.cn);
+ return {sourceId:row.id,skill,unit:level,word:row.w||row.en,en:row.en,cn:row.cn,options,correctIndex,question:skill==='listening'?'Listen and choose the meaning · 听音选句意':'Read and choose the meaning · 阅读选句意'};
+}
+const skills=['listening','reading','writing','speaking','listening','reading','writing','speaking','listening','reading'];
+const questions=skills.map((skill,i)=>{
+ const saved=active?.questionIds?.[i];
+ const item=pool.find(x=>x.row.id===saved?.id)||pool[Math.floor(i*pool.length/skills.length)];
+ return makeQuestion(item,skill,i);
+});
 let answers=Array.isArray(active?.answers)?active.answers.slice(0,10):[],index=answers.length,locked=false,rec=null,timer=null,voiceToken=0,dictation=null;
 let attemptId=active?.id||Date.now().toString(36);
 function saveAttempt(){const records=J.read(KEY);records[block.id]={...(records[block.id]||{}),active:{id:attemptId,answers,questionIds:questions.map(q=>({id:q.sourceId,skill:q.skill}))}};try{localStorage.setItem(KEY,JSON.stringify(records))}catch{}}

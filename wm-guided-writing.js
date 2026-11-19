@@ -5,7 +5,18 @@ const node=(tag,text,cls)=>{const n=document.createElement(tag);if(text!==undefi
 function icon(name,label,fn){const b=button(label,fn);WMStudyIcons.set(b,name,label);return b}
 function reveal(answer){const b=icon('eye','Show answer',()=>{answer.hidden=!answer.hidden;b.setAttribute('aria-expanded',String(!answer.hidden))});b.setAttribute('aria-expanded','false');return b}
 function toolbar(parent,...buttons){const bar=node('div',undefined,'lesson-actions');bar.append(...buttons);parent.append(bar);return bar}
-function enrichLibrary(lib){const original=lib.byId.kindergarten,passage=original.passage.map((x,i)=>({...x,guidedLesson:lessons[i]?.id}));for(const l of lessons.filter(x=>x.source==='challenge'))passage.push({id:'guided:'+l.id,en:l.target,zh:l.materialZh,guidedLesson:l.id,sourceIds:[l.sourceId]});const stage={...original,passage};return {...lib,stages:lib.stages.map(s=>s.id==='kindergarten'?stage:s),byId:{...lib.byId,kindergarten:stage}}}
+function enrichLibrary(lib){
+ const kindergarten=lib.passages.filter(p=>p.stage==='kindergarten');
+ const stages=lib.stages.map(group=>{
+  const passage=group.passage.map(x=>({...x,guidedLesson:lessons[kindergarten.indexOf(x)]?.id}));
+  for(const lesson of lessons.filter(x=>x.source==='challenge')){
+   const owner=lib.sourceGroups.get(lesson.sourceId)||lib.stages[0];
+   if(group.id===owner.id)passage.push({id:'guided:'+lesson.id,en:lesson.target,zh:lesson.materialZh,guidedLesson:lesson.id,sourceIds:[lesson.sourceId]});
+  }
+  return {...group,passage};
+ });
+ return {...lib,stages,byId:Object.fromEntries(stages.map(group=>[group.id,group]))};
+}
 function mount({host,id,onComplete=()=>{},onRestart=()=>{}}){const lesson=lessons.find(x=>x.id===id);if(!lesson)throw Error('Missing lesson '+id);let all={};try{all=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{}if(typeof all!=='object'||Array.isArray(all))all={};let saved=all[id]||{},done=!!saved.completed,destroyed=false,playToken=0,entry=null,active=null;const completed=new Set(Array.isArray(saved.completedSteps)?saved.completedSteps:Array.from({length:Math.max(0,Math.min(5,Number(saved.step)||0))},(_,i)=>i)),voice=new WMMicrosoftVoice(document.createElement('audio')),root=node('section',undefined,'guided-writing');root.id='writing-classroom';host.append(root);
 const notice=node('p','','lesson-notice');notice.setAttribute('role','status');root.append(node('h2','Guided Writing · 写作课堂'),node('p','全部步骤都在这一页，可以自由上下滑动、回看和练习。最后完整写对本课范例即可完成。'),notice);
 function persist(){all[id]={step:completed.size,completedSteps:[...completed],completed:done,blank:saved.blank||'',answer:saved.answer||''};try{localStorage.setItem(KEY,JSON.stringify(all))}catch{notice.textContent='Progress could not be saved · 学习进度暂未保存，可继续练习'}}

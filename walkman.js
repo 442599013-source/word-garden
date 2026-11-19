@@ -25,10 +25,10 @@ let lessonView=null, lessonHost=null;
 const passageParts=['.study-content','.settings','.note'];
 function syncLessonView(){
  if(!lessonHost)return;
- const inRoots=type==='passage'&&$('category').value==='kindergarten';
+ const inRoots=type==='passage'&&window.WMStageLibrary.byId[$('category').value]?.stage==='kindergarten';
  if(inRoots&&!lessonView){
   stop();
-  const passages=catalog.books.filter(entry=>entry.type==='passage'&&entry.category==='kindergarten').flatMap(entry=>entry.items||[]);
+  const passages=window.WMStageLibrary.passages.filter(p=>p.stage==='kindergarten');
   lessonHost.hidden=false;
   for(const selector of passageParts)document.querySelector(selector)?.setAttribute('hidden','');
   lessonView=window.WMListeningLessons.mount(lessonHost,{passages});
@@ -55,7 +55,7 @@ const progress=saved.progress||{},stats=saved.stats||{plays:0,wordPlays:0,unique
 function persist(){try{C.write(KEY,{type,category:$('category').value,bookId:book?.id,progress,stats,favoritesOnly,repeat:$('repeat').value,speed:$('speed').value,loop:$('loop').value})}catch{$('status').textContent='进度保存失败，请检查浏览器存储空间'}}
 function stop(){running=false;paused=false;generation++;voice.stop();transport()}
 function counts(){$('stats').textContent='Learned words · 已学会单词：'+WMStudyTools.learnedWords('listening').size}
-function show(){transport();for(const opt of $('category').options){const c=catalog?.categories?.find(c=>c.id===opt.value);if(c)opt.textContent=c.en}$('category').title=$('category').selectedOptions[0]?.textContent||'Category';const x=book?.items[index];$('english').textContent=x?.en||(loading?'Loading · 正在加载':favoritesOnly?'No unlearned favorites · 暂无待练收藏':book?.allLearned?'All learned · 全部已学会':'No content · 暂无内容');$('chinese').textContent=x?.zh||'';$('book-title').textContent=book?book.titleZh+' · '+(book.titleEn||''):'';$('position').textContent=x?(index+1)+' / '+book.items.length:book?'0 / 0':'';const totals=studyStore.counts(type,scopeItems());learnedSplit.update('❤️ Learned',totals.learned,!x);favoriteSplit.update((x&&studyStore.hasFavorite(type,x)?'⭐':'☆')+' Favorites',totals.favorites,!x);$('favorite').setAttribute('aria-pressed',String(!!x&&studyStore.hasFavorite(type,x)));$('favorites-only').hidden=!favoritesOnly;$('favorites-only').textContent='All items · 普通练习';$('position').classList.toggle('is-favorites',favoritesOnly);$('position').setAttribute('aria-label',favoritesOnly?'Favorites · 收藏练习':'Regular practice · 普通练习');['play','prev','next','learned','favorite'].forEach(id=>$(id).disabled=!x);counts()}
+function show(){transport();for(const opt of $('category').options){const c=catalog?.categories?.find(c=>c.id===opt.value);if(c)opt.textContent=c.zh}$('category').title=$('category').selectedOptions[0]?.textContent||'Category';const x=book?.items[index];$('english').textContent=x?.en||(loading?'Loading · 正在加载':favoritesOnly?'No unlearned favorites · 暂无待练收藏':book?.allLearned?'All learned · 全部已学会':'No content · 暂无内容');$('chinese').textContent=x?.zh||'';$('book-title').textContent=book?book.titleZh+' · '+(book.titleEn||''):'';$('position').textContent=x?(index+1)+' / '+book.items.length:book?'0 / 0':'';const totals=studyStore.counts(type,scopeItems());learnedSplit.update('❤️ Learned',totals.learned,!x);favoriteSplit.update((x&&studyStore.hasFavorite(type,x)?'⭐':'☆')+' Favorites',totals.favorites,!x);$('favorite').setAttribute('aria-pressed',String(!!x&&studyStore.hasFavorite(type,x)));$('favorites-only').hidden=!favoritesOnly;$('favorites-only').textContent='All items · 普通练习';$('position').classList.toggle('is-favorites',favoritesOnly);$('position').setAttribute('aria-label',favoritesOnly?'Favorites · 收藏练习':'Regular practice · 普通练习');['play','prev','next','learned','favorite'].forEach(id=>$(id).disabled=!x);counts()}
 function timeout(p,ms){return Promise.race([p,new Promise((_,r)=>setTimeout(()=>r(Error('存储或加载超时，请重试')),ms))])}
 async function readBook(entry){
  if(entry.items)return C.validate(entry);
@@ -109,5 +109,8 @@ $('sleep').onchange=applySleep;
 document.addEventListener('visibilitychange',()=>{if(deadline&&Date.now()>=deadline){stop();lessonView?.stop();$('status').textContent='Timer ended · 定时已停止'}});window.addEventListener('pagehide',()=>{persist();stop();lessonView?.stop()});window.addEventListener('pageshow',e=>{if(e.persisted){studyStore.refresh();listBooks(book?.id)}});
 try{catalog=window.WMKindergartenListening129;if(!catalog?.books?.length)throw Error('听力内容未加载，请刷新重试');
 catalog.categories.forEach(c=>{const o=document.createElement('option');o.value=c.id;o.textContent=c.en+' · '+c.zh;$('category').append(o)});
-tabs();const routeParams=new URLSearchParams(location.search),routeStage=routeParams.get('stage')||window.WMUnifiedCourseData?.units.find(u=>u.level===Number(routeParams.get('level')))?.stage;$('category').value=catalog.categories.some(c=>c.id===routeStage)?routeStage:catalog.categories.some(c=>c.id===saved.category)?saved.category:'kindergarten';setupLessons();await listBooks(saved.bookId);
+tabs();const routeParams=new URLSearchParams(location.search);
+const route=WMStageLibrary.resolve(routeParams.get('stage'),Number(routeParams.get('level')));
+const group=route||WMStageLibrary.resolve(saved.category)||WMStageLibrary.resolve('kindergarten');
+$('category').value=group.id;setupLessons();await listBooks(saved.bookId);
 }catch(e){$('status').textContent=e.message}show();})();
