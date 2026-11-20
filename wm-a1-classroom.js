@@ -64,7 +64,7 @@
     const ok=await audio.play(...ids);
     if(current!==request)return;
     unmarkSpeaker();
-    if(!ok)status.textContent='播放已中断，可重新点读。';
+    if(!ok)status.textContent=ids.some(id=>/^sound-\d+$/.test(id))?'单音暂未接通，可点例词听完整读音。':'朗读失败，可重新点读。';
   }
   function play(...ids) { return playClips(ids); }
   function tile(item,example=false) {

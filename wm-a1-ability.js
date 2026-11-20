@@ -137,16 +137,17 @@
     if(window.WMSpeechInput)await window.WMSpeechInput.preparePlayback();
     if(serial!==renderId)return;
     const ok=await audio.play(...clips(item));
-    if(!ok&&serial===renderId)status.textContent='播放已中断，可重新点读。';
+    if(!ok&&serial===renderId)status.textContent=item.kind==='sound'?'单音暂未接通。':'朗读失败，可重新点读。';
   }
   async function startListening(toggle) {
     if (playback) { stopListening();toggle.textContent='🔊 听一遍';return; }
     const request={};
     playback=request;toggle.textContent='停止';
+    let playedAll=true;
     while(playback===request&&current) {
       let ok=true;
       for(let i=0;i<Number($('repeat').value)&&playback===request;i++){
-        if(!(await audio.playAt(Number($('speed').value),...clips(current)))){ok=false;break;}
+        if(!(await audio.playAt(Number($('speed').value),...clips(current)))){ok=false;playedAll=false;break;}
       }
       if(playback!==request||!ok||$('loop').value==='off')break;
       if($('loop').value==='book'){
@@ -155,7 +156,7 @@
         toggle.textContent='停止';
       }
     }
-    if(playback===request){playback=null;toggle.textContent='🔊 听一遍';}
+    if(playback===request){playback=null;toggle.textContent='🔊 听一遍';if(!playedAll)status.textContent=current?.kind==='sound'?'单音暂未接通。':'朗读失败，可重新点读。';}
   }
   if (listening) $('sleep').onchange=()=>{
     clearTimeout(timer);
