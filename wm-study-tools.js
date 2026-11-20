@@ -5,9 +5,9 @@ function read(key){try{const x=JSON.parse(localStorage.getItem(key)||'{}');retur
 
 function learnedWords(skill){const key=skill==='listening'?'wm-listening-learned-v6444':'wm-study-learned-v6446-'+skill;return new Set(Object.entries(read(key)).filter(([k,v])=>v===true&&k.startsWith('word|')&&k.slice(5).trim()).map(([k])=>normalize(k.slice(5))))}
 function changed(){window.dispatchEvent(new Event('wm-study-updated'));window.dispatchEvent(new Event('wm-assessment-updated'))}
-function matchFavorites(items,stage='kindergarten'){
- const stores=['listening','speaking','reading','writing'].map(skill=>new Store(skill));
- const metadata='wm-match-review-words-v6451',pool=read(metadata);
+function matchFavorites(items,stage='kindergarten',course=''){
+ const stores=['listening','speaking','reading','writing'].map(skill=>new Store(skill,course));
+ const metadata='wm-match-review-words-v6451'+(course?'::'+course:''),pool=read(metadata);
  const keys=stores.flatMap(store=>[store.favoriteKey,store.orderKey]);
  const previous=new Map([...keys,metadata].map(key=>[key,localStorage.getItem(key)]));
  const valid=items.filter(item=>item.en&&item.zh);
@@ -34,7 +34,7 @@ function matchFavorites(items,stage='kindergarten'){
  changed();
 }
 class Store{
- constructor(skill){this.skill=skill;this.orderKey='wm-study-order-v6460-'+skill;this.learnedKey=skill==='listening'?'wm-listening-learned-v6444':'wm-study-learned-v6446-'+skill;this.favoriteKey='wm-study-favorites-v6447-'+skill;this.learned=read(this.learnedKey);this.favorites=read(this.favoriteKey)}
+ constructor(skill,course=''){this.skill=skill;const scope=course?'::'+course:'';this.orderKey='wm-study-order-v6460-'+skill+scope;this.learnedKey=(skill==='listening'?'wm-listening-learned-v6444':'wm-study-learned-v6446-'+skill)+scope;this.favoriteKey='wm-study-favorites-v6447-'+skill+scope;this.learned=read(this.learnedKey);this.favorites=read(this.favoriteKey)}
  key(type,item){return type+'|'+normalize(item.en)}
  hasLearned(type,item){return !!this.learned[this.key(type,item)]}
  hasFavorite(type,item){return !!this.favorites[this.key(type,item)]}
