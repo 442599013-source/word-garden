@@ -8,20 +8,39 @@ panel.innerHTML='<header class="sentence-header"><span>Sentence</span><button ty
 stage.append(panel);
 const english=panel.querySelector('.sentence-english'),chinese=panel.querySelector('.sentence-chinese'),counter=panel.querySelector('.sentence-nav span');
 function words(row){return String(row.en||row.answer||'').split(/\s+/).filter(Boolean).flatMap(chunk=>{const whole=normalize(chunk);if(vocabulary?.has(whole))return [{text:chunk,key:whole}];const abbreviation=abbreviations.find(k=>whole.startsWith(k+"'")||whole.startsWith(k+'-'));if(abbreviation){const dash=chunk.indexOf('-'),suffix=normalize(chunk.slice(dash+1));if(dash>=0&&vocabulary?.has(suffix))return [{text:chunk.slice(0,dash+1),key:abbreviation},{text:chunk.slice(dash+1),key:suffix}];return [{text:chunk,key:abbreviation}]}const matches=[...chunk.matchAll(/\p{L}+(?:[-'’]\p{L}+)*/gu)];if(!matches.length)return [{text:chunk,key:''}];return matches.map((m,i)=>{const key=normalize(m[0]);return {text:(i===0?chunk.slice(0,m.index):'')+chunk.slice(m.index,matches[i+1]?.index??chunk.length),key:!vocabulary||vocabulary.has(key)?key:''}})})}
+function slots(row){
+ if(!row.category)return words(row);
+ return engine.plan.sourceWordIds.filter(id=>completed.has(id)&&engine.meaning({word:id})===row.category)
+   .map(id=>({text:engine.data.words[id].en,key:id}));
+}
 function remember(){if(engine)engine.s.sentenceView={version:6439,index:current,filled:[...completed]}}
 function render(highlight=''){
  english.replaceChildren();const row=rows[current];panel.hidden=!row;if(!row)return;
- for(const {text:word,key} of words(row)){const filled=completed.has(key)||!key;const slot=document.createElement('span');slot.className='sentence-slot '+(filled?'filled':'blank')+(key===highlight?' landed':'');slot.dataset.word=key;slot.textContent=filled?word:'＿';slot.setAttribute('aria-label',filled?word:'Unfilled word');if(!filled)slot.style.minWidth=Math.max(13,Math.min(40,key.length*4+5))+'px';english.append(slot)}
+ for(const {text:word,key} of slots(row)){const filled=completed.has(key)||!key;const slot=document.createElement('span');slot.className='sentence-slot '+(filled?'filled':'blank')+(key===highlight?' landed':'');slot.dataset.word=key;slot.textContent=filled?word:'＿';slot.setAttribute('aria-label',filled?word:'Unfilled word');if(!filled)slot.style.minWidth=Math.max(13,Math.min(40,key.length*4+5))+'px';english.append(slot)}
+ panel.querySelector('.sentence-header span').textContent=row.category||'Sentence';
+ panel.querySelector('.sentence-sound').hidden=!!row.category;
+ english.hidden=!!row.category&&!english.children.length;
+ chinese.hidden=!!row.category;
  chinese.textContent=row.cn||row.chinese||row.translation||'';chinese.scrollLeft=0;counter.textContent=(current+1)+' / '+rows.length;remember();requestAnimationFrame(position);
 }
 panel.querySelectorAll('[data-step]').forEach(b=>b.onclick=()=>{if(!rows.length)return;current=(current+Number(b.dataset.step)+rows.length)%rows.length;render();window.dispatchEvent(new CustomEvent('wm-match-sentence-selection'))});
 panel.querySelector('.sentence-sound').onclick=()=>{const row=rows[current];if(row)replay(String(row.en||row.answer||''))};
-function init(game,speak){revision++;engine=game;replay=speak||(()=>{});rows=(game.plan.lessons||[]).slice(0,5);abbreviations=(game.plan.sourceWordIds||[]).filter(id=>id.startsWith('abbr:')).map(id=>normalize(game.data.words[id]?.en||id));vocabulary=game.plan.sourceWordIds?new Set(game.plan.sourceWordIds.map(id=>normalize(game.data.words[id]?.en||id))):null;const saved=game.s.sentenceView;completed=new Set([...(saved?.version===6439?saved.filled||[]:[]),...(game.s.done||[]).filter(id=>!game.plan.sourceWordIds||game.plan.sourceWordIds.includes(id)).map(id=>game.data.words[id]?.en||id)].map(normalize).filter(w=>w&&(!vocabulary||vocabulary.has(w))));current=Math.max(0,Math.min(rows.length-1,Number(saved?.index)||0));render();}
+function init(game,speak){revision++;engine=game;replay=speak||(()=>{});rows=game.plan.classification?.map(category=>({category}))||(game.plan.lessons||[]).slice(0,5);
+ if(game.plan.classification){
+  completed=new Set(game.s.done.filter(id=>game.data.words[id]?.pairType==='classification'));
+  current=Math.max(0,Math.min(rows.length-1,Number(game.s.sentenceView?.index)||0));
+  panel.setAttribute('aria-label','配对分类结果');
+  render();return;
+ }abbreviations=(game.plan.sourceWordIds||[]).filter(id=>id.startsWith('abbr:')).map(id=>normalize(game.data.words[id]?.en||id));vocabulary=game.plan.sourceWordIds?new Set(game.plan.sourceWordIds.map(id=>normalize(game.data.words[id]?.en||id))):null;const saved=game.s.sentenceView;completed=new Set([...(saved?.version===6439?saved.filled||[]:[]),...(game.s.done||[]).filter(id=>!game.plan.sourceWordIds||game.plan.sourceWordIds.includes(id)).map(id=>game.data.words[id]?.en||id)].map(normalize).filter(w=>w&&(!vocabulary||vocabulary.has(w))));current=Math.max(0,Math.min(rows.length-1,Number(saved?.index)||0));render();}
 async function match(result,rects){
  const game=engine,epoch=revision;if(!game)return;
  const en=result.previous.find(t=>result.ids.includes(t.id)&&t.lang==='en');
  if(!en||(game.plan.sourceWordIds&&!game.plan.sourceWordIds.includes(en.word)))return;
- const key=normalize(game.data.words[en.word]?.en||en.word),indices=rows.map((r,i)=>words(r).some(w=>w.key===key)?i:-1).filter(i=>i>=0);
+ const item=game.data.words[en.word];
+ const classification=game.plan.classification;
+ if(classification&&item?.pairType!=='classification')return;
+ const key=classification?en.word:normalize(item?.en||en.word);
+ const indices=rows.map((r,i)=>(r.category?r.category===game.meaning(en):words(r).some(w=>w.key===key))?i:-1).filter(i=>i>=0);
  if(!key||!indices.length)return;
  current=indices.includes(current)?current:indices[0];completed.add(key);render(key);
  const slot=[...english.children].find(n=>n.dataset.word===key),source=rects.find(r=>r.lang==='en');

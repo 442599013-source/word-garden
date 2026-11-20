@@ -31,3 +31,12 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-ability-tabs button{flex:0 1 9rem;justify-content:center;gap:.4rem}
 .a1-ability-tabs small{font-size:.75em}
 .study-category-row #lesson-number,.context #lesson-number{width:auto;min-width:2.75rem;padding:.25rem .4rem;border-radius:.5rem}
+
+.a1-classroom #root{padding-bottom:calc(1rem + var(--goldy-nav-space, 70px))}
+.a1-classroom .a1-speaker{flex:none;border:0;background:none;color:inherit;display:grid;place-items:center;padding:0}
+.a1-sound{padding:1rem 0;border-top:1px solid #dfd6c6}
+.a1-classification{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
+.a1-category{border:1px solid #dfd6c6;border-radius:.7rem;padding:.4rem;min-width:0}
+.a1-category>.a1-button{margin:0;width:100%;justify-content:center}
+.a1-category .a1-pool{min-height:1.6rem}
+.a1-classroom [hidden]{display:none!important}

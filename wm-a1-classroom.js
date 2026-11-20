@@ -2,283 +2,267 @@
   'use strict';
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
-  const key = lesson.id + ':classroom';
-  const requested=Number(new URLSearchParams(location.search).get('level') || 1);
-  if (requested!==1) {
-    root.append(Object.assign(document.createElement('p'),{textContent:'第 '+requested+' 课暂无内容。'}));
-    const first=document.createElement('a');
-    first.href='sentence-game.html?level=1';
-    first.textContent='查看第 1 课';
-    root.append(first);
+  const requested = Number(new URLSearchParams(location.search).get('level') || 1);
+  if (requested !== 1) {
+    root.textContent = '第 ' + requested + ' 课暂无内容。';
     return;
   }
-  const passed = new Set();
-  let wordProgress=0;
-  const mistakes = new Set();
-  try {
-    const saved = JSON.parse(localStorage.getItem(key) || '{}');
-    wordProgress=Math.min(lesson.words.length,Math.max(0,Number(saved.wordProgress)||0));
-    for (const id of saved.passed || []) passed.add(id);
-    for (const id of saved.mistakes || []) mistakes.add(id);
-  } catch {}
-  function save() {
-    try { localStorage.setItem(key,JSON.stringify({passed:[...passed],mistakes:[...mistakes],wordProgress})); }
-    catch { status.textContent = '此设备暂时无法保存课堂进度。'; }
-  }
-  function element(tag,text,cls) {
+
+  function element(tag, text, className) {
     const node = document.createElement(tag);
     if (text) node.textContent = text;
-    if (cls) node.className = cls;
+    if (className) node.className = className;
     return node;
   }
-  function button(text,action,cls='a1-button') {
-    const node = element('button',text,cls);
+  function button(text, action, className = 'a1-button') {
+    const node = element('button', text, className);
     node.type = 'button';
     node.onclick = action;
     return node;
   }
-  const status = element('p','','a1-status');
-  status.setAttribute('role','status');
-  let request=0, activeSpeaker;
-  function unmarkSpeaker() {
-    if(!activeSpeaker)return;
-    activeSpeaker.setAttribute('aria-pressed','false');
-    activeSpeaker.textContent='🔊';
-    activeSpeaker=undefined;
+
+  const status = element('p', '', 'a1-status');
+  status.setAttribute('role', 'status');
+  let activeSpeaker, request = 0;
+  function mark(speaker, playing) {
+    if (!speaker) return;
+    speaker.setAttribute('aria-pressed', String(playing));
+    WMStudyIcons.set(speaker, playing ? 'stop' : 'speaker', playing ? '停止朗读' : '朗读整段');
   }
   function stop() {
     request++;
     audio.stop();
-    unmarkSpeaker();
+    mark(activeSpeaker, false);
+    activeSpeaker = undefined;
   }
-  async function playClips(ids,speaker) {
-    if(speaker&&activeSpeaker===speaker){stop();return;}
-    unmarkSpeaker();
-    const current=++request;
-    if(speaker){
-      activeSpeaker=speaker;
-      speaker.setAttribute('aria-pressed','true');
-      speaker.textContent='■';
+  async function play(ids, speaker) {
+    const toggling = speaker && activeSpeaker === speaker;
+    stop();
+    if (toggling) return;
+    const current = request;
+    activeSpeaker = speaker;
+    mark(speaker, true);
+    status.textContent = '';
+    if (!await audio.play(...ids) && current === request) status.textContent = '点读失败，请再试一次。';
+    if (current === request) {
+      mark(speaker, false);
+      activeSpeaker = undefined;
     }
-    status.textContent='';
-    const ok=await audio.play(...ids);
-    if(current!==request)return;
-    unmarkSpeaker();
-    if(!ok)status.textContent=ids.some(id=>/^sound-\d+$/.test(id))?'单音暂未接通，可点例词听完整读音。':'朗读失败，可重新点读。';
-  }
-  function play(...ids) { return playClips(ids); }
-  function tile(item,example=false) {
-    const label = example ? item.example : item.kind === 'letter' ? item.en + ' ' + item.lower : item.en;
-    const reading = example ? item.exampleIpa : item.kind === 'sound' ? '' : item.ipa;
-    const node = button(label,() => play(item.id + (example ? '-example' : '')),'a1-tile');
-    if (reading) node.append(element('small',reading.split('; ').map(ipa=>'/'+ipa+'/').join(' · ')));
-    return node;
-  }
-  function vocabularyGrid(items) {
-    const grid = element('div','','a1-card-grid');
-    for (const item of items) {
-      if (item.kind === 'letter') {
-        grid.append(tile(item));
-        continue;
-      }
-      const card = element('div','','a1-item');
-      card.append(tile(item));
-      if (item.kind === 'sound') {
-        card.append(element('small',item.spelling),tile(item,true),element('small',item.exampleZh));
-      } else if (item.kind === 'word') {
-        card.append(element('small',item.zh));
-      } else {
-        card.firstChild.onclick = () => play(...(item.context ? [item.id+'-context',item.id] : [item.id]));
-        if (item.context) card.prepend(button(item.context,() => play(item.id+'-context'),'a1-context'));
-        card.append(element('small',item.zh));
-        if (item.extra) card.append(element('small','拓展词：'+item.extra));
-      }
-      grid.append(card);
-    }
-    return grid;
-  }
-  const blocks = {
-    intro:() => {
-      const grid=element('div','','a1-card-grid');
-      grid.append(tile(lesson.words.find(item=>item.en==='am')),
-        ...lesson.sounds.filter(item=>['æ','m'].includes(item.ipa)).map(item=>tile(item)));
-      return grid;
-    },
-    letters:() => {
-      const wrap=element('div');
-      wrap.append(vocabularyGrid(lesson.letters),
-        button('yes',()=>play('example-yes'),'a1-tile'),button('my',()=>play('example-my'),'a1-tile'));
-      return wrap;
-    },
-    vowels:() => vocabularyGrid(lesson.sounds.filter(item=>item.group==='vowel')),
-    consonants:() => vocabularyGrid(lesson.sounds.filter(item=>item.group==='consonant')),
-    words:() => vocabularyGrid(lesson.words),
-    phrases:() => {
-      const wrap=element('div');
-      for (const [title,items] of [
-        ['词组',lesson.phrases.filter(item=>!item.extra)],['短句',lesson.sentences.filter(item=>!item.extra)],
-        ['拓展', [...lesson.phrases,...lesson.sentences].filter(item=>item.extra)]]) {
-        wrap.append(element('h3',title),vocabularyGrid(items));
-      }
-      return wrap;
-    }
-  };
-  const lessonContent=element('div');
-  for (const section of lesson.sections) {
-    const block=element('section','','a1-block');
-    const heading=element('header','','a1-block-heading');
-    const speaker=button('🔊',()=>playClips(['section-'+section.id],speaker),'a1-speaker');
-    speaker.setAttribute('aria-pressed','false');
-    speaker.setAttribute('aria-label','朗读整段：'+section.title);
-    heading.append(element('h2',section.title),speaker);
-    block.append(heading,...section.lines.map(line=>element('p',line)),blocks[section.id]());
-    lessonContent.append(block);
   }
 
-  const questions=[
-    {id:'vowel-letters',label:'选择全部基本元音字母',items:lesson.letters,match:'vowel'},
-    {id:'consonant-letters',label:'选择全部普通辅音字母（Y 单独学习）',items:lesson.letters,match:'consonant'},
-    {id:'vowel-sounds',label:'选择全部元音音素',items:lesson.sounds,match:'vowel'},
-    {id:'consonant-sounds',label:'选择全部辅音音素',items:lesson.sounds,match:'consonant'},
-    {id:'words',label:'根据中文和提示选英文',items:lesson.words}
+  function tile(label, id) {
+    return button(label, () => void play([id]), 'a1-tile');
+  }
+  const showWord = item => item.en + '（' + item.zh + '）';
+  const words = new Map(lesson.words.map(item=>[item.en,item]));
+  const am = words.get('am');
+  const sections = element('div');
+  const soundsBySymbol = new Map(lesson.sounds.map(sound=>[sound.ipa,sound]));
+  const placedLetters = new Set();
+  const lettersBySound = new Map(Object.entries({
+    'æ':'A','b':'B','k':'CKQ','d':'D','e':'E','f':'F','ɡ':'G','h':'H','ɪ':'I',
+    'dʒ':'J','l':'L','m':'M','n':'N','ɒ':'O','p':'P','r':'R','s':'SX','t':'T',
+    'ʌ':'U','v':'V','w':'W','j':'Y','z':'Z'
+  }));
+  const articulation = {
+    'æ':'把嘴张开一些，舌头放低，气流顺着嘴里出来。','m':'双唇轻轻合上，让声音从鼻子出来。',
+    'p':'双唇先合上再放开，感觉一小股气出来。','s':'让气流挤过舌尖和上齿附近的窄缝。',
+    'iː':'嘴角略向两边，舌头前部抬高，把这个音稍稍拉长。','ɪ':'舌头前部抬起，嘴和舌头放松一点，发一个短音。',
+    'ə':'放松嘴和舌头，轻轻发一个短音。','ŋ':'舌头后部贴近上方，声音从鼻子出来。',
+    'e':'舌头前部稍微抬起，嘴比发 /æ/ 时张得小一些。',
+    'ɑː':'口腔张开，舌头偏后，把声音稍微拉长。',
+    'ɒ':'舌头靠后，嘴张开，嘴唇稍圆，发一个短音。',
+    'ɔː':'嘴唇收圆，舌头靠后，把这个音稍稍拉长。',
+    'ʊ':'嘴唇轻轻收圆，舌头后部抬起一点，发一个短音。',
+    'uː':'嘴唇收圆，舌头抬高，把这个音稍稍拉长。',
+    'ʌ':'嘴自然张开，舌头放松在口腔中间，发一个短音。',
+    'ɜː':'嘴和舌头放松在中间位置，让声音持续一小会儿。',
+    'eɪ':'先发前半段，接着把舌头抬高一点，让声音滑到后半段。',
+    'aɪ':'先张开嘴，再把舌头前部往上抬，两个部分连成一个音节。',
+    'ɔɪ':'嘴唇先收圆，接着向两边放松，舌头滑向前上方。',
+    'əʊ':'从放松的嘴形起步，慢慢收圆嘴唇。',
+    'aʊ':'先张开嘴，再慢慢收圆嘴唇。',
+    'ɪə':'舌头前部先抬起来，再放松回到中间。',
+    'eə':'从嘴稍张开的前元音起步，舌头滑向中间。',
+    'ʊə':'嘴唇先稍微收圆，再放松。听两个部分连起来的声音。',
+    'b':'双唇先合上，再放开。和 /p/ 比一比，这个音带声带振动。',
+    't':'舌尖先抵住上齿背后的齿龈，再放开。',
+    'd':'舌尖先抵住齿龈再放开，留意带声的感觉。',
+    'k':'舌头后部先抵住软腭，再放开。',
+    'ɡ':'舌头后部先抵住软腭再放开，留意带声的感觉。',
+    'f':'上牙轻碰下唇，让气流从窄缝擦过去。',
+    'v':'上牙轻碰下唇，让气流擦过去，同时让声带振动。',
+    'θ':'舌尖轻靠上门牙，让气流从缝里出去。',
+    'ð':'舌尖轻靠上门牙，让气流从缝里出去，同时让声带振动。',
+    'z':'嘴形和 /s/ 接近，同时让声带振动。',
+    'ʃ':'舌头前部抬起，嘴唇轻轻收圆，让气流从较靠后的位置擦过去。',
+    'ʒ':'嘴形和 /ʃ/ 接近，同时让声带振动。',
+    'h':'放松嘴巴，轻轻呼气，马上接到后面的元音。',
+    'tʃ':'舌头先挡住气流，再留出一道窄缝，让气流擦出去。',
+    'dʒ':'舌头先挡住气流，再让气流擦出去。和 /tʃ/ 相比，这个音带声。',
+    'n':'舌尖抵住齿龈，声音从鼻子出来。',
+    'l':'舌尖碰到齿龈，气流从舌头两侧出去。',
+    'r':'舌尖抬起，靠近上方，舌尖和上方之间留一点空隙。',
+    'j':'把舌头前部抬向上腭，然后马上滑向后面的元音。',
+    'w':'先收圆嘴唇，再马上滑进后面的元音。'
+  };
+  function explain(sound) {
+    const ipa = sound.exampleIpa;
+    const position = ipa === sound.ipa ? '这个词的整个读音' :
+      ipa.startsWith(sound.ipa) ? '这个词开头的音' :
+      ipa.endsWith(sound.ipa) ? '这个词末尾的音' : '这个词中间的音';
+    let text = '点 ' + sound.example + '（' + sound.exampleZh + '），听' + position + '。找找拼写里的 ' +
+      sound.spelling.split(', ')[0] + '，听听它在词里怎么读。';
+    if (sound.ipa === 'ə' || sound.ipa === 'eɪ') {
+      text = '点 a（一个），听它的' + (sound.ipa === 'ə' ? '弱读。说话时轻轻带过这个词，常听到这个短音。' : '强读。单独说这个词或特意强调时，可以听到这个音。');
+    }
+    if (sound.ipa === 'k') text += '在 car（汽车）里，字母 c 也表示这个音。点 Q 听字母名，开头也能听到这个音。';
+    if (sound.ipa === 'v') text = '听 of（……的）的结尾。这里写的是 f，却读成这个音。再点 V 听字母名，开头也能听到这个音。';
+    if (sound.ipa === 'z') text = '听 is（是）的结尾。这里写的是 s，发的是这个带振动的声音。再点 Z 听字母名，开头也能听到这个音。';
+    if (sound.ipa === 'j') text += '再听 my（我的）的词尾。这里也写 y，但你听到的是元音 /aɪ/。';
+    if (sound.ipa === 'm') text += '再点 am（是），这一次把注意力放在词尾。';
+    if (sound.ipa === 's') text = '先听 so（所以）的开头。再比较 ox（公牛）的词尾，字母 x 在这里合起来表示 /k/ 和 /s/。';
+    return (articulation[sound.ipa] ? articulation[sound.ipa] + ' ' : '') + text;
+  }
+
+  for (const section of lesson.sections) {
+    const block = element('section', '', 'a1-block');
+    const header = element('header', '', 'a1-block-heading');
+    const speaker = button('', () => void play(['section-' + section.id], speaker), 'a1-speaker');
+    mark(speaker, false);
+    header.append(element('h2', section.title), speaker);
+    block.append(header, ...section.lines.map(line=>element('p', line)));
+    const narration = [section.title,...section.lines];
+    if (section.id === 'intro') {
+      const examples = element('div', '', 'a1-pool');
+      examples.append(tile(showWord(am),am.id), ...['æ','m','s'].map(ipa=>tile('/'+ipa+'/',soundsBySymbol.get(ipa).id)));
+      block.append(examples);
+    } else {
+      for (const sound of lesson.sounds.filter(item => item.group + 's' === section.id)) {
+        const group = element('article', '', 'a1-sound');
+        const line = explain(sound);
+        group.append(tile(sound.en, sound.id), element('p', line));
+        narration.push({id:sound.id},line);
+        const cards = element('div', '', 'a1-pool');
+        const letters = [...(lettersBySound.get(sound.ipa) || '')].map(letter=>lesson.letters.find(item=>item.en===letter));
+        for (const letter of letters) {
+          if (placedLetters.has(letter.id)) continue;
+          placedLetters.add(letter.id);
+          cards.append(tile(letter.en + ' ' + letter.lower, letter.id));
+          narration.push({id:letter.id});
+        }
+        const examples = lesson.words.filter(word=>word.phonemes.includes(sound.id));
+        const example = words.get(sound.example);
+        if (example && !examples.includes(example)) examples.unshift(example);
+        if (sound.ipa === 'j') cards.append(tile(showWord(words.get('my')),words.get('my').id));
+        if (!example) {
+          cards.append(tile(sound.example + '（' + sound.exampleZh + '）',sound.id + '-example'));
+          narration.push({id:sound.id + '-example'},sound.exampleZh);
+        }
+        for (const word of examples) {
+          const id = word.en === 'a' && sound.ipa === 'ə' ? 'weak-a' :
+            word.en === 'a' && sound.ipa === 'eɪ' ? 'strong-a' : word.id;
+          cards.append(tile(showWord(word),id));
+          narration.push({id},word.zh);
+        }
+        group.append(cards);
+        block.append(group);
+      }
+    }
+    audio.registerNarration(section.id,narration);
+    sections.append(block);
+  }
+
+  const questions = [
+    {id:'letters', title:'请选择元音字母', items:lesson.letters},
+    {id:'sounds', title:'请选择元音音素', items:lesson.sounds},
+    {id:'words', title:'请选择元音开头的单词', items:lesson.words}
   ];
-  function shuffle(values) {
-    const result=values.slice();
-    for (let j=result.length-1;j>0;j--) {
-      const k=Math.floor(Math.random()*(j+1));
-      [result[j],result[k]]=[result[k],result[j]];
+  const quiz = element('section', '', 'a1-block');
+  quiz.id = 'a1-assessment';
+  quiz.hidden = true;
+  const key = lesson.id + ':classification';
+  let saved = {};
+  try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch {}
+  function save() {
+    try { localStorage.setItem(key,JSON.stringify(saved)); } catch {}
+  }
+  function shuffle(items) {
+    const result = items.slice();
+    for (let n = result.length - 1; n > 0; n--) {
+      const j = Math.floor(Math.random() * (n + 1));
+      [result[n],result[j]] = [result[j],result[n]];
     }
     return result;
   }
-  const quiz = element('section','','a1-block');
-  quiz.id='a1-assessment';
-  quiz.hidden=true;
-  let questionIndex=0;
   function showQuiz(index) {
-    questionIndex=index;
     stop();
-    quiz.hidden=false;
-    quiz.replaceChildren(element('h2','课堂考核 '+(index+1)+'/5'),element('p',questions[index].label));
-    const feedback=element('p');
+    quiz.hidden = false;
+    const question = questions[index];
+    const pool = element('div', '', 'a1-pool');
+    const feedback = element('p');
     feedback.setAttribute('role','status');
-    const pass = () => {
-      passed.add(questions[index].id);
-      save();
-      quiz.append(button(index===4 ? '完成第 1 课' : '下一项',() => {
-        if (questionIndex < 4) showQuiz(questionIndex+1);
-        else {
-          quiz.replaceChildren(element('h2','第 1 课考核完成'),element('p','现在可以进入第 1 关巩固练习。'));
-          for (const [name,url] of [['魔法配对','word-match.html'],['听力','walkman.html'],['口语','speaking-study.html'],['阅读','reading-study.html'],['写作','writing-study.html']]) {
-            const link=element('a',name,'a1-button');
-            link.href=url+'?level=1&from=journey'; quiz.append(link);
-          }
-          quiz.append(button('重新练习',()=>{wordProgress=0;save();showQuiz(0);}));
-        }
-      }));
-    };
-    if (index===4) { wordQuiz(feedback,pass); return; }
-    const {items,match,id} = questions[index];
-    const chosen=new Map(), pool=element('div','','a1-pool'), selection=element('div','','a1-pool');
-    selection.setAttribute('aria-label','已选答案');
-    for (const item of shuffle(items)) {
-      const node=element('div','','a1-quiz-card');
-      const select=button(item.en,() => {
-        if (chosen.delete(item.id)) pool.append(node);
-        else { chosen.set(item.id,item); selection.append(node); }
-        select.setAttribute('aria-pressed',String(chosen.has(item.id)));
-        if(item.kind==='sound')void play(item.id);
-      },'a1-tile');
-      select.setAttribute('aria-pressed','false');
-      node.append(select);
-      pool.append(node);
-    }
-    const submit=button('提交本项',() => {
-      const targets=items.filter(item=>item.group===match);
-      const errors=items.filter(item=>chosen.has(item.id)!==(item.group===match));
-      for (const item of items) {
-        const record=id+':'+item.id;
-        if (errors.includes(item)) mistakes.add(record); else mistakes.delete(record);
-      }
-      save();
-      feedback.textContent='选对 '+targets.filter(item=>chosen.has(item.id)).length+'/'+targets.length+
-        '，多选 '+[...chosen.values()].filter(item=>item.group!==match).length+' 项。'+(errors.length?'请调整后再提交。':'全部正确。');
-      if (!errors.length) {
-        submit.disabled=true;
-        for (const button of quiz.querySelectorAll('button[aria-pressed]')) button.disabled=true;
-        pass();
-      }
+    const classified = new Set(question.items.filter(item=>saved[question.id]?.includes?.(item.id)).map(item=>item.id));
+    const groups = element('div', '', 'a1-classification');
+    const buckets = new Map();
+    let selection, selectedButton;
+    const next = button(index < 2 ? '下一题' : '完成第 1 课', () => {
+      if (index < 2) showQuiz(index + 1);
+      else quiz.replaceChildren(element('h2','第 1 课考核完成'),
+        button('重新练习',()=>{saved={};save();showQuiz(0);}));
     });
-    quiz.append(element('h3','已选答案'),selection,element('h3','待选卡片'),pool,submit,feedback);
-  }
-  function wordQuiz(feedback,pass) {
-    const size=6, total=lesson.words.length, work=element('div');
-    const queue=lesson.words.slice();
-    let start=wordProgress;
-    quiz.append(work,feedback);
-    function batch() {
-      work.replaceChildren();
-      if (start>=total) {
-        feedback.textContent='已完成全部 '+total+' 个单词。';
-        pass();
-        return;
-      }
-      const rows=queue.slice(start,start+size), filled=new Map(), slots=new Map(), tokens=new Map();
-      const slotList=element('div','','a1-word-slots'), options=element('div','','a1-pool');
-      let active=rows[0].id;
-      function render() {
-        for (const [id,slot] of slots) {
-          slot.textContent=filled.get(id)?.en || '___';
-          slot.setAttribute('aria-pressed',String(active===id));
-        }
-        for (const [id,token] of tokens) token.disabled=[...filled.values()].some(item=>item.id===id);
-      }
-      for (const row of rows) {
-        const line=element('div',row.zh+(row.hint?' · '+row.hint:''),'a1-word-slot');
-        const slot=button('___',()=>{filled.delete(row.id);active=row.id;render();});
-        slot.setAttribute('aria-label',row.zh+'的答案');
-        slots.set(row.id,slot);
-        line.append(slot);
-        slotList.append(line);
-      }
-      for (const row of shuffle(rows)) {
-        const token=button(row.en,()=>{
-          if(!active)return;
-          filled.set(active,row);
-          active=rows.find(item=>!filled.has(item.id))?.id;
-          render();
-        },'a1-tile');
-        tokens.set(row.id,token);
-        options.append(token);
-      }
-      const submit=button('提交本批',()=>{
-        if (filled.size!==rows.length) { feedback.textContent='请先填完这一批。';return; }
-        const wrong=rows.filter(item=>filled.get(item.id)?.id!==item.id);
-        for (const row of rows) {
-          if (wrong.includes(row)) mistakes.add('words:'+row.id); else mistakes.delete('words:'+row.id);
-        }
-        save();
-        feedback.textContent='本批 '+(rows.length-wrong.length)+'/'+rows.length+' 正确，已完成 '+(start+rows.length-wrong.length)+'/'+total+'。';
-        if (wrong.length) {
-          for (const row of wrong) filled.delete(row.id);
-          active=wrong[0].id;render();
-          return;
-        }
-        start+=rows.length;wordProgress=start;save();
-        batch();
-      });
-      work.append(element('p','单词 '+(start+1)+'–'+(start+rows.length)+' / '+total),slotList,options,submit);
-      render();
+    function progress() {
+      next.hidden = classified.size !== question.items.length;
     }
-    batch();
+    function choose(group) {
+      if (!selection) { feedback.textContent = '请先点下面的一张卡片。'; return; }
+      if (selection.group !== group) { feedback.textContent = '再听一遍，试试另一个分类。'; return; }
+      const label = selection.kind === 'word' ? showWord(selection) : selection.en;
+      buckets.get(group).append(tile(label,selection.id));
+      classified.add(selection.id);
+      saved[question.id] = [...classified];
+      save();
+      selectedButton.remove();
+      selection = selectedButton = null;
+      feedback.textContent = '正确 · ' + classified.size + ' / ' + question.items.length;
+      progress();
+    }
+    for (const [group, label] of Object.entries(lesson.labels[question.items[0].kind])) {
+      const frame = element('div', '', 'a1-category');
+      const list = element('div', '', 'a1-pool');
+      buckets.set(group, list);
+      frame.append(button(label,()=>choose(group)),list);
+      groups.append(frame);
+    }
+    for (const item of shuffle(question.items)) {
+      const label = item.kind === 'word' ? showWord(item) : item.en;
+      if (classified.has(item.id)) {
+        buckets.get(item.group).append(tile(label,item.id));
+        continue;
+      }
+      const card = button(label,()=>{
+        selectedButton?.setAttribute('aria-pressed','false');
+        selection = item;
+        selectedButton = card;
+        card.setAttribute('aria-pressed','true');
+        void play([item.id]);
+      },'a1-tile');
+      card.setAttribute('aria-pressed','false');
+      pool.append(card);
+    }
+    quiz.replaceChildren(element('h2','课堂考核 ' + (index + 1) + ' / 3'),
+      element('p',question.title),element('p',index===0 ?
+        '先听名字，认出字母，再选它的类别。Y 在字母分类里放入辅音字母框，它在不同单词里可以表示不同的音。' :
+        index===1 ? '先听单音，再选元音音素或辅音音素。' : '先听整个单词，再按开头听到的第一个音分类。'),
+      groups, pool, feedback, next);
+    progress();
   }
-  root.append(element('p','幼儿园 A1 · 第 1 课','a1-kicker'),
-    element('h1','认识字母、音素与最短英语单词'),status,lessonContent,
-    button(passed.size&&passed.size<5?'继续课堂考核':'开始课堂考核',()=>{
-      showQuiz(Math.max(0,questions.findIndex(question=>!passed.has(question.id))));
-      quiz.scrollIntoView({block:'start'});
-    }),quiz);
-  if(location.hash==='#a1-assessment') {
-    showQuiz(Math.max(0,questions.findIndex(question=>!passed.has(question.id))));
+  function startQuiz() {
+    const next = questions.findIndex(question=>saved[question.id]?.length !== question.items.length);
+    showQuiz(next === -1 ? 2 : next);
     quiz.scrollIntoView({block:'start'});
   }
+  root.append(element('p','幼儿园 A1 · 第 1 课','a1-kicker'),
+    element('h1','认识 44 个英语音素'),status,sections,button('课堂考核',startQuiz),quiz);
+  if (location.hash === '#a1-assessment') startQuiz();
 })();

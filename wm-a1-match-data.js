@@ -1,16 +1,18 @@
 (() => {
   'use strict';
   const lesson = WMA1Lesson;
-  const exampleSentences = ['Do it.','Go on.','I am OK.','It is on.','We go in.'];
-  const lessons = exampleSentences.map(en => {
-    const item = lesson.sentences.find(row=>row.en===en);
-    return {id:item.id,en:item.en,cn:item.zh};
-  });
+  const words = {...lesson.match};
+  for (const item of lesson.words) {
+    words[item.id + '-type'] = {...item,zh:lesson.category(item),pairType:'classification'};
+    words[item.id] = {...words[item.id],pairType:'meaning'};
+  }
+  for (const item of [...lesson.letters,...lesson.sounds]) words[item.id].pairType = 'classification';
+  const categories = Object.values(lesson.labels).flatMap(group=>Object.values(group));
   window.WMMatchData = {
-    version:6427,courseId:lesson.id,words:lesson.match,fillerIds:[],
+    version:6427,courseId:lesson.id,words,fillerIds:[],
     levels:[{
-      level:1,stage:'kindergarten',group:lesson.group,lessons,meanings:{},
-      sourceWordIds:Object.keys(lesson.match)
+      level:1,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},
+      classification:categories,sourceWordIds:Object.keys(words),previewPairs:6
     }]
   };
 })();

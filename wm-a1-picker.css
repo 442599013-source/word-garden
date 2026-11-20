@@ -1,0 +1,14 @@
+.wm-study-page .wm-header-category .wm-a1-lesson-picker:has(#lesson-number),
+.wm-study-page .wm-header-category.wm-a1-lesson-picker:has(#lesson-number){
+  display:flex!important;align-items:center;gap:4px;
+}
+.wm-study-page .wm-header-category .wm-a1-lesson-picker #lesson-number,
+.wm-study-page .wm-header-category.wm-a1-lesson-picker #lesson-number{
+  appearance:auto;width:2.35rem!important;min-width:2.35rem!important;flex:none;
+}
+.wm-study-page .wm-header-category #stage,
+.wm-study-page .wm-header-category #category{flex:1 1 auto;min-width:0}
+.wm-study-page .header:has(#lesson-number),
+.wm-study-page .wm-listening-header:has(#lesson-number){
+  grid-template-columns:36px minmax(0,1fr) clamp(120px,37vw,140px);
+}

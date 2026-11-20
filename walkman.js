@@ -1,4 +1,4 @@
-(async()=>{'use strict';const $=id=>document.getElementById(id),C=WMWalkman,KEY='wm-shared-stage-library-v6430',saved=C.read(KEY,{}),names={word:['听单词','Words'],phrase:['听词组','Phrases'],sentence:['听短句','Sentences'],passage:['听短文','Passages']};let type=new URLSearchParams(location.search).get('type')||saved.type||'word';if(!C.types.includes(type))type='word';let catalog,book=null,index=0,running=false,paused=false,generation=0,loadGeneration=0,loading=false,deadline=0,timer,favoritesOnly=!!saved.favoritesOnly;const voice=new WMMicrosoftVoice($('audio'));const studyStore=new WMStudyTools.Store('listening');
+(async()=>{'use strict';const $=id=>document.getElementById(id),C=WMWalkman,KEY='wm-shared-stage-library-v6430',saved=C.read(KEY,{}),names={word:['听单词','Words'],phrase:['听词组','Phrases'],sentence:['听短句','Sentences'],passage:['听短文','Passages']};let type=new URLSearchParams(location.search).get('type')||saved.type||'word';if(!C.types.includes(type))type='word';let catalog,book=null,index=0,running=false,paused=false,generation=0,loadGeneration=0,loading=false,deadline=0,timer,favoritesOnly=!!saved.favoritesOnly;const voice=new WMMicrosoftVoice($('audio'));const studyStore=new WMStudyTools.Store('listening',WMA1Lesson.id);
 let reviewScope=[];
 function reviewQueue(){return studyStore.remaining(type,reviewScope,true)}
 async function selectQueue(only,target){
@@ -112,5 +112,5 @@ catalog.categories.forEach(c=>{const o=document.createElement('option');o.value=
 tabs();const routeParams=new URLSearchParams(location.search);
 const route=WMStageLibrary.resolve(routeParams.get('stage'),Number(routeParams.get('level')));
 const group=route||WMStageLibrary.resolve(saved.category)||WMStageLibrary.resolve('kindergarten');
-$('category').value=group.id;setupLessons();await listBooks(saved.bookId);
+$('category').value=group.id;WMA1LessonNumber($('category'),$('category').parentElement);setupLessons();await listBooks(saved.bookId);
 }catch(e){$('status').textContent=e.message}show();})();

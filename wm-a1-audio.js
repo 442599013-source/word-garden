@@ -7,7 +7,7 @@
   const items = new Map(lesson.all.map(item => [item.id,item]));
   const sections = new Map(lesson.sections.map(section => [section.id,section]));
   const sounds = new Map(lesson.sounds.map(item => [item.en,item.id]));
-  const wordByName = new Map(lesson.words.map(item => [item.en,item.id]));
+  const lessonNarration = new Map();
   const en = text => ({text,locale:'en-GB'});
   const zh = text => ({text,locale:'zh-CN'});
   const local = id => ({id});
@@ -20,7 +20,7 @@
     reader.stop();
   }
   function narration(line) {
-    return line.split(/(\/[\p{L}ː]+\/|[A-Za-z]+(?:[ 、][A-Za-z]+)*)/u)
+    return line.split(/(\/[^/\s]+\/|[A-Za-z]+(?:[ 、][A-Za-z]+)*)/u)
       .flatMap(part => {
         const text = part.trim();
         if (!text || /^[、，。！？；]+$/.test(text)) return [];
@@ -35,34 +35,12 @@
     if (item?.kind === 'sound') return local(id);
     if (item?.kind === 'letter') return en(({A:'ay',H:'aitch',Z:'zed'})[item.en] || item.en);
     if (item) return en(item.en);
+    if(id==='weak-a')return local(sounds.get('/ə/'));
+    if(id==='strong-a')return local(sounds.get('/eɪ/'));
     if (id === 'example-yes' || id === 'example-my') return en(id.slice('example-'.length));
     const linked = items.get(id.replace(/-(example|context)$/,''));
     const text = id.endsWith('-example') ? linked?.example : linked?.context;
     return text ? en(text) : null;
-  }
-  function sectionTasks(section) {
-    const intro = section.lines.flatMap(narration);
-    switch (section.id) {
-      case 'intro':
-        return [...intro,task(wordByName.get('am')), local(sounds.get('/æ/')),local(sounds.get('/m/'))];
-      case 'letters':
-        return [...intro,...lesson.letters.map(item => task(item.id)),en('yes'),en('my')];
-      case 'vowels':
-      case 'consonants':
-        return [...intro,...lesson.sounds.filter(item => item.group+'s'===section.id)
-          .flatMap(item => [local(item.id),en(item.example),zh(item.exampleZh)])];
-      case 'words':
-        return [...intro,...lesson.words.flatMap(item => [en(item.en),zh(item.zh)])];
-      case 'phrases': {
-        const examples = [...lesson.phrases,...lesson.sentences];
-        const ordered = [...examples.filter(item => !item.extra),...examples.filter(item => item.extra)];
-        return [...intro,...ordered.flatMap(item => [
-          ...(item.context ? [en(item.context)] : []),en(item.en),zh(item.zh)
-        ])];
-      }
-      default:
-        return intro;
-    }
   }
   function playSound(id,rate) {
     WMMicrosoftVoice.audioMode('playback');
@@ -91,7 +69,7 @@
     const current = token;
     for (const id of ids) {
       const section = id.startsWith('section-') && sections.get(id.slice('section-'.length));
-      const queue = section ? sectionTasks(section) : [task(id)];
+      const queue = section ? (lessonNarration.get(section.id) || section.lines.flatMap(narration)) : [task(id)];
       for (const entry of queue) {
         if (!entry || current !== token) return false;
         if (entry.id) {
@@ -106,5 +84,8 @@
     return current === token;
   }
   window.addEventListener('pagehide',stop);
-  window.WMA1Audio = {play:(...ids) => playAt(1,...ids),playAt,stop};
+  function registerNarration(id, parts) {
+    lessonNarration.set(id, parts.flatMap(part=>typeof part==='string' ? narration(part) : [task(part.id)]));
+  }
+  window.WMA1Audio = {play:(...ids) => playAt(1,...ids),playAt,stop,registerNarration};
 })();

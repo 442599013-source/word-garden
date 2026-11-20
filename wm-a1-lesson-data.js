@@ -5,7 +5,7 @@
   const letterNames = ('eɪ biː siː diː iː ef dʒiː eɪtʃ aɪ dʒeɪ keɪ el em en əʊ piː kjuː ɑː es tiː juː viː ˈdʌbəl.juː eks waɪ zed').split(' ');
   const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map((en, i) => ({
     id: 'letter-' + en.toLowerCase(), en, lower: en.toLowerCase(), ipa: letterNames[i],
-    kind: 'letter', group: en === 'Y' ? 'special' : 'AEIOU'.includes(en) ? 'vowel' : 'consonant'
+    kind: 'letter', group: 'AEIOU'.includes(en) ? 'vowel' : 'consonant'
   }));
   const soundRows = `iː|e, ee|me|miː|我（宾格）
 ɪ|i|in|ɪn|在……里面
@@ -208,35 +208,40 @@ Is it for me?|这是给我的吗？|for`;
   }
   const phrases=examples(phrasesText,'phrase'), sentences=examples(sentencesText,'sentence');
   const sections = [
-    {id:'intro',title:'先分清字母、音素和音标',lines:[
-      '字母是写在纸上的符号。音素是能区别词义的最小语音单位。音标用来记录发音。',
-      '拿 am 来看。写下来是两个字母 a 和 m。把它读出来，可以听到元音 /æ/ 和辅音 /m/。整个单词的读音写成 /æm/。'
+    {id:'intro',title:'先听懂元音和辅音的区别',lines:[
+      '先听 am（是）。慢一点听，开头是 /æ/，结尾是 /m/。这两个声音就是这个词里的两个音素。',
+      '试着发 /æ/。嘴巴张开，气流从嘴里顺畅出来，所以它是元音音素。再发 /m/。双唇合上，气流从鼻子出去，嘴里的通道被双唇挡住，所以它是辅音音素。',
+      '有的辅音会让口腔里的通道变窄。试试 /s/，听气流挤过窄缝的声音。接下来先学二十个元音音素，再学二十四个辅音音素。',
+      '单独点一个字母，听到的是它的名字。点整个单词，才能听到字母在这个词里表示的声音。'
     ]},
-    {id:'letters',title:'认识 26 个字母',lines:[
-      '先听字母的名称。每个字母有大写和小写。',
-      'A、E、I、O、U 是五个基本元音字母。Y 在这课单独认识。听 yes 和 my，注意 Y 在这两个词里表示的声音。其余二十个是本课的普通辅音字母。'
+    {id:'vowels',title:'20 个元音音素',lines:[
+      '先听每组顶部的音，再点下面的词，到词里找这个音。试着自己跟读。',
+      '前十二个是单元音。后八个是双元音，发音时在同一个音节里从一个声音滑向另一个声音。'
     ]},
-    {id:'vowels',title:'听辨 20 个元音音素',lines:[
-      '发元音时，口腔里的气流通常比较通畅。先听单个音，再听这个音在单词里是什么样。',
-      '这里有十二个单元音和八个双元音。双元音是在同一个音节里由一个声音滑向另一个声音。'
-    ]},
-    {id:'consonants',title:'听辨 24 个辅音音素',lines:[
-      '发辅音时，嘴唇、舌头等会挡住气流，或者让气流通道变窄。',
-      '试着读一次 /p/，感受嘴唇先合上、再放开。接着听 /æ/，再回到 am，同时听一听元音和辅音。'
-    ]},
-    {id:'words',title:'认识 54 个一、二字母词',lines:[
-      '这课有两个一字母词和五十二个二字母词。点单词卡听读音，再结合例子记住词义。',
-      '有的词单独读和在句子里读会有不同的发音。先听示范音，再在短句里听一遍。'
-    ]},
-    {id:'phrases',title:'把词连成自然的词组和短句',lines:[
-      '听 go on，它的意思是继续。听 do it，它的意思是做这件事。',
-      '有些短句需要前文。先听 I am OK，再听 So am I，后一句是说我也一样。带拓展词的例子放在后面。'
+    {id:'consonants',title:'24 个辅音音素',lines:[
+      '先听每组顶部的音，再听它在单词里的位置。跟读时，留意嘴唇和舌头怎么动。'
     ]}
   ];
-  const groups = {vowel:'元音音素',consonant:'辅音音素',special:'特殊字母 Y'};
-  const category = item => item.kind==='sound' ? groups[item.group] : ({vowel:'基本元音字母',consonant:'普通辅音字母',special:groups.special})[item.group];
+  const labels = {
+    letter:{vowel:'元音字母',consonant:'辅音字母'},
+    sound:{vowel:'元音音素',consonant:'辅音音素'},
+    word:{vowel:'元音开头的单词',consonant:'辅音开头的单词'}
+  };
+  const category = item => labels[item.kind][item.group];
+  const vowelStarts = new Set([...sounds.slice(0,20).map(item=>item.ipa[0])]);
+  const phonemes = [...sounds].sort((a,b)=>b.ipa.length-a.ipa.length);
+  for(const word of words) {
+    const strongIpa=word.ipa.split(';')[0];
+    word.group=vowelStarts.has(strongIpa[0])?'vowel':'consonant';
+    word.phonemes=[];
+    for(let offset=0;offset<strongIpa.length;){
+      const sound=phonemes.find(item=>strongIpa.startsWith(item.ipa,offset));
+      if(sound)word.phonemes.push(sound.id);
+      offset+=sound?.ipa.length || 1;
+    }
+  }
   const vocabulary = [...letters,...sounds,...words];
   const all = [...vocabulary,...phrases,...sentences];
   const match = Object.fromEntries(vocabulary.map(item=>[item.id,{...item,zh:item.match||category(item)}]));
-  window.WMA1Lesson = {id:lessonId, number:1, group:'kindergarten-1', letters,sounds,words,phrases,sentences,sections,all,match,category};
+  window.WMA1Lesson = {id:lessonId, number:1, group:'kindergarten-1', letters,sounds,words,phrases,sentences,sections,all,match,category,labels};
 })();

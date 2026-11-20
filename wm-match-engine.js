@@ -4,12 +4,13 @@
 class MatchGame{
  constructor(data,{level=1,seed=Date.now(),snapshot=null,reviews=[],reviewMeanings={}}={}){
   this.data=data;this.level=Math.max(1,Math.min(data.levels.length,Number(level)||1));this.plan=data.levels[this.level-1];this.targets=new Set();this.selected=null;
+  this.previewPairs=this.plan.previewPairs||0;
   const incoming=[...new Set(reviews)].filter(w=>data.words[w]);
   const words=[...new Set([...(this.plan.sourceWordIds||[]),...incoming])].filter(w=>data.words[w]);
   const sameRound=snapshot?.schema===6427&&snapshot.courseId===data.courseId&&snapshot.level===this.level&&
    Array.isArray(snapshot.levelWords)&&Array.isArray(snapshot.done)&&Number.isSafeInteger(snapshot.score)&&
    Number.isSafeInteger(snapshot.rng)&&Number.isSafeInteger(snapshot.serial);
-  if(sameRound&&snapshot.batchFormat===1&&words.length===snapshot.levelWords.length&&
+  if(sameRound&&snapshot.batchFormat===(this.previewPairs?2:1)&&words.length===snapshot.levelWords.length&&
      words.every(w=>snapshot.levelWords.includes(w))){
    this.s=JSON.parse(JSON.stringify(snapshot));
    this.s.meanings={...reviewMeanings,...this.s.meanings,...this.plan.meanings};
@@ -18,9 +19,9 @@ class MatchGame{
   const done=sameRound?[...new Set(snapshot.done.filter(w=>words.includes(w)))]:[];
   this.s={
    ...(sameRound?snapshot:{}),
-   schema:6427,batchFormat:1,meanings:{...reviewMeanings,...this.plan.meanings},courseId:data.courseId,level:this.level,
+   schema:6427,batchFormat:this.previewPairs?2:1,meanings:{...reviewMeanings,...this.plan.meanings},courseId:data.courseId,level:this.level,
    rng:(sameRound?snapshot.rng:Number(seed)>>>0)||350129,serial:sameRound?snapshot.serial:0,
-   board:[],pool:[],done,released:[],
+   board:[],pool:[],preview:[],done,released:[],
    ordinary:sameRound?snapshot.ordinary||0:0,combo:sameRound?snapshot.combo||0:0,bestCombo:sameRound?snapshot.bestCombo||0:0,
    score:sameRound?snapshot.score:0,pairs:done.length,finished:false,cycle:sameRound?snapshot.cycle||0:0,
    reviewOut:sameRound?(snapshot.reviewOut||[]).filter(w=>data.words[w]):[],
@@ -31,9 +32,39 @@ class MatchGame{
   this.dealBatch();
  }
  dealBatch(){
-  const reviews=this.s.reviewPending.splice(0,10);
+  if(this.previewPairs)return this.fillBoard();
+  const words=this.takeBatch();
+  this.s.board=this.place(this.batchTiles(words));
+  this.s.finished=!words.length;
+  return this.s.board.map(tile=>tile.id);
+ }
+ takeBatch(){
+  const active=new Set(this.s.board.map(tile=>tile.word));
+  const reviews=this.s.reviewPending.filter(word=>!active.has(word)).slice(0,10);
+  this.s.reviewPending=this.s.reviewPending.filter(word=>!reviews.includes(word));
   this.s.reviewQueued.push(...reviews);
-  const words=[...reviews,...this.s.pool.splice(0,10-reviews.length)];
+  return [...reviews,...this.s.pool.splice(0,10-reviews.length)];
+ }
+ fillBoard(){
+  const board=this.s.board;
+  const added=[];
+  const append=(words)=>{
+   const tiles=this.batchTiles(words);
+   const occupied=new Set(board.map(tile=>tile.slot));
+   const slots=Array.from({length:32},(_,i)=>i).filter(slot=>!occupied.has(slot)).slice(-tiles.length);
+   tiles.forEach((tile,i)=>{tile.slot=slots[i];board.push(tile);added.push(tile.id);});
+  };
+  if(!board.length&&!this.s.preview.length)append(this.takeBatch());
+  for(let free=(32-board.length)/2;free>0;free=(32-board.length)/2){
+   if(!this.s.preview.length)this.s.preview=this.takeBatch();
+   if(!this.s.preview.length)break;
+   append(this.s.preview.splice(0,Math.min(free,this.previewPairs)));
+  }
+  board.sort((a,b)=>a.slot-b.slot);
+  this.s.finished=!board.length;
+  return added;
+ }
+ batchTiles(words){
   const tiles=words.flatMap(word=>this.pair(word));
   let shuffled=this.shuffled(tiles);
   if(words.length>1){
@@ -52,9 +83,7 @@ class MatchGame{
     shuffled=[...firstHalf,...secondHalf];
    }
   }
-  this.s.board=this.place(shuffled);
-  this.s.finished=!words.length;
-  return this.s.board.map(tile=>tile.id);
+  return shuffled;
  }
  rand(){let x=this.s.rng;x^=x<<13;x^=x>>>17;x^=x<<5;this.s.rng=x>>>0;return this.s.rng/4294967296;}
  shuffled(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(this.rand()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
@@ -65,13 +94,13 @@ class MatchGame{
  availablePairs(board=this.s.board){const m=new Map();for(const t of board){const key=this.meaning(t),row=m.get(key)||{en:0,zh:0};row[t.lang]++;m.set(key,row)}return [...m.values()].reduce((n,g)=>n+Math.min(g.en,g.zh),0);}
  collapse(removed){
   const board=this.s.board.filter(tile=>!removed.includes(tile.id));
-  if(!board.length)return this.dealBatch();
+  if(!board.length&&!this.previewPairs){this.s.board=board;return this.dealBatch();}
   for(let col=0;col<4;col++){
    const column=board.filter(tile=>tile.slot%4===col).sort((a,b)=>a.slot-b.slot);
    column.forEach((tile,i)=>{tile.slot=(8-column.length+i)*4+col});
   }
   this.s.board=board.sort((a,b)=>a.slot-b.slot);
-  return [];
+  return this.previewPairs?this.fillBoard():[];
  }
  select(id){if(this.s.finished)return {kind:'noop'};const b=this.s.board.find(t=>t.id===id);if(!b)return {kind:'noop'};
   if(this.selected===id){this.selected=null;return {kind:'selected',id:null}}if(!this.selected){this.selected=id;return {kind:'selected',id}}
