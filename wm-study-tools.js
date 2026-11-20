@@ -3,7 +3,7 @@
 const normalize=s=>String(s||'').normalize('NFKC').trim().replace(/\s+/g,' ').toLowerCase();
 function read(key){try{const x=JSON.parse(localStorage.getItem(key)||'{}');return x&&typeof x==='object'&&!Array.isArray(x)?x:{}}catch{return {}}}
 
-function learnedWords(skill){const key=skill==='listening'?'wm-listening-learned-v6444':'wm-study-learned-v6446-'+skill;return new Set(Object.entries(read(key)).filter(([k,v])=>v===true&&k.startsWith('word|')&&k.slice(5).trim()).map(([k])=>normalize(k.slice(5))))}
+function learnedWords(skill){if(window.WMLearningStats)return WMLearningStats.words(skill);const key=skill==='listening'?'wm-listening-learned-v6444':'wm-study-learned-v6446-'+skill;return new Set(Object.entries(read(key)).filter(([k,v])=>v===true&&k.startsWith('word|')&&k.slice(5).trim()).map(([k])=>normalize(k.slice(5))))}
 function changed(){window.dispatchEvent(new Event('wm-study-updated'));window.dispatchEvent(new Event('wm-assessment-updated'))}
 function matchFavorites(items,stage='kindergarten',course=''){
  const stores=['listening','speaking','reading','writing'].map(skill=>new Store(skill,course));

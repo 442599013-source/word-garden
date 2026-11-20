@@ -416,4 +416,5 @@ window.WordMatchPreviewAzure=async()=>{try{const locale=data.accent;const voice=
 drawHome();
 
 window.addEventListener('pageshow',()=>{if(page==='home')drawHome()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&page==='home')drawHome()});
-window.addEventListener('wm-assessment-updated',()=>{if(page==='home')drawHome()});window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13'||e.key==='wm-listening-learned-v6444'||e.key?.startsWith('wm-study-learned-v6446-'))&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});
+for(const name of ['wm-assessment-updated','wm-learning-stats-updated'])window.addEventListener(name,()=>{if(page==='home')drawHome()});
+window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13'||window.WMLearningStats?.isProgressKey(e.key))&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});

@@ -222,6 +222,7 @@
       classified.add(selection.id);
       saved[question.id] = [...classified];
       save();
+      if(selection.kind==='word')window.WMLearningStats?.recordWord('classroom',selection.en);
       selectedButton.remove();
       selection = selectedButton = null;
       feedback.textContent = '正确 · ' + classified.size + ' / ' + question.items.length;
