@@ -143,6 +143,24 @@
   }
   sections.append(overview);
 
+  function listeningSummary(title, items, labelFor) {
+    const block = element('section', '', 'a1-block a1-listening-summary');
+    const header = element('header', '', 'a1-block-heading');
+    const groups = ['vowel', 'consonant'].map(group => items.filter(item => item.group === group));
+    const names = lesson.labels[items[0].kind];
+    header.append(element('h2', title),
+      speakerFor(groups.flat().map(item => item.id), '听全部 · ' + title));
+    block.append(header);
+    for (const group of groups) {
+      const name = names[group[0].group];
+      const heading = element('header', '', 'a1-block-heading');
+      heading.append(element('h3', name),
+        speakerFor(group.map(item => item.id), '只听' + name));
+      block.append(heading, element('p', group.map(labelFor).join('、')));
+    }
+    return block;
+  }
+
   for (const section of lesson.sections) {
     const block = element('section', '', 'a1-block');
     const header = element('header', '', 'a1-block-heading');
@@ -159,7 +177,6 @@
         const group = element('article', '', 'a1-sound');
         const line = explain(sound);
         const controls = element('div', '', 'a1-pool');
-        controls.append(tile(sound.en, sound.id), speakerFor([sound.id], '播放音素 ' + sound.en));
         group.append(controls, element('p', line));
         const cards = element('div', '', 'a1-pool');
         const letters = [...(lettersBySound.get(sound.ipa) || '')].map(letter=>lesson.letters.find(item=>item.en===letter));
@@ -171,21 +188,27 @@
         const examples = lesson.words.filter(word=>word.phonemes.includes(sound.id));
         const example = words.get(sound.example);
         if (example && !examples.includes(example)) examples.unshift(example);
-        if (sound.ipa === 'j') cards.append(tile(showWord(words.get('my')),words.get('my').id));
-        if (!example) {
-          cards.append(tile(sound.example + '（' + sound.exampleZh + '）',sound.id + '-example'));
-        }
+        const wordCards = [];
+        if (sound.ipa === 'j') wordCards.push([showWord(words.get('my')), words.get('my').id]);
+        if (!example) wordCards.push([sound.example + '（' + sound.exampleZh + '）', sound.id + '-example']);
         for (const word of examples) {
           const id = word.en === 'a' && sound.ipa === 'ə' ? 'weak-a' :
             word.en === 'a' && sound.ipa === 'eɪ' ? 'strong-a' : word.id;
-          cards.append(tile(showWord(word),id));
+          wordCards.push([showWord(word), id]);
         }
+        controls.append(tile(sound.en, sound.id),
+          speakerFor(wordCards.map(([, id]) => id), '朗读 ' + sound.en + ' 的全部例词'));
+        cards.append(...wordCards.map(([label, id]) => tile(label, id)));
         group.append(cards);
         block.append(group);
       }
     }
     sections.append(block);
+    if (section.id === 'vowels') {
+      sections.append(listeningSummary('听元音字母和辅音字母的区别', lesson.letters, item => item.en));
+    }
   }
+  sections.append(listeningSummary('听元音开头和辅音开头的单词', lesson.words, showWord));
 
   const questions = [
     {id:'letters', title:'请选择元音字母', items:lesson.letters},
@@ -213,7 +236,14 @@
     stop();
     quiz.hidden = false;
     const question = questions[index];
-    const pool = element('div', '', 'a1-pool');
+    const isWordQuiz = question.id === 'words';
+    quiz.classList.toggle('a1-word-assessment', isWordQuiz);
+    const pool = element('div', '', isWordQuiz ? 'a1-pool a1-word-pool' : 'a1-pool');
+    if (isWordQuiz) {
+      pool.tabIndex = 0;
+      pool.setAttribute('role', 'region');
+      pool.setAttribute('aria-label', '待分类的单词');
+    }
     const feedback = element('p');
     feedback.setAttribute('role','status');
     const classified = new Set(question.items.filter(item=>saved[question.id]?.includes?.(item.id)).map(item=>item.id));

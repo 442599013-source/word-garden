@@ -40,3 +40,24 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-category>.a1-button{margin:0;width:100%;justify-content:center}
 .a1-category .a1-pool{min-height:1.6rem}
 .a1-classroom [hidden]{display:none!important}
+
+.a1-listening-summary h3{margin:.5rem 0 0}
+.a1-listening-summary p{margin:.25rem 0 .75rem;overflow-wrap:anywhere}
+.a1-classroom .a1-word-assessment .a1-classification{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:1;
+  background:#fffdf7;
+  padding:.25rem 0;
+}
+.a1-word-assessment .a1-word-pool,.a1-word-assessment .a1-category .a1-pool{
+  align-content:flex-start;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+}
+.a1-word-assessment .a1-word-pool{
+  max-height:18rem;
+  max-height:clamp(9rem,38dvh,21rem);
+  padding:.3rem;
+}
+.a1-word-assessment .a1-category .a1-pool{max-height:4.5rem}
