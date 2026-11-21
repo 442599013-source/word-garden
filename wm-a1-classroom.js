@@ -56,6 +56,11 @@
     mark(speaker, false);
     return speaker;
   }
+  const audioItem = id => ({id});
+  function narrationSpeaker(id, parts, label) {
+    audio.registerNarration(id, parts);
+    return speakerFor(['section-' + id], label);
+  }
   function tile(label, id) {
     return button(label, () => void play([id]), 'a1-tile');
   }
@@ -148,16 +153,20 @@
     const header = element('header', '', 'a1-block-heading');
     const groups = ['vowel', 'consonant'].map(group => items.filter(item => item.group === group));
     const names = lesson.labels[items[0].kind];
-    header.append(element('h2', title),
-      speakerFor(groups.flat().map(item => item.id), '听全部 · ' + title));
+    const narration = [title];
+    header.append(element('h2', title));
     block.append(header);
     for (const group of groups) {
       const name = names[group[0].group];
       const heading = element('header', '', 'a1-block-heading');
+      const parts = [name, ...group.flatMap(item => item.kind === 'word' ?
+        [audioItem(item.id), item.zh] : [audioItem(item.id)])];
+      narration.push(...parts);
       heading.append(element('h3', name),
-        speakerFor(group.map(item => item.id), '只听' + name));
+        narrationSpeaker('summary-' + group[0].kind + '-' + group[0].group, parts, '只听' + name));
       block.append(heading, element('p', group.map(labelFor).join('、')));
     }
+    header.append(narrationSpeaker('summary-' + items[0].kind, narration, '听全部 · ' + title));
     return block;
   }
 
@@ -166,16 +175,18 @@
     const header = element('header', '', 'a1-block-heading');
     header.append(element('h2', section.title));
     block.append(header, ...section.lines.map(line=>element('p', line)));
+    const narration = [section.title, ...section.lines];
     if (section.id === 'intro') {
-      header.append(speakerFor(['section-intro'], '朗读元音和辅音的区别'));
-      audio.registerNarration('intro', [section.title, ...section.lines]);
       const examples = element('div', '', 'a1-pool');
-      examples.append(tile(showWord(am),am.id), ...['æ','m','s'].map(ipa=>tile('/'+ipa+'/',soundsBySymbol.get(ipa).id)));
+      const sounds = ['æ','m','s'].map(ipa => soundsBySymbol.get(ipa));
+      examples.append(tile(showWord(am),am.id), ...sounds.map(sound => tile(sound.en,sound.id)));
+      narration.push(audioItem(am.id), am.zh, ...sounds.map(sound => audioItem(sound.id)));
       block.append(examples);
     } else {
       for (const sound of lesson.sounds.filter(item => item.group + 's' === section.id)) {
         const group = element('article', '', 'a1-sound');
         const line = explain(sound);
+        const groupNarration = [audioItem(sound.id), line];
         const controls = element('div', '', 'a1-pool');
         group.append(controls, element('p', line));
         const cards = element('div', '', 'a1-pool');
@@ -184,25 +195,32 @@
           if (placedLetters.has(letter.id)) continue;
           placedLetters.add(letter.id);
           cards.append(tile(letter.en + ' ' + letter.lower, letter.id));
+          groupNarration.push(audioItem(letter.id));
         }
         const examples = lesson.words.filter(word=>word.phonemes.includes(sound.id));
         const example = words.get(sound.example);
         if (example && !examples.includes(example)) examples.unshift(example);
         const wordCards = [];
-        if (sound.ipa === 'j') wordCards.push([showWord(words.get('my')), words.get('my').id]);
-        if (!example) wordCards.push([sound.example + '（' + sound.exampleZh + '）', sound.id + '-example']);
+        if (sound.ipa === 'j') {
+          const my = words.get('my');
+          wordCards.push([showWord(my), my.id, my.zh]);
+        }
+        if (!example) wordCards.push([sound.example + '（' + sound.exampleZh + '）', sound.id + '-example', sound.exampleZh]);
         for (const word of examples) {
           const id = word.en === 'a' && sound.ipa === 'ə' ? 'weak-a' :
             word.en === 'a' && sound.ipa === 'eɪ' ? 'strong-a' : word.id;
-          wordCards.push([showWord(word), id]);
+          wordCards.push([showWord(word), id, word.zh]);
         }
+        groupNarration.push(...wordCards.flatMap(([, id, meaning]) => [audioItem(id), meaning]));
         controls.append(tile(sound.en, sound.id),
-          speakerFor(wordCards.map(([, id]) => id), '朗读 ' + sound.en + ' 的全部例词'));
+          narrationSpeaker(sound.id, groupNarration, '朗读 ' + sound.en + ' 整组'));
         cards.append(...wordCards.map(([label, id]) => tile(label, id)));
+        narration.push(...groupNarration);
         group.append(cards);
         block.append(group);
       }
     }
+    header.append(narrationSpeaker(section.id, narration, '朗读' + section.title + '整块'));
     sections.append(block);
     if (section.id === 'vowels') {
       sections.append(listeningSummary('听元音字母和辅音字母的区别', lesson.letters, item => item.en));

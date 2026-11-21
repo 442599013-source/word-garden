@@ -23,7 +23,7 @@
     return line.split(/(\/[^/\s]+\/|[A-Za-z]+(?:[ 、][A-Za-z]+)*)/u)
       .flatMap(part => {
         const text = part.trim();
-        if (!text || /^[、，。！？；]+$/.test(text)) return [];
+        if (!text || !/[\p{L}\p{N}]/u.test(text)) return [];
         if (sounds.has(text)) return [local(sounds.get(text))];
         if (text === '/æm/') return [en('am')];
         if (/^[A-Za-z]/.test(text)) return [en(text.replaceAll('、',', '))];
@@ -69,13 +69,15 @@
     stop();
     const current = token;
     for (const id of ids) {
-      const section = id.startsWith('section-') && sections.get(id.slice('section-'.length));
-      const queue = section ? (lessonNarration.get(section.id) || section.lines.flatMap(narration)) : [task(id)];
+      const sectionId = id.startsWith('section-') ? id.slice('section-'.length) : '';
+      const section = sections.get(sectionId);
+      const queue = lessonNarration.get(sectionId) ||
+        (section ? section.lines.flatMap(narration) : [task(id)]);
       for (const entry of queue) {
         if (!entry || current !== token) return false;
         if (entry.id) {
           const played = await playSound(entry.id,rate);
-          if (current !== token || (!played && !section)) return false;
+          if (current !== token || !played) return false;
         } else {
           try { await reader.play(entry.text,entry.locale,rate); }
           catch { return false; }

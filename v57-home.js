@@ -19,19 +19,31 @@ for(const id of ['v48-level-en','v48-level-zh','v48-score','v48-ability']){const
 stage.append(legacy);
 const sections=[['Advance','v57-level'],['Practice','v57-score'],['Ability','v57-ability']];
 stats.replaceChildren();const refs=sections.map(([label,cls])=>{const column=document.createElement('div');column.className='v57-stat '+cls;const title=document.createElement('b');title.textContent=label;const value=document.createElement('strong');value.className='v57-value';const track=document.createElement('div');track.className='v57-progress';const fill=document.createElement('div');fill.className='v57-progress-fill';track.append(fill);column.append(title,value,track);stats.append(column);return{value,fill};});
-function matchScore(fallback){
- try{
-  const lesson=window.WMA1Lesson;
-  if(!lesson?.id)return fallback;
-  const current=localStorage.getItem('wm-wordmatch-v35::'+lesson.id);
-  const state=JSON.parse(current??localStorage.getItem('wm-wordmatch-v35')??localStorage.getItem('wm-wordmatch-v32')??'{}');
-  const total=Number(state?.total||0);
-  return Number.isFinite(total)?total/10:fallback;
- }catch{return fallback;}
+function matchProgress(){
+ const lessonId=window.WMA1Lesson?.id;
+ const keys=new Set([lessonId && 'wm-wordmatch-v35::'+lessonId,
+  window.WMMatchProgressKey?.(),'wm-wordmatch-v35','wm-wordmatch-v32']);
+ for(const key of keys){
+  if(!key)continue;
+  try{
+   const raw=localStorage.getItem(key);
+   if(raw===null)continue;
+   const state=JSON.parse(raw);
+   if(!state || typeof state!=='object' || Array.isArray(state))continue;
+   const completed=new Set(Object.keys(state.completed||{}).filter(level=>state.completed[level]));
+   for(const [level,round] of Object.entries(state.rounds||{})){
+    if(round?.finished===true)completed.add(level);
+   }
+   const total=Number(state.total);
+   return {score:Number.isFinite(total)?total/10:0,completed:completed.size};
+  }catch{}
+ }
+ return {score:0,completed:0};
 }
-function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));let score=0;try{score=Number(JSON.parse(localStorage.getItem(window.WMMatchProgressKey?.()||'wm-wordmatch-v35')||'{}').total||0)/10;}catch{}if(!Number.isFinite(score))score=0;
-const index=tier(lv,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
-const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);const matching=matchScore(score);set(1,matching.toFixed(1),matching/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
+function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));
+const {score,completed}=matchProgress();
+const index=tier(completed,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
+const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);set(1,score.toFixed(1),score/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
 for(const evt of ['pageshow','storage','wm-companions-change','wm-study-updated','wm-learning-stats-updated'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
 // V58: use the existing Microsoft Azure TTS service, never browser speechSynthesis.
 const title=stage.querySelector('.journey-title');
