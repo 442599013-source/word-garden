@@ -31,6 +31,7 @@
       });
   }
   function task(id) {
+    if (id === 'all-phonemes-v6473') return local(id);
     const item = items.get(id);
     if (item?.kind === 'sound') return local(id);
     if (item?.kind === 'letter') return en(({A:'ay',H:'aitch',Z:'zed'})[item.en] || item.en);
@@ -55,7 +56,7 @@
         if (!ok) player.pause();
         resolve(ok);
       };
-      const timeout = setTimeout(() => finish(false),12000);
+      const timeout = setTimeout(() => finish(false),id === 'all-phonemes-v6473' ? 65000 : 12000);
       interrupt = () => finish(false);
       player.onended = () => finish(true);
       player.onerror = () => finish(false);

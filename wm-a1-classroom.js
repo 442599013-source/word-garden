@@ -27,7 +27,7 @@
   function mark(speaker, playing) {
     if (!speaker) return;
     speaker.setAttribute('aria-pressed', String(playing));
-    WMStudyIcons.set(speaker, playing ? 'stop' : 'speaker', playing ? '停止朗读' : '朗读整段');
+    WMStudyIcons.set(speaker, playing ? 'stop' : 'speaker', playing ? '停止朗读' : speaker.dataset.playLabel);
   }
   function stop() {
     request++;
@@ -50,6 +50,12 @@
     }
   }
 
+  function speakerFor(ids, label) {
+    const speaker = button('', () => void play(ids, speaker), 'a1-speaker');
+    speaker.dataset.playLabel = label;
+    mark(speaker, false);
+    return speaker;
+  }
   function tile(label, id) {
     return button(label, () => void play([id]), 'a1-tile');
   }
@@ -125,15 +131,26 @@
     return (articulation[sound.ipa] ? articulation[sound.ipa] + ' ' : '') + text;
   }
 
+  const overview = element('section', '', 'a1-block');
+  const overviewHeading = element('header', '', 'a1-block-heading');
+  overviewHeading.append(element('h2', '先听一遍 44 个音素'),
+    speakerFor(['all-phonemes-v6473'], '播放全部 44 个音素'));
+  overview.append(overviewHeading, element('p', '先听元音，再听辅音。'));
+  for (const [category,title] of [['vowel','20 个元音音素'], ['consonant','24 个辅音音素']]) {
+    const group = element('div', '', 'a1-pool');
+    group.append(...lesson.sounds.filter(sound=>sound.group===category).map(sound=>tile(sound.en,sound.id)));
+    overview.append(element('h3',title),group);
+  }
+  sections.append(overview);
+
   for (const section of lesson.sections) {
     const block = element('section', '', 'a1-block');
     const header = element('header', '', 'a1-block-heading');
-    const speaker = button('', () => void play(['section-' + section.id], speaker), 'a1-speaker');
-    mark(speaker, false);
-    header.append(element('h2', section.title), speaker);
+    header.append(element('h2', section.title));
     block.append(header, ...section.lines.map(line=>element('p', line)));
-    const narration = [section.title,...section.lines];
     if (section.id === 'intro') {
+      header.append(speakerFor(['section-intro'], '朗读元音和辅音的区别'));
+      audio.registerNarration('intro', [section.title, ...section.lines]);
       const examples = element('div', '', 'a1-pool');
       examples.append(tile(showWord(am),am.id), ...['æ','m','s'].map(ipa=>tile('/'+ipa+'/',soundsBySymbol.get(ipa).id)));
       block.append(examples);
@@ -141,15 +158,15 @@
       for (const sound of lesson.sounds.filter(item => item.group + 's' === section.id)) {
         const group = element('article', '', 'a1-sound');
         const line = explain(sound);
-        group.append(tile(sound.en, sound.id), element('p', line));
-        narration.push({id:sound.id},line);
+        const controls = element('div', '', 'a1-pool');
+        controls.append(tile(sound.en, sound.id), speakerFor([sound.id], '播放音素 ' + sound.en));
+        group.append(controls, element('p', line));
         const cards = element('div', '', 'a1-pool');
         const letters = [...(lettersBySound.get(sound.ipa) || '')].map(letter=>lesson.letters.find(item=>item.en===letter));
         for (const letter of letters) {
           if (placedLetters.has(letter.id)) continue;
           placedLetters.add(letter.id);
           cards.append(tile(letter.en + ' ' + letter.lower, letter.id));
-          narration.push({id:letter.id});
         }
         const examples = lesson.words.filter(word=>word.phonemes.includes(sound.id));
         const example = words.get(sound.example);
@@ -157,19 +174,16 @@
         if (sound.ipa === 'j') cards.append(tile(showWord(words.get('my')),words.get('my').id));
         if (!example) {
           cards.append(tile(sound.example + '（' + sound.exampleZh + '）',sound.id + '-example'));
-          narration.push({id:sound.id + '-example'},sound.exampleZh);
         }
         for (const word of examples) {
           const id = word.en === 'a' && sound.ipa === 'ə' ? 'weak-a' :
             word.en === 'a' && sound.ipa === 'eɪ' ? 'strong-a' : word.id;
           cards.append(tile(showWord(word),id));
-          narration.push({id},word.zh);
         }
         group.append(cards);
         block.append(group);
       }
     }
-    audio.registerNarration(section.id,narration);
     sections.append(block);
   }
 

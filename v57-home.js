@@ -17,11 +17,21 @@ function tier(lv,score){if(lv<=0)return -1;const r=score/(lv*5);return r<.6?0:r<
 const legacy=document.createElement('div');legacy.hidden=true;legacy.style.display='none';
 for(const id of ['v48-level-en','v48-level-zh','v48-score','v48-ability']){const old=document.getElementById(id);if(old){old.remove();legacy.append(old);}else{const n=document.createElement('span');n.id=id;legacy.append(n);}}
 stage.append(legacy);
-const sections=[['Advance','v57-level'],['Words Learned','v57-score'],['Ability','v57-ability']];
+const sections=[['Advance','v57-level'],['Practice','v57-score'],['Ability','v57-ability']];
 stats.replaceChildren();const refs=sections.map(([label,cls])=>{const column=document.createElement('div');column.className='v57-stat '+cls;const title=document.createElement('b');title.textContent=label;const value=document.createElement('strong');value.className='v57-value';const track=document.createElement('div');track.className='v57-progress';const fill=document.createElement('div');fill.className='v57-progress-fill';track.append(fill);column.append(title,value,track);stats.append(column);return{value,fill};});
+function matchScore(fallback){
+ try{
+  const lesson=window.WMA1Lesson;
+  if(!lesson?.id)return fallback;
+  const current=localStorage.getItem('wm-wordmatch-v35::'+lesson.id);
+  const state=JSON.parse(current??localStorage.getItem('wm-wordmatch-v35')??localStorage.getItem('wm-wordmatch-v32')??'{}');
+  const total=Number(state?.total||0);
+  return Number.isFinite(total)?total/10:fallback;
+ }catch{return fallback;}
+}
 function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));let score=0;try{score=Number(JSON.parse(localStorage.getItem(window.WMMatchProgressKey?.()||'wm-wordmatch-v35')||'{}').total||0)/10;}catch{}if(!Number.isFinite(score))score=0;
 const index=tier(lv,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
-const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);const learned=window.WMLearningStats?.summary('all').total||0;set(1,learned+' Words',learned/10000*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
+const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);const matching=matchScore(score);set(1,matching.toFixed(1),matching/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
 for(const evt of ['pageshow','storage','wm-companions-change','wm-study-updated','wm-learning-stats-updated'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
 // V58: use the existing Microsoft Azure TTS service, never browser speechSynthesis.
 const title=stage.querySelector('.journey-title');
