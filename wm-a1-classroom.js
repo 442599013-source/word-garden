@@ -237,6 +237,15 @@
       ...lesson.themeWords.flatMap(item => [audioItem(item.id), item.zh])], '朗读主题必学词'));
   themePool.append(...lesson.themeWords.map(item => tile(showWord(item), item.id)));
   themeSection.append(themeTitle, element('p', themeIntro), themePool);
+  const themeExamples = new Set(['a vowel sound','a consonant sound','a vowel letter',
+    'a consonant letter','a word','the first sound','It is a vowel sound.',
+    'It is a consonant sound.','E is a vowel letter.','M is a consonant letter.',
+    'It is a word.','It is the first sound in “ox”.']);
+  for (const [title, items] of [['配套词组',lesson.phrases],['配套短句',lesson.sentences]]) {
+    const pool = element('div', '', 'a1-pool');
+    pool.append(...items.filter(item=>themeExamples.has(item.en)).map(item=>tile(showWord(item),item.id)));
+    themeSection.append(element('h3',title),pool);
+  }
   sections.append(themeSection);
 
   const questions = [

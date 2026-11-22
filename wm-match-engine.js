@@ -6,6 +6,22 @@ const batchSize = 10;
 const boardCapacity = 32;
 const batchFormat = 4;
 
+function migrateWordIds(snapshot, replacements) {
+ if (!snapshot?.levelWords?.some(id => Object.hasOwn(replacements, id))) return snapshot;
+ const migrated = JSON.parse(JSON.stringify(snapshot));
+ const replace = id => replacements[id] || id;
+ for (const key of ['levelWords','done','reviewOut','reviewPending','reviewQueue','incomingReviews']) {
+  if (Array.isArray(migrated[key])) migrated[key] = migrated[key].map(replace);
+ }
+ for (const key of ['board','queue']) {
+  for (const card of migrated[key] || []) card.word = replace(card.word);
+ }
+ for (const oldId of Object.keys(replacements)) delete migrated.meanings?.[oldId];
+ migrated.v64Reviews = Object.fromEntries(Object.entries(migrated.v64Reviews || {})
+  .map(([id, count]) => [replace(id), count]));
+ return migrated;
+}
+
 class MatchGame {
  constructor(data, {level = 1, seed = Date.now(), snapshot = null, reviews = [], reviewMeanings = {}} = {}) {
   this.data = data;
@@ -14,7 +30,9 @@ class MatchGame {
   this.targets = new Set();
   this.selected = null;
 
-  const incoming = [...new Set(reviews)].filter(word => data.words[word]);
+  const replacements = data.replacedWordIds || {};
+  snapshot = migrateWordIds(snapshot, replacements);
+  const incoming = [...new Set(reviews.map(id => replacements[id] || id))].filter(word => data.words[word]);
   const words = [...new Set([...(this.plan.sourceWordIds || []), ...incoming])].filter(word => data.words[word]);
   const meanings = {...reviewMeanings, ...this.plan.meanings};
   const sameRound = snapshot?.schema === 6427 && snapshot.courseId === data.courseId &&
@@ -27,6 +45,7 @@ class MatchGame {
    if (!this.s.finished && this.s.board.length < boardCapacity) {
     this.deal(boardCapacity - this.s.board.length);
    }
+   if (!this.s.finished) this.finishIfCleared();
    return;
   }
 
@@ -87,21 +106,19 @@ class MatchGame {
   return ['en', 'zh'].map(lang => ({id: 'm' + this.level + '-' + (++this.s.serial), word, lang, batch}));
  }
 
- get reviewReady() {
-  return !this.s.board.length && !this.s.queue.length && this.s.reviewQueue.length > 0;
- }
-
- startReview() {
-  if (!this.reviewReady) return [];
-  const batch = this.s.reviewQueue.splice(0, batchSize);
-  this.s.queue = this.shuffled(batch.flatMap(word => this.pair(word, 'review')));
-  return this.deal(boardCapacity);
- }
-
  deal(count) {
   const occupied = new Set(this.s.board.map(tile => tile.slot));
   const slots = Array.from({length: boardCapacity}, (_, i) => i).filter(slot => !occupied.has(slot));
-  const cards = this.s.queue.splice(0, Math.min(count, slots.length));
+  const cards = [];
+  const limit = Math.min(count, slots.length);
+  while (cards.length < limit) {
+   if (!this.s.queue.length) {
+    if (!this.s.reviewQueue.length) break;
+    const batch = this.s.reviewQueue.splice(0, batchSize);
+    this.s.queue = this.shuffled(batch.flatMap(word => this.pair(word, 'review')));
+   }
+   cards.push(...this.s.queue.splice(0, limit - cards.length));
+  }
   const destinations = slots.slice(slots.length - cards.length);
   cards.forEach((card, index) => {
    card.slot = destinations[index];
@@ -149,7 +166,7 @@ class MatchGame {
    column.forEach((tile, i) => {tile.slot = (8 - column.length + i) * 4 + col;});
   }
   this.s.board = board.sort((a, b) => a.slot - b.slot);
-  const added = this.deal(removed.length);
+  const added = this.deal(boardCapacity - board.length);
   this.finishIfCleared();
   return added;
  }
@@ -175,7 +192,8 @@ class MatchGame {
    const reviewWords = [...new Set([a.word, b.word])];
    reviewWords.forEach(word => this.queueReview(word));
    this.s.combo = 0;
-   return {kind: 'wrong', ids: [a.id, b.id], reviewWords};
+   const newIds = this.deal(boardCapacity - this.s.board.length);
+   return {kind: 'wrong', ids: [a.id, b.id], reviewWords, newIds};
   }
 
   const english = a.lang === 'en' ? a : b;

@@ -1,16 +1,10 @@
 .a1-passage-practice { grid-column: 1 / -1; min-width: 0; display: grid; gap: 1rem; }
-.a1-passage-transcript, .a1-passage-task {
-  padding: .9rem;
-  border-radius: 1rem;
-  background: var(--wm-study-card, #fbf6ff);
-  color: #29213a;
-  text-align: start;
-}
+.a1-passage-transcript, .a1-passage-task { min-width: 0; text-align: start; }
 .a1-passage-turn, .a1-passage-answer { display: grid; gap: .4rem; }
 .a1-passage-turn { padding-block: .45rem; border-bottom: 1px solid #dccfe9; }
 .a1-passage-turn p, .a1-passage-answer p { margin: 0; }
 .a1-passage-turn p[lang] { font-weight: 650; }
-.a1-passage-turn p:last-child { color: #54456a; }
+.a1-passage-turn .a1-passage-meaning { color: #54456a; }
 .a1-passage-count { color: #54456a; margin: 0; }
 .a1-passage-answer button { min-height: 2.75rem; }
 .a1-passage-answer button[aria-pressed="true"]:not(#mic) { outline: 2px solid #7951ac; }

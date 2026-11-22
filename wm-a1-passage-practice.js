@@ -15,15 +15,19 @@
     return control;
   }
 
-  function mount({host, passage, skill, mic, onComplete}) {
+  function mount({host, transcriptHost, passage, skill, onManual, onComplete}) {
     const panel = make('section', '', 'a1-passage-practice');
-    const transcript = make('section', '', 'a1-passage-transcript');
+    const transcript = make('div', '', 'a1-passage-transcript');
+    const translations = [];
     transcript.append(make('h2', passage.titleZh));
     for (const [i, [en, zh]] of passage.lines.entries()) {
       const turn = make('div', '', 'a1-passage-turn');
       const spoken = make('p', en);
       spoken.lang = 'en-GB';
-      turn.append(make('strong', i % 2 ? '回答' : '提问'), spoken, make('p', zh));
+      const meaning = make('p', zh, 'a1-passage-meaning');
+      meaning.hidden = true;
+      translations.push(meaning);
+      turn.append(make('strong', i % 2 ? '回答' : '提问'), spoken, meaning);
       transcript.append(turn);
     }
 
@@ -34,7 +38,8 @@
     const feedback = make('p', '', 'a1-passage-feedback');
     feedback.setAttribute('role', 'status');
     task.append(counter, question, answerArea, feedback);
-    panel.append(transcript, task);
+    transcriptHost.append(transcript);
+    panel.append(task);
     host.append(panel);
 
     const questions = passage[skill];
@@ -91,8 +96,8 @@
       question.lang = 'en-GB';
       question.textContent = passage.lines[lineIndex][0];
       expected = passage.lines[lineIndex + 1][0];
-      mic.disabled = false;
-      answerArea.append(make('p','点麦克风，用短文里的回答作答。'), mic);
+      answerArea.append(make('p','可以用麦克风回答，也可以手写原文的完整回答。'));
+      drawHandwriting(expected, false);
       const recognized = make('p');
       recognized.setAttribute('role','status');
       answerArea.append(recognized);
@@ -110,9 +115,13 @@
     function drawWriting([prompt, answer]) {
       question.textContent = prompt;
       answerArea.append(make('p', index === 0 ? '在下方手写元音字母。' : '在下方手写完整英文句子。'));
+      drawHandwriting(answer, index === 0);
+    }
+
+    function drawHandwriting(answer, lettersOnly) {
       const pad = make('canvas', '', 'a1-passage-pad');
       pad.width = 960;
-      pad.height = index === 0 ? 150 : 260;
+      pad.height = lettersOnly ? 150 : 260;
       pad.setAttribute('aria-label', '手写答案区');
       const ctx = pad.getContext('2d');
       let pointer = null, hasInk = false;
@@ -127,6 +136,8 @@
         }
         pad.onpointerdown = e=>{
           if (pointer !== null || e.button !== 0) return;
+          if (answered || !ctx) return;
+          onManual();
           pointer = e.pointerId;
           pad.setPointerCapture(pointer);
           ctx.beginPath();
@@ -156,7 +167,7 @@
         feedback.textContent = '';
       });
       const check = button('核对原文答案', ()=>{
-        if (!hasInk && ctx) {
+        if (!hasInk) {
           feedback.textContent = '请先在手写区作答。';
           return;
         }
@@ -165,6 +176,16 @@
         feedback.textContent = '对照你手写的答案。若有遗漏，请清空重写。';
       });
       answerArea.append(pad, clear, check, reference, acknowledge);
+      if (!ctx) {
+        pad.hidden = clear.hidden = check.hidden = true;
+        const field = make('textarea');
+        field.setAttribute('aria-label','输入英文答案');
+        answerArea.append(field,button('提交答案',()=>{
+          onManual();
+          if(normalize(field.value)===normalize(answer))succeed();
+          else {hadWrong=true;feedback.textContent='请对照原文再试一次。';}
+        }));
+      }
     }
 
     let receive = null;
@@ -185,7 +206,8 @@
 
     draw();
     return {get expected(){return expected},speech(text,raw){receive?.(text,raw)},
-      destroy(){panel.remove()}};
+      showMeanings(show){translations.forEach(node=>node.hidden=!show)},
+      destroy(){panel.remove();transcript.remove()}};
   }
 
   window.WMA1PassagePractice = {mount};

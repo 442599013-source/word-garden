@@ -175,7 +175,13 @@ a no|一个否定回答
 an ad|一则广告
 an ox|一头公牛
 an ex|一位前任
-an OK|一次同意或批准`;
+an OK|一次同意或批准
+a vowel sound|一个元音音素
+a consonant sound|一个辅音音素
+a vowel letter|一个元音字母
+a consonant letter|一个辅音字母
+a word|一个单词
+the first sound|首音`;
   const sentencesText = `I am.|是的，我已经起床了。| |Are you up?
 I do.|我愿意。| |Do you want to go?
 I go.|我去。| |Who goes first?
@@ -227,7 +233,13 @@ It is my bag.|这是我的包。|bag
 This is an ad.|这是一则广告。|this
 He is in a car.|他在一辆车里。|car
 We are OK.|我们没事。|are
-Is it for me?|这是给我的吗？|for`;
+Is it for me?|这是给我的吗？|for
+It is a vowel sound.|它是一个元音音素。
+It is a consonant sound.|它是一个辅音音素。
+E is a vowel letter.|E 是元音字母。
+M is a consonant letter.|M 是辅音字母。
+It is a word.|它是一个单词。
+It is the first sound in “ox”.|它是 ox 的首音。`;
   function examples(rows,kind) {
     return rows.split('\n').map((row,i) => {
       const [en,zh,extra='',context='']=row.split('|');
@@ -276,8 +288,11 @@ Is it for me?|这是给我的吗？|for`;
     word:'单词',
     'first sound':'首音'
   }).map(([en,zh])=>({id:'a1-theme-'+en.replaceAll(' ','-'),en,zh,kind:'word',theme:true,match:zh}));
+  const matchSingleWords = Object.entries({
+    vowel:'元音', consonant:'辅音', sound:'声音', letter:'字母', first:'第一个'
+  }).map(([en,zh])=>({id:'a1-match-part-'+en,en,zh,kind:'word'}));
   const vocabulary = [...letters,...sounds,...words];
-  const all = [...vocabulary,...themeWords,...phrases,...sentences];
+  const all = [...vocabulary,...themeWords,...phrases,...sentences,...matchSingleWords];
   const match = Object.fromEntries(vocabulary.map(item=>[item.id,{...item,zh:item.match||category(item)}]));
-  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,themeWords,phrases,sentences,sections,all,match,category,labels};
+  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,themeWords,phrases,sentences,matchSingleWords,sections,all,match,category,labels};
 })();
