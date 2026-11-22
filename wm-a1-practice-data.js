@@ -2,7 +2,7 @@
   'use strict';
   const lesson = WMA1Lesson;
   const types = ['word','phrase','sentence','passage'];
-  const items = {word:lesson.words,phrase:lesson.phrases,sentence:lesson.sentences,passage:[]};
+  const items = {word:[...lesson.words,...lesson.themeWords],phrase:lesson.phrases,sentence:lesson.sentences,passage:window.WMA1Passages || []};
   const stages = WMClassGroups.groups.map(group=>({
     ...group,...Object.fromEntries(types.map(type=>[type,group.id===lesson.group?items[type]:[]]))
   }));

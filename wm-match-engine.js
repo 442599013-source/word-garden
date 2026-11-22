@@ -4,7 +4,7 @@
 
 const batchSize = 10;
 const boardCapacity = 32;
-const batchFormat = 3;
+const batchFormat = 4;
 
 class MatchGame {
  constructor(data, {level = 1, seed = Date.now(), snapshot = null, reviews = [], reviewMeanings = {}} = {}) {
@@ -43,7 +43,7 @@ class MatchGame {
    score: sameRound ? snapshot.score : 0, pairs: done.length, finished: false,
    cycle: sameRound ? snapshot.cycle || 0 : 0,
    reviewOut: sameRound ? (snapshot.reviewOut || []).filter(word => words.includes(word)) : [],
-   reviewPending: [], incomingReviews: incoming, levelWords: words,
+   reviewPending: [], reviewQueue: [], incomingReviews: incoming, levelWords: words,
    v64Reviews: Object.fromEntries(incoming.map(word => [word, 1])),
    correct: sameRound ? snapshot.correct || 0 : 0,
    attempts: sameRound ? snapshot.attempts || 0 : 0,
@@ -54,7 +54,8 @@ class MatchGame {
   const remaining = this.shuffled(words.filter(word => !done.includes(word)));
   const migratedReviews = this.s.reviewOut.filter(word => done.includes(word));
   this.s.reviewPending = this.s.reviewOut.filter(word => !done.includes(word));
-  const toDeal = [...remaining, ...migratedReviews];
+  this.s.reviewQueue = migratedReviews;
+  const toDeal = remaining;
   for (let offset = 0; offset < toDeal.length; offset += batchSize) {
    const batch = offset / batchSize;
    const tiles = toDeal.slice(offset, offset + batchSize).flatMap(word => this.pair(word, batch));
@@ -86,6 +87,17 @@ class MatchGame {
   return ['en', 'zh'].map(lang => ({id: 'm' + this.level + '-' + (++this.s.serial), word, lang, batch}));
  }
 
+ get reviewReady() {
+  return !this.s.board.length && !this.s.queue.length && this.s.reviewQueue.length > 0;
+ }
+
+ startReview() {
+  if (!this.reviewReady) return [];
+  const batch = this.s.reviewQueue.splice(0, batchSize);
+  this.s.queue = this.shuffled(batch.flatMap(word => this.pair(word, 'review')));
+  return this.deal(boardCapacity);
+ }
+
  deal(count) {
   const occupied = new Set(this.s.board.map(tile => tile.slot));
   const slots = Array.from({length: boardCapacity}, (_, i) => i).filter(slot => !occupied.has(slot));
@@ -102,19 +114,7 @@ class MatchGame {
   const index = this.s.reviewPending.indexOf(english.word);
   if (index < 0) return;
   this.s.reviewPending.splice(index, 1);
-  const queue = this.s.queue;
-  const first = queue.findIndex(card => card.batch === english.batch);
-  let last = first;
-  for (let i = first + 1; i < queue.length; i++) {
-   if (queue[i].batch === english.batch) last = i;
-  }
-  let length = first < 0 ? 0 : last - first + 1;
-  for (const tile of this.shuffled(this.pair(english.word, english.batch))) {
-   // Insert each review card independently while keeping the original queue order.
-   const start = first < 0 ? 0 : first;
-   queue.splice(start + Math.floor(this.rand() * (length + 1)), 0, tile);
-   length++;
-  }
+  this.s.reviewQueue.push(english.word);
  }
 
  meaning(tile) {
@@ -137,7 +137,7 @@ class MatchGame {
  }
 
  finishIfCleared() {
-  if (this.s.board.length || this.s.queue.length) return;
+  if (this.s.board.length || this.s.queue.length || this.s.reviewQueue.length) return;
   this.s.finished = true;
   this.s.completedAt = Date.now();
  }

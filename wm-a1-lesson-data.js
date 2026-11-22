@@ -268,8 +268,16 @@ Is it for me?|这是给我的吗？|for`;
       offset+=sound?.ipa.length || 1;
     }
   }
+  const themeWords = Object.entries({
+    'vowel sound':'元音音素',
+    'consonant sound':'辅音音素',
+    'vowel letter':'元音字母',
+    'consonant letter':'辅音字母',
+    word:'单词',
+    'first sound':'首音'
+  }).map(([en,zh])=>({id:'a1-theme-'+en.replaceAll(' ','-'),en,zh,kind:'word',theme:true,match:zh}));
   const vocabulary = [...letters,...sounds,...words];
-  const all = [...vocabulary,...phrases,...sentences];
+  const all = [...vocabulary,...themeWords,...phrases,...sentences];
   const match = Object.fromEntries(vocabulary.map(item=>[item.id,{...item,zh:item.match||category(item)}]));
-  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,phrases,sentences,sections,all,match,category,labels};
+  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,themeWords,phrases,sentences,sections,all,match,category,labels};
 })();

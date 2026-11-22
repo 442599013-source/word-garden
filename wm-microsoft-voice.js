@@ -4,7 +4,28 @@ window.WMMicrosoftVoice=class{
  static instances=new Set();
  static voiceFor(locale){let actor='jack_angel';try{const c=window.WMCompanions?.read?.()||JSON.parse(localStorage.getItem('wm-companions-v39')||'{}');actor=c.slots?.[0]||actor}catch{}const male=['jack_angel','golden_staff_angel','cal_angel','blond_angel','school_boy'].includes(actor);return String(locale).startsWith('zh')?(male?'zh-CN-YunxiNeural':'zh-CN-XiaoxiaoNeural'):(male?'en-GB-RyanNeural':'en-GB-SoniaNeural')}
  static verifyVoice(response,voice){const actual=response.headers.get('X-Microsoft-Voice');window.WMVoiceDiagnostics={requested:voice,actual,status:response.status,service:response.headers.get('X-Voice-Service')};if(actual!==voice)throw Error('语音服务尚未确认所选音色，请更新语音服务。')}
- static audioMode(type){try{if(navigator.audioSession)navigator.audioSession.type=type}catch{}}
+ static audioMode(type){
+  try{
+   const session=navigator.audioSession;
+   if(!session)return false;
+   session.type=type;
+   window.WMAudioRouteDiagnostics={requested:type,actual:session.type,state:session.state};
+   return session.type===type;
+  }catch(error){
+   window.WMAudioRouteDiagnostics={requested:type,error:error.name};
+   return false;
+  }
+ }
+ static captureMarker='wm-speech-output-restore';
+ static markCapture(){try{sessionStorage.setItem(this.captureMarker,'1')}catch{}}
+ static needsOutputRestore(){try{return sessionStorage.getItem(this.captureMarker)==='1'}catch{return false}}
+ static restoreOutput(){
+  if(document.body?.dataset.skill==='writing'&&this.needsOutputRestore()){
+   this.audioMode('auto');
+   const restored=this.audioMode('playback');
+   if(restored||!navigator.audioSession)try{sessionStorage.removeItem(this.captureMarker)}catch{}
+  }else this.audioMode('playback');
+ }
  destroy(){this.stop();this.prefetchController?.abort();window.WMMicrosoftVoice.instances.delete(this)}
  static stopForMicrophone(){for(const instance of this.instances)instance.stop()}
  constructor(audio){this.audio=audio;this.token=0;audio.volume=1;audio.muted=false;window.WMMicrosoftVoice.instances.add(this)}
@@ -19,15 +40,27 @@ window.WMMicrosoftVoice=class{
  const check=()=>{if(token!==this.token)throw new DOMException('Stopped','AbortError')};
  const preparePlayback=window.WMSpeechInput?.preparePlayback;
  if(preparePlayback)await preparePlayback();
- check();window.WMMicrosoftVoice.audioMode('playback');
+ check();if(!window.WMSpeechInput?.Session?.active)window.WMMicrosoftVoice.restoreOutput();
  const voice=window.WMMicrosoftVoice.voiceFor(locale);
  const key=new URL('./__microsoft_audio_v6432__/'+voice+'/'+encodeURIComponent(text),location.href).href;
  const boostedKey=key.replace('__microsoft_audio_v6432__','__microsoft_audio_louder_v6432__');let boosted=false;let cache,response;try{cache=await deadline(caches.open('wordmatch-microsoft-bilingual-v9'),600,'Cache timeout');response=await deadline(cache.match(boostedKey),600,'Cache timeout');boosted=!!response;if(!response)response=await deadline(cache.match(key),600,'Cache timeout')}catch{}
  check();let blob;
  if(response){try{blob=await deadline(response.blob(),1500,'Cache timeout')}catch{}}
  if(!blob?.size){const timer=setTimeout(()=>{if(token===this.token)this.controller?.abort()},25000);try{response=await fetch('https://wordmatch-voice.442599013.workers.dev/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice}),signal});if(!response.ok)throw Error('微软语音 HTTP '+response.status);window.WMMicrosoftVoice.verifyVoice(response,voice);blob=await response.blob();if(!blob.size||!blob.type.startsWith('audio/'))throw Error('未收到有效音频');if(cache)cache.put(key,new Response(blob)).catch(()=>{})}catch(e){check();if(signal.aborted)throw Error('语音请求超时，请重试');throw e}finally{clearTimeout(timer)}}
- check();if(!boosted){try{const normalized=await deadline(this.louder(blob),6000,'Audio processing timeout');check();blob=normalized.blob;if(cache&&normalized.changed)cache.put(boostedKey,new Response(blob)).catch(()=>{})}catch(e){check()}}check();window.WMMicrosoftVoice.audioMode('playback');this.url=URL.createObjectURL(blob);const a=this.audio;a.src=this.url;a.volume=1;a.muted=false;a.playbackRate=rate;
- return new Promise((resolve,reject)=>{let watchdog,settled=false;const clean=()=>{clearInterval(watchdog);a.onended=null;a.onerror=null;this.cancel=null};const done=e=>{if(settled)return;settled=true;clean();e?(a.pause(),reject(e)):resolve()};this.cancel=()=>done(new DOMException('Stopped','AbortError'));a.onended=()=>done();a.onerror=()=>done(Error('音频播放失败，请重试'));let elapsed=0,stalled=0,lastTime=-1;watchdog=setInterval(()=>{elapsed+=1000;const now=Number(a.currentTime)||0;if(now>lastTime+.01){stalled=0;lastTime=now}else stalled+=1000;if(stalled>=12000||elapsed>Math.max(90000,text.length*1200/rate)){a.pause();done(Error('播放中断，请点击喇叭重试'))}},1000);deadline(Promise.resolve().then(()=>{check();window.WMMicrosoftVoice.audioMode('playback');return a.play()}),8000,'播放未启动，请点击音频播放键或重试').then(()=>{if(token===this.token)onStart()}).catch(e=>done(Error(e.name==='NotAllowedError'?'请点击下方音频播放键，再重试':e.message)))});
+ check();if(!boosted){try{const normalized=await deadline(this.louder(blob),6000,'Audio processing timeout');check();blob=normalized.blob;if(cache&&normalized.changed)cache.put(boostedKey,new Response(blob)).catch(()=>{})}catch(e){check()}}check();window.WMMicrosoftVoice.audioMode('playback');this.url=URL.createObjectURL(blob);return this.playSource(this.url,rate,onStart,token,Math.max(90000,text.length*1200/rate));
+ }
+ async playFile(src,rate=1,onStart=()=>{}){
+  this.stop();
+  const token=this.token;
+  await window.WMSpeechInput?.preparePlayback?.();
+  if(token===this.token&&!window.WMSpeechInput?.Session?.active)window.WMMicrosoftVoice.restoreOutput();
+  return this.playSource(src,rate,onStart,token,90000);
+ }
+ playSource(src,rate,onStart,token,maxDuration){
+  const check=()=>{if(token!==this.token)throw new DOMException('Stopped','AbortError')};
+  check();
+  const a=this.audio;a.src=src;a.volume=1;a.muted=false;a.playbackRate=rate;
+ return new Promise((resolve,reject)=>{let watchdog,settled=false;const clean=()=>{clearInterval(watchdog);a.onended=null;a.onerror=null;this.cancel=null};const done=e=>{if(settled)return;settled=true;clean();e?(a.pause(),reject(e)):resolve()};this.cancel=()=>done(new DOMException('Stopped','AbortError'));a.onended=()=>done();a.onerror=()=>done(Error('音频播放失败，请重试'));let elapsed=0,stalled=0,lastTime=-1;watchdog=setInterval(()=>{elapsed+=1000;const now=Number(a.currentTime)||0;if(now>lastTime+.01){stalled=0;lastTime=now}else stalled+=1000;if(stalled>=12000||elapsed>maxDuration){a.pause();done(Error('播放中断，请点击喇叭重试'))}},1000);deadline(Promise.resolve().then(()=>{check();window.WMMicrosoftVoice.audioMode('playback');return a.play()}),8000,'播放未启动，请点击音频播放键或重试').then(()=>{if(token===this.token)onStart()}).catch(e=>done(Error(e.name==='NotAllowedError'?'请点击下方音频播放键，再重试':e.message)))});
  }
 };
 if(['reading','writing'].includes(document.body?.dataset.skill)){

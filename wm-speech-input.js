@@ -27,11 +27,12 @@ class Session{
     if(settled)return;
     settled=true;
     clearTimeout(timer);
-    recognizer.onend=null;
+    recognizer.onaudioend=recognizer.onend=null;
     this.log('recognizer-released',reason);
     resolve();
    };
    for(const name of ['onstart','onaudiostart','onaudioend','onresult','onerror','onspeechstart','onspeechend'])recognizer[name]=null;
+   recognizer.onaudioend=()=>this.log('audio-end');
    recognizer.onend=()=>done('end');
    timer=setTimeout(()=>done('timeout'),1200);
    try{recognizer.abort()}catch{done('already-ended')}
@@ -44,7 +45,6 @@ class Session{
    }
   });
   this.pendingRelease=Session.release=release;
-  if(wasActive)window.WMMicrosoftVoice?.audioMode?.('playback');
   this.stateTo('idle');
   return release;
  }
@@ -58,7 +58,7 @@ class Session{
  r.onresult=e=>{if(!live())return;let text='',final=true;for(let i=0;i<e.results.length;i++){text+=(text?' ':'')+(e.results[i][0]?.transcript||'');final=final&&e.results[i].isFinal}text=text.trim();if(!text)return;this.text=text;if(final)this.finalText=text;this.log('live-result',final?'final':'interim');watchdog();this.onStatus(final?'Recognized · 已识别':'Recognizing · 正在识别');this.onText(text,false,text);if(!live())return;if(final)this.finish(t,'Recognized · 已识别，可查看或修改',true)};
  r.onerror=e=>{if(!live())return;this.log('live-error',e.error||'unknown');this.finish(t,messages[e.error]||'Recognition failed · 识别失败，请重试',!!this.text)};
  r.onend=()=>{if(!live())return;this.rec=null;this.log('live-end');this.finish(t,this.text?'Recognized · 已识别，可查看或修改':'No text recognized · 没有识别到文字，请重新点击话筒',!!this.text)};
- this.later(()=>{if(live())this.stop()},45000);try{window.WMMicrosoftVoice?.audioMode?.('play-and-record');r.start()}catch(e){this.log('start-error',e.name);this.finish(t,'Cannot start recognition · 无法启动识别，请重试')}
+ this.later(()=>{if(live())this.stop()},45000);try{window.WMMicrosoftVoice?.markCapture?.();window.WMMicrosoftVoice?.audioMode?.('play-and-record');r.start()}catch(e){this.log('start-error',e.name);this.finish(t,'Cannot start recognition · 无法启动识别，请重试')}
  }
  stop(){if(!['starting','listening'].includes(this.state))return;const t=this.token,r=this.rec;this.stateTo('stopping');this.onStatus('Finishing · 正在结束识别');if(!r){this.finish(t,'Stopped · 已停止',!!this.text);return}this.later(()=>{if(t===this.token)this.finish(t,this.text?'Recognized · 已识别':'No text recognized · 没有识别到文字，请重试',!!this.text)},1800);try{r.stop()}catch{this.finish(t,'Recognition ended · 识别已结束，请重试',!!this.text)}}
 }

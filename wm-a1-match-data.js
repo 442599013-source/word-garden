@@ -6,6 +6,7 @@
     words[item.id + '-type'] = {...item,zh:lesson.category(item),pairType:'classification'};
     words[item.id] = {...words[item.id],pairType:'meaning'};
   }
+  for (const item of lesson.themeWords) words[item.id] = {...item,pairType:'meaning'};
   for (const item of [...lesson.letters,...lesson.sounds]) words[item.id].pairType = 'classification';
   const categories = Object.values(lesson.labels).flatMap(group=>Object.values(group));
   window.WMMatchData = {

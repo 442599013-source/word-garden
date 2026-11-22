@@ -228,6 +228,17 @@
   }
   sections.append(listeningSummary('听以元音音素或辅音音素开头的单词', lesson.words, showWord));
 
+  const themeSection = element('section', '', 'a1-block');
+  const themeTitle = element('header', '', 'a1-block-heading');
+  const themePool = element('div', '', 'a1-pool');
+  const themeIntro = '用这些词说明一个字母或音素属于哪一类，也能用它们说出单词的首音。';
+  themeTitle.append(element('h2', '第一课主题必学词'),
+    narrationSpeaker('theme-words', ['第一课主题必学词', themeIntro,
+      ...lesson.themeWords.flatMap(item => [audioItem(item.id), item.zh])], '朗读主题必学词'));
+  themePool.append(...lesson.themeWords.map(item => tile(showWord(item), item.id)));
+  themeSection.append(themeTitle, element('p', themeIntro), themePool);
+  sections.append(themeSection);
+
   const questions = [
     {id:'letters', title:'请选择元音字母', items:lesson.letters},
     {id:'sounds', title:'请选择元音音素', items:lesson.sounds},
