@@ -237,19 +237,206 @@
   const key = lesson.id + ':classification';
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch {}
-  const quizStatus = element('span','✓ 已完成','a1-assessment-complete');
+  // The old save stored IDs only. Use the V64.82 assessment to verify those answers.
+  const previousQuestions = {
+    letters: { title: "请选择元音字母", items: {
+      "letter-a": ["letter","A","eɪ","vowel"],
+      "letter-b": ["letter","B","biː","consonant"],
+      "letter-c": ["letter","C","siː","consonant"],
+      "letter-d": ["letter","D","diː","consonant"],
+      "letter-e": ["letter","E","iː","vowel"],
+      "letter-f": ["letter","F","ef","consonant"],
+      "letter-g": ["letter","G","dʒiː","consonant"],
+      "letter-h": ["letter","H","eɪtʃ","consonant"],
+      "letter-i": ["letter","I","aɪ","vowel"],
+      "letter-j": ["letter","J","dʒeɪ","consonant"],
+      "letter-k": ["letter","K","keɪ","consonant"],
+      "letter-l": ["letter","L","el","consonant"],
+      "letter-m": ["letter","M","em","consonant"],
+      "letter-n": ["letter","N","en","consonant"],
+      "letter-o": ["letter","O","əʊ","vowel"],
+      "letter-p": ["letter","P","piː","consonant"],
+      "letter-q": ["letter","Q","kjuː","consonant"],
+      "letter-r": ["letter","R","ɑː","consonant"],
+      "letter-s": ["letter","S","es","consonant"],
+      "letter-t": ["letter","T","tiː","consonant"],
+      "letter-u": ["letter","U","juː","vowel"],
+      "letter-v": ["letter","V","viː","consonant"],
+      "letter-w": ["letter","W","ˈdʌbəl.juː","consonant"],
+      "letter-x": ["letter","X","eks","consonant"],
+      "letter-y": ["letter","Y","waɪ","consonant"],
+      "letter-z": ["letter","Z","zed","consonant"]
+    } },
+    sounds: { title: "请选择元音音素", items: {
+      "sound-1": ["sound","/iː/","iː","vowel"],
+      "sound-2": ["sound","/ɪ/","ɪ","vowel"],
+      "sound-3": ["sound","/e/","e","vowel"],
+      "sound-4": ["sound","/æ/","æ","vowel"],
+      "sound-5": ["sound","/ɑː/","ɑː","vowel"],
+      "sound-6": ["sound","/ɒ/","ɒ","vowel"],
+      "sound-7": ["sound","/ɔː/","ɔː","vowel"],
+      "sound-8": ["sound","/ʊ/","ʊ","vowel"],
+      "sound-9": ["sound","/uː/","uː","vowel"],
+      "sound-10": ["sound","/ʌ/","ʌ","vowel"],
+      "sound-11": ["sound","/ɜː/","ɜː","vowel"],
+      "sound-12": ["sound","/ə/","ə","vowel"],
+      "sound-13": ["sound","/eɪ/","eɪ","vowel"],
+      "sound-14": ["sound","/aɪ/","aɪ","vowel"],
+      "sound-15": ["sound","/ɔɪ/","ɔɪ","vowel"],
+      "sound-16": ["sound","/əʊ/","əʊ","vowel"],
+      "sound-17": ["sound","/aʊ/","aʊ","vowel"],
+      "sound-18": ["sound","/ɪə/","ɪə","vowel"],
+      "sound-19": ["sound","/eə/","eə","vowel"],
+      "sound-20": ["sound","/ʊə/","ʊə","vowel"],
+      "sound-21": ["sound","/p/","p","consonant"],
+      "sound-22": ["sound","/b/","b","consonant"],
+      "sound-23": ["sound","/t/","t","consonant"],
+      "sound-24": ["sound","/d/","d","consonant"],
+      "sound-25": ["sound","/k/","k","consonant"],
+      "sound-26": ["sound","/ɡ/","ɡ","consonant"],
+      "sound-27": ["sound","/f/","f","consonant"],
+      "sound-28": ["sound","/v/","v","consonant"],
+      "sound-29": ["sound","/θ/","θ","consonant"],
+      "sound-30": ["sound","/ð/","ð","consonant"],
+      "sound-31": ["sound","/s/","s","consonant"],
+      "sound-32": ["sound","/z/","z","consonant"],
+      "sound-33": ["sound","/ʃ/","ʃ","consonant"],
+      "sound-34": ["sound","/ʒ/","ʒ","consonant"],
+      "sound-35": ["sound","/h/","h","consonant"],
+      "sound-36": ["sound","/tʃ/","tʃ","consonant"],
+      "sound-37": ["sound","/dʒ/","dʒ","consonant"],
+      "sound-38": ["sound","/m/","m","consonant"],
+      "sound-39": ["sound","/n/","n","consonant"],
+      "sound-40": ["sound","/ŋ/","ŋ","consonant"],
+      "sound-41": ["sound","/l/","l","consonant"],
+      "sound-42": ["sound","/r/","r","consonant"],
+      "sound-43": ["sound","/j/","j","consonant"],
+      "sound-44": ["sound","/w/","w","consonant"]
+    } },
+    words: { title: "请选择以元音音素开头的单词", items: {
+      "word-1": ["word","a","ə; eɪ","vowel"],
+      "word-2": ["word","I","aɪ","vowel"],
+      "word-3": ["word","am","æm; əm","vowel"],
+      "word-4": ["word","an","æn; ən","vowel"],
+      "word-5": ["word","as","æz; əz","vowel"],
+      "word-6": ["word","at","æt; ət","vowel"],
+      "word-7": ["word","be","biː","consonant"],
+      "word-8": ["word","by","baɪ","consonant"],
+      "word-9": ["word","do","duː; də","consonant"],
+      "word-10": ["word","go","ɡəʊ","consonant"],
+      "word-11": ["word","he","hiː","consonant"],
+      "word-12": ["word","if","ɪf","vowel"],
+      "word-13": ["word","in","ɪn","vowel"],
+      "word-14": ["word","is","ɪz; əz","vowel"],
+      "word-15": ["word","it","ɪt","vowel"],
+      "word-16": ["word","me","miː","consonant"],
+      "word-17": ["word","my","maɪ","consonant"],
+      "word-18": ["word","no","nəʊ","consonant"],
+      "word-19": ["word","of","ɒv; əv","vowel"],
+      "word-20": ["word","OK","əʊˈkeɪ","vowel"],
+      "word-21": ["word","on","ɒn","vowel"],
+      "word-22": ["word","or","ɔː; ə","vowel"],
+      "word-23": ["word","ox","ɒks","vowel"],
+      "word-24": ["word","so","səʊ","consonant"],
+      "word-25": ["word","to","tuː; tə","consonant"],
+      "word-26": ["word","up","ʌp","vowel"],
+      "word-27": ["word","us","ʌs; əs","vowel"],
+      "word-28": ["word","we","wiː","consonant"],
+      "word-29": ["word","ad","æd","vowel"],
+      "word-30": ["word","ah","ɑː","vowel"],
+      "word-31": ["word","hi","haɪ","consonant"],
+      "word-32": ["word","oh","əʊ","vowel"],
+      "word-33": ["word","ex","eks","vowel"],
+      "word-34": ["word","re","reɪ; riː","consonant"],
+      "word-35": ["word","ta","tɑː","consonant"],
+      "word-36": ["word","aw","ɔː","vowel"],
+      "word-37": ["word","ax","æks","vowel"],
+      "word-38": ["word","eh","eɪ","vowel"],
+      "word-39": ["word","er","ɜː","vowel"],
+      "word-40": ["word","ew","iːw","vowel"],
+      "word-41": ["word","ha","hɑː","consonant"],
+      "word-42": ["word","hm","m̩","consonant"],
+      "word-43": ["word","ho","həʊ","consonant"],
+      "word-44": ["word","ma","mɑː","consonant"],
+      "word-45": ["word","mm","m̩","consonant"],
+      "word-46": ["word","oi","ɔɪ","vowel"],
+      "word-47": ["word","ow","aʊ","vowel"],
+      "word-48": ["word","oy","ɔɪ","vowel"],
+      "word-49": ["word","pa","pɑː","consonant"],
+      "word-50": ["word","sh","ʃ","consonant"],
+      "word-51": ["word","uh","ʌ","vowel"],
+      "word-52": ["word","um","ʌm","vowel"],
+      "word-53": ["word","ya","jə","consonant"],
+      "word-54": ["word","yo","jəʊ","consonant"],
+      "a1-match-part-vowel": ["word","vowel","vəʊəl","consonant"],
+      "a1-match-part-consonant": ["word","consonant","kɒnsənənt","consonant"],
+      "a1-match-part-sound": ["word","sound","saʊnd","consonant"],
+      "a1-match-part-letter": ["word","letter","letə","consonant"],
+      "a1-match-part-first": ["word","first","fɜːst","consonant"],
+      "a1-theme-word": ["word","word","wɜːd","consonant"],
+      "a1-theme-question": ["word","question","kwestʃən","consonant"],
+      "a1-theme-answer": ["word","answer","ɑːnsə","vowel"],
+      "a1-theme-all": ["word","all","ɔːl","vowel"],
+      "a1-theme-and": ["word","and","ænd","vowel"],
+      "a1-theme-can": ["word","can","kæn","consonant"],
+      "a1-theme-for": ["word","for","fɔː","consonant"],
+      "a1-theme-letters": ["word","letters","letəz","consonant"],
+      "a1-theme-one": ["word","one","wʌn","consonant"],
+      "a1-theme-put": ["word","put","pʊt","consonant"],
+      "a1-theme-say": ["word","say","seɪ","consonant"],
+      "a1-theme-set": ["word","set","set","consonant"],
+      "a1-theme-sounds": ["word","sounds","saʊndz","consonant"],
+      "a1-theme-ten": ["word","ten","ten","consonant"],
+      "a1-theme-the": ["word","the","ðiː","consonant"],
+      "a1-theme-too": ["word","too","tuː","consonant"],
+      "a1-theme-use": ["word","use","juːz","consonant"],
+      "a1-theme-words": ["word","words","wɜːdz","consonant"],
+      "a1-theme-yes": ["word","yes","jes","consonant"],
+      "a1-theme-you": ["word","you","juː","consonant"]
+    } },
+  };
+  const quizStatus = element('span','','a1-assessment-status');
   quizStatus.setAttribute('role','status');
-  function remainingQuestion() {
-    return questions.findIndex(({id,items})=>{
-      const answered = new Set(Array.isArray(saved[id]) ? saved[id] : []);
-      return items.some(item=>!answered.has(item.id));
-    });
+  const quizButton = button('课堂考核',startQuiz);
+  const signature = (question,item) => JSON.stringify([question.title,item.kind,item.en,item.ipa,item.group]);
+  const current = new Map(questions.map(question=>[question.id,
+    new Map(question.items.map(item=>[item.id,signature(question,item)]))]));
+  function previousSignature(section,id) {
+    if (Object.hasOwn(saved,'verifiedQuestions')) return saved.verifiedQuestions?.[section]?.[id];
+    const snapshot = previousQuestions[section];
+    const item = snapshot?.items[id];
+    return item && JSON.stringify([snapshot.title,...item]);
   }
-  function updateQuizStatus() { quizStatus.hidden = remainingQuestion() !== -1; }
+  function verifiedAnswers() {
+    return new Map(questions.map(({id})=>[id,new Set(
+      (Array.isArray(saved[id]) ? saved[id] : []).filter(itemId=>{
+        const expected = current.get(id).get(itemId);
+        return expected !== undefined && expected === previousSignature(id,itemId);
+      })
+    )]));
+  }
+  let answers = verifiedAnswers();
+  const answersFor = id => answers.get(id);
+  function remainingQuestion() {
+    return questions.findIndex(({id,items})=>answersFor(id).size !== items.length);
+  }
+  function updateQuizStatus() {
+    const remaining = questions.reduce((count,{id,items})=>count+items.length-answersFor(id).size,0);
+    const started = questions.some(({id})=>answersFor(id).size > 0);
+    quizStatus.hidden = remaining > 0 && !started && !questions.some(({id})=>Array.isArray(saved[id])&&saved[id].length);
+    quizStatus.classList.toggle('a1-assessment-complete',!remaining);
+    quizStatus.textContent = remaining ? '还有 '+remaining+' 题待补答' : '✓ 已完成';
+    quizButton.textContent = remaining && !quizStatus.hidden ? '继续考核' : '课堂考核';
+  }
   function save() {
+    saved.verifiedQuestions = Object.fromEntries(questions.map(({id})=>[id,
+      Object.fromEntries([...answersFor(id)].map(itemId=>[itemId,current.get(id).get(itemId)]))
+    ]));
+    for (const {id} of questions) saved[id] = [...answersFor(id)];
     updateQuizStatus();
     try { localStorage.setItem(key,JSON.stringify(saved)); } catch {}
   }
+
   function shuffle(items) {
     const result = items.slice();
     for (let n = result.length - 1; n > 0; n--) {
@@ -274,7 +461,7 @@
     }
     const feedback = element('p');
     feedback.setAttribute('role','status');
-    const classified = new Set(question.items.filter(item=>saved[question.id]?.includes?.(item.id)).map(item=>item.id));
+    const classified = answersFor(question.id);
     const groups = element('div', '', 'a1-classification');
     const buckets = new Map();
     let selection, selectedButton;
@@ -282,7 +469,7 @@
     function advance() {
       if (index < questions.length - 1) showQuiz(index + 1);
       else quiz.replaceChildren(element('h2','第 1 课考核完成'),
-        button('重新练习',()=>{saved={};save();showQuiz(0);}));
+        button('重新练习',()=>{saved={};answers=new Map(questions.map(({id})=>[id,new Set()]));save();showQuiz(0);}));
     }
     function choose(group) {
       if (completed) return;
@@ -291,7 +478,6 @@
       const label = selection.kind === 'word' ? showWord(selection) : selection.en;
       buckets.get(group).append(tile(label,selection.id));
       classified.add(selection.id);
-      saved[question.id] = [...classified];
       save();
       if(selection.kind==='word')window.WMLearningStats?.recordWord('classroom',selection.en);
       selectedButton.remove();
@@ -357,7 +543,7 @@
   sections.append(closing, listeningSummary('词汇汇总｜听单词首音', lesson.words, showWord));
 
   const quizActions = element('div','','a1-assessment-actions');
-  quizActions.append(button('课堂考核',startQuiz),quizStatus);
+  quizActions.append(quizButton,quizStatus);
   updateQuizStatus();
   root.append(element('p','幼儿园 A1 · ' + lesson.code,'a1-kicker'),
     element('h1',lesson.titleZh),element('p','认识 44 个英语音素'),status,sections,quizActions,quiz);
