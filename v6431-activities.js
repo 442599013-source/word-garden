@@ -5,7 +5,8 @@
   const context=document.getElementById('activity-context');
   const host=document.getElementById('activity-links');
   journey.saveSelected(number);
-  context.textContent='Level '+number+' · '+level.group.zh+(number===1?' · 字母、音素与最短英语单词':' · 暂无新课内容');
+  const lesson=window.WMClassroomCatalog?.lessons.find(item=>item.number===number);
+  context.textContent=lesson?lesson.code+' · '+lesson.titleZh:'Level '+number+' · '+level.group.zh+' · 暂无新课内容';
   document.getElementById('activity-back').href='level-road.html?stage='+level.stage.id+'&group='+Math.floor(level.classIndex/3);
   const entries=[
     ['classroom','Magic Classroom','魔法课堂','✦'],
@@ -17,11 +18,11 @@
     ['assessment','Advancement Mission','课堂考核','☆']
   ];
   for(const [id,en,zh,icon] of entries){
-    const card=document.createElement(number===1?'a':'div');
+    const card=document.createElement(lesson?'a':'div');
     card.className='advance-card';
     card.dataset.activity=id;
-    if(number===1){
-      card.href=id==='assessment'?'sentence-game.html?level=1#a1-assessment':journey.href(number,id);
+    if(lesson){
+      card.href=id==='assessment'?'sentence-game.html?level='+lesson.number+'#a1-assessment':journey.href(number,id);
     }else card.setAttribute('aria-disabled','true');
     const mark=document.createElement('span');
     mark.className='advance-mark';

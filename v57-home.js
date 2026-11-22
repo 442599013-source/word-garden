@@ -12,7 +12,15 @@ const pairs=[
  ['Let our magical adventure begin!','让我们的魔法之旅开始吧！']
 ];
 const names=['Poor','Weak','Basic','Good','Excellent','Amazing','Exceptional'];
-function tier(lv,score){if(lv<=0)return -1;const r=score/(lv*5);return r<.6?0:r<1?1:Math.abs(r-1)<1e-9?2:r<1.2?3:r<1.5?4:r<1.8?5:6;}
+function matchRating(){
+ try{
+  const result=JSON.parse(localStorage.getItem('wm-match-last-completed-rating-v1')||'null');
+  if(!result)return -1;
+  const {correct,attempts}=result;
+  if(!Number.isSafeInteger(correct)||!Number.isSafeInteger(attempts)||attempts<1||correct<0||correct>attempts)return -1;
+  return [0,.5,.6,.7,.8,.9,1].reduce((tier,threshold,index)=>correct/attempts>=threshold?index:tier,0);
+ }catch{return -1;}
+}
 // Existing V49 sync() still writes these IDs. Preserve them offscreen, not in the visible card.
 const legacy=document.createElement('div');legacy.hidden=true;legacy.style.display='none';
 for(const id of ['v48-level-en','v48-level-zh','v48-score','v48-ability']){const old=document.getElementById(id);if(old){old.remove();legacy.append(old);}else{const n=document.createElement('span');n.id=id;legacy.append(n);}}
@@ -30,21 +38,17 @@ function matchProgress(){
    if(raw===null)continue;
    const state=JSON.parse(raw);
    if(!state || typeof state!=='object' || Array.isArray(state))continue;
-   const completed=new Set(Object.keys(state.completed||{}).filter(level=>state.completed[level]));
-   for(const [level,round] of Object.entries(state.rounds||{})){
-    if(round?.finished===true)completed.add(level);
-   }
    const total=Number(state.total);
-   return {score:Number.isFinite(total)?total/10:0,completed:completed.size};
+   return {score:Number.isFinite(total)?total/10:0};
   }catch{}
  }
- return {score:0,completed:0};
+ return {score:0};
 }
 function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));
-const {score,completed}=matchProgress();
-const index=tier(completed,score),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
+const {score}=matchProgress();
+const index=matchRating(),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
 const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);set(1,score.toFixed(1),score/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
-for(const evt of ['pageshow','storage','wm-companions-change','wm-study-updated','wm-learning-stats-updated'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
+for(const evt of ['pageshow','storage','wm-companions-change','wm-study-updated','wm-learning-stats-updated','wm-match-rating-updated'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
 // V58: use the existing Microsoft Azure TTS service, never browser speechSynthesis.
 const title=stage.querySelector('.journey-title');
 const audio=document.createElement('audio');

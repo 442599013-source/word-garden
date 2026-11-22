@@ -2,6 +2,34 @@
 (() => {
   'use strict';
   const lessonId = 'goldy-a1-letter-sounds-1';
+  const courseTypes = {
+    pronunciation:{code:'YY', title:'语音'},
+    vocabulary:{code:'CH', title:'词汇'},
+    grammar:{code:'YF', title:'语法'}
+  };
+  function chineseNumber(number) {
+    const digits = '零一二三四五六七八九';
+    if (number < 10) return digits[number];
+    for (const [base, unit] of [[10000,'万'],[1000,'千'],[100,'百'],[10,'十']]) {
+      if (number < base) continue;
+      const leading = Math.floor(number / base), rest = number % base;
+      const prefix = base === 10 && leading === 1 ? '' : chineseNumber(leading);
+      return prefix + unit + (rest ? (rest < base / 10 ? '零' : '') + chineseNumber(rest) : '');
+    }
+  }
+  function numberLessons(catalog) {
+    const counts = new Map();
+    return catalog.map((lesson, index) => {
+      const type = courseTypes[lesson.type];
+      const categoryNumber = (counts.get(lesson.type) || 0) + 1;
+      counts.set(lesson.type, categoryNumber);
+      const number = index + 1;
+      return {...lesson, number, categoryNumber, code:number + type.code + categoryNumber,
+        titleZh:'第' + chineseNumber(number) + '课：' + type.title + '第' + chineseNumber(categoryNumber) + '节'};
+    });
+  }
+  const catalog = numberLessons([{id:lessonId, type:'pronunciation'}]);
+  window.WMClassroomCatalog = {lessons:catalog, numberLessons};
   const letterNames = ('eɪ biː siː diː iː ef dʒiː eɪtʃ aɪ dʒeɪ keɪ el em en əʊ piː kjuː ɑː es tiː juː viː ˈdʌbəl.juː eks waɪ zed').split(' ');
   const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map((en, i) => ({
     id: 'letter-' + en.toLowerCase(), en, lower: en.toLowerCase(), ipa: letterNames[i],
@@ -208,10 +236,10 @@ Is it for me?|这是给我的吗？|for`;
   }
   const phrases=examples(phrasesText,'phrase'), sentences=examples(sentencesText,'sentence');
   const sections = [
-    {id:'intro',title:'先听懂元音和辅音的区别',lines:[
+    {id:'intro',title:'先听懂元音音素和辅音音素的区别',lines:[
       '先听 am（是）。慢一点听，开头是 /æ/，结尾是 /m/。这两个声音就是这个词里的两个音素。',
       '试着发 /æ/。嘴巴张开，气流从嘴里顺畅出来，所以它是元音音素。再发 /m/。双唇合上，气流从鼻子出去，嘴里的通道被双唇挡住，所以它是辅音音素。',
-      '有的辅音会让口腔里的通道变窄。试试 /s/，听气流挤过窄缝的声音。接下来先学二十个元音音素，再学二十四个辅音音素。',
+      '有的辅音音素会让口腔里的通道变窄。试试 /s/，听气流挤过窄缝的声音。接下来先学二十个元音音素，再学二十四个辅音音素。',
       '单独点一个字母，听到的是它的名字。点整个单词，才能听到字母在这个词里表示的声音。'
     ]},
     {id:'vowels',title:'20 个元音音素',lines:[
@@ -225,7 +253,7 @@ Is it for me?|这是给我的吗？|for`;
   const labels = {
     letter:{vowel:'元音字母',consonant:'辅音字母'},
     sound:{vowel:'元音音素',consonant:'辅音音素'},
-    word:{vowel:'元音开头的单词',consonant:'辅音开头的单词'}
+    word:{vowel:'以元音音素开头的单词',consonant:'以辅音音素开头的单词'}
   };
   const category = item => labels[item.kind][item.group];
   const vowelStarts = new Set([...sounds.slice(0,20).map(item=>item.ipa[0])]);
@@ -243,5 +271,5 @@ Is it for me?|这是给我的吗？|for`;
   const vocabulary = [...letters,...sounds,...words];
   const all = [...vocabulary,...phrases,...sentences];
   const match = Object.fromEntries(vocabulary.map(item=>[item.id,{...item,zh:item.match||category(item)}]));
-  window.WMA1Lesson = {id:lessonId, number:1, group:'kindergarten-1', letters,sounds,words,phrases,sentences,sections,all,match,category,labels};
+  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,phrases,sentences,sections,all,match,category,labels};
 })();

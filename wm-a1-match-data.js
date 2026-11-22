@@ -12,7 +12,7 @@
     version:6427,courseId:lesson.id,words,fillerIds:[],
     levels:[{
       level:1,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},
-      classification:categories,sourceWordIds:Object.keys(words),previewPairs:6
+      classification:categories,sourceWordIds:Object.keys(words)
     }]
   };
 })();
