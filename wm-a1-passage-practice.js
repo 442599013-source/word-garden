@@ -38,7 +38,7 @@
     return {element,showMeanings(open){lines.forEach(show=>show(open))}};
   }
 
-  function mount({host, transcriptHost, passage, skill, onManual, onComplete, onNext, entryArea}) {
+  function mount({host, transcriptHost, passage, skill, onComplete, onNext, entryArea}) {
     const panel = make('section', '', 'a1-passage-practice');
     const transcript = buildTranscript(passage);
     const task = make('section', '', 'a1-passage-task');
@@ -115,91 +115,28 @@
       answerArea.append(make('p','Say or type the answer from the passage.'));
     }
 
-    function checkSpeaking(text, final) {
+    function checkEntry(text, final) {
       if (answered || !normalize(text)) return;
       const actual = normalize(text), answer = normalize(expected);
-      if (actual === answer || window.WMSpeechMatch?.equivalent(text, expected)) succeed();
-      else if (final && answer.startsWith(actual + ' ')) feedback.textContent = 'Only part of the answer was received. Try again or type the rest.';
+      if (matches(text)) succeed();
+      else if (final && answer.startsWith(actual + ' ') && skill==='speaking') feedback.textContent = 'Only part of the answer was received. Try again or type the rest.';
       else if (final) {
         hadWrong = true;
         feedback.textContent = 'Check the passage and try again.';
       } else feedback.textContent = '';
     }
 
+    function matches(text) {
+      const value=normalize(text), answer=normalize(expected);
+      if(skill==='writing'&&index===0){
+        return value.replace(/\band\b/g,'').replace(/\s/g,'')==='aeiou';
+      }
+      return value===answer||(skill==='speaking'&&!!window.WMSpeechMatch?.equivalent(text,expected));
+    }
     function drawWriting([prompt, answer]) {
       question.textContent = prompt;
+      expected = answer;
       answerArea.append(make('p', index === 0 ? 'Write the vowel letters.' : 'Write the full answer from the passage.'));
-      drawHandwriting(answer, index === 0);
-    }
-
-    function drawHandwriting(answer, lettersOnly) {
-      const pad = make('canvas', '', 'a1-passage-pad');
-      pad.width = 960;
-      pad.height = lettersOnly ? 150 : 260;
-      pad.setAttribute('aria-label', 'Handwriting area');
-      const ctx = pad.getContext('2d');
-      let pointer = null, hasInk = false;
-      if (ctx) {
-        ctx.strokeStyle = '#29213a';
-        ctx.lineWidth = 4;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-        function position(e) {
-          const box = pad.getBoundingClientRect();
-          return [(e.clientX-box.left)*pad.width/box.width,(e.clientY-box.top)*pad.height/box.height];
-        }
-        pad.onpointerdown = e=>{
-          if (pointer !== null || e.button !== 0) return;
-          if (answered || !ctx) return;
-          onManual();
-          pointer = e.pointerId;
-          pad.setPointerCapture(pointer);
-          ctx.beginPath();
-          const [x,y] = position(e);
-          ctx.moveTo(x,y);
-          ctx.lineTo(x+.1,y+.1);
-          ctx.stroke();
-          hasInk = true;
-        };
-        pad.onpointermove = e=>{
-          if (pointer !== e.pointerId) return;
-          ctx.lineTo(...position(e));
-          ctx.stroke();
-        };
-        pad.onpointerup = pad.onpointercancel = pad.onlostpointercapture = e=>{
-          if (pointer === e.pointerId) pointer = null;
-        };
-      }
-      const reference = make('p', '', 'a1-passage-reference');
-      reference.hidden = true;
-      const acknowledge = button('My answer matches', succeed);
-      acknowledge.hidden = true;
-      const clear = button('Clear', ()=>{
-        ctx?.clearRect(0,0,pad.width,pad.height);
-        hasInk = false;
-        reference.hidden = acknowledge.hidden = true;
-        feedback.textContent = '';
-      });
-      const check = button('Check the passage answer', ()=>{
-        if (!hasInk) {
-          feedback.textContent = 'Write your answer first.';
-          return;
-        }
-        reference.textContent = answer;
-        reference.hidden = acknowledge.hidden = false;
-        feedback.textContent = '对照你手写的答案。若有遗漏，请Clear。';
-      });
-      answerArea.append(pad, clear, check, reference, acknowledge);
-      if (!ctx) {
-        pad.hidden = clear.hidden = check.hidden = true;
-        const field = make('textarea');
-        field.setAttribute('aria-label','Type your answer');
-        answerArea.append(field,button('Check answer',()=>{
-          onManual();
-          if(normalize(field.value)===normalize(answer))succeed();
-          else {hadWrong=true;feedback.textContent='Check the passage and try again.';}
-        }));
-      }
     }
 
     function draw() {
@@ -222,8 +159,8 @@
     return {
       get expected(){return expected},
       get answered(){return answered},
-      matches(text){return normalize(text)===normalize(expected)||!!window.WMSpeechMatch?.equivalent(text,expected)},
-      checkSpeaking,
+      matches,
+      checkEntry,
       clearFeedback(){if(!answered)feedback.textContent=''},
       showMeanings:transcript.showMeanings,
       destroy(){clearTimeout(timer);panel.remove();transcript.element.remove()}

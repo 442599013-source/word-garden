@@ -8,15 +8,6 @@
 .a1-passage-count { color: #54456a; margin: 0; }
 .a1-passage-answer button { min-height: 2.75rem; }
 .a1-passage-answer button[aria-pressed="true"]:not(#mic) { outline: 2px solid #7951ac; }
-.a1-passage-pad {
-  width: 100%;
-  height: auto;
-  touch-action: none;
-  border: 1px solid #9c80b4;
-  border-radius: .6rem;
-  background: #fff;
-}
-.a1-passage-reference { padding: .55rem; font-weight: 650; }
 .a1-passage-header { display: flex; align-items: start; justify-content: space-between; gap: .5rem; }
 .a1-passage-header h2 { margin: 0; }
 .wm-study-page .study-progress-row { justify-content: flex-start; min-width: 0; }
@@ -41,5 +32,17 @@
   padding: .55rem; border-radius: .65rem; border: 1px solid #8fc7a5;
   background: #e8f6ed; color: #205b3e; font-weight: 700;
 }
-.a1-passage-task[data-state="correct"] .a1-passage-pad { border-color: #32845c; background: #e8f6ed; }
 .a1-passage-check { background: #7951ac; color: #fff; }
+
+.wm-study-page .study-shared-playback {
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 6px;
+}
+.wm-study-page .study-shared-playback > .study-round-play.wm-icon-action {
+  height: 36px !important;
+  width: 36px !important;
+  border-radius: 50% !important;
+}
+.wm-study-page .study-shared-playback > button:first-child { grid-column: span 2; }
