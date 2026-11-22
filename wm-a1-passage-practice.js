@@ -18,8 +18,7 @@
   function buildTranscript(passage) {
     const element = make('div', '', 'a1-passage-transcript');
     const header = make('header', '', 'a1-passage-header');
-    const controls = make('div', '', 'a1-passage-controls');
-    header.append(make('h2', passage.title), controls);
+    header.append(make('h2', passage.title));
     element.append(header);
     const lines = passage.lines.map(([en, zh], i) => {
       const turn = make('div', '', 'a1-passage-turn');
@@ -36,7 +35,7 @@
       element.append(turn);
       return show;
     });
-    return {element,controls,showMeanings(open){lines.forEach(show=>show(open))}};
+    return {element,showMeanings(open){lines.forEach(show=>show(open))}};
   }
 
   function mount({host, transcriptHost, passage, skill, onManual, onComplete, onNext, entryArea}) {
@@ -226,7 +225,6 @@
       matches(text){return normalize(text)===normalize(expected)||!!window.WMSpeechMatch?.equivalent(text,expected)},
       checkSpeaking,
       clearFeedback(){if(!answered)feedback.textContent=''},
-      controls:transcript.controls,
       showMeanings:transcript.showMeanings,
       destroy(){clearTimeout(timer);panel.remove();transcript.element.remove()}
     };

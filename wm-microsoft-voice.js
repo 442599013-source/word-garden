@@ -7,7 +7,7 @@ window.WMMicrosoftVoice=class{
  static audioMode(type){
   try{
    const session=navigator.audioSession;
-   if(!session)return false;
+   if(!session){window.WMAudioRouteDiagnostics={requested:type,supported:false};return false;}
    session.type=type;
    window.WMAudioRouteDiagnostics={requested:type,actual:session.type,state:session.state};
    return session.type===type;
@@ -20,17 +20,23 @@ window.WMMicrosoftVoice=class{
  static markCapture(){try{sessionStorage.setItem(this.captureMarker,'1')}catch{}}
  static needsOutputRestore(){try{return sessionStorage.getItem(this.captureMarker)==='1'}catch{return false}}
  static restoreOutput(){
-  if(document.body?.dataset.skill==='writing'&&this.needsOutputRestore()){
-   this.audioMode('auto');
-   const restored=this.audioMode('playback');
-   if(restored||!navigator.audioSession)try{sessionStorage.removeItem(this.captureMarker)}catch{}
-  }else this.audioMode('playback');
+  if(window.WMSpeechInput?.Session?.active)return false;
+  const afterCapture=this.needsOutputRestore();
+  const reset=afterCapture?this.audioMode('auto'):false;
+  const switched=this.audioMode('playback');
+  const diagnostics=window.WMAudioRouteDiagnostics||{};
+  window.WMAudioRouteDiagnostics={...diagnostics,afterCapture,reset,switched};
+  return afterCapture;
+ }
+ static confirmPlayback(afterCapture){
+  if(!afterCapture||window.WMSpeechInput?.Session?.active)return;
+  try{sessionStorage.removeItem(this.captureMarker)}catch{}
  }
  destroy(){this.stop();this.prefetchController?.abort();window.WMMicrosoftVoice.instances.delete(this)}
  static stopForMicrophone(){for(const instance of this.instances)instance.stop()}
  constructor(audio){this.audio=audio;this.token=0;audio.volume=1;audio.muted=false;window.WMMicrosoftVoice.instances.add(this)}
  preload(items){const queue=items.filter(([text])=>text).slice(0,90);if(this.prefetchController)this.prefetchController.abort();const controller=this.prefetchController=new AbortController();let cursor=0;const run=async()=>{let cache;try{cache=await caches.open('wordmatch-microsoft-bilingual-v9')}catch{}while(cursor<queue.length&&!controller.signal.aborted){const [text,requestedLocale]=queue[cursor++],locale=String(requestedLocale).startsWith('en')?'en-GB':requestedLocale,voice=window.WMMicrosoftVoice.voiceFor(locale),key=new URL('./__microsoft_audio_v6432__/'+voice+'/'+encodeURIComponent(text),location.href).href;try{if(cache&&await cache.match(key))continue;const response=await fetch('https://wordmatch-voice.442599013.workers.dev/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice}),signal:controller.signal});if(!response.ok)continue;window.WMMicrosoftVoice.verifyVoice(response,voice);const blob=await response.blob();if(blob.size&&blob.type.startsWith('audio/')&&cache)await cache.put(key,new Response(blob))}catch{}}};void Promise.all([run(),run()])}
- static normalizeSamples(channels){let sum=0,count=0;for(const samples of channels)for(const v of samples)if(Math.abs(v)>.003){sum+=v*v;count++}const rms=count?Math.sqrt(sum/count):0;if(rms<.0001)return channels;const gain=Math.max(1,Math.min(4,.16/rms));return channels.map(samples=>Float32Array.from(samples,v=>{const x=v*gain,a=Math.abs(x);return a<=.8?x:Math.sign(x)*(.8+.18*(1-Math.exp(-(a-.8)/.18)))}))}
+ static normalizeSamples(channels){let sum=0,count=0;for(const samples of channels)for(const v of samples)if(Math.abs(v)>.003){sum+=v*v;count++}const rms=count?Math.sqrt(sum/count):0;if(rms<.0001)return channels;const gain=Math.max(1,Math.min(6,.16/rms));return channels.map(samples=>Float32Array.from(samples,v=>{const x=v*gain,a=Math.abs(x);return a<=.8?x:Math.sign(x)*(.8+.18*(1-Math.exp(-(a-.8)/.18)))}))}
  async louder(blob){const Offline=window.OfflineAudioContext||window.webkitOfflineAudioContext;if(!Offline)return {blob,changed:false};const context=new Offline(1,1,24000);const decoded=await context.decodeAudioData(await blob.arrayBuffer());const channels=[];for(let c=0;c<decoded.numberOfChannels;c++)channels.push(decoded.getChannelData(c));const pcm=window.WMMicrosoftVoice.normalizeSamples(channels),n=decoded.length,count=pcm.length,buffer=new ArrayBuffer(44+n*count*2),view=new DataView(buffer);const ascii=(at,text)=>{for(let i=0;i<text.length;i++)view.setUint8(at+i,text.charCodeAt(i))};ascii(0,'RIFF');view.setUint32(4,36+n*count*2,true);ascii(8,'WAVE');ascii(12,'fmt ');view.setUint32(16,16,true);view.setUint16(20,1,true);view.setUint16(22,count,true);view.setUint32(24,decoded.sampleRate,true);view.setUint32(28,decoded.sampleRate*count*2,true);view.setUint16(32,count*2,true);view.setUint16(34,16,true);ascii(36,'data');view.setUint32(40,n*count*2,true);for(let i=0;i<n;i++)for(let c=0;c<count;c++){const v=Math.max(-1,Math.min(1,pcm[c][i]));view.setInt16(44+(i*count+c)*2,v<0?v*32768:v*32767,true)}return {blob:new Blob([buffer],{type:'audio/wav'}),changed:true}}
 
  stop(){this.token++;this.controller?.abort();this.cancel?.();this.audio.pause();if(this.url)URL.revokeObjectURL(this.url);this.url=null}
@@ -40,27 +46,26 @@ window.WMMicrosoftVoice=class{
  const check=()=>{if(token!==this.token)throw new DOMException('Stopped','AbortError')};
  const preparePlayback=window.WMSpeechInput?.preparePlayback;
  if(preparePlayback)await preparePlayback();
- check();if(!window.WMSpeechInput?.Session?.active)window.WMMicrosoftVoice.restoreOutput();
+ check();
  const voice=window.WMMicrosoftVoice.voiceFor(locale);
  const key=new URL('./__microsoft_audio_v6432__/'+voice+'/'+encodeURIComponent(text),location.href).href;
- const boostedKey=key.replace('__microsoft_audio_v6432__','__microsoft_audio_louder_v6432__');let boosted=false;let cache,response;try{cache=await deadline(caches.open('wordmatch-microsoft-bilingual-v9'),600,'Cache timeout');response=await deadline(cache.match(boostedKey),600,'Cache timeout');boosted=!!response;if(!response)response=await deadline(cache.match(key),600,'Cache timeout')}catch{}
+ const boostedKey=key.replace('__microsoft_audio_v6432__','__microsoft_audio_louder_v6481__');let boosted=false;let cache,response;try{cache=await deadline(caches.open('wordmatch-microsoft-bilingual-v9'),600,'Cache timeout');response=await deadline(cache.match(boostedKey),600,'Cache timeout');boosted=!!response;if(!response)response=await deadline(cache.match(key),600,'Cache timeout')}catch{}
  check();let blob;
  if(response){try{blob=await deadline(response.blob(),1500,'Cache timeout')}catch{}}
  if(!blob?.size){const timer=setTimeout(()=>{if(token===this.token)this.controller?.abort()},25000);try{response=await fetch('https://wordmatch-voice.442599013.workers.dev/tts',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({text,locale,voice}),signal});if(!response.ok)throw Error('微软语音 HTTP '+response.status);window.WMMicrosoftVoice.verifyVoice(response,voice);blob=await response.blob();if(!blob.size||!blob.type.startsWith('audio/'))throw Error('未收到有效音频');if(cache)cache.put(key,new Response(blob)).catch(()=>{})}catch(e){check();if(signal.aborted)throw Error('语音请求超时，请重试');throw e}finally{clearTimeout(timer)}}
- check();if(!boosted){try{const normalized=await deadline(this.louder(blob),6000,'Audio processing timeout');check();blob=normalized.blob;if(cache&&normalized.changed)cache.put(boostedKey,new Response(blob)).catch(()=>{})}catch(e){check()}}check();window.WMMicrosoftVoice.audioMode('playback');this.url=URL.createObjectURL(blob);return this.playSource(this.url,rate,onStart,token,Math.max(90000,text.length*1200/rate));
+ check();if(!boosted){try{const normalized=await deadline(this.louder(blob),6000,'Audio processing timeout');check();blob=normalized.blob;if(cache&&normalized.changed)cache.put(boostedKey,new Response(blob)).catch(()=>{})}catch(e){check()}}check();this.url=URL.createObjectURL(blob);return this.playSource(this.url,rate,onStart,token,Math.max(90000,text.length*1200/rate));
  }
  async playFile(src,rate=1,onStart=()=>{}){
   this.stop();
   const token=this.token;
   await window.WMSpeechInput?.preparePlayback?.();
-  if(token===this.token&&!window.WMSpeechInput?.Session?.active)window.WMMicrosoftVoice.restoreOutput();
   return this.playSource(src,rate,onStart,token,90000);
  }
  playSource(src,rate,onStart,token,maxDuration){
   const check=()=>{if(token!==this.token)throw new DOMException('Stopped','AbortError')};
   check();
   const a=this.audio;a.src=src;a.volume=1;a.muted=false;a.playbackRate=rate;
- return new Promise((resolve,reject)=>{let watchdog,settled=false;const clean=()=>{clearInterval(watchdog);a.onended=null;a.onerror=null;this.cancel=null};const done=e=>{if(settled)return;settled=true;clean();e?(a.pause(),reject(e)):resolve()};this.cancel=()=>done(new DOMException('Stopped','AbortError'));a.onended=()=>done();a.onerror=()=>done(Error('音频播放失败，请重试'));let elapsed=0,stalled=0,lastTime=-1;watchdog=setInterval(()=>{elapsed+=1000;const now=Number(a.currentTime)||0;if(now>lastTime+.01){stalled=0;lastTime=now}else stalled+=1000;if(stalled>=12000||elapsed>maxDuration){a.pause();done(Error('播放中断，请点击喇叭重试'))}},1000);deadline(Promise.resolve().then(()=>{check();window.WMMicrosoftVoice.audioMode('playback');return a.play()}),8000,'播放未启动，请点击音频播放键或重试').then(()=>{if(token===this.token)onStart()}).catch(e=>done(Error(e.name==='NotAllowedError'?'请点击下方音频播放键，再重试':e.message)))});
+ return new Promise((resolve,reject)=>{let watchdog,settled=false;const clean=()=>{clearInterval(watchdog);a.onended=null;a.onerror=null;this.cancel=null};const done=e=>{if(settled)return;settled=true;clean();e?(a.pause(),reject(e)):resolve()};this.cancel=()=>done(new DOMException('Stopped','AbortError'));a.onended=()=>done();a.onerror=()=>done(Error('音频播放失败，请重试'));let elapsed=0,stalled=0,lastTime=-1;watchdog=setInterval(()=>{elapsed+=1000;const now=Number(a.currentTime)||0;if(now>lastTime+.01){stalled=0;lastTime=now}else stalled+=1000;if(stalled>=12000||elapsed>maxDuration){a.pause();done(Error('播放中断，请点击喇叭重试'))}},1000);deadline(Promise.resolve().then(()=>{check();const afterCapture=window.WMMicrosoftVoice.restoreOutput();return Promise.resolve(a.play()).then(()=>{if(token===this.token&&!a.paused)window.WMMicrosoftVoice.confirmPlayback(afterCapture)})}),8000,'播放未启动，请点击音频播放键或重试').then(()=>{if(token===this.token)onStart()}).catch(e=>done(Error(e.name==='NotAllowedError'?'请点击下方音频播放键，再重试':e.message)))});
  }
 };
 if(['reading','writing'].includes(document.body?.dataset.skill)){

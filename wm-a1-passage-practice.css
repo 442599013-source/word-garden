@@ -19,13 +19,20 @@
 .a1-passage-reference { padding: .55rem; font-weight: 650; }
 .a1-passage-header { display: flex; align-items: start; justify-content: space-between; gap: .5rem; }
 .a1-passage-header h2 { margin: 0; }
-.a1-passage-controls, .a1-walkman-controls { display: flex; align-items: center; gap: .35rem; flex: none; }
-.a1-passage-controls button, .a1-walkman-controls button {
-  display: grid; place-items: center; padding: 0; width: 2.5rem; height: 2.5rem;
-  min-width: 0; border: 1px solid #cfa8dd; border-radius: .65rem;
-  background: #fff8ff; color: var(--training-deep, #794b9a);
+.wm-study-page .study-progress-row { justify-content: flex-start; min-width: 0; }
+.wm-study-page .study-progress-actions {
+  display: inline-flex; align-items: center; flex: none; gap: .25em; font-size: 14px;
 }
-.a1-passage-controls svg, .a1-walkman-controls svg { width: 1.2rem; height: 1.2rem; }
+.wm-study-page .study-progress-actions button.wm-icon-action {
+  display: inline-grid; place-items: center; flex: none; width: 1.8em; height: 1.8em;
+  min-width: 0; min-height: 0; margin: 0; padding: 0; border: 0;
+  background: transparent; box-shadow: none; color: inherit; font-size: inherit;
+}
+.wm-study-page .study-progress-actions button.wm-icon-action svg {
+  display: block; width: 1em; height: 1em;
+}
+.wm-study-page .study-progress-actions button:focus-visible { outline: 2px solid currentColor; outline-offset: 1px; }
+.wm-study-page .study-progress-row > button[id$="favorites-only"] { margin-inline-start: auto !important; }
 .a1-passage-turn .a1-passage-line {
   display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit;
   text-align: start; font: inherit; font-weight: 650; white-space: normal;

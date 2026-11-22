@@ -23,3 +23,8 @@
 #home-stage .v57-voice-button[aria-pressed="true"]{background:linear-gradient(150deg,#fff7dbdf,#a6d9e6dd)}
 /* Match existing home dialog and subpage frames to the same subtle border. */
 #home-stage .panel-view:not([hidden]),#home-stage #picker{border:1.5px solid transparent!important;background:linear-gradient(145deg,rgba(255,250,247,.80),rgba(224,244,246,.72)) padding-box,linear-gradient(120deg,rgba(230,192,134,.68),rgba(255,255,255,.95),rgba(134,206,225,.72),rgba(239,183,215,.68)) border-box!important}
+
+#home-stage .v48-stats .v57-no-rating-record {
+  white-space: normal !important;
+  line-height: 1.1;
+}

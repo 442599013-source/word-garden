@@ -6,12 +6,14 @@ function restoreFilter(){favoritesOnly=filters[filterKey()]===true}
 let transcript=null;
 const passageHost=document.createElement('div');
 $('english').after(passageHost);
-const originalPlayParent=$('play').parentNode;
-const originalPlayNext=$('play').nextSibling;
+
 let shownItem, meaningVisible=false;
 const meaningButton=document.createElement('button');
 meaningButton.type='button';
-$('play').after(meaningButton);
+const progressActions=document.createElement('span');
+progressActions.className='study-progress-actions';
+$('position').after(progressActions);
+progressActions.append($('play'),meaningButton);
 meaningButton.onclick=()=>{meaningVisible=!meaningVisible;showMeaning()};
 function showMeaning(){
  $('chinese').hidden=!!transcript||!meaningVisible;
@@ -38,7 +40,7 @@ function openStudyList(kind){
 }
 const learnedSplit=WMStudyTools.splitControl($('learned'),()=>openStudyList('learned')),favoriteSplit=WMStudyTools.splitControl($('favorite'),()=>openStudyList('favorites'));
 const header=document.createElement('header');header.className='wm-listening-header';const heading=document.querySelector('main>h1'),back=document.querySelector('main>a'),categoryRow=document.querySelector('.study-category-row');back.before(header);header.append(back,heading,categoryRow);back.textContent='‹';back.setAttribute('aria-label','Back to My');categoryRow.classList.add('wm-header-category');$('stats').hidden=true;$('audio').removeAttribute('controls');$('audio').hidden=true;
-function transport(){WMStudyIcons.set($('prev'),'previous','Previous');WMStudyIcons.set($('next'),'next','Next');WMStudyIcons.set($('play'),running&&!paused?'pause':'play',running&&!paused?'Pause':'Play')}
+function transport(){WMStudyIcons.set($('prev'),'previous','Previous');WMStudyIcons.set($('next'),'next','Next');WMStudyIcons.set($('play'),running&&!paused?'pause':'speaker',running&&!paused?'Pause':'Play')}
 
 let lessonView=null, lessonHost=null;
 const passageParts=['.study-content','.settings','.note'];
@@ -79,17 +81,13 @@ function updatePassage(item){
  shownItem=item;
  meaningVisible=false;
  if(transcript) {
-  originalPlayParent.insertBefore($('play'),originalPlayNext);
-  $('play').after(meaningButton);
   passageHost.replaceChildren();
   transcript=null;
  }
  const passage=type==='passage'&&window.WMA1Passages?.find(row=>row.id===item?.id);
  if(passage&&window.WMA1PassagePractice){
   transcript=WMA1PassagePractice.buildTranscript(passage);
-  transcript.controls.className='a1-walkman-controls';
   passageHost.append(transcript.element);
-  transcript.controls.append($('play'),meaningButton);
  }
 }
 function show(){transport();for(const opt of $('category').options){const c=catalog?.categories?.find(c=>c.id===opt.value);if(c)opt.textContent=c.zh}$('category').title=$('category').selectedOptions[0]?.textContent||'Category';const x=book?.items[index];updatePassage(x);meaningButton.disabled=!x;if(!transcript)showMeaning();else { $('chinese').hidden=true; meaningButton.setAttribute('aria-expanded',String(meaningVisible)); WMStudyIcons.set(meaningButton,'eye',meaningVisible?'Hide meaning':'Show meaning');} $('english').hidden=!!transcript;$('english').style.whiteSpace=type==='passage'?'pre-line':'';$('english').textContent=x?.en||(loading?'Loading · 正在加载':favoritesOnly?'No unlearned favorites · 暂无待练收藏':book?.allLearned?'All learned · 全部已学会':'No content · 暂无内容');$('chinese').textContent=x?.zh||'';$('book-title').textContent=book?(type==='passage'?book.titleEn:book.titleZh+' · '+(book.titleEn||'')):'';$('position').textContent=x?(index+1)+' / '+book.items.length:book?'0 / 0':'';const totals=studyStore.counts(type,scopeItems());learnedSplit.update('❤️ Learned',totals.learned,!x);favoriteSplit.update((x&&studyStore.hasFavorite(type,x)?'⭐':'☆')+' Favorites',totals.favorites,!x);$('favorite').setAttribute('aria-pressed',String(!!x&&studyStore.hasFavorite(type,x)));$('favorites-only').hidden=!favoritesOnly;$('favorites-only').textContent=type==='passage'?'All items':'All items · 普通练习';$('position').classList.toggle('is-favorites',favoritesOnly);$('position').setAttribute('aria-label',favoritesOnly?'Favorites · 收藏练习':'Regular practice · 普通练习');['play','prev','next','learned','favorite'].forEach(id=>$(id).disabled=!x);counts()}

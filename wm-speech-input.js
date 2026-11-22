@@ -32,7 +32,7 @@ class Session{
     resolve();
    };
    for(const name of ['onstart','onaudiostart','onaudioend','onresult','onerror','onspeechstart','onspeechend'])recognizer[name]=null;
-   recognizer.onaudioend=()=>this.log('audio-end');
+   recognizer.onaudioend=()=>{this.log('audio-end');done('audio-end')};
    recognizer.onend=()=>done('end');
    timer=setTimeout(()=>done('timeout'),1200);
    try{recognizer.abort()}catch{done('already-ended')}

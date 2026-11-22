@@ -16,8 +16,7 @@ function matchKeys(){
  const lessonId=window.WMA1Lesson?.id;
  return [lessonId && 'wm-wordmatch-v35::'+lessonId,window.WMMatchProgressKey?.(),'wm-wordmatch-v35','wm-wordmatch-v32'];
 }
-function matchRating(){
- const result=window.WMMatchResults?.latest(matchKeys());
+function matchRating(result){
  if(!result)return -1;
  return [0,.5,.6,.7,.8,.9,1].reduce((tier,threshold,index)=>result.correct/result.attempts>=threshold?index:tier,0);
 }
@@ -44,7 +43,10 @@ function matchProgress(){
 }
 function update(){const lv=Math.max(0,Math.min(600,Number(window.WM42?.completed?.())||0));
 const {score}=matchProgress();
-const index=matchRating(),rating=index<0?'Not Rated':names[index];const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
+const summary=window.WMMatchResults?.summary(matchKeys());
+const index=matchRating(summary?.rating), missingRecord=index<0&&summary?.completed;
+const rating=index>=0?names[index]:missingRecord?'已通关 · 无评级记录':'Not Rated';
+refs[2].value.classList.toggle('v57-no-rating-record',!!missingRecord);const set=(i,s,p)=>{refs[i].value.textContent=s;refs[i].fill.style.width=Math.max(0,Math.min(100,p))+'%';};
 const current=window.WMClassGroups?.currentLevel()||lv;const total=window.WMUnifiedCourseMeta?.levelCount||600;set(0,'Level '+current,current/total*100);refs[0].fill.dataset.started=String(current>0);set(1,score.toFixed(1),score/7500*100);set(2,rating,(index+1)/7*100);refs[2].value.classList.toggle('v57-long',rating.length>11);}
 for(const evt of ['pageshow','storage','wm-companions-change','wm-study-updated','wm-learning-stats-updated','wm-match-rating-updated'])window.addEventListener(evt,update);document.addEventListener('visibilitychange',()=>{if(!document.hidden)update();});update();
 // V58: use the existing Microsoft Azure TTS service, never browser speechSynthesis.

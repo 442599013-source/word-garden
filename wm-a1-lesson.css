@@ -61,3 +61,6 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
   padding:.3rem;
 }
 .a1-word-assessment .a1-category .a1-pool{max-height:4.5rem}
+
+.a1-assessment-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; }
+.a1-assessment-complete { color: #246b44; font-weight: 700; }

@@ -237,7 +237,17 @@
   const key = lesson.id + ':classification';
   let saved = {};
   try { saved = JSON.parse(localStorage.getItem(key) || '{}') || {}; } catch {}
+  const quizStatus = element('span','✓ 已完成','a1-assessment-complete');
+  quizStatus.setAttribute('role','status');
+  function remainingQuestion() {
+    return questions.findIndex(({id,items})=>{
+      const answered = new Set(Array.isArray(saved[id]) ? saved[id] : []);
+      return items.some(item=>!answered.has(item.id));
+    });
+  }
+  function updateQuizStatus() { quizStatus.hidden = remainingQuestion() !== -1; }
   function save() {
+    updateQuizStatus();
     try { localStorage.setItem(key,JSON.stringify(saved)); } catch {}
   }
   function shuffle(items) {
@@ -327,7 +337,7 @@
     if (classified.size === question.items.length) advance();
   }
   function startQuiz() {
-    const next = questions.findIndex(question=>saved[question.id]?.length !== question.items.length);
+    const next = remainingQuestion();
     showQuiz(next === -1 ? 2 : next);
     quiz.scrollIntoView({block:'start'});
   }
@@ -346,7 +356,10 @@
   closing.append(closingHeading, ...closingLines.map(line => element('p', line)));
   sections.append(closing, listeningSummary('词汇汇总｜听单词首音', lesson.words, showWord));
 
+  const quizActions = element('div','','a1-assessment-actions');
+  quizActions.append(button('课堂考核',startQuiz),quizStatus);
+  updateQuizStatus();
   root.append(element('p','幼儿园 A1 · ' + lesson.code,'a1-kicker'),
-    element('h1',lesson.titleZh),element('p','认识 44 个英语音素'),status,sections,button('课堂考核',startQuiz),quiz);
+    element('h1',lesson.titleZh),element('p','认识 44 个英语音素'),status,sections,quizActions,quiz);
   if (location.hash === '#a1-assessment') startQuiz();
 })();

@@ -273,7 +273,7 @@ It is the first sound in “ox”.|它是 ox 的首音。`;
     ['vowel','vəʊəl','元音','a vowel letter','元音字母','It is a vowel letter.','它是元音字母。'],
     ['consonant','kɒnsənənt','辅音','a consonant letter','辅音字母','M is a consonant letter.','M 是辅音字母。'],
     ['sound','saʊnd','声音','a consonant sound','辅音音素','It is a consonant sound.','它是辅音音素。'],
-    ['letter','letə','字母','the first letter','首字母','A is the first letter.','A 是首字母。'],
+    ['letter','letə','字母；信、书信','the first letter','首字母','A is the first letter.','A 是首字母。'],
     ['first','fɜːst','第一个','the first sound','首音','It is the first sound.','它是首音。'],
     ['word','wɜːd','单词','a word','一个单词','It is a word.','它是一个单词。'],
     ['question','kwestʃən','问题','a question','一个问题','It is a question.','这是一个问题。'],
