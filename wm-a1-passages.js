@@ -24,17 +24,17 @@
       ['Do I say A, E, I, O and U?','我要说 A、E、I、O、U 吗？'],
       ['Yes. A, E, I, O and U.','对。A、E、I、O、U。']
     ],[0,2,4,6,8],[
-      choice('以下哪些是辅音字母？',['M','E','S','A'],[0,2]),
-      choice('以下哪些是元音音素？',['/m/','/æ/','/ɑː/','/ʃ/'],[1,2]),
-      choice('下列哪个词的首字母是元音字母？',['ah','ha','sh'],[0]),
-      choice('/m/ 属于哪一类音素？',['元音音素','辅音音素'],[1]),
-      choice('根据原文，老师先请学生说哪个词？',['ha','ah','um'],[1])
+      choice("Is /m/ a vowel sound?", ["No. It is a consonant sound.", "Yes. It is a vowel sound.", "Say “ah” to me."], [0]),
+      choice("Vowel sounds", ["/m/", "/æ/", "/ɑː/", "/ʃ/"], [1,2]),
+      choice("Do I say “ah” or “ha”?", ["Say “ha” to me.", "Yes. A, E, I, O and U.", "Say “ah” to me."], [2]),
+      choice("Is /ɑː/ a vowel sound?", ["Yes. It is a vowel sound.", "No. It is a consonant sound.", "Yes. Say “hm”, “mm” and “sh”."], [0]),
+      choice("Do I go on?", ["Yes. You can say “um”, too.", "Yes. Say “hm”, “mm” and “sh”.", "Say “ah” to me."], [1])
     ],[
-      ['请写出五个元音字母。','A, E, I, O and U.'],
-      ['请用原文中的完整英文句子写出「它是辅音音素」。','It is a consonant sound.'],
-      ['请用原文中的完整英文句子写出「它是元音音素」。','It is a vowel sound.'],
-      ['请用原文中的完整英文句子写出「对我说 ah」。','Say “ah” to me.'],
-      ['请用原文中的完整英文句子写出「说 hm、mm 和 sh」。','Say “hm”, “mm” and “sh”.']
+      ["Vowel letters",'A, E, I, O and U.'],
+      ["Is /m/ a vowel sound?",'It is a consonant sound.'],
+      ["Is /æ/ a consonant sound?",'It is a vowel sound.'],
+      ["Do I say “ah” or “ha”?",'Say “ah” to me.'],
+      ["Do I go on?",'Say “hm”, “mm” and “sh”.']
     ]),
     dialogue('a1-passage-letters','Vowel and consonant letters','认识元音字母和辅音字母',[
       ['Hi. Is E a consonant letter?','嗨。E 是辅音字母吗？'],
@@ -52,17 +52,17 @@
       ['A, E, I, O and U?','A、E、I、O 和 U 吗？'],
       ['Yes. A, E, I, O and U.','对。A、E、I、O 和 U。']
     ],[0,2,4,6,8],[
-      choice('以下哪些是辅音字母？',['E','M','B','A'],[1,2]),
-      choice('以下哪些是元音字母？',['E','M','A','P'],[0,2]),
-      choice('以下哪些词的首字母是元音字母？',['am','at','my','be'],[0,1]),
-      choice('以下哪些词都以 M 开头？',['me、my、ma','am、an、at','ad、aw、ax'],[0]),
-      choice('we 的首字母是什么？',['T','W','P'],[1])
+      choice("Is E a consonant letter?", ["No. M is a consonant letter.", "No. It is a vowel letter.", "Yes. A, E, I, O and U."], [1]),
+      choice("Vowel letters", ["E", "M", "A", "P"], [0,2]),
+      choice("Do “am”, “an” and “at” all use A as the first letter?", ["A is the first letter in “am”, “an” and “at”.", "M is the first letter in “me”, “my” and “ma”.", "Yes. So do “we” and “ta”."], [0]),
+      choice("Do “ad”, “aw” and “ax” all use A as the first letter?", ["M is the first letter in “me”, “my” and “ma”.", "Yes. A is the first letter in “ad”, “aw” and “ax”.", "Yes. A, E, I, O and U."], [1]),
+      choice("Do “be”, “by”, “he”, “ho”, “pa” and “re” all use a consonant letter as the first letter?", ["No. It is a vowel letter.", "Yes. A is the first letter in “ad”, “aw” and “ax”.", "Yes. So do “we” and “ta”."], [2])
     ],[
-      ['请写出五个元音字母。','A, E, I, O and U.'],
-      ['请用原文中的完整英文句子写出「M 是辅音字母」。','M is a consonant letter.'],
-      ['请用原文中的完整英文句子说明 am、an 和 at 的首字母是什么。','A is the first letter in “am”, “an” and “at”.'],
-      ['请用原文中的完整英文句子说明 me、my 和 ma 的首字母是什么。','M is the first letter in “me”, “my” and “ma”.'],
-      ['请用原文中的完整英文句子说明 ad、aw 和 ax 的首字母是什么。','A is the first letter in “ad”, “aw” and “ax”.']
+      ["Vowel letters",'A, E, I, O and U.'],
+      ["Is M a vowel letter?",'M is a consonant letter.'],
+      ["Do “am”, “an” and “at” all use A as the first letter?",'A is the first letter in “am”, “an” and “at”.'],
+      ["Is M the first letter in “me”, “my” and “ma”?",'M is the first letter in “me”, “my” and “ma”.'],
+      ["Do “ad”, “aw” and “ax” all use A as the first letter?",'A is the first letter in “ad”, “aw” and “ax”.']
     ]),
     dialogue('a1-passage-first-sound','First sounds in words','判断单词的首音',[
       ['Is “ox” a word?','ox 是一个单词吗？'],
@@ -80,17 +80,17 @@
       ['Do I say A, E, I, O and U?','我要说 A、E、I、O、U 吗？'],
       ['Yes. A, E, I, O and U.','对。A、E、I、O、U。']
     ],[0,2,4,6,8],[
-      choice('以下哪些是辅音字母？',['G','O','Y','I'],[0,2]),
-      choice('以下哪些是元音音素？',['/ɒ/','/ɪ/','/j/','/ɡ/'],[0,1]),
-      choice('以下哪些词的首字母是元音字母？',['ox','if','go','yo'],[0,1]),
-      choice('ox 的首音是什么？',['/ɡ/','/ɪ/','/ɒ/'],[2]),
-      choice('哪两个单词都以 /j/ 开头？',['yo、ya','if、it','ox、on'],[0])
+      choice("Consonant letters", ["G", "O", "Y", "I"], [0,2]),
+      choice("Is /ɒ/ the first sound of “ox”?", ["Yes. It is a consonant sound.", "Yes. It is a vowel sound.", "Yes. It is a word."], [1]),
+      choice("Is /ɪ/ the first sound in “if”, “in”, “is” and “it”?", ["Yes. It is a word.", "Yes. /ɡ/ is the first sound in “go”.", "Yes. It is the first sound in “if” and “in”."], [2]),
+      choice("Is /j/ the first sound in “yo” and “ya”?", ["Yes. It is a consonant sound.", "Yes. It is a vowel sound.", "Yes. It is a word."], [0]),
+      choice("Can I put “on”, “or”, “up”, “us”, “ex”, “oi”, “ow”, “oy”, “ew” and “OK” in one set?", ["Yes. It is a word.", "Yes. For all ten, the first sound is a vowel sound.", "Yes. It is the first sound in “if” and “in”."], [1])
     ],[
-      ['请写出五个元音字母。','A, E, I, O and U.'],
-      ['请用原文中的完整英文句子写出「它是一个单词」。','It is a word.'],
-      ['请用原文中的完整英文句子说明 ox 的首音属于哪类音素。','It is a vowel sound.'],
-      ['请用原文中的完整英文句子说明 yo 的首音属于哪类音素。','It is a consonant sound.'],
-      ['请用原文中的完整英文句子写出「它是这些单词的首音」。','It is the first sound in “if” and “in”.']
+      ["Vowel letters",'A, E, I, O and U.'],
+      ["Is “ox” a word?",'It is a word.'],
+      ["Is /ɒ/ the first sound of “ox”?",'It is a vowel sound.'],
+      ["Is /j/ the first sound in “yo” and “ya”?",'It is a consonant sound.'],
+      ["Is /ɪ/ the first sound in “if”, “in”, “is” and “it”?",'It is the first sound in “if” and “in”.']
     ])
   ];
 })();

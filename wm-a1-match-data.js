@@ -6,8 +6,6 @@
     words[item.id + '-type'] = {...item,zh:lesson.category(item),pairType:'classification'};
     words[item.id] = {...words[item.id],pairType:'meaning'};
   }
-  const themeWord = lesson.themeWords.find(item => item.en === 'word');
-  for (const item of [themeWord,...lesson.matchSingleWords]) words[item.id] = {...item,pairType:'meaning'};
   // Map each old term to a different constituent to keep existing progress and reviews.
   const replacedWordIds = {
     'a1-theme-vowel-sound':'a1-match-part-vowel',

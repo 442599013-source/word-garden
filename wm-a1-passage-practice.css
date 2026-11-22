@@ -17,3 +17,22 @@
   background: #fff;
 }
 .a1-passage-reference { padding: .55rem; font-weight: 650; }
+.a1-passage-header { display: flex; align-items: start; justify-content: space-between; gap: .5rem; }
+.a1-passage-header h2 { margin: 0; }
+.a1-passage-controls, .a1-walkman-controls { display: flex; align-items: center; gap: .35rem; flex: none; }
+.a1-passage-controls button, .a1-walkman-controls button {
+  display: grid; place-items: center; padding: 0; width: 2.5rem; height: 2.5rem;
+  min-width: 0; border: 1px solid #cfa8dd; border-radius: .65rem;
+  background: #fff8ff; color: var(--training-deep, #794b9a);
+}
+.a1-passage-controls svg, .a1-walkman-controls svg { width: 1.2rem; height: 1.2rem; }
+.a1-passage-turn .a1-passage-line {
+  display: block; width: 100%; padding: 0; border: 0; background: none; color: inherit;
+  text-align: start; font: inherit; font-weight: 650; white-space: normal;
+}
+.a1-passage-task[data-state="correct"] .a1-passage-feedback {
+  padding: .55rem; border-radius: .65rem; border: 1px solid #8fc7a5;
+  background: #e8f6ed; color: #205b3e; font-weight: 700;
+}
+.a1-passage-task[data-state="correct"] .a1-passage-pad { border-color: #32845c; background: #e8f6ed; }
+.a1-passage-check { background: #7951ac; color: #fff; }

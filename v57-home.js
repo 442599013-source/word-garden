@@ -12,14 +12,14 @@ const pairs=[
  ['Let our magical adventure begin!','让我们的魔法之旅开始吧！']
 ];
 const names=['Poor','Weak','Basic','Good','Excellent','Amazing','Exceptional'];
+function matchKeys(){
+ const lessonId=window.WMA1Lesson?.id;
+ return [lessonId && 'wm-wordmatch-v35::'+lessonId,window.WMMatchProgressKey?.(),'wm-wordmatch-v35','wm-wordmatch-v32'];
+}
 function matchRating(){
- try{
-  const result=JSON.parse(localStorage.getItem('wm-match-last-completed-rating-v1')||'null');
-  if(!result)return -1;
-  const {correct,attempts}=result;
-  if(!Number.isSafeInteger(correct)||!Number.isSafeInteger(attempts)||attempts<1||correct<0||correct>attempts)return -1;
-  return [0,.5,.6,.7,.8,.9,1].reduce((tier,threshold,index)=>correct/attempts>=threshold?index:tier,0);
- }catch{return -1;}
+ const result=window.WMMatchResults?.latest(matchKeys());
+ if(!result)return -1;
+ return [0,.5,.6,.7,.8,.9,1].reduce((tier,threshold,index)=>result.correct/result.attempts>=threshold?index:tier,0);
 }
 // Existing V49 sync() still writes these IDs. Preserve them offscreen, not in the visible card.
 const legacy=document.createElement('div');legacy.hidden=true;legacy.style.display='none';
@@ -28,9 +28,7 @@ stage.append(legacy);
 const sections=[['Advance','v57-level'],['Practice','v57-score'],['Ability','v57-ability']];
 stats.replaceChildren();const refs=sections.map(([label,cls])=>{const column=document.createElement('div');column.className='v57-stat '+cls;const title=document.createElement('b');title.textContent=label;const value=document.createElement('strong');value.className='v57-value';const track=document.createElement('div');track.className='v57-progress';const fill=document.createElement('div');fill.className='v57-progress-fill';track.append(fill);column.append(title,value,track);stats.append(column);return{value,fill};});
 function matchProgress(){
- const lessonId=window.WMA1Lesson?.id;
- const keys=new Set([lessonId && 'wm-wordmatch-v35::'+lessonId,
-  window.WMMatchProgressKey?.(),'wm-wordmatch-v35','wm-wordmatch-v32']);
+ const keys=new Set(matchKeys());
  for(const key of keys){
   if(!key)continue;
   try{

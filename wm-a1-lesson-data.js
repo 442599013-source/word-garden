@@ -268,31 +268,65 @@ It is the first sound in “ox”.|它是 ox 的首音。`;
     word:{vowel:'以元音音素开头的单词',consonant:'以辅音音素开头的单词'}
   };
   const category = item => labels[item.kind][item.group];
-  const vowelStarts = new Set([...sounds.slice(0,20).map(item=>item.ipa[0])]);
+  // The same taught words feed the phoneme examples, summary and each practice mode.
+  const themeRows = [
+    ['vowel','vəʊəl','元音','a vowel letter','元音字母','It is a vowel letter.','它是元音字母。'],
+    ['consonant','kɒnsənənt','辅音','a consonant letter','辅音字母','M is a consonant letter.','M 是辅音字母。'],
+    ['sound','saʊnd','声音','a consonant sound','辅音音素','It is a consonant sound.','它是辅音音素。'],
+    ['letter','letə','字母','the first letter','首字母','A is the first letter.','A 是首字母。'],
+    ['first','fɜːst','第一个','the first sound','首音','It is the first sound.','它是首音。'],
+    ['word','wɜːd','单词','a word','一个单词','It is a word.','它是一个单词。'],
+    ['question','kwestʃən','问题','a question','一个问题','It is a question.','这是一个问题。'],
+    ['answer','ɑːnsə','回答','an answer','一个回答','It is an answer.','这是一个回答。'],
+    ['all','ɔːl','全部','all ten','全部十个','I can say all ten.','我能把十个都说出来。'],
+    ['and','ænd','和','A and E','A 和 E','I say A and E.','我说 A 和 E。'],
+    ['can','kæn','能','can say','能说','I can say it.','我能说出来。'],
+    ['for','fɔː','对于','for all ten','对于这十个','For all ten, the first sound is a vowel sound.','这十个词的首音都是元音音素。'],
+    ['letters','letəz','字母（复数）','vowel letters','元音字母（复数）','A and E are vowel letters.','A 和 E 是元音字母。'],
+    ['one','wʌn','一个（数量）','one set','一组','I can put it in one set.','我可以把它放进一组。'],
+    ['put','pʊt','放','put in one set','放入一组','Can I put it in one set?','我可以把它放进一组吗？'],
+    ['say','seɪ','说','say “ah”','说 ah','Say “ah” to me.','对我说 ah。'],
+    ['set','set','一组','a set','一组','It is a set.','它是一组。'],
+    ['sounds','saʊndz','声音（复数）','vowel sounds','元音音素（复数）','They are vowel sounds.','它们是元音音素。'],
+    ['ten','ten','十','ten words','十个单词','I can say ten words.','我能说十个单词。'],
+    ['the','ðiː','这个（定冠词）','the first word','第一个单词','It is the first word.','它是第一个单词。'],
+    ['too','tuː','也','say it, too','也说出来','You can say “um”, too.','你也可以说 um。'],
+    ['use','juːz','使用','use A','使用 A','I use A.','我使用 A。'],
+    ['words','wɜːdz','单词（复数）','the words','这些单词','Say the words to me.','把这些单词说给我听。'],
+    ['yes','jes','是的','say yes','说「是的」','Yes. It is a word.','是的。它是一个单词。'],
+    ['you','juː','你','you can','你可以','You can say it.','你可以说出来。']
+  ];
+  const matchParts = new Set(['vowel','consonant','sound','letter','first']);
+  const themeWords = themeRows.map(([en,ipa,zh])=>({
+    id:(matchParts.has(en)?'a1-match-part-':'a1-theme-')+en,
+    kind:'word',theme:true,en,ipa,zh,match:zh
+  }));
+  for (const [en,, ,phrase,phraseZh,sentence,sentenceZh] of themeRows) {
+    if (!phrases.some(item=>item.en===phrase)) phrases.push({id:'a1-theme-phrase-'+en,kind:'phrase',en:phrase,zh:phraseZh});
+    if (!sentences.some(item=>item.en===sentence)) sentences.push({id:'a1-theme-sentence-'+en,kind:'sentence',en:sentence,zh:sentenceZh});
+  }
+  for (const [en,zh] of [
+    ['vowel sound','元音音素'], ['consonant sound','辅音音素'],
+    ['vowel letter','元音字母'], ['consonant letter','辅音字母'], ['first sound','首音']
+  ]) {
+    if (!phrases.some(item=>item.en===en)) phrases.push({id:'a1-term-'+en.replaceAll(' ','-'),kind:'phrase',en,zh});
+  }
+  words.push(...themeWords);
   const phonemes = [...sounds].sort((a,b)=>b.ipa.length-a.ipa.length);
-  for(const word of words) {
+  for (const word of words) {
     const strongIpa=word.ipa.split(';')[0];
-    word.group=vowelStarts.has(strongIpa[0])?'vowel':'consonant';
+    const first=phonemes.find(sound=>strongIpa.startsWith(sound.ipa));
+    word.group=first?.group || 'consonant';
+    word.firstSound=first?.id;
     word.phonemes=[];
-    for(let offset=0;offset<strongIpa.length;){
+    for (let offset=0;offset<strongIpa.length;) {
       const sound=phonemes.find(item=>strongIpa.startsWith(item.ipa,offset));
-      if(sound)word.phonemes.push(sound.id);
+      if (sound) word.phonemes.push(sound.id);
       offset+=sound?.ipa.length || 1;
     }
   }
-  const themeWords = Object.entries({
-    'vowel sound':'元音音素',
-    'consonant sound':'辅音音素',
-    'vowel letter':'元音字母',
-    'consonant letter':'辅音字母',
-    word:'单词',
-    'first sound':'首音'
-  }).map(([en,zh])=>({id:'a1-theme-'+en.replaceAll(' ','-'),en,zh,kind:'word',theme:true,match:zh}));
-  const matchSingleWords = Object.entries({
-    vowel:'元音', consonant:'辅音', sound:'声音', letter:'字母', first:'第一个'
-  }).map(([en,zh])=>({id:'a1-match-part-'+en,en,zh,kind:'word'}));
   const vocabulary = [...letters,...sounds,...words];
-  const all = [...vocabulary,...themeWords,...phrases,...sentences,...matchSingleWords];
+  const all = [...vocabulary,...phrases,...sentences];
   const match = Object.fromEntries(vocabulary.map(item=>[item.id,{...item,zh:item.match||category(item)}]));
-  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,themeWords,phrases,sentences,matchSingleWords,sections,all,match,category,labels};
+  window.WMA1Lesson = {...catalog[0], group:'kindergarten-1', letters,sounds,words,themeWords,phrases,sentences,sections,all,match,category,labels};
 })();

@@ -197,7 +197,7 @@
           cards.append(tile(letter.en + ' ' + letter.lower, letter.id));
           groupNarration.push(audioItem(letter.id));
         }
-        const examples = lesson.words.filter(word=>word.phonemes.includes(sound.id));
+        const examples = lesson.words.filter(word=>word.theme ? word.firstSound===sound.id : word.phonemes.includes(sound.id));
         const example = words.get(sound.example);
         if (example && !examples.includes(example)) examples.unshift(example);
         const wordCards = [];
@@ -226,28 +226,6 @@
       sections.append(listeningSummary('听元音字母和辅音字母的区别', lesson.letters, item => item.en));
     }
   }
-  sections.append(listeningSummary('听以元音音素或辅音音素开头的单词', lesson.words, showWord));
-
-  const themeSection = element('section', '', 'a1-block');
-  const themeTitle = element('header', '', 'a1-block-heading');
-  const themePool = element('div', '', 'a1-pool');
-  const themeIntro = '用这些词说明一个字母或音素属于哪一类，也能用它们说出单词的首音。';
-  themeTitle.append(element('h2', '第一课主题必学词'),
-    narrationSpeaker('theme-words', ['第一课主题必学词', themeIntro,
-      ...lesson.themeWords.flatMap(item => [audioItem(item.id), item.zh])], '朗读主题必学词'));
-  themePool.append(...lesson.themeWords.map(item => tile(showWord(item), item.id)));
-  themeSection.append(themeTitle, element('p', themeIntro), themePool);
-  const themeExamples = new Set(['a vowel sound','a consonant sound','a vowel letter',
-    'a consonant letter','a word','the first sound','It is a vowel sound.',
-    'It is a consonant sound.','E is a vowel letter.','M is a consonant letter.',
-    'It is a word.','It is the first sound in “ox”.']);
-  for (const [title, items] of [['配套词组',lesson.phrases],['配套短句',lesson.sentences]]) {
-    const pool = element('div', '', 'a1-pool');
-    pool.append(...items.filter(item=>themeExamples.has(item.en)).map(item=>tile(showWord(item),item.id)));
-    themeSection.append(element('h3',title),pool);
-  }
-  sections.append(themeSection);
-
   const questions = [
     {id:'letters', title:'请选择元音字母', items:lesson.letters},
     {id:'sounds', title:'请选择元音音素', items:lesson.sounds},
@@ -270,7 +248,9 @@
     }
     return result;
   }
+  let quizTimer;
   function showQuiz(index) {
+    clearTimeout(quizTimer);
     stop();
     quiz.hidden = false;
     const question = questions[index];
@@ -288,17 +268,16 @@
     const groups = element('div', '', 'a1-classification');
     const buckets = new Map();
     let selection, selectedButton;
-    const next = button(index < 2 ? '下一题' : '完成第 1 课', () => {
-      if (index < 2) showQuiz(index + 1);
+    let completed = false;
+    function advance() {
+      if (index < questions.length - 1) showQuiz(index + 1);
       else quiz.replaceChildren(element('h2','第 1 课考核完成'),
         button('重新练习',()=>{saved={};save();showQuiz(0);}));
-    });
-    function progress() {
-      next.hidden = classified.size !== question.items.length;
     }
     function choose(group) {
+      if (completed) return;
       if (!selection) { feedback.textContent = '请先点下面的一张卡片。'; return; }
-      if (selection.group !== group) { feedback.textContent = '再听一遍，试试另一个分类。'; return; }
+      if (selection.group !== group) { feedback.dataset.state='wrong'; feedback.textContent = '再听一遍，试试另一个分类。'; return; }
       const label = selection.kind === 'word' ? showWord(selection) : selection.en;
       buckets.get(group).append(tile(label,selection.id));
       classified.add(selection.id);
@@ -307,8 +286,13 @@
       if(selection.kind==='word')window.WMLearningStats?.recordWord('classroom',selection.en);
       selectedButton.remove();
       selection = selectedButton = null;
-      feedback.textContent = '正确 · ' + classified.size + ' / ' + question.items.length;
-      progress();
+      feedback.textContent = '✓ Correct! · ' + classified.size + ' / ' + question.items.length;
+      feedback.dataset.state = 'correct';
+      void window.WMStudySound?.ding();
+      if (classified.size === question.items.length) {
+        completed = true;
+        quizTimer = setTimeout(advance,850);
+      }
     }
     for (const [group, label] of Object.entries(lesson.labels[question.items[0].kind])) {
       const frame = element('div', '', 'a1-category');
@@ -324,6 +308,7 @@
         continue;
       }
       const card = button(label,()=>{
+        if (completed) return;
         selectedButton?.setAttribute('aria-pressed','false');
         selection = item;
         selectedButton = card;
@@ -337,8 +322,9 @@
       element('p',question.title),element('p',index===0 ?
         '先听名字，认出字母，再选它的类别。Y 在字母分类里放入辅音字母框，它在不同单词里可以表示不同的音。' :
         index===1 ? '先听单音，再选元音音素或辅音音素。' : '先听整个单词，再判断首音素是元音音素还是辅音音素。'),
-      groups, pool, feedback, next);
-    progress();
+      groups, pool, feedback);
+    feedback.className='a1-ability-status';
+    if (classified.size === question.items.length) advance();
   }
   function startQuiz() {
     const next = questions.findIndex(question=>saved[question.id]?.length !== question.items.length);
@@ -358,7 +344,7 @@
   closingHeading.append(element('h2', closingTitle),
     narrationSpeaker('initial-sound-summary', [closingTitle, ...closingLines], '朗读课末知识点'));
   closing.append(closingHeading, ...closingLines.map(line => element('p', line)));
-  sections.append(closing);
+  sections.append(closing, listeningSummary('词汇汇总｜听单词首音', lesson.words, showWord));
 
   root.append(element('p','幼儿园 A1 · ' + lesson.code,'a1-kicker'),
     element('h1',lesson.titleZh),element('p','认识 44 个英语音素'),status,sections,button('课堂考核',startQuiz),quiz);

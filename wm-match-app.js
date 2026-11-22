@@ -8,17 +8,8 @@ let accountedScore=0;let game,locked=false,session=0,lastFocus=null,dialogOpen=f
 function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;}
 function btn(text,action,cls=''){const b=el('button',cls,text);b.type='button';b.onclick=action;return b;}
 function announce(text){$('match-status').textContent=text;}
-const ratingKey = 'wm-match-last-completed-rating-v1';
-function saveRating(){
- const {finished, ratingEligible, correct, attempts, completedAt} = game.s;
- if(!finished || !ratingEligible || !attempts || game.ratingPublished) return;
- const previous = JSON.parse(localStorage.getItem(ratingKey) || 'null');
- if(!previous || previous.completedAt <= completedAt){
-  localStorage.setItem(ratingKey, JSON.stringify({correct, attempts, completedAt}));
-  window.dispatchEvent(new Event('wm-match-rating-updated'));
- }
- game.ratingPublished = true;
-}
+store.completedRounds ??= {};
+store.replaying ??= {};
 function completedReview(level){
  const saved=store.completedReviews?.[level];
  const previous=store.rounds[level];
@@ -26,9 +17,11 @@ function completedReview(level){
 }
 function save(){store.total+=game.s.score-accountedScore;accountedScore=game.s.score;store.rounds[game.level]=game.snapshot();store.level=game.level;try{localStorage.setItem(window.WMJourneySelectionKey||'wm-journey-selection-v21',String(game.level))}catch{}store.bestCombo=Math.max(store.bestCombo,game.s.bestCombo);if(game.s.finished){
  store.completed[game.level]=true;
+ store.completedRounds[game.level]=game.snapshot();
+ delete store.replaying[game.level];
  store.completedReviews??={};
- store.completedReviews[game.level]={words:game.s.reviewOut,meanings:game.s.meanings};
-}try{localStorage.setItem(KEY,JSON.stringify(store));saveRating();}catch{announce('Progress could not be saved · 进度暂时无法保存');}}
+ if(game.s.completedAt||!store.completedReviews[game.level])store.completedReviews[game.level]={words:game.s.reviewOut,meanings:game.s.meanings};
+}try{localStorage.setItem(KEY,JSON.stringify(store));window.WMMatchResults?.publish(game.s);}catch{announce('Progress could not be saved · 进度暂时无法保存');}}
 const PALETTES=[['#22c8f7','#087bd5','#fff','#326291'],['#ffd943','#dc9713','#653405','#fff3b3'],['#f466bf','#b72c86','#fff','#88396f'],['#b57af0','#7842bb','#fff','#6f3ca4'],['#94e840','#50a520','#3b255b','#dbffab']];
 function palette(t){const n=Number(t.id.split('-').pop());return PALETTES[(n*7+game.level)%PALETTES.length];}
 function entry(id){return {...DATA.words[id],zh:game.s.meanings?.[id]||game.plan.meanings?.[id]||DATA.words[id].zh};}
@@ -135,14 +128,50 @@ function closeDialog(){if(game.s.finished&&$('dialog').dataset.kind==='finish')r
 function openDialog(title,kind){if(kind!=='finish')stopSpeech();lastFocus=document.activeElement;dialogOpen=true;$('dialog-title').textContent=title;$('dialog-content').replaceChildren();$('dialog').dataset.kind=kind;$('dialog').hidden=false;$('close-dialog').hidden=kind==='finish';$('close-dialog').focus?.({preventScroll:true});return $('dialog-content');}
 function chooseLevel(){if(locked)return;const host=openDialog('Choose a level · 选择关卡','levels'),grid=el('div','level-grid');for(let i=1;i<=DATA.levels.length;i++){const b=btn(String(i)+((store.completed[i]===true||store.rounds[i]?.finished===true)?' ✓':''),()=>{load(i);});b.dataset.completed=String(store.completed[i]===true||store.rounds[i]?.finished===true);b.classList.toggle('current',i===game.level);b.setAttribute('aria-label','Level '+i+' 第'+i+'关');grid.append(b);}host.append(grid);}
 function settings(){if(locked)return;const host=openDialog('Settings · 设置','settings');for(const [key,en,zh]of [['pronunciation','Pronunciation','单词朗读'],['effects','Sound effects','游戏音效']]){const row=el('div','setting-row');row.append(el('span','',en+' · '+zh));const b=btn(store[key]?'On 开':'Off 关',()=>{store[key]=!store[key];if(!store[key]&&key==='pronunciation')stopSpeech();if(!store[key]&&key==='effects'){speechQueue=speechQueue.filter(x=>!['recording','applause'].includes(x.kind));stopApplause();}b.textContent=store[key]?'On 开':'Off 关';b.setAttribute('aria-pressed',String(store[key]));save();});b.setAttribute('aria-pressed',String(store[key]));row.append(b);host.append(row);}const total=el('p','','Total game points · 累计游戏积分：'+score(store.total)),best=el('p','','Best combo · 最高连消：'+store.bestCombo);total.style.fontSize=best.style.fontSize='14px';host.append(total,best);}
-function showFinish(){
+function showFinish(revisited=false){
  const stars=Engine.stars(game.s.bestCombo),host=openDialog(game.level<DATA.levels.length&&game.level%window.WMClassGroups?.classSize===0?'Promoted · 晋升'+window.WMClassGroups.forLevel(game.level+1).zh:'Level Complete! · 本关完成','finish'),summary=el('div','finish-compact'),top=el('div','finish-top'),title=el('div','finish-copy'),headline=el('div','finish-headline');
- headline.append(el('span','victory','✌️'),el('strong','','Level Complete!'),el('span','party-poppers','🎉'.repeat(stars)));title.append(headline,el('small','','本级全部词已完成 · Board Cleared'));const metric=el('div','finish-metric');metric.append(el('strong','',score(game.s.score)),el('small','','得分 · 最高连消 '+game.s.bestCombo));top.append(title,metric);
- const actions=el('div','finish-actions');if(game.level<DATA.levels.length)actions.append(btn('Next 下一关 ›',()=>load(game.level+1),'finish-next'));actions.append(btn('Replay 再玩',()=>load(game.level,true)),btn('Home 首页',()=>{location.href='index.html';}));
+ headline.append(el('span','victory','✌️'),el('strong','',revisited?'本关已完成 · Level Complete':'Level Complete!'),el('span','party-poppers','🎉'.repeat(stars)));title.append(headline,el('small','','本级全部词已完成 · Board Cleared'));const metric=el('div','finish-metric');metric.append(el('strong','',score(game.s.score)),el('small','','得分 · 最高连消 '+game.s.bestCombo));top.append(title,metric);
+ const actions=el('div','finish-actions');if(game.level<DATA.levels.length)actions.append(btn('Next 下一关 ›',()=>load(game.level+1),'finish-next'));actions.append(btn('Replay 重玩',()=>load(game.level,true)),btn('Home 首页',()=>{location.href='index.html';}));
  const fireworks=el('div','finish-fireworks');fireworks.setAttribute('aria-hidden','true');for(let j=0;j<3;j++){const burst=el('span','finish-burst');burst.style.setProperty('--burst-x',[15,50,85][j]+'%');burst.style.setProperty('--burst-y',[22,7,26][j]+'px');for(let i=0;i<10;i++){const ray=el('i');ray.style.setProperty('--angle',i*36+'deg');ray.style.setProperty('--delay',j*.15+'s');burst.append(ray);}fireworks.append(burst);}
  summary.append(fireworks,top,actions);for(const cls of ['left','top','right']){const star=el('span','finish-bling '+cls,'✦');star.setAttribute('aria-hidden','true');summary.append(star);}summary.setAttribute('aria-label',stars+'星通关');host.append(summary);actions.querySelector('button')?.focus({preventScroll:true});
 }
-function load(level,restart=false){session++;stopSpeech();stopApplause();if(game)save();const previousRound=store.rounds[level],prior=restart||previousRound?.finished?null:previousRound;const review=completedReview(level-1);game=new Engine(DATA,{level,snapshot:prior,seed:Date.now()+level*421,reviews:review?.words,reviewMeanings:review?.meanings});accountedScore=game.s.score;if(restart)store.rounds[level]=game.snapshot();locked=true;dialogOpen=false;$('dialog').hidden=true;$('close-dialog').hidden=false;effects.replaceChildren();tileNodes.clear();board.replaceChildren();renderTargets();save();renderNumbers();helpTitle(false);showRules(0);window.WMMatchSentences?.init(game,text=>{stopSpeech();if(store.pronunciation){speechQueue.push({text,lang:'en-GB',kind:'sentence',audioId:game.plan.lessons.find(row=>row.en===text)?.id});void pumpSpeech()}});save();try{const u=new URL(location.href);u.searchParams.set('level',game.level);u.searchParams.delete('from');u.searchParams.delete('choose');history.replaceState(null,'',u.pathname+u.search);}catch{}const round=session;void renderBoard(null,{initial:true}).then(()=>{if(round!==session)return;locked=false;if(!game.s.finished&&!game.availablePairs())void doNewBatch(true)});window.WMGuardianRound={engine:game};window.dispatchEvent(new CustomEvent("wm-match-round-start"));if(game.s.finished)showFinish();}
+function load(level,restart=false){
+ session++;stopSpeech();stopApplause();if(game)save();
+ const previousRound=store.rounds[level];
+ const savedComplete=store.completedRounds[level]||(previousRound?.finished?previousRound:null);
+ const revisited=!restart&&!store.replaying[level]&&(!!savedComplete||store.completed[level]===true);
+ const prior=restart?null:revisited?savedComplete:previousRound;
+ const review=completedReview(level-1);
+ game=new Engine(DATA,{level,snapshot:prior,seed:Date.now()+level*421,reviews:review?.words,reviewMeanings:review?.meanings});
+ if(restart)store.replaying[level]=true;
+ if(revisited&&!game.s.finished){
+  // A previous build could overwrite the round after saving the completion flag.
+  Object.assign(game.s,{board:[],queue:[],reviewQueue:[],reviewPending:[],done:game.s.levelWords.slice(),
+   pairs:game.s.levelWords.length,finished:true,score:0,bestCombo:store.bestCombo,completedAt:null});
+ }
+ accountedScore=game.s.score;
+ locked=true;dialogOpen=false;$('dialog').hidden=true;$('close-dialog').hidden=false;
+ effects.replaceChildren();tileNodes.clear();board.replaceChildren();
+ renderTargets();renderNumbers();helpTitle(false);showRules(0);
+ window.WMMatchSentences?.init(game,text=>{stopSpeech();if(store.pronunciation){
+  speechQueue.push({text,lang:'en-GB',kind:'sentence',audioId:game.plan.lessons.find(row=>row.en===text)?.id});void pumpSpeech();
+ }});
+ save();
+ try{
+  const u=new URL(location.href);
+  u.searchParams.set('level',game.level);u.searchParams.delete('from');u.searchParams.delete('choose');
+  history.replaceState(null,'',u.pathname+u.search);
+ }catch{}
+ window.WMGuardianRound={engine:game};
+ if(game.s.finished){locked=false;showFinish(revisited);return;}
+ const round=session;
+ void renderBoard(null,{initial:true}).then(()=>{
+  if(round!==session)return;
+  locked=false;
+  if(!game.s.finished&&!game.availablePairs())void doNewBatch(true);
+ });
+ window.dispatchEvent(new CustomEvent('wm-match-round-start'));
+}
 $('hint').onclick=async()=>{if(locked||dialogOpen||game.s.finished)return;clearHint();const pair=game.useHint();if(!pair.length){await doNewBatch(true);return;}save();renderNumbers();hintCostEffect();for(const id of pair)tileNodes.get(id)?.classList.add('hinted');
  const selected=pair.map(id=>game.s.board.find(t=>t.id===id)).filter(Boolean);
  const english=selected.find(t=>t.lang==='en'),chinese=selected.find(t=>t.lang==='zh');

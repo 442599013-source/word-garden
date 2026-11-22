@@ -7,7 +7,11 @@ const requested=Number(params.get('level'));
 const routedStage=lib.resolve(params.get('stage'),requested);
 const guidedStage=params.get('lesson')&&lib.stages.find(s=>s.passage.some(x=>x.guidedLesson===params.get('lesson')));
 const directPTE=skill==='reading'&&params.get('from')==='journey'&&window.WMUnifiedCourseData?.units?.[requested-1]?.kind==='pte';
-let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=!!saved.favoritesOnly,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
+let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
+const filters=saved.filters||{};
+const filterKey=()=>stage.id+':'+type;
+if(!saved.filters&&saved.favoritesOnly&&stage.id===saved.stage&&type===saved.type)filters[filterKey()]=true;
+favoritesOnly=filters[filterKey()]===true;
 const indices=saved.indices||{},voice=new WMMicrosoftVoice($('audio')),norm=s=>String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^\p{L}\p{N}'\s-]/gu,'').trim().replace(/\s+/g,' '),words=s=>s.match(/[A-Za-z0-9]+(?:['’\-][A-Za-z0-9]+)*/g)||[],items=()=>store.remaining(type,stage[type],favoritesOnly),item=()=>items()[index],key=()=>stage.id+':'+type+(favoritesOnly?':favorites':''),shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 document.title=skill[0].toUpperCase()+skill.slice(1)+' Practice · Goldy Magic English';
 const context=document.querySelector('.context'),categoryLabel=context.querySelector('label');context.classList.add('study-category-row');categoryLabel.classList.add('study-category-label');for(const child of [...categoryLabel.childNodes])if(child.nodeType===3)child.remove();$('stage').setAttribute('aria-label','Learning stage');
@@ -16,25 +20,31 @@ const itemRow=document.createElement('div');itemRow.className='study-progress-ro
 const questionHost=document.querySelector('.question');
 const actionRow=document.createElement('div');actionRow.className='study-entry-actions';const oldTools=$('listen').closest('.tools');actionRow.append($('listen'),$('reveal'));oldTools?.remove();document.querySelector('.question').after(actionRow);
 const wordFeedback=document.createElement('div');wordFeedback.className='wm-word-feedback';$('input-area').append(wordFeedback);
-function persist(){indices[key()]=index;try{localStorage.setItem(KEY,JSON.stringify({stage:stage.id,type,indices,correct:saved.correct||0,favoritesOnly}))}catch{}}
+function persist(){indices[key()]=index;try{localStorage.setItem(KEY,JSON.stringify({stage:stage.id,type,indices,correct:saved.correct||0,filters}))}catch{}}
 function icon(mic=false){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">'+(mic?'<rect x="8" y="2" width="8" height="13" rx="4"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3M8 22h8"/>':'<path d="M11 5 6 9H3v6h3l5 4zM15 8a6 6 0 0 1 0 8m3-11a10 10 0 0 1 0 14"/>')+'</svg>'}
-const mic=new WMSpeechInput.Session({prepare(){voice.stop()},target:()=>passageView?.expected||item()?.en||'',onState:s=>{WMStudyIcons.set($('mic'),s==='idle'?'mic':'stop',s==='idle'?'Read aloud':s==='listening'?'Stop recording':'Stop microphone');$('mic').setAttribute('aria-pressed',String(s!=='idle'))},onStatus:s=>{if(!locked)$('status').textContent=s},onText:(text,final,raw)=>{if(locked)return;if(passageView){if(final)passageView.speech(text,raw);return}$('entry').value=text;if(final){WMWordFeedback.render(wordFeedback,item()?.en||'',text);judge(true,true)}}});
+const mic=new WMSpeechInput.Session({prepare(){voice.stop()},target:()=>passageView?.expected||item()?.en||'',collectPhrases:()=>!!passageView?.expected,matchPhrase:text=>!!passageView?.matches(text),onState:s=>{WMStudyIcons.set($('mic'),s==='idle'?'mic':'stop',s==='idle'?'Read aloud':s==='listening'?'Stop recording':'Stop microphone');$('mic').setAttribute('aria-pressed',String(s!=='idle'))},onStatus:s=>{if(!locked)$('status').textContent=type==='passage'?s.split(' · ')[0]:s},onText:(text,final,raw)=>{if(locked)return;if(passageView){
+ const entry=$('entry');
+ entry.value=raw;
+ if(final)passageView.checkSpeaking(raw,true);
+ else passageView.clearFeedback();
+ return
+ }$('entry').value=text;if(final){WMWordFeedback.render(wordFeedback,item()?.en||'',text);judge(true,true)}}});
 function stop(){epoch++;audioEpoch++;clearTimeout(advanceTimer);voice.stop();void mic.cancel();clearTimeout(typed.timer)}
 async function listen(){
  const x=item();
- if(!x||locked)return;
+ if(!x||locked||passageView?.answered)return;
  if(skill==='speaking')usedListen=true;
  const t=++audioEpoch;
  voice.stop();
  await mic.cancel();
  if(t!==audioEpoch)return;
  const status=$('status');
- status.textContent='Loading audio · 正在准备语音';
+ status.textContent=type==='passage'?'Loading audio':'Loading audio · 正在准备语音';
  const parts=x.audioSegments?.map(text=>{
   const sound=WMA1Lesson.sounds.find(item=>item.en===text);
   return sound?{src:'audio/a1-lesson-1/'+sound.id+'.mp3'}:{text,locale:'en-GB'};
  }) || (skill==='writing'?[{text:x.en,locale:'en-GB'},{text:x.zh,locale:'zh-CN'}]:[{text:x.en,locale:'en-GB'}]);
- const onStart=()=>{if(t===audioEpoch)status.textContent='Playing · 正在播放'};
+ const onStart=()=>{if(t===audioEpoch)status.textContent=type==='passage'?'Playing':'Playing · 正在播放'};
  try{
   for(const part of parts){
    if(t!==audioEpoch)return;
@@ -43,13 +53,14 @@ async function listen(){
   }
   if(t===audioEpoch)status.textContent='';
  }catch(error){
-  if(t===audioEpoch&&error.name!=='AbortError')status.textContent='Tap Listen to play · 请点收听重试';
+  if(t===audioEpoch&&error.name!=='AbortError')status.textContent=type==='passage'?'Tap Listen to play':'Tap Listen to play · 请点收听重试';
  }
 }
 
 function selectQueue(only, target){
  persist();
  favoritesOnly=only;
+ filters[filterKey()]=only;
  const queue=items();
  index=target?Math.max(0,queue.findIndex(x=>store.key(type,x)===store.key(type,target))):only?0:indices[key()]||0;
  draw();
@@ -64,21 +75,34 @@ function openStudyList(kind){
  });
 }
 const learnedSplit=WMStudyTools.splitControl(learnedButton,()=>openStudyList('learned')),favoriteSplit=WMStudyTools.splitControl(favoriteButton,()=>openStudyList('favorites'));
-function updateTools(current){if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;const x=current||item(),counts=store.counts(type,stage[type]);learnedSplit.update('❤️ Learned',counts.learned,!x);favoriteSplit.update((x&&store.hasFavorite(type,x)?'⭐':'☆')+' Favorites',counts.favorites,!x);favoriteButton.setAttribute('aria-pressed',String(!!x&&store.hasFavorite(type,x)));filterButton.textContent='All items · 普通练习';filterButton.hidden=!favoritesOnly;countLabel.classList.toggle('is-favorites',favoritesOnly);countLabel.setAttribute('aria-label',favoritesOnly?'Favorites · 收藏练习':'Regular practice · 普通练习');countLabel.textContent=(x?index+1:0)+' / '+items().length}
+function updateTools(current){if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;const x=current||item(),counts=store.counts(type,stage[type]);learnedSplit.update('❤️ Learned',counts.learned,!x);favoriteSplit.update((x&&store.hasFavorite(type,x)?'⭐':'☆')+' Favorites',counts.favorites,!x);favoriteButton.setAttribute('aria-pressed',String(!!x&&store.hasFavorite(type,x)));filterButton.textContent=type==='passage'?'All items':'All items · 普通练习';filterButton.hidden=!favoritesOnly;countLabel.classList.toggle('is-favorites',favoritesOnly);countLabel.setAttribute('aria-label',favoritesOnly?'Favorites · 收藏练习':'Regular practice · 普通练习');countLabel.textContent=(x?index+1:0)+' / '+items().length}
 learnedButton.onclick=()=>{const x=item();if(!x)return;try{store.mark(type,x)}catch{$('status').textContent='Unable to save Learned · 未能保存，请重试';return}stop();index=Math.min(index,Math.max(0,items().length-1));persist();draw()};
 favoriteButton.onclick=()=>{const x=item();if(!x)return;let added;try{added=store.toggle(type,x)}catch{$('status').textContent='Unable to save Favorites · 未能保存，请重试';return}if(favoritesOnly&&!added){stop();index=Math.min(index,Math.max(0,items().length-1));draw()}else updateTools()};
 filterButton.onclick=()=>selectQueue(false);
-function wrong(){if(locked)return;hadWrong=true;let groupingFailed=false;if(['reading','writing'].includes(skill)&&item()){try{store.favorite(type,item());updateTools()}catch{groupingFailed=true}}$('status').dataset.state='wrong';$('input-area').dataset.state='wrong';$('status').textContent=groupingFailed?'Please try again · 收藏未能保存，请稍后重试':'Please try again · 请修改后重答'}
+const manualFavorites=()=>type==='word'&&['listening','speaking','reading'].includes(skill);
+function wrong(){if(locked)return;hadWrong=true;let groupingFailed=false;if(!manualFavorites()&&['reading','writing'].includes(skill)&&item()){try{store.favorite(type,item());updateTools()}catch{groupingFailed=true}}$('status').dataset.state='wrong';$('input-area').dataset.state='wrong';$('status').textContent=groupingFailed?'Please try again · 收藏未能保存，请稍后重试':'Please try again · 请修改后重答'}
 function win(voiceInput=false){if(locked||!item())return;locked=true;saved.correct=(saved.correct||0)+1;const x=item(),before=index;stop();const t=epoch;let removed=false,saveFailed=false;
- if(['reading','writing'].includes(skill)||(skill==='speaking'&&voiceInput&&!hadWrong&&!usedManual&&!usedListen)){try{if(!hadWrong&&!usedShow){store.graduate(type,x);removed=true}else store.favorite(type,x)}catch{saveFailed=true}}
- $('status').dataset.state='correct';$('input-area').dataset.state='correct';$('status').textContent=saveFailed?'✓ Correct · 分组保存失败，请稍后重试':'✓ Correct!';$('listen').disabled=$('reveal').disabled=$('mic').disabled=true;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;const displayPosition=countLabel.textContent;updateTools(x);countLabel.textContent=displayPosition;learnedButton.disabled=favoriteButton.disabled=true;persist();
+ if(manualFavorites()||['reading','writing'].includes(skill)||(skill==='speaking'&&voiceInput&&!hadWrong&&!usedManual&&!usedListen)){
+  try{
+   if(!hadWrong&&!usedShow){store.graduate(type,x);removed=true}
+   else if(!manualFavorites())store.favorite(type,x)
+  }catch{saveFailed=true}
+ }
+ $('status').dataset.state='correct';$('input-area').dataset.state='correct';$('status').textContent=saveFailed?(type==='passage'?'✓ Correct! Progress could not be saved.':'✓ Correct · 分组保存失败，请稍后重试'):'✓ Correct!';$('listen').disabled=$('reveal').disabled=$('mic').disabled=true;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;const displayPosition=countLabel.textContent;updateTools(x);countLabel.textContent=displayPosition;learnedButton.disabled=favoriteButton.disabled=true;persist();
  try{window.WMPracticeAssessment?.record({skill,id:'stage:'+stage.id+':'+type+':'+x.id,word:x.en,level:stage.id,correct:true})}catch{}
  try{void window.WMStudySound?.ding()}catch{}
  advanceTimer=setTimeout(()=>{if(t!==epoch)return;const remaining=items();if(remaining.length){const currentIndex=remaining.findIndex(y=>store.key(type,y)===store.key(type,x));index=removed||currentIndex<0?Math.min(before,remaining.length-1):(currentIndex+1)%remaining.length}else index=0;persist();draw()},850);
 }
 
 function judge(final=false,voiceInput=false){if(locked||!item())return;const text=$('entry').value;if(norm(text)===norm(item().en)||(voiceInput&&window.WMSpeechMatch?.equivalent(text,item().en))){void win(voiceInput);return}if(final&&norm(text))wrong()}
-function typed(){if(locked||!item())return;if(skill==='speaking')usedManual=true;if(skill!=='writing'||revealed)WMWordFeedback.render(wordFeedback,item().en,$('entry').value);audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel();$('status').textContent='';$('status').dataset.state='';judge(false);clearTimeout(typed.timer);const target=words(item().en),actual=words($('entry').value);if(actual.length>=target.length&&actual.length&&actual.at(-1).length>=target.at(-1).length&&!norm(item().en).startsWith(norm($('entry').value)))typed.timer=setTimeout(()=>judge(true),1000)}
+function typed(){if(locked||!item()||passageView?.answered)return;
+ if(passageView){
+  usedManual=true;audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel();
+  $('status').textContent='';
+  passageView.checkSpeaking($('entry').value,false);
+  return;
+ }
+ if(skill==='speaking')usedManual=true;if(skill!=='writing'||revealed)WMWordFeedback.render(wordFeedback,item().en,$('entry').value);audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel();$('status').textContent='';$('status').dataset.state='';judge(false);clearTimeout(typed.timer);const target=words(item().en),actual=words($('entry').value);if(actual.length>=target.length&&actual.length&&actual.at(-1).length>=target.at(-1).length&&!norm(item().en).startsWith(norm($('entry').value)))typed.timer=setTimeout(()=>judge(true),1000)}
 function renderInstructionChecks(x){
  const answers=$('answers'), checks=[['action','题目要我做什么？'],['response','我要怎么答？']];
  const pteRows=window.WMUnifiedCourseData.units.filter(unit=>unit.kind==='pte').flatMap(unit=>unit.lessons);
@@ -106,18 +130,43 @@ function renderInstructionChecks(x){
  }
 }
 function draw(){const settle=window.WMViewportStability?.begin()||(()=>{});try{drawContent()}finally{settle()}}
-function drawContent(){document.querySelector('.pte-instruction-tip')?.remove();lessonView?.destroy();lessonView=null;if(passageView){passageView.destroy();passageView=null;}usedManual=false;usedListen=false;stop();actionRow.hidden=false;locked=false;usedShow=false;hadWrong=false;index=Math.max(0,Math.min(Math.max(0,items().length-1),index));const x=item();$('answers').replaceChildren();$('pieces').replaceChildren();$('built').replaceChildren();$('entry').value='';wordFeedback.replaceChildren();$('status').textContent='';$('status').dataset.state='';$('input-area').dataset.state='';revealed=false;WMStudyIcons.set($('reveal'),'eye','Show answer');$('reveal').setAttribute('aria-expanded','false');$('stage').value=stage.id;for(const opt of $('stage').options){const st=lib.byId[opt.value];opt.textContent=st.zh}$('stage').title=$('stage').selectedOptions[0]?.textContent||'Category';if($('level-label'))$('level-label').textContent=stage.en;if($('level-en'))$('level-en').textContent=stage.zh;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;$('position').textContent=stage.en+' · '+stage.zh;$('answer-progress').textContent=(x?index+1:0)+' / '+items().length;updateTools();$('listen').disabled=$('reveal').disabled=$('mic').disabled=!x;$('translation').textContent=x?.zh||'';$('translation').hidden=skill!=='speaking';$('prompt').hidden=false;$('prompt').lang=skill==='writing'?'zh-CN':'en';$('prompt').textContent=!x?(favoritesOnly?'No unlearned favorites · 暂无待练收藏':stage[type].length?'All learned · 全部已学会':'No material available · 暂无内容'):skill==='listening'?'Listen and choose the meaning · 听音选择句意':skill==='writing'?x.zh:x.en;WMStudyIcons.set($('listen'),'speaker','Listen again');WMStudyIcons.set($('prev'),'previous','Previous');WMStudyIcons.set($('next'),'next','Next');$('mic').hidden=skill!=='speaking';WMStudyIcons.set($('mic'),'mic','Read aloud');$('input-area').hidden=!x||!['speaking','writing'].includes(skill);$('entry').disabled=!x;$('reveal').hidden=skill==='speaking';if($('finish'))$('finish').hidden=true;document.querySelectorAll('#types button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.type===type)));if(!x){entryUI?.suspend();actionRow.hidden=true;return;}
+function mountEntry(){
+ if(!entryUI)entryUI=new WMPracticeUI.Entry($('entry'),{
+  clear:$('clear'),onManual:()=>{audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel()},
+  onChange:typed,isLocked:()=>locked||!!passageView?.answered,open:skill==='writing'
+ });
+ if($('entry').selectionStart!==0||$('entry').selectionEnd!==0)$('entry').setSelectionRange(0,0);
+ actionRow.replaceChildren(entryUI.toggle,$('listen'),$('reveal'),...(skill==='speaking'?[$('mic')]:[]));
+ WMStudyIcons.set(entryUI.toggle,'keyboard','English keyboard');
+ $('input-area').insertBefore(actionRow,wordFeedback);
+ entryUI.resume();
+ $('entry').oninput=typed;
+ $('entry').onkeydown=e=>{
+  if(e.key!=='Enter'||e.shiftKey)return;
+  e.preventDefault();
+  if(passageView)passageView.checkSpeaking($('entry').value,true);
+  else judge(true);
+ };
+}
+function drawContent(){document.querySelector('.pte-instruction-tip')?.remove();lessonView?.destroy();lessonView=null;if(passageView){questionHost.after(actionRow);passageView.destroy();passageView=null;}actionRow.classList.remove('a1-passage-controls');usedManual=false;usedListen=false;stop();actionRow.hidden=false;locked=false;usedShow=false;hadWrong=false;index=Math.max(0,Math.min(Math.max(0,items().length-1),index));const x=item();$('answers').replaceChildren();$('pieces').replaceChildren();$('built').replaceChildren();$('entry').value='';wordFeedback.replaceChildren();$('status').textContent='';$('status').dataset.state='';$('input-area').dataset.state='';revealed=false;WMStudyIcons.set($('reveal'),'eye','Show answer');$('reveal').setAttribute('aria-expanded','false');$('stage').value=stage.id;for(const opt of $('stage').options){const st=lib.byId[opt.value];opt.textContent=st.zh}$('stage').title=$('stage').selectedOptions[0]?.textContent||'Category';if($('level-label'))$('level-label').textContent=stage.en;if($('level-en'))$('level-en').textContent=stage.zh;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;$('position').textContent=stage.en+' · '+stage.zh;$('answer-progress').textContent=(x?index+1:0)+' / '+items().length;updateTools();$('listen').disabled=$('reveal').disabled=$('mic').disabled=!x;$('translation').textContent=x?.zh||'';$('translation').hidden=skill!=='speaking';$('prompt').hidden=false;$('prompt').lang=skill==='writing'?'zh-CN':'en';$('prompt').textContent=!x?(favoritesOnly?'No unlearned favorites · 暂无待练收藏':stage[type].length?'All learned · 全部已学会':'No material available · 暂无内容'):skill==='listening'?'Listen and choose the meaning · 听音选择句意':skill==='writing'?x.zh:x.en;WMStudyIcons.set($('listen'),'speaker','Listen again');WMStudyIcons.set($('prev'),'previous','Previous');WMStudyIcons.set($('next'),'next','Next');$('mic').hidden=skill!=='speaking';WMStudyIcons.set($('mic'),'mic','Read aloud');$('input-area').hidden=!x||!['speaking','writing'].includes(skill);$('entry').disabled=!x;$('reveal').hidden=skill==='speaking';if($('finish'))$('finish').hidden=true;document.querySelectorAll('#types button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.type===type)));if(!x){entryUI?.suspend();actionRow.hidden=true;return;}
 if(skill==='reading'){questionHost.after(actionRow);actionRow.replaceChildren($('listen'),$('reveal'),...(skill==='speaking'?[$('mic')]:[]));}
 if(type==='passage'&&x.lines&&window.WMA1PassagePractice){
- entryUI?.destroy();entryUI=null;
- $('input-area').hidden=true;$('prompt').hidden=true;$('translation').hidden=true;
- questionHost.after(actionRow);
- actionRow.replaceChildren($('listen'),$('reveal'),...(skill==='speaking'?[$('mic')]:[]));
+ $('prompt').hidden=true;$('translation').hidden=true;
  $('reveal').hidden=false;
  WMStudyIcons.set($('reveal'),'eye','Show meaning');
+ const speaking=skill==='speaking';
  passageView=window.WMA1PassagePractice.mount({host:$('answers'),transcriptHost:questionHost,passage:x,skill,
+  entryArea:speaking?$('input-area'):null,
   onManual(){usedManual=true;if(mic.state!=='idle')void mic.cancel()},
-  onComplete(wrongAnswer){hadWrong=wrongAnswer;void win(skill==='speaking')}});
+  onNext(){if(speaking){stop();$('entry').value='';$('status').textContent='';}},
+  onComplete(wrongAnswer){hadWrong=wrongAnswer;void win(speaking&&!usedManual)}});
+ if(speaking)mountEntry();
+ else {
+  entryUI?.destroy();entryUI=null;$('input-area').hidden=true;
+  actionRow.replaceChildren($('listen'),$('reveal'));
+  actionRow.classList.add('a1-passage-controls');
+  passageView.controls.replaceWith(actionRow);
+ }
  persist();return;
 }
 if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&x.guidedLesson){
@@ -125,6 +174,6 @@ if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&x.guidedLe
  lessonView=WMGuidedWriting.mount({host:$('answers'),id:x.guidedLesson,onRestart:draw,onComplete:({restored=false}={})=>{if(locked)return;locked=true;if(!restored)saved.correct=(saved.correct||0)+1;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;$('status').textContent='✓ Lesson complete · 本课学习完成';$('status').dataset.state='correct';learnedButton.disabled=favoriteButton.disabled=true;persist();const t=epoch;advanceTimer=setTimeout(()=>{if(t!==epoch)return;const list=items();index=list.length?(index+1)%list.length:0;persist();draw()},850)}});persist();return;
  }
  if(skill==='reading'&&x.checks){renderInstructionChecks(x);persist();return}
- if(['listening','reading'].includes(skill)){const candidates=shuffle(stage[type].filter(y=>y.zh!==x.zh)),unique=[x.zh];for(const c of candidates){if(!unique.includes(c.zh))unique.push(c.zh);if(unique.length===4)break}for(const zh of shuffle(unique)){const b=document.createElement('button');b.type='button';b.className='answer rs-choice';b.textContent=zh;b.onclick=()=>{if(locked)return;document.querySelectorAll('#answers button').forEach(n=>delete n.dataset.state);if(zh===x.zh){b.dataset.state='correct';void win()}else{b.dataset.state='wrong';wrong()}};$('answers').append(b)}}else{if(!entryUI)entryUI=new WMPracticeUI.Entry($('entry'),{clear:$('clear'),onManual:()=>{audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel()},onChange:typed,isLocked:()=>locked,open:skill==='writing'});if($('entry').selectionStart!==0||$('entry').selectionEnd!==0)$('entry').setSelectionRange(0,0);actionRow.replaceChildren(entryUI.toggle,$('listen'),...(skill==='speaking'?[$('reveal'),$('mic')]:[$('reveal')]));WMStudyIcons.set(entryUI.toggle,'keyboard','English keyboard');WMStudyIcons.set($('reveal'),'eye','Show answer');$('input-area').insertBefore(actionRow,wordFeedback);entryUI.resume();$('entry').oninput=typed;$('entry').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();judge(true)}}}
+ if(['listening','reading'].includes(skill)){const candidates=shuffle(stage[type].filter(y=>y.zh!==x.zh)),unique=[x.zh];for(const c of candidates){if(!unique.includes(c.zh))unique.push(c.zh);if(unique.length===4)break}for(const zh of shuffle(unique)){const b=document.createElement('button');b.type='button';b.className='answer rs-choice';b.textContent=zh;b.onclick=()=>{if(locked)return;document.querySelectorAll('#answers button').forEach(n=>delete n.dataset.state);if(zh===x.zh){b.dataset.state='correct';void win()}else{b.dataset.state='wrong';wrong()}};$('answers').append(b)}}else mountEntry();
 persist();if(skill==='reading'||(skill==='writing'&&!WMMicrosoftVoice.needsOutputRestore()))void listen();}
-for(const s of lib.stages){const o=document.createElement('option');o.value=s.id;o.textContent=s.zh;$('stage').append(o)}for(const t of lib.types){const b=document.createElement('button');b.type='button';b.dataset.type=t;b.innerHTML=names[t][0]+'<small>'+({listening:'听',speaking:'说',reading:'读',writing:'写'})[skill]+names[t][1]+'</small>';b.onclick=()=>{persist();type=t;index=indices[key()]||0;draw()};$('types').append(b)}$('stage').onchange=()=>{persist();stage=lib.byId[$('stage').value];index=indices[key()]||0;draw()};$('listen').onclick=listen;$('mic').onclick=()=>{if(!locked&&item())mic.toggle()};$('reveal').onclick=()=>{const x=item();if(!x||locked)return;if(!revealed)usedShow=true;revealed=!revealed;if(passageView){passageView.showMeanings(revealed);$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide meaning':'Show meaning');return;}$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide answer':'Show answer');$('prompt').lang=skill==='writing'&&!revealed?'zh-CN':'en';$('prompt').textContent=revealed?x.en:skill==='listening'?'Listen and choose the meaning · 听音选择句意':skill==='writing'?x.zh:x.en;$('translation').textContent=x.zh;$('translation').hidden=!(revealed||skill==='speaking');if(skill==='writing'){if(revealed)WMWordFeedback.render(wordFeedback,x.en,$('entry').value);else wordFeedback.replaceChildren()}};for(const [id,d]of [['prev',-1],['next',1]])$(id).onclick=()=>{if(!items().length)return;index=(index+d+items().length)%items().length;draw()};window.addEventListener('pagehide',()=>{persist();lessonView?.destroy();stop()});window.addEventListener('pageshow',e=>{if(e.persisted){store.refresh();draw()}});$('stage').value=stage.id;WMA1LessonNumber($('stage'),$('stage').parentElement);index=indices[key()]||0;if(directPTE&&type==='sentence'){const first=items().findIndex(x=>x.checks&&x.classroomLevel===requested);if(first>=0)index=first}if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&params.get('lesson')){const at=items().findIndex(x=>x.guidedLesson===params.get('lesson'));if(at>=0)index=at}draw();window.WMStagePracticeDebug={get state(){return {skill,stage:stage.id,type,index,locked,remaining:items().length,current:item()?.en,favoritesOnly,usedShow,hadWrong,keyboardOpen:!!entryUI?.opened,usedManual,usedListen,guidedLesson:lessonView?.state,counts:store.counts(type,stage[type])}},judge,listen};})();
+for(const s of lib.stages){const o=document.createElement('option');o.value=s.id;o.textContent=s.zh;$('stage').append(o)}for(const t of lib.types){const b=document.createElement('button');b.type='button';b.dataset.type=t;b.innerHTML=names[t][0]+'<small>'+({listening:'听',speaking:'说',reading:'读',writing:'写'})[skill]+names[t][1]+'</small>';b.onclick=()=>{persist();type=t;favoritesOnly=filters[filterKey()]===true;index=indices[key()]||0;draw()};$('types').append(b)}$('stage').onchange=()=>{persist();stage=lib.byId[$('stage').value];favoritesOnly=filters[filterKey()]===true;index=indices[key()]||0;draw()};$('listen').onclick=listen;$('mic').onclick=()=>{if(!locked&&item()&&!passageView?.answered)mic.toggle()};$('reveal').onclick=()=>{const x=item();if(!x||locked)return;if(!revealed)usedShow=true;revealed=!revealed;if(passageView){passageView.showMeanings(revealed);$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide meaning':'Show meaning');return;}$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide answer':'Show answer');$('prompt').lang=skill==='writing'&&!revealed?'zh-CN':'en';$('prompt').textContent=revealed?x.en:skill==='listening'?'Listen and choose the meaning · 听音选择句意':skill==='writing'?x.zh:x.en;$('translation').textContent=x.zh;$('translation').hidden=!(revealed||skill==='speaking');if(skill==='writing'){if(revealed)WMWordFeedback.render(wordFeedback,x.en,$('entry').value);else wordFeedback.replaceChildren()}};for(const [id,d]of [['prev',-1],['next',1]])$(id).onclick=()=>{if(!items().length)return;index=(index+d+items().length)%items().length;draw()};window.addEventListener('pagehide',()=>{persist();lessonView?.destroy();stop()});window.addEventListener('pageshow',e=>{if(e.persisted){store.refresh();draw()}});$('stage').value=stage.id;WMA1LessonNumber($('stage'),$('stage').parentElement);index=indices[key()]||0;if(directPTE&&type==='sentence'){const first=items().findIndex(x=>x.checks&&x.classroomLevel===requested);if(first>=0)index=first}if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&params.get('lesson')){const at=items().findIndex(x=>x.guidedLesson===params.get('lesson'));if(at>=0)index=at}draw();window.WMStagePracticeDebug={get state(){return {skill,stage:stage.id,type,index,locked,remaining:items().length,current:item()?.en,favoritesOnly,usedShow,hadWrong,keyboardOpen:!!entryUI?.opened,usedManual,usedListen,guidedLesson:lessonView?.state,counts:store.counts(type,stage[type])}},judge,listen};})();

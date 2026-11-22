@@ -38,6 +38,10 @@ class MatchGame {
   const sameRound = snapshot?.schema === 6427 && snapshot.courseId === data.courseId &&
    snapshot.level === this.level && Array.isArray(snapshot.levelWords) && Array.isArray(snapshot.done) &&
    Number.isSafeInteger(snapshot.score) && Number.isSafeInteger(snapshot.rng) && Number.isSafeInteger(snapshot.serial);
+  if (sameRound && snapshot.finished) {
+   this.s = JSON.parse(JSON.stringify(snapshot));
+   return;
+  }
   if (sameRound && snapshot.batchFormat === batchFormat && Array.isArray(snapshot.queue) &&
       words.length === snapshot.levelWords.length && words.every(word => snapshot.levelWords.includes(word))) {
    this.s = JSON.parse(JSON.stringify(snapshot));
