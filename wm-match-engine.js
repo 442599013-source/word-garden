@@ -24,6 +24,9 @@ class MatchGame {
       words.length === snapshot.levelWords.length && words.every(word => snapshot.levelWords.includes(word))) {
    this.s = JSON.parse(JSON.stringify(snapshot));
    this.s.meanings = {...meanings, ...this.s.meanings, ...this.plan.meanings};
+   if (!this.s.finished && this.s.board.length < boardCapacity) {
+    this.deal(boardCapacity - this.s.board.length);
+   }
    return;
   }
 
@@ -57,7 +60,7 @@ class MatchGame {
    const tiles = toDeal.slice(offset, offset + batchSize).flatMap(word => this.pair(word, batch));
    this.s.queue.push(...this.shuffled(tiles));
   }
-  this.deal(batchSize * 2);
+  this.deal(boardCapacity);
   this.finishIfCleared();
  }
 
