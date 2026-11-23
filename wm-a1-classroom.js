@@ -11,7 +11,6 @@
     catch{return {}}
   }
   function resumeLesson(){
-    const match=read('wm-wordmatch-v35::'+lesson.id);
     const quiz=read(lesson.id+':classification');
     const firstQuizComplete=[
       ['letters','请选择元音字母',lesson.letters],
@@ -25,8 +24,7 @@
       ));
     });
     return available.find(({number})=>!(
-      match.completed?.[number]===true || match.rounds?.[number]?.finished===true ||
-      match.completedRounds?.[number]?.finished===true || number===1&&firstQuizComplete
+      number===1?firstQuizComplete:window.WMA1Lesson2Quiz?.complete()
     ))?.number||available.at(-1).number;
   }
 

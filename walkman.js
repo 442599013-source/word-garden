@@ -91,7 +91,7 @@ function progressKey(){return favoritesOnly?'favorites:'+type+':'+$('category').
 function scopeItems(){const list=(catalog?.books||[]).filter(b=>b.type===type&&b.category===$('category').value).flatMap(b=>b.items||[]);return favoritesOnly&&reviewScope.length?reviewScope:list.length?list:book?.allItems||[]}
 
 const progress=saved.progress||{},stats=saved.stats||{plays:0,wordPlays:0,uniqueWords:{}};stats.uniqueWords??={};
-function persist(){try{C.write(KEY,{type,category:$('category').value,bookId:book?.id,progress,stats,filters,repeat:$('repeat').value,speed:$('speed').value,loop:$('loop').value})}catch{$('status').textContent='进度保存失败，请检查浏览器存储空间'}}
+function persist(){try{C.write(KEY,{type,category:$('category').value,bookId:book?.id,progress,stats,filters,repeat:$('repeat').value,speed:$('speed').value,loop:$('loop').value,spell:$('spell').value})}catch{$('status').textContent='进度保存失败，请检查浏览器存储空间'}}
 function stop(){running=false;paused=false;segmentActive=false;generation++;voice.stop();transport()}
 function counts(){$('stats').textContent='Learned words · 已学会单词：'+WMStudyTools.learnedWords('listening').size}
 function findPassage(item){
@@ -152,7 +152,7 @@ async function listBooks(prefer,{review=false,target}={}){
   if(token===loadGeneration){loading=false;show()}
  }
 }
-function tabs(){C.types.forEach(t=>{const b=document.createElement('button');const zh=document.createElement('span'),en=document.createElement('small');zh.className='type-zh';zh.textContent=names[t][0];en.textContent=names[t][1];b.append(en,zh);b.dataset.type=t;b.setAttribute('aria-pressed',String(t===type));b.onclick=()=>{stop();type=t;restoreFilter();syncLessonView();document.querySelectorAll('#types button').forEach((x,i)=>x.setAttribute('aria-pressed',String(C.types[i]===type)));listBooks();persist()};$('types').append(b)})}
+function tabs(){C.types.forEach(t=>{const b=document.createElement('button');const zh=document.createElement('span'),en=document.createElement('small');zh.className='type-zh';zh.textContent=names[t][0];en.textContent=names[t][1];b.append(en,zh);b.dataset.type=t;b.setAttribute('aria-pressed',String(t===type));b.onclick=()=>{stop();type=t;$('spell-setting').hidden=type!=='word';restoreFilter();syncLessonView();document.querySelectorAll('#types button').forEach((x,i)=>x.setAttribute('aria-pressed',String(C.types[i]===type)));listBooks();persist()};$('types').append(b)})}
 function audioParts(item){
  const passage=type==='passage'&&findPassage(item);
  if(passage)return passage.lines.flatMap(([en,zh])=>[
@@ -162,7 +162,10 @@ function audioParts(item){
   }),
   {text:zh,lang:'zh-CN'}
  ]);
- return window.WMListeningLessons?.legacyAudio(item)||[{text:item.en,lang:'en-GB'},{text:item.zh,lang:'zh-CN'}];
+ const parts=window.WMListeningLessons?.legacyAudio(item)||[{text:item.en,lang:'en-GB'},{text:item.zh,lang:'zh-CN'}];
+ if(type!=='word'||$('spell').value!=='on')return parts;
+ const characters=item.en.match(/[A-Za-z]/g)||[];
+ return characters.length?[parts[0],{text:characters.map(letter=>letter.toUpperCase()).join(', '),lang:'en-GB'},...parts.slice(1)]:parts;
 }
 async function play(){if(running){paused=!paused;if(paused){$('audio').pause();transport();$('status').textContent='Paused · 已暂停'}else{
  if(segmentActive){
@@ -179,6 +182,9 @@ $('favorite').onclick=()=>{const item=book?.items[index];if(!item)return;let add
 $('favorites-only').onclick=()=>void selectQueue(false);
 $('category').onchange=()=>{restoreFilter();syncLessonView();void listBooks()};for(const id of ['repeat','speed','loop']){$(id).value=saved[id]||$(id).value;$(id).onchange=()=>{if(id==='speed')$('audio').playbackRate=Number($('speed').value);persist()}}
 function applySleep(){clearTimeout(timer);const mins=Number($('sleep').value);deadline=mins?Date.now()+mins*60000:0;if(!deadline){$('timer-status').textContent='Sleep timer off · 已取消定时';return}timer=setTimeout(()=>{deadline=0;stop();lessonView?.stop();$('sleep').value='0';$('timer-status').textContent='Timer ended · 定时已停止';$('status').textContent='Timer ended · 定时已停止'},Math.max(0,deadline-Date.now()));$('timer-status').textContent='Stops at '+new Date(deadline).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})+' · 将在此时停止';}
+$('spell').value=saved.spell==='on'?'on':'off';
+$('spell-setting').hidden=type!=='word';
+$('spell').onchange=persist;
 $('sleep').onchange=applySleep;
 document.addEventListener('visibilitychange',()=>{if(deadline&&Date.now()>=deadline){stop();lessonView?.stop();$('status').textContent='Timer ended · 定时已停止'}});window.addEventListener('pagehide',()=>{persist();stop();lessonView?.stop()});window.addEventListener('pageshow',e=>{if(e.persisted){studyStore.refresh();listBooks(book?.id)}});
 try{catalog=window.WMKindergartenListening129;if(!catalog?.books?.length)throw Error('听力内容未加载，请刷新重试');

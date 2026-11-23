@@ -126,9 +126,63 @@ function listDialog({store,type,items,kind,onReview,onAll,onChanged,options,init
  close.focus({preventScroll:true});
 }
 
-let context=null;
-function audio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!context||context.state==='closed')context=new C();return context}
-function unlock(){try{const c=audio();if(c?.state==='suspended')void c.resume().catch(()=>{})}catch{}}
-async function ding(){try{const c=audio();if(!c)return false;if(c.state==='suspended')await c.resume();if(c.state!=='running')return false;const start=c.currentTime;for(const [frequency,volume]of [[1046.5,.16],[2093,.04]]){const oscillator=c.createOscillator(),gain=c.createGain();oscillator.type='sine';oscillator.frequency.value=frequency;gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(volume,start+.012);gain.gain.exponentialRampToValueAtTime(.0001,start+.23);oscillator.connect(gain);gain.connect(c.destination);oscillator.onended=()=>{oscillator.disconnect();gain.disconnect()};oscillator.start(start);oscillator.stop(start+.25)}return true}catch{return false}}
-document.addEventListener('pointerdown',unlock,{passive:true});document.addEventListener('keydown',unlock,{passive:true});document.addEventListener('touchend',unlock,{passive:true});document.addEventListener('click',unlock,{passive:true});window.WMStudyTools={Store,normalize,learnedWords,matchFavorites,splitControl,listDialog};window.WMStudySound={ding,unlock};
+let context=null,backup=null;
+function audio(){
+ const AudioContext=window.AudioContext||window.webkitAudioContext;
+ if(!AudioContext)return null;
+ if(!context||context.state==='closed')context=new AudioContext();
+ return context;
+}
+function fallbackTone(){
+ if(!backup&&typeof window.Audio==='function'){
+  backup=new window.Audio('audio/study-correct.wav');
+  backup.preload='auto';
+ }
+ return backup;
+}
+function unlock(){
+ try{
+  fallbackTone();
+  const c=audio();
+  if(c&&c.state!=='running')void c.resume().catch(()=>{});
+ }catch{}
+}
+async function playBackup(){
+ try{
+  const player=fallbackTone();
+  if(!player)return false;
+  player.currentTime=0;
+  await player.play();
+  return true;
+ }catch{return false}
+}
+async function ding(){
+ try{
+  const c=audio();
+  if(!c||c.state!=='running'){
+   // Use the current answer tap for playback when a backgrounded context is still resuming.
+   if(c)void c.resume().catch(()=>{});
+   return playBackup();
+  }
+  const start=c.currentTime;
+  for(const [frequency,volume] of [[1046.5,.16],[2093,.04]]){
+   const oscillator=c.createOscillator(),gain=c.createGain();
+   oscillator.frequency.value=frequency;
+   gain.gain.setValueAtTime(.0001,start);
+   gain.gain.exponentialRampToValueAtTime(volume,start+.012);
+   gain.gain.exponentialRampToValueAtTime(.0001,start+.23);
+   oscillator.connect(gain);gain.connect(c.destination);
+   oscillator.onended=()=>{oscillator.disconnect();gain.disconnect()};
+   oscillator.start(start);oscillator.stop(start+.25);
+  }
+  return true;
+ }catch{return playBackup()}
+}
+document.addEventListener('pointerdown',unlock,{passive:true});
+document.addEventListener('keydown',unlock,{passive:true});
+document.addEventListener('touchend',unlock,{passive:true});
+document.addEventListener('click',unlock,{passive:true});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)unlock()});
+window.addEventListener('pageshow',unlock);
+window.WMStudyTools={Store,normalize,learnedWords,matchFavorites,splitControl,listDialog};window.WMStudySound={ding,unlock};
 })();

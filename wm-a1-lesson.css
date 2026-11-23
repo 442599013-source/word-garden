@@ -84,3 +84,5 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-comparison summary { cursor:pointer; font-weight:700; }
 .a1-onset-example-row,.a1-example-sound { display:flex; align-items:center; flex-wrap:wrap; gap:.35rem; margin:.35rem 0; }
 .a1-example-sound { display:inline-flex; margin-inline-end:.65rem; }
+
+.a1-onset-heading { align-items:flex-start; }

@@ -113,7 +113,6 @@
         summary.push({id:sound.id},chinese(name+'音素'),...items.map(item=>({id:item.id})));
       }
       const id=narration('2yy2-letter-'+letter,[english(letter.toUpperCase()),chinese(explanation),...summary]);
-      detail.append(control('朗读 '+letter.toUpperCase()+' 的对比',[id],{text:'听这一组对比',className:'a1-button'}));
       compare.append(detail);
       compareIds.push(id);
     }
@@ -123,12 +122,12 @@
       const description='加一个跨课例子：use 和 up 都以字母 U 开头。use 的首音是 /j/，属于辅音。第一课的 up 先听到 /ʌ/，属于元音。';
       const id=narration('2yy2-letter-u',[chinese(description),{id:use.id},{id:sounds.get('j').id},{id:up.id},{id:sounds.get('ʌ').id}]);
       detail.append(node('summary','U · 和第一课对比'),node('p',description),
-        example('use','j',use.id),example('up','ʌ',up.id),
-        control('朗读 U 的对比',[id],{text:'听这一组对比',className:'a1-button'}));
+        example('use','j',use.id),example('up','ʌ',up.id));
       compare.append(detail);
       compareIds.push(id);
     }
 
+    compare.firstChild.append(control('朗读首字母对比',compareIds));
     const categoryIds=[];
     const sections=[];
     for(const [category,label] of Object.entries(lesson.labels)){
@@ -147,7 +146,7 @@
         const header=node('div','','a1-onset-heading');
         const symbol=node('h3');
         symbol.append(control('听首音 /'+ipa+'/',[sound.id],{text:'/'+ipa+'/',className:'a1-ipa-touch'}));
-        header.append(symbol,control('朗读 /'+ipa+'/ 组',[id],{text:'听整组',className:'a1-button'}));
+        header.append(symbol,control('朗读 /'+ipa+'/ 组',[id]));
         group.append(header,node('p',guidance[ipa]));
         const grid=node('div','','a1-card-grid a1-onset-cards');
         for(const item of list){
@@ -171,7 +170,9 @@
     title.append(node('h1',heading.titleZh+' · '+lesson.topic),control('朗读整课',[introId,...compareIds,...categoryIds]));
     const practice=node('a','去第二关魔法配对','a1-button');
     practice.href='word-match.html?level=2&from=journey';
-    root.append(node('p',heading.code+' · Magic Classroom','a1-kicker'),title,status,introBlock,compare,...sections,practice);
+    root.append(node('p',heading.code+' · Magic Classroom','a1-kicker'),title,status,introBlock,compare,...sections);
+    WMA1Lesson2Quiz.mount(root,{control,stop:()=>{audio.stop();request++;paint(active,false);active=null}});
+    root.append(practice);
   }
   window.WMA1Lesson2Classroom={mount};
 })();

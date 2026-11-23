@@ -18,7 +18,7 @@
     ['assessment','Advancement Mission','课堂考核','☆']
   ];
   for(const [id,en,zh,icon] of entries){
-    const available=lesson&&(id!=='assessment'||lesson.number===1);
+    const available=!!lesson;
     const card=document.createElement(available?'a':'div');
     card.className='advance-card';
     card.dataset.activity=id;

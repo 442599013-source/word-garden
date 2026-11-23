@@ -146,7 +146,7 @@ favoriteButton.onclick=()=>{const x=item();if(!x)return;let added;try{added=stor
 filterButton.onclick=()=>selectQueue(false);
 const manualFavorites=()=>type==='word'&&['listening','speaking','reading'].includes(skill);
 function wrong(){if(locked)return;hadWrong=true;let groupingFailed=false;if(!manualFavorites()&&['reading','writing'].includes(skill)&&item()){try{store.favorite(type,item());updateTools()}catch{groupingFailed=true}}$('status').dataset.state='wrong';$('input-area').dataset.state='wrong';$('status').textContent=groupingFailed?'Please try again · 收藏未能保存，请稍后重试':'Please try again · 请修改后重答'}
-function win(voiceInput=false){if(locked||!item())return;locked=true;saved.correct=(saved.correct||0)+1;const x=item(),before=index;stop();const t=epoch;let removed=false,saveFailed=false;
+function win(voiceInput=false){if(locked||!item())return;locked=true;saved.correct=(saved.correct||0)+1;const x=item(),before=index;stop();void window.WMStudySound?.ding();const t=epoch;let removed=false,saveFailed=false;
  if(manualFavorites()||['reading','writing'].includes(skill)||(skill==='speaking'&&voiceInput&&!hadWrong&&!usedManual&&!usedListen)){
   try{
    if(!hadWrong&&!usedShow){store.graduate(type,x);removed=true}
@@ -155,7 +155,6 @@ function win(voiceInput=false){if(locked||!item())return;locked=true;saved.corre
  }
  $('status').dataset.state='correct';$('input-area').dataset.state='correct';$('status').textContent=saveFailed?(type==='passage'?'✓ Correct! Progress could not be saved.':'✓ Correct · 分组保存失败，请稍后重试'):'✓ Correct!';$('listen').disabled=$('reveal').disabled=$('mic').disabled=true;syncProgressActions();if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;const displayPosition=countLabel.textContent;updateTools(x);countLabel.textContent=displayPosition;learnedButton.disabled=favoriteButton.disabled=true;persist();
  try{window.WMPracticeAssessment?.record({skill,id:'stage:'+stage.id+':'+type+':'+x.id,word:x.en,level:stage.id,correct:true})}catch{}
- try{void window.WMStudySound?.ding()}catch{}
  advanceTimer=setTimeout(()=>{if(t!==epoch)return;const remaining=items();if(remaining.length){const currentIndex=remaining.findIndex(y=>store.key(type,y)===store.key(type,x));index=removed||currentIndex<0?Math.min(before,remaining.length-1):(currentIndex+1)%remaining.length}else index=0;persist();draw()},850);
 }
 
@@ -168,6 +167,51 @@ function typed(){if(locked||!item()||passageView?.answered)return;
   return;
  }
  if(skill==='speaking')usedManual=true;if(skill!=='writing'||revealed)WMWordFeedback.render(wordFeedback,item().en,$('entry').value);audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel();$('status').textContent='';$('status').dataset.state='';judge(false);clearTimeout(typed.timer);const target=words(item().en),actual=words($('entry').value);if(actual.length>=target.length&&actual.length&&actual.at(-1).length>=target.at(-1).length&&!norm(item().en).startsWith(norm($('entry').value)))typed.timer=setTimeout(()=>judge(true),1000)}
+// Balance successive reading-word answers without exposing a predictable cycle.
+const readingAnswerCounts=[0,0,0,0];
+let lastReadingWord,lastReadingPosition=-1,readingStreak=0;
+const wordFamilies={
+ count:new Set('all any few lot per one two six ten'.split(' ')),
+ pronoun:new Set('he her him his it its me my our she us we who you'.split(' ')),
+ time:new Set('ago now often yet day end'.split(' ')),
+ place:new Set('far here near out off up on in way'.split(' ')),
+ quality:new Set('bad big dry fit hot ill low mad new odd old raw red sad shy wet'.split(' ')),
+ verbs:new Set('act add ask beg buy cry cut dig die eat fix fly fry get hit lay let lie mix nod opt owe pay put rip rob run say see sit sue try use win'.split(' '))
+};
+function wordFamily(value){
+ const word=value.toLowerCase();
+ for(const [family,words] of Object.entries(wordFamilies))if(words.has(word))return family;
+ return 'other';
+}
+function readingWordOptions(word,pool){
+ const simplify=text=>text.replace(/（[^）]*）|\([^)]*\)/g,'').trim();
+ const parts=text=>text.split(/[；;、，,／/]/u).map(simplify).filter(Boolean);
+ const accepted=parts(word.zh);
+ const candidates=shuffle(pool.filter(item=>item.zh!==word.zh&&!parts(item.zh).some(value=>accepted.includes(value))));
+ const family=wordFamily(word.en);
+ const sameFamily=candidates.filter(item=>wordFamily(item.en)===family);
+ const seen=new Set([word.zh]);
+ const distractors=[];
+ for(const item of [...sameFamily,...candidates]){
+  if(seen.has(item.zh))continue;
+  seen.add(item.zh);distractors.push(item.zh);
+  if(distractors.length===3)break;
+ }
+ const size=distractors.length+1;
+ if(word.id!==lastReadingWord||lastReadingPosition>=size){
+  const open=Array.from({length:size},(_,i)=>i).filter(i=>size===1||readingStreak<2||i!==lastReadingPosition);
+  const floor=Math.min(...open.map(i=>readingAnswerCounts[i]));
+  const eligible=open.filter(i=>readingAnswerCounts[i]<=floor+1);
+  const selected=eligible[Math.floor(Math.random()*eligible.length)];
+  readingAnswerCounts[selected]++;
+  readingStreak=selected===lastReadingPosition?readingStreak+1:1;
+  lastReadingPosition=selected;
+  lastReadingWord=word.id;
+ }
+ const options=shuffle(distractors);
+ options.splice(lastReadingPosition,0,word.zh);
+ return options;
+}
 function renderInstructionChecks(x){
  const answers=$('answers'), checks=[['action','题目要我做什么？'],['response','我要怎么答？']];
  const pteRows=window.WMUnifiedCourseData.units.filter(unit=>unit.kind==='pte').flatMap(unit=>unit.lessons);
@@ -251,6 +295,6 @@ if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&x.guidedLe
  lessonView=WMGuidedWriting.mount({host:$('answers'),id:x.guidedLesson,onRestart:draw,onComplete:({restored=false}={})=>{if(locked)return;locked=true;if(!restored)saved.correct=(saved.correct||0)+1;if($('total'))$('total').textContent=WMStudyTools.learnedWords(skill).size;$('status').textContent='✓ Lesson complete · 本课学习完成';$('status').dataset.state='correct';learnedButton.disabled=favoriteButton.disabled=true;persist();const t=epoch;advanceTimer=setTimeout(()=>{if(t!==epoch)return;const list=items();index=list.length?(index+1)%list.length:0;persist();draw()},850)}});persist();return;
  }
  if(skill==='reading'&&x.checks){renderInstructionChecks(x);persist();return}
- if(['listening','reading'].includes(skill)){const candidates=shuffle(stage[type].filter(y=>y.zh!==x.zh)),unique=[x.zh];for(const c of candidates){if(!unique.includes(c.zh))unique.push(c.zh);if(unique.length===4)break}for(const zh of shuffle(unique)){const b=document.createElement('button');b.type='button';b.className='answer rs-choice';b.textContent=zh;b.onclick=()=>{if(locked)return;document.querySelectorAll('#answers button').forEach(n=>delete n.dataset.state);if(zh===x.zh){b.dataset.state='correct';void win()}else{b.dataset.state='wrong';wrong()}};$('answers').append(b)}}else mountEntry();
+ if(['listening','reading'].includes(skill)){let options;if(skill==='reading'&&type==='word'){options=readingWordOptions(x,stage[type])}else{const candidates=shuffle(stage[type].filter(y=>y.zh!==x.zh)),unique=[x.zh];for(const c of candidates){if(!unique.includes(c.zh))unique.push(c.zh);if(unique.length===4)break}options=shuffle(unique)}for(const zh of options){const b=document.createElement('button');b.type='button';b.className='answer rs-choice';b.textContent=zh;b.onclick=()=>{if(locked)return;document.querySelectorAll('#answers button').forEach(n=>delete n.dataset.state);if(zh===x.zh){b.dataset.state='correct';void win()}else{b.dataset.state='wrong';wrong()}};$('answers').append(b)}}else mountEntry();
 persist();if(skill==='reading'||(skill==='writing'&&!WMMicrosoftVoice.needsOutputRestore()))void listen();}
 for(const s of lib.stages){const o=document.createElement('option');o.value=s.id;o.textContent=s.zh;$('stage').append(o)}for(const t of lib.types){const b=document.createElement('button');b.type='button';b.dataset.type=t;b.innerHTML=names[t][0]+'<small>'+({listening:'听',speaking:'说',reading:'读',writing:'写'})[skill]+names[t][1]+'</small>';b.onclick=()=>{persist();type=t;favoritesOnly=filters[filterKey()]===true;index=indices[key()]||0;draw()};$('types').append(b)}$('stage').onchange=()=>{persist();stage=lib.byId[$('stage').value];favoritesOnly=filters[filterKey()]===true;index=indices[key()]||0;draw()};$('listen').onclick=listen;$('mic').onclick=()=>{if(!locked&&item()&&!passageView?.answered)mic.toggle()};$('reveal').onclick=()=>{const x=item();if(!x||locked)return;if(!revealed)usedShow=true;revealed=!revealed;syncProgressActions();if(passageView){passageView.showMeanings(revealed);$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide meaning':'Show meaning');return;}$('reveal').setAttribute('aria-expanded',String(revealed));WMStudyIcons.set($('reveal'),'eye',revealed?'Hide answer':'Show answer');$('prompt').lang=skill==='writing'&&!revealed?'zh-CN':'en';$('prompt').textContent=revealed?x.en:skill==='listening'?'Listen and choose the meaning · 听音选择句意':skill==='writing'?x.zh:x.en;$('translation').textContent=x.zh;$('translation').hidden=!(revealed||skill==='speaking');if(skill==='writing'){if(revealed)WMWordFeedback.render(wordFeedback,x.en,$('entry').value);else wordFeedback.replaceChildren()}};for(const [id,d]of [['prev',-1],['next',1]])$(id).onclick=()=>navigate(d);window.addEventListener('pagehide',()=>{persist();lessonView?.destroy();stop()});window.addEventListener('pageshow',e=>{if(e.persisted){store.refresh();draw()}});$('stage').value=stage.id;WMA1LessonNumber($('stage'),$('stage').parentElement,()=>favoritesOnly);index=indices[key()]||0;if(favoritesOnly&&params.get('reviewWord')){index=Math.max(0,items().findIndex(x=>store.key(type,x)===store.key(type,{en:params.get('reviewWord')})))}if(directPTE&&type==='sentence'){const first=items().findIndex(x=>x.checks&&x.classroomLevel===requested);if(first>=0)index=first}if(skill==='writing'&&stage.stage==='kindergarten'&&type==='passage'&&params.get('lesson')){const at=items().findIndex(x=>x.guidedLesson===params.get('lesson'));if(at>=0)index=at}draw();window.WMStagePracticeDebug={get state(){return {skill,stage:stage.id,type,index,locked,remaining:items().length,current:item()?.en,favoritesOnly,usedShow,hadWrong,keyboardOpen:!!entryUI?.opened,usedManual,usedListen,guidedLesson:lessonView?.state,counts:store.counts(type,stage[type])}},judge,listen};})();
