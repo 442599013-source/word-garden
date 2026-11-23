@@ -46,12 +46,85 @@ class Store{
  unlearn(type,item){const next={...read(this.learnedKey)};delete next[this.key(type,item)];localStorage.setItem(this.learnedKey,JSON.stringify(next));this.learned=next;this.stamp('learned',this.key(type,item),false);changed()}
  favorite(type,item){this.refresh();const next={...this.favorites,[this.key(type,item)]:true};localStorage.setItem(this.favoriteKey,JSON.stringify(next));if(!this.favorites[this.key(type,item)])this.stamp('favorites',this.key(type,item));this.favorites=next}
  toggle(type,item){this.refresh();const next={...this.favorites},key=this.key(type,item);if(next[key])delete next[key];else next[key]=true;localStorage.setItem(this.favoriteKey,JSON.stringify(next));this.favorites=next;this.stamp('favorites',key,!!next[key]);return !!next[key]}
- remaining(type,items,only=false){if(only)return this.sorted(type,items,'favorites');this.refresh();return items.filter(x=>!this.hasLearned(type,x))}
- counts(type,items){this.refresh();const unique=[...new Map(items.map(x=>[this.key(type,x),x])).values()];return {learned:unique.filter(x=>this.hasLearned(type,x)).length,favorites:unique.filter(x=>this.hasFavorite(type,x)).length}}
+ remaining(type,items,only=false){if(only)return this.sorted(type,items,'favorites').filter(x=>!this.hasLearned(type,x));this.refresh();return items.filter(x=>!this.hasLearned(type,x))}
+ counts(type,items){this.refresh();const unique=[...new Map(items.map(x=>[this.key(type,x),x])).values()];return {learned:unique.filter(x=>this.hasLearned(type,x)).length,favorites:unique.filter(x=>this.hasFavorite(type,x)&&!this.hasLearned(type,x)).length}}
 }
 
 function splitControl(button,onCount){const box=document.createElement('div');box.className='wm-study-split';button.before(box);const count=document.createElement('button');count.type='button';count.className='wm-study-count';box.append(button,count);count.onclick=onCount;return {update(label,n,disabled=false){const parts=label.trim().split(/\s+/),symbol=document.createElement('span'),word=document.createElement('span');symbol.className='wm-study-label-icon';symbol.textContent=parts.shift();word.textContent=parts.join(' ');button.replaceChildren(symbol,word);button.disabled=disabled;count.textContent=Number(n).toLocaleString('en-US');count.setAttribute('aria-label','View '+label.replace(/[❤️⭐☆]/gu,'').trim()+' '+n)},count}}
-function listDialog({store,type,items,kind,onReview,onAll,onChanged}){const overlay=document.createElement('div');overlay.className='wm-study-list-overlay';const panel=document.createElement('section');panel.className='wm-study-list';panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');const title=document.createElement('h2');title.textContent=kind==='learned'?'Learned':'Favorites';title.id='wm-study-list-title';panel.setAttribute('aria-labelledby',title.id);const close=document.createElement('button');close.type='button';close.textContent='Close ×';const former=document.activeElement;function dismiss(){overlay.remove();former?.focus?.({preventScroll:true})}close.onclick=dismiss;panel.append(title,close);const all=document.createElement('button');all.type='button';all.textContent=kind==='favorites'?'Study all favorites · 学习全部收藏':'Regular practice · 普通练习';all.onclick=()=>{dismiss();onAll?.()};panel.append(all);const list=document.createElement('div');panel.append(list);function paint(){store.refresh();list.replaceChildren();const rows=store.sorted(type,items,kind);all.disabled=kind==='favorites'&&!rows.length;if(!rows.length){const empty=document.createElement('p');empty.textContent='No items';list.append(empty)}for(const x of rows){const row=document.createElement('div');row.className='wm-study-list-row';const label=document.createElement('span');label.textContent=x.en+' · '+(x.zh||'');const action=document.createElement('button');action.type='button';action.textContent=kind==='learned'?'Move to learning':'Study';action.onclick=()=>{try{if(kind==='learned'){store.unlearn(type,x);onChanged?.();paint()}else{dismiss();onReview?.(x)}}catch{action.textContent='Save failed · Retry'}};row.append(label,action);if(kind==='favorites'){const remove=document.createElement('button');remove.type='button';remove.textContent='Remove';remove.onclick=()=>{try{store.toggle(type,x);onChanged?.();paint()}catch{remove.textContent='Save failed · Retry'}};row.append(remove)}list.append(row)}}paint();overlay.append(panel);document.body.append(overlay);overlay.onclick=e=>{if(e.target===overlay)dismiss()};overlay.onkeydown=e=>{if(e.key==='Escape')dismiss();if(e.key==='Tab'){const controls=[...panel.querySelectorAll('button')],first=controls[0],last=controls.at(-1);if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}};close.focus({preventScroll:true})}
+function listDialog({store,type,items,kind,onReview,onAll,onChanged,options,initialScope,itemsForScope,itemLabel}){
+ const overlay=document.createElement('div'),panel=document.createElement('section');
+ overlay.className='wm-study-list-overlay';panel.className='wm-study-list';
+ panel.setAttribute('role','dialog');panel.setAttribute('aria-modal','true');
+ const title=document.createElement('h2');
+ title.textContent=kind==='learned'?'Learned':'Favorites';title.id='wm-study-list-title';
+ panel.setAttribute('aria-labelledby',title.id);
+ const former=document.activeElement;
+ function dismiss(){overlay.remove();former?.focus?.({preventScroll:true})}
+ function button(label,action){
+  const el=document.createElement('button');el.type='button';el.textContent=label;el.onclick=action;
+  return el;
+ }
+ const close=button('Close ×',dismiss);
+ panel.append(title,close);
+ let select;
+ if(options?.length){
+  select=document.createElement('select');select.setAttribute('aria-label','课次筛选');
+  for(const [value,label] of options){
+   const option=document.createElement('option');option.value=value;option.textContent=label;
+   select.append(option);
+  }
+  select.value=initialScope;
+  select.addEventListener('change',paint);
+  panel.append(select);
+ }
+ const all=button(kind==='favorites'?'学习所选收藏 · Study favorites':'普通练习 · Regular practice',()=>{
+  dismiss();onAll?.(select?.value);
+ });
+ const list=document.createElement('div');
+ panel.append(all,list);
+ function paint(){
+  const scope=select?.value, pool=scope?itemsForScope(scope):items;
+  const rows=kind==='favorites'?store.remaining(type,pool,true):store.sorted(type,pool,kind);
+  list.replaceChildren();
+  all.disabled=kind==='favorites'&&!rows.length;
+  if(!rows.length){
+   const empty=document.createElement('p');empty.textContent='No items · 暂无单词';list.append(empty);
+  }
+  for(const item of rows){
+   const row=document.createElement('div'), label=document.createElement('span');
+   row.className='wm-study-list-row';label.textContent=item.en+' · '+(item.zh||'');
+   const source=itemLabel?.(item);
+   if(source){
+    const note=document.createElement('small');note.className='study-lesson-source';note.textContent=source;label.append(note);
+   }
+   const action=button(kind==='learned'?'移回练习':'学习',()=>{
+    try{
+     if(kind==='learned'){store.unlearn(type,item);onChanged?.();paint()}
+     else{dismiss();onReview?.(item,scope)}
+    }catch{action.textContent='保存失败，请重试'}
+   });
+   row.append(label,action);
+   if(kind==='favorites'){
+    const remove=button('移出收藏',()=>{
+     try{store.toggle(type,item);onChanged?.();paint()}catch{remove.textContent='保存失败，请重试'}
+    });
+    row.append(remove);
+   }
+   list.append(row);
+  }
+ }
+ paint();overlay.append(panel);document.body.append(overlay);
+ overlay.onclick=e=>{if(e.target===overlay)dismiss()};
+ overlay.onkeydown=e=>{
+  if(e.key==='Escape')dismiss();
+  if(e.key==='Tab'){
+   const controls=[...panel.querySelectorAll('button:not(:disabled), select')],first=controls[0],last=controls.at(-1);
+   if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
+   else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
+  }
+ };
+ close.focus({preventScroll:true});
+}
 
 let context=null;
 function audio(){const C=window.AudioContext||window.webkitAudioContext;if(!C)return null;if(!context||context.state==='closed')context=new C();return context}

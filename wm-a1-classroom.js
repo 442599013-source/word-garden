@@ -2,7 +2,48 @@
   'use strict';
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
-  const requested = Number(new URLSearchParams(location.search).get('level') || 1);
+  const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||item.number===2&&window.WMA1Lesson2Classroom);
+  const parameters=new URLSearchParams(location.search);
+  const requested=Number(parameters.get('level') || (location.hash==='#a1-assessment'?1:resumeLesson()));
+
+  function read(key){
+    try{return JSON.parse(localStorage.getItem(key)||'null')||{}}
+    catch{return {}}
+  }
+  function resumeLesson(){
+    const match=read('wm-wordmatch-v35::'+lesson.id);
+    const quiz=read(lesson.id+':classification');
+    const firstQuizComplete=[
+      ['letters','请选择元音字母',lesson.letters],
+      ['sounds','请选择元音音素',lesson.sounds],
+      ['words','请选择以元音音素开头的单词',lesson.words]
+    ].every(([kind,title,items])=>{
+      const verified=quiz.verifiedQuestions?.[kind];
+      return Array.isArray(quiz[kind])&&items.every(item=>quiz[kind].includes(item.id)&&(
+        !quiz.verifiedQuestions ||
+        verified?.[item.id]===JSON.stringify([title,item.kind,item.en,item.ipa,item.group])
+      ));
+    });
+    return available.find(({number})=>!(
+      match.completed?.[number]===true || match.rounds?.[number]?.finished===true ||
+      match.completedRounds?.[number]?.finished===true || number===1&&firstQuizComplete
+    ))?.number||available.at(-1).number;
+  }
+
+  const back=document.querySelector('.a1-nav a');
+  if(back){
+    back.href='level-activities.html?level='+requested;
+    const picker=element('select');
+    picker.setAttribute('aria-label','课次');
+    for(const entry of available){
+      const option=element('option','第 '+entry.number+' 课 · '+entry.code);
+      option.value=String(entry.number);
+      picker.append(option);
+    }
+    picker.value=String(requested);
+    picker.onchange=()=>{ location.href='sentence-game.html?level='+picker.value; };
+    back.after(picker);
+  }
   if (requested === 2 && window.WMA1Lesson2Classroom) {
     window.WMA1Lesson2Classroom.mount(root);
     return;

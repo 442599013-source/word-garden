@@ -64,3 +64,23 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 
 .a1-assessment-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .7rem; }
 .a1-assessment-complete { color: #246b44; font-weight: 700; }
+
+.a1-nav { display:flex; align-items:center; justify-content:space-between; gap:.75rem; }
+.a1-nav select { max-width:60%; font:inherit; padding:.4rem; }
+.a1-onset-group { border-top:1px solid #dfd6c6; margin-top:1rem; padding-top:.8rem; }
+.a1-onset-group p { margin:.25rem 0 .5rem; }
+.a1-onset-heading { display:flex; align-items:center; justify-content:space-between; gap:.5rem; }
+.a1-onset-heading h3 { margin:0; }
+.a1-onset-cards { grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5rem),1fr)); }
+.a1-onset-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:.2rem; padding:.2rem; }
+.a1-ipa-touch,.a1-word-touch,.a1-compare-word {
+  font:inherit; color:#203b2d; cursor:pointer; border-radius:.45rem; min-height:2.6rem;
+}
+.a1-word-touch { background:transparent; border:0; min-width:0; font-weight:700; overflow-wrap:anywhere; }
+.a1-word-touch small { font-weight:400; }
+.a1-ipa-touch,.a1-compare-word { background:#f4f9f3; border:1px solid #8da595; padding:0 .42rem; }
+.a1-ipa-touch[aria-pressed=true],.a1-word-touch[aria-pressed=true],.a1-compare-word[aria-pressed=true] { background:#cde2d4; }
+.a1-comparison { border-top:1px solid #dfd6c6; margin:.65rem 0; padding-top:.5rem; }
+.a1-comparison summary { cursor:pointer; font-weight:700; }
+.a1-onset-example-row,.a1-example-sound { display:flex; align-items:center; flex-wrap:wrap; gap:.35rem; margin:.35rem 0; }
+.a1-example-sound { display:inline-flex; margin-inline-end:.65rem; }
