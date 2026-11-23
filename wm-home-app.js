@@ -120,14 +120,12 @@ function subpage(page, data){
  name='考试错题巩固练习';english='Exam Mistake Review';
  const mistakes=(data.examMistakes||[]);
  content=`<div class="inner-panel"><h3>考试错题记录：${mistakes.length} 道</h3><p class="secondary-info">只汇总正式期中、期末考试错题。考试完成后原考试页也会提供同题型巩固训练。</p>${mistakes.length?mistakes.slice(-30).reverse().map((q,i)=>`<div class="wm-exam-row"><div><strong>${escapeHTML(String(q.word||q.topic||q.type||'考试错题'))}</strong><small>正确答案：${escapeHTML(String(q.answer||q.cn||''))}</small></div></div>`).join(''):'<p class="secondary-info">尚无可回顾的历史错题；以前的考试没有保存逐题记录，不能自动恢复。</p>'}<button class="primary-action" type="button" data-route="journey">进入考试与错题训练</button></div>`;
- }else if(page==='register'){
- name='本机学习档案';english='Local Learning Profile';
- content=`<div class="inner-panel"><h3>邮箱注册 · Create Account</h3><label class="input-label" for="authEmail">邮箱 · Email</label><input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com"><label class="input-label" for="authPassword">密码 · Password（至少6位）</label><input id="authPassword" class="input" type="password" autocomplete="new-password" minlength="6" placeholder="Password"><button class="primary-action" type="button" data-auth="signup">注册并发送验证邮件<small>Register & Verify Email</small></button><button class="secondary-action" type="button" data-auth="google">使用 Google 一键登录 · Continue with Google</button><button class="secondary-action" type="button" data-route="login">已有账户？登录 · Log In</button><p id="authStatus" class="secondary-info" role="status">${escapeHTML(window.WMAuth?.status||'正在连接 Firebase…')}</p></div>`;
+ }else if(page==='register'||page==='login'){
+ name=window.WMAuth?.user?'账户':page==='register'?'注册':'登录';
+ english=window.WMAuth?.user?'Account':page==='register'?'Register':'Log In';
+ content=accountPanel(page);
  }else if(page==='journey'){
  name='成长之路';english='Level Up'; content='__JOURNEY__';
- }else if(page==='login'){
- name=data.nickname?'账户':'登录';english=data.nickname?'Account':'Log In';
- content=`<div class="inner-panel"><h3>邮箱账户 · Email Account</h3><p id="authUserInfo" class="secondary-info">${escapeHTML(window.WMAuth?.user?.email||'未登录 · Guest')}</p><label class="input-label" for="authEmail">邮箱 · Email</label><input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com"><label class="input-label" for="authPassword">密码 · Password</label><input id="authPassword" class="input" type="password" autocomplete="current-password" placeholder="Password"><button class="primary-action" type="button" data-auth="login">邮箱登录<small>Log In</small></button><button class="secondary-action" type="button" data-auth="google">使用 Google 一键登录 · Continue with Google</button><button class="secondary-action" type="button" data-route="register">注册<small>Register</small></button><button class="secondary-action" type="button" data-auth="reset">忘记密码 · Reset Password</button><button class="secondary-action" type="button" data-auth="verify">重发验证邮件 · Resend Verification</button><button class="secondary-action" type="button" data-auth="logout">退出登录 · Log Out</button><p id="authStatus" class="secondary-info" role="status">${escapeHTML(window.WMAuth?.status||'正在连接 Firebase…')}</p><p class="secondary-info">原有本机学习记录保留，账户登录不会清空记录。</p></div>`;
  }else if(page==='settings'){
  name='设置';english='Settings';
  content=`<div class="inner-panel"><div class="setting-row"><span>声音<small>Sound</small></span><button class="toggle" data-action="sound" type="button">${data.sound?'开启':'关闭'}<small>${data.sound?'On':'Off'}</small></button></div><label class="input-label" for="accent">英语口音 · English Accent</label><select id="accent" class="input"><option value="en-GB" ${data.accent==='en-GB'?'selected':''}>英式英语 · British English</option><option value="en-US" ${data.accent==='en-US'?'selected':''}>美式英语 · American English</option></select><label class="input-label" for="azureVoice" style="margin-top:12px">AI 英语配音角色 · English Voice</label><select id="azureVoice" class="input">${(data.accent==='en-GB'?[['en-GB-SoniaNeural','Sonia · 英式女声'],['en-GB-RyanNeural','Ryan · 英式男声']]:[['en-US-JennyNeural','Jenny · 美式女声'],['en-US-AriaNeural','Aria · 美式女声'],['en-US-GuyNeural','Guy · 美式男声']]).map(v=>`<option value="${v[0]}" ${data.azureVoice===v[0]?'selected':''}>${v[1]}</option>`).join('')}</select><label class="input-label" for="azureChineseVoice" style="margin-top:12px">AI 中文配音角色 · Chinese Voice</label><select id="azureChineseVoice" class="input">${[['zh-CN-XiaoxiaoNeural','晓晓 · 中文女声'],['zh-CN-XiaoyiNeural','晓伊 · 中文女声'],['zh-CN-YunxiNeural','云希 · 中文男声'],['zh-CN-YunjianNeural','云健 · 中文男声']].map(v=>`<option value="${v[0]}" ${data.azureChineseVoice===v[0]?'selected':''}>${v[1]}</option>`).join('')}</select><button type="button" class="secondary-action" data-action="voice-test">试听所选AI声音 · Preview Voice</button><label class="input-label" for="voiceSpeed" style="margin-top:12px">英语朗读速度 · Playback Speed</label><select id="voiceSpeed" class="input"><option value="0.75" ${data.voiceSpeed===0.75?'selected':''}>0.75× · 慢速 Slow</option><option value="0.9" ${data.voiceSpeed===0.9?'selected':''}>0.9× · 稍慢 Gentle</option><option value="1" ${data.voiceSpeed===1?'selected':''}>1.0× · 正常 Normal</option><option value="1.15" ${data.voiceSpeed===1.15?'selected':''}>1.15× · 稍快 Fast</option><option value="1.3" ${data.voiceSpeed===1.3?'selected':''}>1.3× · 快速 Faster</option></select><p class="secondary-info">Azure在线AI英语朗读：播放速度只影响播放，不重新生成音频；相同文本及配音角色共用云端缓存。</p></div>`;
@@ -243,58 +241,142 @@ const safeRead=()=>{try{return JSON.parse(localStorage.getItem(storageKey)||'{}'
 const stored=safeRead();
 const data={nickname:typeof stored.nickname==='string'?stored.nickname:'',sound:stored.sound!==false,accent:stored.accent==='en-GB'?'en-GB':'en-US',voiceChoice:typeof stored.voiceChoice==='string'?stored.voiceChoice:'',voiceSpeed:[0.75,0.9,1,1.15,1.3].includes(Number(stored.voiceSpeed))?Number(stored.voiceSpeed):1,learnedWords:Array.isArray(stored.learnedWords)?stored.learnedWords:[],examHistory:Array.isArray(stored.examHistory)?stored.examHistory:[],passedLevels:Array.isArray(stored.passedLevels)?stored.passedLevels:[],
  stage:stored.stage||null,wordsEliminated:Array.isArray(stored.learnedWords)?new Set(stored.learnedWords).size:0,examScores:Array.isArray(stored.examHistory)?stored.examHistory.map(x=>x.score):Array.isArray(stored.examScores)?stored.examScores:[],pteScores:stored.pteScores||{},azureVoice:stored.azureVoice||'',azureChineseVoice:stored.azureChineseVoice||'zh-CN-XiaoxiaoNeural',wordsSeen:Array.isArray(stored.wordsSeen)?stored.wordsSeen:[],studyDays:Array.isArray(stored.studyDays)?stored.studyDays:[],examMistakes:Array.isArray(stored.examMistakes)?stored.examMistakes:[]};
-// Firebase email registration, recovered from the earlier WordMatch implementation.
-// Configuration is loaded only from firebase-config.js (not the Azure speech secret).
-window.WMAuth={user:null,status:'正在连接 Firebase…'};
+const authReturnKey='wm-auth-return';
+window.WMAuth={user:null,status:'正在连接账户…',pending:false};
 let wmFirebase=null;
+let returnToAccount=false;
+try{
+ returnToAccount=sessionStorage.getItem(authReturnKey)==='1';
+ sessionStorage.removeItem(authReturnKey);
+}catch{}
+let page='home';
+
+function accountPanel(route){
+ const {user,status,pending}=window.WMAuth||{};
+ const message=`<p id="authStatus" class="secondary-info wm-auth-status" role="status">${escapeHTML(status||'')}</p>`;
+ if(user){
+  const verify=user.emailVerified?'':'<button class="secondary-action" type="button" data-auth="verify">重发验证邮件 · Resend verification</button>';
+  return `<section class="inner-panel wm-account" aria-label="账户"><p class="wm-auth-badge">✓ 已登录 · Signed in</p><p id="authUserInfo" class="wm-auth-email">${escapeHTML(user.email||user.displayName||'Google')}</p>${message}<div class="wm-auth-actions">${verify}<button class="secondary-action" type="button" data-auth="logout">退出登录 · Log out</button></div><p class="secondary-info">学习记录保存在本机。</p></section>`;
+ }
+ const register=route==='register';
+ const disabled=pending?' disabled':'';
+ const emailForm=`<label class="input-label" for="authEmail">邮箱 · Email</label><input id="authEmail" class="input" type="email" autocomplete="email" placeholder="you@example.com"><label class="input-label" for="authPassword">密码 · Password</label><input id="authPassword" class="input" type="password" autocomplete="${register?'new-password':'current-password'}"${register?' minlength="6"':''}><button class="secondary-action" type="button" data-auth="${register?'signup':'login'}"${disabled}>${register?'注册 · Register':'邮箱登录 · Email log in'}</button>`;
+ return `<section class="inner-panel wm-account" aria-label="账户">
+ <button class="primary-action wm-auth-google" type="button" data-auth="google"${disabled}>使用 Google 登录<small>Continue with Google</small></button>
+ ${message}
+ ${register?emailForm:`<details class="wm-auth-email-form"><summary>使用邮箱 · Use email</summary>${emailForm}<button class="secondary-action wm-auth-text" type="button" data-auth="reset"${disabled}>忘记密码 · Reset password</button></details>`}
+ <button class="secondary-action wm-auth-text" type="button" data-route="${register?'login':'register'}">${register?'已有账户？登录 · Log in':'注册账户 · Create account'}</button>
+ <p class="secondary-info">学习记录保存在本机。</p></section>`;
+}
+function authStatus(message) {
+ WMAuth.status=message;
+ const node=document.getElementById('authStatus');
+ if(node)node.textContent=message;
+}
+function syncAuthUser(user,message){
+ const previous=WMAuth.user;
+ WMAuth.user=user;
+ WMAuth.status=message||(user?(user.emailVerified?'':'请验证邮箱。'):'');
+ if(previous?.uid!==user?.uid||previous?.emailVerified!==user?.emailVerified){
+  if(page==='login'||page==='register'){
+   if(user&&page==='register')void navigate('login');
+   else drawFallback(page);
+   window.scrollTo({top:0,behavior:'instant'});
+  }else if(page==='home')drawHome();
+ }
+ authStatus(WMAuth.status);
+}
+function authError(error){
+ switch(error.code){
+  case 'auth/popup-closed-by-user':
+  case 'auth/cancelled-popup-request':
+   return '已取消 Google 登录。';
+  case 'auth/unauthorized-domain':
+   return '当前网站尚未获准使用 Google 登录。';
+  case 'auth/operation-not-allowed':
+   return 'Google 登录尚未启用。';
+  case 'auth/network-request-failed':
+   return '网络连接失败，请重试。';
+  case 'auth/invalid-credential':
+   return '邮箱或密码不正确，请重试。';
+  default:
+   return '操作失败：'+(error.code||error.message||'请重试。');
+ }
+}
 async function initWMFirebase(){
  try{
   const {firebaseConfig}=await import('./firebase-config.js');
   if(!firebaseConfig?.apiKey||firebaseConfig.apiKey==='YOUR_API_KEY')throw Error('请填写 firebase-config.js');
-  const [{initializeApp},{getAuth,onAuthStateChanged}]=await Promise.all([
+  const [{initializeApp},sdk]=await Promise.all([
    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js'),
    import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js')]);
-  wmFirebase={auth:getAuth(initializeApp(firebaseConfig))};
-  onAuthStateChanged(wmFirebase.auth,user=>{
-   WMAuth.user=user;
-   WMAuth.status=user?(user.emailVerified?'邮箱已验证 · Verified':'请先验证邮箱 · Please verify email'):'未登录 · Guest';
-   const el=document.getElementById('authUserInfo');if(el)el.textContent=user?.email||'未登录 · Guest';
-   const st=document.getElementById('authStatus');if(st)st.textContent=WMAuth.status;
+  const auth=sdk.getAuth(initializeApp(firebaseConfig));
+  wmFirebase={auth,sdk};
+  sdk.onAuthStateChanged(auth,user=>{
+   if(user?.uid!==WMAuth.user?.uid||user?.emailVerified!==WMAuth.user?.emailVerified){
+    syncAuthUser(user);
+   }else if(!WMAuth.pending&&WMAuth.status==='正在连接账户…')authStatus('');
   });
- }catch(e){WMAuth.status='Firebase未配置：请上传 firebase-config.js；本机学习不受影响。';const el=document.getElementById('authStatus');if(el)el.textContent=WMAuth.status;console.info('Firebase:',e.message)}
+  if(returnToAccount){
+   try{
+    const result=await sdk.getRedirectResult(auth);
+    if(result?.user)syncAuthUser(result.user,'Google 登录成功。');
+    else if(auth.currentUser)syncAuthUser(auth.currentUser,'已恢复登录。');
+    else authStatus('未完成 Google 登录，请重试。');
+   }catch(error){authStatus(authError(error))}
+  }
+ }catch(error){authStatus('暂时无法连接账户，请重试。')}
 }
 async function wmAuthAction(action){
- const el=document.getElementById('authStatus');
- const show=msg=>{WMAuth.status=msg;if(el)el.textContent=msg};
- if(!wmFirebase){show('Firebase 尚未连接，请先配置 firebase-config.js');return}
+ if(!wmFirebase){authStatus('账户服务尚未连接，请稍后再试。');return}
+ if(WMAuth.pending)return;
+ const {sdk,auth}=wmFirebase;
+ const email=document.getElementById('authEmail')?.value.trim()||'';
+ const password=document.getElementById('authPassword')?.value||'';
+ WMAuth.pending=true;
+ document.querySelectorAll('[data-auth]').forEach(button=>button.disabled=true);
  try{
-  const auth=await import('https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js');
-  const email=document.getElementById('authEmail')?.value.trim()||'';
-  const password=document.getElementById('authPassword')?.value||'';
   if(action==='google'){
-   const provider=new auth.GoogleAuthProvider();
-   try{await auth.signInWithPopup(wmFirebase.auth,provider)}catch(e){if(e.code==='auth/popup-blocked'||e.code==='auth/popup-closed-by-user'||e.code==='auth/operation-not-supported-in-this-environment'){await auth.signInWithRedirect(wmFirebase.auth,provider)}else throw e}
-   show('Google 登录请求已提交。');
+   const provider=new sdk.GoogleAuthProvider();
+   authStatus('正在等待 Google 登录…');
+   let result;
+   try{result=await sdk.signInWithPopup(auth,provider)}
+   catch(error){
+    if(!['auth/popup-blocked','auth/operation-not-supported-in-this-environment'].includes(error.code))throw error;
+    try{sessionStorage.setItem(authReturnKey,'1')}catch{}
+    await sdk.signInWithRedirect(auth,provider);
+    return;
+   }
+   syncAuthUser(result.user,'Google 登录成功。');
   }else if(action==='signup'){
-   if(password.length<6)throw Error('密码至少6位');
-   const result=await auth.createUserWithEmailAndPassword(wmFirebase.auth,email,password);
-   await auth.sendEmailVerification(result.user);
-   show('验证邮件已发送，请打开邮箱完成验证后登录。');
+   if(password.length<6)throw Error('密码至少 6 位。');
+   const result=await sdk.createUserWithEmailAndPassword(auth,email,password);
+   await sdk.sendEmailVerification(result.user);
+   syncAuthUser(result.user,'验证邮件已发送，请打开邮箱完成验证。');
   }else if(action==='login'){
-   const result=await auth.signInWithEmailAndPassword(wmFirebase.auth,email,password);
-   await result.user.reload();show(result.user.emailVerified?'邮箱登录成功 · Signed in':'请先验证邮箱后使用账户。');
+   const result=await sdk.signInWithEmailAndPassword(auth,email,password);
+   syncAuthUser(result.user,result.user.emailVerified?'邮箱登录成功。':'请打开验证邮件完成邮箱验证。');
   }else if(action==='reset'){
-   if(!email)throw Error('请先输入邮箱');await auth.sendPasswordResetEmail(wmFirebase.auth,email);show('已发送密码重置邮件。');
+   if(!email)throw Error('请先输入邮箱。');
+   await sdk.sendPasswordResetEmail(auth,email);
+   authStatus('密码重置邮件已发送。');
   }else if(action==='verify'){
-   const user=wmFirebase.auth.currentUser;if(!user)throw Error('请先登录');await auth.sendEmailVerification(user);show('已重新发送验证邮件。');
+   if(!auth.currentUser)throw Error('请先登录。');
+   await sdk.sendEmailVerification(auth.currentUser);
+   authStatus('验证邮件已重新发送。');
   }else if(action==='logout'){
-   await auth.signOut(wmFirebase.auth);show('已退出登录。');
+   await sdk.signOut(auth);
+   syncAuthUser(null,'已退出登录。');
   }
- }catch(e){show('操作失败：'+(e.code||e.message))}
+ }catch(error){
+  try{sessionStorage.removeItem(authReturnKey)}catch{}
+  authStatus(authError(error));
+ }finally{
+  WMAuth.pending=false;
+  document.querySelectorAll('[data-auth]').forEach(button=>button.disabled=false);
+ }
 }
-document.addEventListener('click',e=>{const b=e.target.closest('[data-auth]');if(b)wmAuthAction(b.dataset.auth)});
-initWMFirebase();
-let page='home';
+document.addEventListener('click',e=>{const button=e.target.closest('[data-auth]');if(button)void wmAuthAction(button.dataset.auth)});
 let cleanup=null;
 let token=0;
 const app=document.getElementById('app');
@@ -313,7 +395,7 @@ function drawHome(){
  app.classList.remove('beach-home');
  const summary={...data,pteScores:{...data.pteScores}};
  for(const skill of skills){const estimate=window.WMPracticeAssessment?.summary(skill.id);if(estimate)summary.pteScores[skill.id]=estimate.score;}
- app.innerHTML=`${header(Boolean(data.nickname))}<section class="section me-overview"><div class="me-stage-row"><div id="me-companions" aria-label="My angel and golden egg"></div></div>${meAbilityStats(data)}</section>${pteSummary(summary)}`;
+ app.innerHTML=`${header(Boolean(window.WMAuth?.user))}<section class="section me-overview"><div class="me-stage-row"><div id="me-companions" aria-label="My angel and golden egg"></div></div>${meAbilityStats(data)}</section>${pteSummary(summary)}`;
  window.dispatchEvent(new Event('goldy-me-render'));
 }
 function fitBeachHome(){
@@ -350,7 +432,7 @@ async function navigate(route){
  },()=>{});
  if(thisToken!==token){if(result)result();return;}
  if(featureRoot.childNodes.length){app.replaceChildren(featureRoot);cleanup=result;}
- else {app.innerHTML=preview;}
+ else if(route!=='login'&&route!=='register') {app.innerHTML=preview;}
  if(route==='settings')populateVoices();
 }
 app.addEventListener('change',e=>{if(e.target.id==='accent'){data.accent=e.target.value;data.voiceChoice='';data.azureVoice='';save();navigate('settings')}if(e.target.id==='voiceChoice'){data.voiceChoice=e.target.value;save()}if(e.target.id==='azureVoice'){data.azureVoice=e.target.value;save()}if(e.target.id==='azureChineseVoice'){data.azureChineseVoice=e.target.value;save()}});
@@ -418,3 +500,6 @@ drawHome();
 window.addEventListener('pageshow',()=>{if(page==='home')drawHome()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&page==='home')drawHome()});
 for(const name of ['wm-assessment-updated','wm-learning-stats-updated'])window.addEventListener(name,()=>{if(page==='home')drawHome()});
 window.addEventListener('storage',e=>{if((e.key==='wm-practice-assessment-v17'||e.key==='wm-listening-progress-v13'||window.WMLearningStats?.isProgressKey(e.key))&&page==='home'){window.WMPracticeAssessment?.importListening();drawHome()}});
+
+if(returnToAccount)void navigate('login');
+void initWMFirebase();

@@ -3,6 +3,10 @@
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
   const requested = Number(new URLSearchParams(location.search).get('level') || 1);
+  if (requested === 2 && window.WMA1Lesson2Classroom) {
+    window.WMA1Lesson2Classroom.mount(root);
+    return;
+  }
   if (requested !== lesson.number) {
     root.textContent = '第 ' + requested + ' 课暂无内容。';
     return;

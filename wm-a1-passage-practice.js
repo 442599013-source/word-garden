@@ -128,7 +128,7 @@
 
     function matches(text) {
       const value=normalize(text), answer=normalize(expected);
-      if(skill==='writing'&&index===0){
+      if(skill==='writing'&&index===0&&passage.id?.startsWith('a1-passage-')){
         return value.replace(/\band\b/g,'').replace(/\s/g,'')==='aeiou';
       }
       return value===answer||(skill==='speaking'&&!!window.WMSpeechMatch?.equivalent(text,expected));
@@ -136,7 +136,7 @@
     function drawWriting([prompt, answer]) {
       question.textContent = prompt;
       expected = answer;
-      answerArea.append(make('p', index === 0 ? 'Write the vowel letters.' : 'Write the full answer from the passage.'));
+      answerArea.append(make('p', index === 0 && passage.id?.startsWith('a1-passage-') ? 'Write the vowel letters.' : 'Write the full answer from the passage.'));
     }
 
     function draw() {

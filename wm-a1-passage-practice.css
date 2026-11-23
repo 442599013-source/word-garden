@@ -34,15 +34,13 @@
 }
 .a1-passage-check { background: #7951ac; color: #fff; }
 
+
 .wm-study-page .study-shared-playback {
   display: grid;
-  grid-template-columns: 36px minmax(0, 1fr) 36px minmax(0, 1fr) 36px;
-  align-items: center;
-  gap: 6px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
 }
-.wm-study-page .study-shared-playback > .study-round-play.wm-icon-action {
-  height: 36px !important;
-  width: 36px !important;
-  border-radius: 50% !important;
+.wm-study-page .study-shared-playback > button {
+  width: 100%;
+  min-width: 0;
 }
-.wm-study-page .study-shared-playback > button:first-child { grid-column: span 2; }

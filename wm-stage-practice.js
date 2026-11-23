@@ -9,10 +9,11 @@ const guidedStage=params.get('lesson')&&lib.stages.find(s=>s.passage.some(x=>x.g
 const directPTE=skill==='reading'&&params.get('from')==='journey'&&window.WMUnifiedCourseData?.units?.[requested-1]?.kind==='pte';
 let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
 const filters=saved.filters||{};
-const filterKey=()=>stage.id+':'+type;
-if(!saved.filters&&saved.favoritesOnly&&stage.id===saved.stage&&type===saved.type)filters[filterKey()]=true;
+const lessonScope=lib.number===2?':lesson-2':'';
+const filterKey=()=>stage.id+lessonScope+':'+type;
+if(!lessonScope&&!saved.filters&&saved.favoritesOnly&&stage.id===saved.stage&&type===saved.type)filters[filterKey()]=true;
 favoritesOnly=filters[filterKey()]===true;
-const indices=saved.indices||{},voice=new WMMicrosoftVoice($('audio')),norm=s=>String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^\p{L}\p{N}'\s-]/gu,'').trim().replace(/\s+/g,' '),words=s=>s.match(/[A-Za-z0-9]+(?:['’\-][A-Za-z0-9]+)*/g)||[],items=()=>store.remaining(type,stage[type],favoritesOnly),item=()=>items()[index],key=()=>stage.id+':'+type+(favoritesOnly?':favorites':''),shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
+const indices=saved.indices||{},voice=new WMMicrosoftVoice($('audio')),norm=s=>String(s||'').toLowerCase().replace(/[’‘]/g,"'").replace(/[^\p{L}\p{N}'\s-]/gu,'').trim().replace(/\s+/g,' '),words=s=>s.match(/[A-Za-z0-9]+(?:['’\-][A-Za-z0-9]+)*/g)||[],items=()=>store.remaining(type,stage[type],favoritesOnly),item=()=>items()[index],key=()=>stage.id+lessonScope+':'+type+(favoritesOnly?':favorites':''),shuffle=a=>{const b=a.slice();for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]}return b};
 document.title=skill[0].toUpperCase()+skill.slice(1)+' Practice · Goldy Magic English';
 const context=document.querySelector('.context'),categoryLabel=context.querySelector('label');context.classList.add('study-category-row');categoryLabel.classList.add('study-category-label');for(const child of [...categoryLabel.childNodes])if(child.nodeType===3)child.remove();$('stage').setAttribute('aria-label','Learning stage');
 const tools=document.createElement('div');tools.className='study-top-tools';const learnedButton=document.createElement('button'),favoriteButton=document.createElement('button');learnedButton.id='study-learned';favoriteButton.id='study-favorite';learnedButton.type=favoriteButton.type='button';context.before(tools);tools.append(learnedButton,favoriteButton,context);const categoryHost=document.querySelector('.header .total');if(categoryHost){categoryHost.classList.add('wm-header-category');categoryHost.replaceChildren(context)}
@@ -42,7 +43,6 @@ function createReadingPlayback(){
   const button=document.createElement('button');button.type='button';button.onclick=action;
   WMStudyIcons.set(button,icon,label);buttons[id]=button;row.append(button);
  }
- buttons.play.classList.add('study-round-play');
  return {row,...buttons};
 }
 function syncReadingPlayback(){

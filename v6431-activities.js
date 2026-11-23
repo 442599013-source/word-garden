@@ -18,10 +18,11 @@
     ['assessment','Advancement Mission','课堂考核','☆']
   ];
   for(const [id,en,zh,icon] of entries){
-    const card=document.createElement(lesson?'a':'div');
+    const available=lesson&&(id!=='assessment'||lesson.number===1);
+    const card=document.createElement(available?'a':'div');
     card.className='advance-card';
     card.dataset.activity=id;
-    if(lesson){
+    if(available){
       card.href=id==='assessment'?'sentence-game.html?level='+lesson.number+'#a1-assessment':journey.href(number,id);
     }else card.setAttribute('aria-disabled','true');
     const mark=document.createElement('span');

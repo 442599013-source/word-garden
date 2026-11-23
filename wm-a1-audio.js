@@ -36,6 +36,7 @@
     if (item?.kind === 'sound') return local(id);
     if (item?.kind === 'letter') return en(({A:'ay',H:'aitch',Z:'zed'})[item.en] || item.en);
     if (item) return en(item.en);
+    if (id.startsWith('2yy2-word-')) return en(id.slice('2yy2-word-'.length));
     if(id==='weak-a')return local(sounds.get('/ə/'));
     if(id==='strong-a')return local(sounds.get('/eɪ/'));
     if (id === 'example-yes' || id === 'example-my') return en(id.slice('example-'.length));
@@ -88,7 +89,7 @@
   }
   window.addEventListener('pagehide',stop);
   function registerNarration(id, parts) {
-    lessonNarration.set(id, parts.flatMap(part=>typeof part==='string' ? narration(part) : [task(part.id)]));
+    lessonNarration.set(id, parts.flatMap(part=>typeof part==='string' ? narration(part) : part.locale ? [part] : [task(part.id)]));
   }
   window.WMA1Audio = {play:(...ids) => playAt(1,...ids),playAt,stop,registerNarration};
 })();

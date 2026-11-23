@@ -1,7 +1,8 @@
 (async()=>{'use strict';const $=id=>document.getElementById(id),C=WMWalkman,KEY='wm-shared-stage-library-v6430',saved=C.read(KEY,{}),names={word:['听单词','Words'],phrase:['听词组','Phrases'],sentence:['听短句','Sentences'],passage:['听短文','Passages']};let type=new URLSearchParams(location.search).get('type')||saved.type||'word';if(!C.types.includes(type))type='word';let catalog,book=null,index=0,running=false,paused=false,segmentActive=false,generation=0,loadGeneration=0,loading=false,deadline=0,timer,favoritesOnly=false;const voice=new WMMicrosoftVoice($('audio'));const studyStore=new WMStudyTools.Store('listening',WMA1Lesson.id);
 let reviewScope=[];
 const filters=saved.filters||{};
-const filterKey=()=>$('category').value+':'+type;
+const lessonScope=window.WMStageLibrary.number===2?':lesson-2':'';
+const filterKey=()=>$('category').value+lessonScope+':'+type;
 function restoreFilter(){favoritesOnly=filters[filterKey()]===true}
 voice.isUserPaused=()=>paused;
 let transcript=null;
@@ -22,7 +23,6 @@ bottomMeaning.onclick=()=>meaningButton.click();
 progressActions.append(topPlay,meaningButton);
 const playbackRow=$('play').parentElement;
 playbackRow.classList.add('study-shared-playback');
-$('play').classList.add('study-round-play');
 playbackRow.append(bottomMeaning);
 meaningButton.onclick=()=>{meaningVisible=!meaningVisible;showMeaning()};
 function showMeaning(){
@@ -84,13 +84,16 @@ function setupLessons(){
  syncLessonView();
 }
 
-function progressKey(){return favoritesOnly?'favorites:'+type+':'+$('category').value:book.id}
+function progressKey(){return favoritesOnly?'favorites:'+type+':'+$('category').value+lessonScope:book.id}
 function scopeItems(){const list=(catalog?.books||[]).filter(b=>b.type===type&&b.category===$('category').value).flatMap(b=>b.items||[]);return favoritesOnly&&reviewScope.length?reviewScope:list.length?list:book?.allItems||[]}
 
 const progress=saved.progress||{},stats=saved.stats||{plays:0,wordPlays:0,uniqueWords:{}};stats.uniqueWords??={};
 function persist(){try{C.write(KEY,{type,category:$('category').value,bookId:book?.id,progress,stats,filters,repeat:$('repeat').value,speed:$('speed').value,loop:$('loop').value})}catch{$('status').textContent='进度保存失败，请检查浏览器存储空间'}}
 function stop(){running=false;paused=false;segmentActive=false;generation++;voice.stop();transport()}
 function counts(){$('stats').textContent='Learned words · 已学会单词：'+WMStudyTools.learnedWords('listening').size}
+function findPassage(item){
+ return window.WMA1Lesson2?.passages.find(row=>row.id===item?.id)||window.WMA1Passages?.find(row=>row.id===item?.id);
+}
 function updatePassage(item){
  if(item===shownItem)return;
  shownItem=item;
@@ -99,7 +102,7 @@ function updatePassage(item){
   passageHost.replaceChildren();
   transcript=null;
  }
- const passage=type==='passage'&&window.WMA1Passages?.find(row=>row.id===item?.id);
+ const passage=type==='passage'&&findPassage(item);
  if(passage&&window.WMA1PassagePractice){
   transcript=WMA1PassagePractice.buildTranscript(passage);
   passageHost.append(transcript.element);
@@ -146,13 +149,16 @@ async function listBooks(prefer,{review=false,target}={}){
   if(token===loadGeneration){loading=false;show()}
  }
 }
-function tabs(){C.types.forEach(t=>{const b=document.createElement('button');const zh=document.createElement('span'),en=document.createElement('small');zh.className='type-zh';zh.textContent=names[t][0];en.textContent=names[t][1];b.append(en,zh);b.setAttribute('aria-pressed',String(t===type));b.onclick=()=>{stop();type=t;restoreFilter();syncLessonView();document.querySelectorAll('#types button').forEach((x,i)=>x.setAttribute('aria-pressed',String(C.types[i]===type)));listBooks();persist()};$('types').append(b)})}
+function tabs(){C.types.forEach(t=>{const b=document.createElement('button');const zh=document.createElement('span'),en=document.createElement('small');zh.className='type-zh';zh.textContent=names[t][0];en.textContent=names[t][1];b.append(en,zh);b.dataset.type=t;b.setAttribute('aria-pressed',String(t===type));b.onclick=()=>{stop();type=t;restoreFilter();syncLessonView();document.querySelectorAll('#types button').forEach((x,i)=>x.setAttribute('aria-pressed',String(C.types[i]===type)));listBooks();persist()};$('types').append(b)})}
 function audioParts(item){
- const passage=window.WMA1Passages?.find(p=>p.id===item.id);
- if(passage)return passage.audioSegments.map(segment=>{
-  const sound=WMA1Lesson.sounds.find(x=>x.en===segment);
-  return sound?{src:'audio/a1-lesson-1/'+sound.id+'.mp3'}:{text:segment,lang:'en-GB'};
- });
+ const passage=type==='passage'&&findPassage(item);
+ if(passage)return passage.lines.flatMap(([en,zh])=>[
+  ...en.split(/(\/[^/]+\/)/u).map(part=>part.trim()).filter(Boolean).map(segment=>{
+   const sound=WMA1Lesson.sounds.find(x=>x.en===segment);
+   return sound?{src:'audio/a1-lesson-1/'+sound.id+'.mp3'}:{text:segment,lang:'en-GB'};
+  }),
+  {text:zh,lang:'zh-CN'}
+ ]);
  return window.WMListeningLessons?.legacyAudio(item)||[{text:item.en,lang:'en-GB'},{text:item.zh,lang:'zh-CN'}];
 }
 async function play(){if(running){paused=!paused;if(paused){$('audio').pause();transport();$('status').textContent='Paused · 已暂停'}else{
@@ -178,6 +184,6 @@ tabs();const routeParams=new URLSearchParams(location.search);
 const route=WMStageLibrary.resolve(routeParams.get('stage'),Number(routeParams.get('level')));
 const group=route||WMStageLibrary.resolve(saved.category)||WMStageLibrary.resolve('kindergarten');
 $('category').value=group.id;
-if(!saved.filters&&saved.favoritesOnly&&type===saved.type&&group.id===saved.category)filters[filterKey()]=true;
+if(!lessonScope&&!saved.filters&&saved.favoritesOnly&&type===saved.type&&group.id===saved.category)filters[filterKey()]=true;
 restoreFilter();WMA1LessonNumber($('category'),$('category').parentElement);setupLessons();await listBooks(saved.bookId);
 }catch(e){$('status').textContent=e.message}show();})();
