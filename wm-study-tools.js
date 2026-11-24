@@ -126,7 +126,7 @@ function listDialog({store,type,items,kind,onReview,onAll,onChanged,options,init
  close.focus({preventScroll:true});
 }
 
-let context=null,backup=null;
+let context=null,backup=null,interrupted=false;
 function audio(){
  const AudioContext=window.AudioContext||window.webkitAudioContext;
  if(!AudioContext)return null;
@@ -158,6 +158,16 @@ async function playBackup(){
 }
 async function ding(){
  try{
+  if(interrupted){
+   interrupted=false;
+   const previous=context;
+   context=null;
+   if(previous&&previous.state!=='closed')void previous.close().catch(()=>{});
+   window.WMMicrosoftVoice?.audioMode('playback');
+   const fallback=playBackup();
+   unlock();
+   if(await fallback)return true;
+  }
   const c=audio();
   if(!c||c.state!=='running'){
    // Use the current answer tap for playback when a backgrounded context is still resuming.
@@ -182,7 +192,10 @@ document.addEventListener('pointerdown',unlock,{passive:true});
 document.addEventListener('keydown',unlock,{passive:true});
 document.addEventListener('touchend',unlock,{passive:true});
 document.addEventListener('click',unlock,{passive:true});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)unlock()});
-window.addEventListener('pageshow',unlock);
+document.addEventListener('visibilitychange',()=>{
+ if(document.hidden)interrupted=true;
+});
+window.addEventListener('pagehide',()=>{interrupted=true});
+window.addEventListener('pageshow',event=>{if(event.persisted)interrupted=true});
 window.WMStudyTools={Store,normalize,learnedWords,matchFavorites,splitControl,listDialog};window.WMStudySound={ding,unlock};
 })();

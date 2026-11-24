@@ -2,7 +2,7 @@
   'use strict';
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
-  const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||item.number===2&&window.WMA1Lesson2Classroom);
+  const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||item.number===2&&window.WMA1Lesson2Classroom||item.number===3&&window.WMA1PhonicsClassroom);
   const parameters=new URLSearchParams(location.search);
   const requested=Number(parameters.get('level') || (location.hash==='#a1-assessment'?1:resumeLesson()));
 
@@ -24,7 +24,7 @@
       ));
     });
     return available.find(({number})=>!(
-      number===1?firstQuizComplete:window.WMA1Lesson2Quiz?.complete()
+      number===1?firstQuizComplete:number===2?window.WMA1Lesson2Quiz?.complete():window.WMA1PhonicsClassroom?.complete()
     ))?.number||available.at(-1).number;
   }
 
@@ -39,8 +39,22 @@
       picker.append(option);
     }
     picker.value=String(requested);
-    picker.onchange=()=>{ location.href='sentence-game.html?level='+picker.value; };
+    if(parameters.has('practice')){
+      const skill=parameters.get('practice');
+      const page={listening:'walkman',reading:'reading-study',speaking:'speaking-study',writing:'writing-study'}[skill];
+      if(page){
+        const all=element('option','汇总');all.value='all';picker.prepend(all);
+        picker.value='3';
+        picker.onchange=()=>{if(picker.value!=='3')location.href=page+'.html?level='+picker.value;};
+        back.after(picker);
+      }
+    }
+    if(!picker.onchange)picker.onchange=()=>{ location.href='sentence-game.html?level='+picker.value; };
     back.after(picker);
+  }
+  if (requested === 3 && window.WMA1PhonicsClassroom) {
+    window.WMA1PhonicsClassroom.mount(root);
+    return;
   }
   if (requested === 2 && window.WMA1Lesson2Classroom) {
     window.WMA1Lesson2Classroom.mount(root);

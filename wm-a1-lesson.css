@@ -86,3 +86,14 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-example-sound { display:inline-flex; margin-inline-end:.65rem; }
 
 .a1-onset-heading { align-items:flex-start; }
+
+/* Selection must remain visible over the base answer style. */
+.a1-ability-answer .a1-button[aria-pressed="true"] {
+  background:#cde2d4; color:#203b2d; outline:2px solid #315b4a; outline-offset:-2px;
+}
+.a1-ability-answer .a1-button[aria-pressed="true"]::before { content:'✓'; margin-inline-end:.55rem; }
+
+.a1-phonics-list { overflow-wrap:anywhere; font-weight:600; }
+.a1-phonics-entry { display:flex; align-items:center; gap:.5rem; }
+.a1-phonics-entry input { min-width:0; flex:1; min-height:2.75rem; padding-inline:.75rem; font:inherit; }
+.a1-classroom [hidden] { display:none!important; }

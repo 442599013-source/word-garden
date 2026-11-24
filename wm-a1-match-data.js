@@ -1,7 +1,15 @@
 (() => {
   'use strict';
   const lesson = WMA1Lesson;
-  const words = {...lesson.match};
+  const aliases={
+    '元音字母':'Vowel letter','辅音字母':'Consonant letter',
+    '元音音素':'Vowel sound','辅音音素':'Consonant sound',
+    '以元音音素开头':'Starts with a vowel sound','以元音音素开头的单词':'Starts with a vowel sound',
+    '以辅音音素开头':'Starts with a consonant sound','以辅音音素开头的单词':'Starts with a consonant sound'
+  };
+  const classificationLabel=value=>aliases[value]||value;
+  const words = Object.fromEntries(Object.entries(lesson.match).map(([id,item])=>[id,{...item}]));
+
   for (const item of lesson.words) {
     words[item.id + '-type'] = {...item,zh:lesson.category(item),pairType:'classification'};
     words[item.id] = {...words[item.id],pairType:'meaning'};
@@ -26,13 +34,29 @@
   }
   const secondLevel=lesson2?[{
     level:2,stage:'kindergarten',group:lesson2.group,lessons:[],meanings:{},
-    classification:Object.values(lesson2.labels),sourceWordIds:secondIds
+    classification:Object.values(lesson2.labels).map(classificationLabel),sourceWordIds:secondIds
   }]:[];
+  const thirdIds=[];
+  for(const row of window.WMA1Phonics?.rows||[]){
+    const groups=WMA1Phonics.cardGroups(row);
+    groups.forEach((spelling,i)=>{
+      const id='3yy3-'+row.id+'-'+i;
+      words[id]={id:row.id,en:row.ipa,zh:spelling.join(' · '),kind:'sound-spelling',matchKey:'phonics:'+row.id};
+      thirdIds.push(id);
+    });
+  }
+  const thirdLevel=thirdIds.length?[{
+    level:3,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:thirdIds
+  }]:[];
+  for(const item of Object.values(words)){
+    if(item.pairType==='classification')item.zh=classificationLabel(item.zh);
+  }
   window.WMMatchData = {
+    classificationLabel,
     version:6427,courseId:lesson.id,words,replacedWordIds,fillerIds:[],
     levels:[{
       level:1,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},
-      classification:categories,sourceWordIds:firstIds
-    },...secondLevel]
+      classification:categories.map(classificationLabel),sourceWordIds:firstIds
+    },...secondLevel,...thirdLevel]
   };
 })();

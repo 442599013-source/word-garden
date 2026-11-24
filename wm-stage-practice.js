@@ -4,10 +4,14 @@ const $=id=>document.getElementById(id),lib=document.body.dataset.skill==='writi
 if(!['listening','speaking','reading','writing'].includes(skill))throw Error('Unknown skill');
 const KEY='wm-stage-practice-v6430-'+skill,store=new WMStudyTools.Store(skill,WMA1Lesson.id),names={word:['Words','单词'],phrase:['Phrases','词组'],sentence:['Sentences','短句'],passage:['Passages','短文']};let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{}
 const requested=Number(params.get('level'));
+if(requested===3){
+ location.replace('sentence-game.html?level=3&practice='+skill);
+ return;
+}
 const routedStage=lib.resolve(params.get('stage'),requested);
 const guidedStage=params.get('lesson')&&lib.stages.find(s=>s.passage.some(x=>x.guidedLesson===params.get('lesson')));
 const directPTE=skill==='reading'&&params.get('from')==='journey'&&window.WMUnifiedCourseData?.units?.[requested-1]?.kind==='pte';
-let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':params.has('level')&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
+let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':(skill==='reading'||params.has('level'))&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
 const filters=saved.filters||{};
 const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':'';
 const filterKey=()=>stage.id+lessonScope+':'+type;

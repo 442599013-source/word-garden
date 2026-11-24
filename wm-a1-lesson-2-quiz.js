@@ -9,17 +9,19 @@
       const letter=word.en[0].toUpperCase(),ipa=onsets.get(word.en);
       if(!byLetter.has(letter))byLetter.set(letter,new Map());
       if(!byLetter.get(letter).has(ipa))byLetter.get(letter).set(ipa,word);
-      if(!bySound.has(ipa))bySound.set(ipa,new Set());
-      bySound.get(ipa).add(letter);
+      if(!bySound.has(ipa))bySound.set(ipa,[]);
+      bySound.get(ipa).push(word.en);
     }
     const questions=[],labels={vowel:'元音音素',consonant:'辅音音素'};
-    const letters=[...byLetter.keys()].sort();
     for(const [ipa,found] of bySound){
-      const answers=[...found].sort();
+      const answers=found.slice(0,3);
+      const distractors=words.filter(word=>onsets.get(word.en)!==ipa)
+        .sort((a,b)=>Number(b.en[0]===answers[0][0])-Number(a.en[0]===answers[0][0]))
+        .slice(0,3).map(word=>word.en);
       questions.push({
-        id:'letter:'+ipa,audio:sounds.get(ipa).id,
-        prompt:'听首音 /'+ipa+'/。在本课词表中，哪些首字母可以对应这个首音？',
-        choices:[...new Set([...answers,...letters.filter(letter=>!found.has(letter)).slice(0,3)])],
+        id:'word:'+ipa,audio:sounds.get(ipa).id,
+        prompt:'听首音 /'+ipa+'/。以下哪些本课单词以这个音开头？',
+        choices:[...answers,...distractors],
         answers
       });
     }
@@ -123,6 +125,7 @@
       }
       const submit=button('确认选择',check);
       submit.hidden=!multi;
+      submit.disabled=true;
       const shuffled=[...question.choices];
       for(let i=shuffled.length-1;i>0;i--){
         const j=Math.floor(Math.random()*(i+1));
@@ -133,6 +136,9 @@
           if(!multi)selected.clear();
           if(selected.has(value))selected.delete(value);else selected.add(value);
           for(const [choice,b] of options)b.setAttribute('aria-pressed',String(selected.has(choice)));
+          feedback.textContent='';
+          delete feedback.dataset.state;
+          submit.disabled=!selected.size;
           if(!multi)check();
         });
         el.setAttribute('aria-pressed','false');

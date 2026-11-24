@@ -103,6 +103,7 @@
           if (item.correct.length === 1) judgeChoice();
         },'answer rs-choice');
         option.setAttribute('aria-pressed', 'false');
+        if(item.kind==='meaning')option.lang='zh-CN';
         return option;
       });
       answerArea.append(make('p', item.correct.length > 1 ? 'Choose all that apply.' : 'Choose one answer.'), ...choices);

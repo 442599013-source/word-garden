@@ -139,7 +139,10 @@ class MatchGame {
  }
 
  meaning(tile) {
-  return (this.s.meanings?.[tile.word] || this.plan.meanings?.[tile.word] || this.data.words[tile.word].zh).trim();
+  const item=this.data.words[tile.word];
+  const value=(this.s.meanings?.[tile.word] || this.plan.meanings?.[tile.word] || item.zh).trim();
+  if(item.matchKey)return item.matchKey;
+  return item.pairType==='classification' ? (this.data.classificationLabel?.(value)||value) : value;
  }
 
  matching(a, b) {
