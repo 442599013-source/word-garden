@@ -36,6 +36,10 @@
     if (item?.kind === 'sound') return local(id);
     if (item?.kind === 'letter') return en(({A:'ay',H:'aitch',Z:'zed'})[item.en] || item.en);
     if (item) return en(item.en);
+    if (id.startsWith('3yy3-word-')) {
+      const word=window.WMA1Phonics?.words.find(item=>item.id===id);
+      return word?en(word.en):null;
+    }
     if (id.startsWith('2yy2-word-')) return en(id.slice('2yy2-word-'.length));
     if(id==='weak-a')return local(sounds.get('/ə/'));
     if(id==='strong-a')return local(sounds.get('/eɪ/'));

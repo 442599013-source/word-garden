@@ -1,8 +1,8 @@
-(async()=>{'use strict';const $=id=>document.getElementById(id),C=WMWalkman,KEY='wm-shared-stage-library-v6430',saved=C.read(KEY,{}),names={word:['听单词','Words'],phrase:['听词组','Phrases'],sentence:['听短句','Sentences'],passage:['听短文','Passages']};const params=new URLSearchParams(location.search);if(params.get('level')==='3'){location.replace('sentence-game.html?level=3&practice=listening');return;}let type=params.get('type')||(params.has('level')?saved.type:'word')||'word';if(!C.types.includes(type))type='word';let catalog,book=null,index=0,running=false,paused=false,segmentActive=false,generation=0,loadGeneration=0,loading=false,deadline=0,timer,favoritesOnly=false;const voice=new WMMicrosoftVoice($('audio'));const studyStore=new WMStudyTools.Store('listening',WMA1Lesson.id);
+(async()=>{'use strict';const $=id=>document.getElementById(id),C=WMWalkman,KEY='wm-shared-stage-library-v6430',saved=C.read(KEY,{}),names={word:['听单词','Words'],phrase:['听词组','Phrases'],sentence:['听短句','Sentences'],passage:['听短文','Passages']};const params=new URLSearchParams(location.search);let type=params.get('type')||(params.get('level')==='3'?'word':params.has('level')?saved.type:'word')||'word';if(!C.types.includes(type))type='word';let catalog,book=null,index=0,running=false,paused=false,segmentActive=false,generation=0,loadGeneration=0,loading=false,deadline=0,timer,favoritesOnly=false;const voice=new WMMicrosoftVoice($('audio'));const studyStore=new WMStudyTools.Store('listening',WMA1Lesson.id);
 let reviewScope=[];
 const filters=saved.filters||{};
 const lib=window.WMStageLibrary;
-const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':'';
+const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':lib.number===3?':lesson-3':'';
 const filterKey=()=>$('category').value+lessonScope+':'+type;
 function restoreFilter(){favoritesOnly=filters[filterKey()]===true}
 voice.isUserPaused=()=>paused;

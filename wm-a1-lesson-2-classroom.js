@@ -92,6 +92,14 @@
       if(!bySound.has(ipa))bySound.set(ipa,[]);
       bySound.get(ipa).push(item);
     }
+    function comparisonHeading(detail,id,label){
+      detail.classList.add('a1-local-comparison');
+      const speaker=control('朗读'+label,[id]);
+      speaker.classList.add('a1-local-speaker');
+      const wrapper=node('div','','a1-comparison-controls');
+      wrapper.append(detail,speaker);
+      compare.append(wrapper);
+    }
     const compareIds=[];
     const orderedLetters=['o', ...[...letters.keys()].filter(letter=>letter!=='o').sort()];
     for(const letter of orderedLetters){
@@ -113,7 +121,7 @@
         summary.push({id:sound.id},chinese(name+'音素'),...items.map(item=>({id:item.id})));
       }
       const id=narration('2yy2-letter-'+letter,[english(letter.toUpperCase()),chinese(explanation),...summary]);
-      compare.append(detail);
+      comparisonHeading(detail,id,detail.firstChild.textContent);
       compareIds.push(id);
     }
     const up=WMA1Lesson.words.find(item=>item.en==='up'),use=words.get('use');
@@ -123,7 +131,7 @@
       const id=narration('2yy2-letter-u',[chinese(description),{id:use.id},{id:sounds.get('j').id},{id:up.id},{id:sounds.get('ʌ').id}]);
       detail.append(node('summary','U · 和第一课对比'),node('p',description),
         example('use','j',use.id),example('up','ʌ',up.id));
-      compare.append(detail);
+      comparisonHeading(detail,id,detail.firstChild.textContent);
       compareIds.push(id);
     }
 

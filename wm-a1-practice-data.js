@@ -8,10 +8,11 @@
   if(lesson2) lessons[2]={
     word:lesson2.words,phrase:lesson2.phrases,sentence:lesson2.sentences,passage:lesson2.passages
   };
+  if(window.WMA1Phonics) lessons[3]={word:WMA1Phonics.words,phrase:[],sentence:[],passage:[]};
   const labels = lesson2?{all:'汇总',1:'第 1 课',2:'第 2 课',3:'第 3 课'}:{1:'第 1 课'};
   const search = new URLSearchParams(window.location?.search||'');
   const selected = search.get('level');
-  const scope = selected==='1'||(selected==='2'&&lesson2)?selected:lesson2?'all':'1';
+  const scope = Object.hasOwn(lessons,selected)?selected:lesson2?'all':'1';
   const number = scope==='all'?0:Number(scope);
   const normalize = window.WMStudyTools.normalize;
   const unique = rows => [...new Map(rows.map(item=>[normalize(item.en),item])).values()];
@@ -27,7 +28,7 @@
   }
   function lessonLabel(item) {
     const sources=item&&wordSources.get(normalize(item.en));
-    return sources?.length===2?'两课都有':labels[sources?.[0]]||'';
+    return sources?.map(source=>labels[source]).join(' · ')||'';
   }
   function availableItems(type,selection=scope){
     return selection==='all'?allItems[type]:lessons[selection]?.[type]||[];
@@ -40,7 +41,7 @@
     return byId[id]||byId[WMClassGroups.forLevel(level)?.id]||stages.find(stage=>stage.stage===id);
   }
   const books=types.map(type=>({
-    id:({all:lesson.id+'-all',1:lesson.id,2:'goldy-a1-first-sounds-2'})[scope]+'-'+type,
+    id:({all:lesson.id+'-all',1:lesson.id,2:'goldy-a1-first-sounds-2',3:'goldy-a1-phonics-3'})[scope]+'-'+type,
     type,category:lesson.group,titleZh:labels[scope],titleEn:number?'Lesson '+number:'All lessons',
     items:availableItems(type)
   }));
@@ -56,7 +57,7 @@
   function listScope(stage,type,favoritesOnly){
     if(!lesson2||stage!==lesson.group||type!=='word')return {};
     return {
-      options:[['all',labels.all],['1',labels[1]],['2',labels[2]]],
+      options:[['all',labels.all],...Object.keys(lessons).map(id=>[id,labels[id]])],
       initialScope:favoritesOnly?scope:'all',
       itemsForScope:selection=>availableItems(type,selection),
       itemLabel:lessonLabel
@@ -73,7 +74,7 @@
     host.classList.add('wm-a1-lesson-picker');
     function sync(){
       const available=category.value===lesson.group;
-      const options=available?(lesson2?['all','1','2','3']:['1']):[''];
+      const options=available?(lesson2?['all',...Object.keys(lessons)]:['1']):[''];
       select.replaceChildren(...options.map(value=>{
         const option=document.createElement('option');
         option.value=value;
@@ -85,17 +86,8 @@
     }
     select.addEventListener('change',()=>{
       if(!select.value)return;
-      if(select.value==='3'){
-        const skill=({ 'walkman.html':'listening','reading-study.html':'reading',
-          'speaking-study.html':'speaking','writing-study.html':'writing' })[location.pathname.split('/').at(-1)]
-          || document.body.dataset.skill;
-        if(['listening','reading','speaking','writing'].includes(skill)){
-          window.location.href='sentence-game.html?level=3&practice='+skill;
-          return;
-        }
-      }
       const active=document.querySelector('#types [aria-pressed="true"]');
-      openScope(select.value,category.value,active?.dataset.type,{review:isReview()});
+      openScope(select.value,category.value,select.value==='3'?'word':active?.dataset.type,{review:isReview()});
     });
     category.addEventListener('change',sync);
     sync();

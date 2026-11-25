@@ -5,6 +5,12 @@
   const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||item.number===2&&window.WMA1Lesson2Classroom||item.number===3&&window.WMA1PhonicsClassroom);
   const parameters=new URLSearchParams(location.search);
   const requested=Number(parameters.get('level') || (location.hash==='#a1-assessment'?1:resumeLesson()));
+  const practicePages={listening:'walkman',reading:'reading-study',speaking:'speaking-study',writing:'writing-study'};
+  const practice=practicePages[parameters.get('practice')];
+  if(requested===3&&practice){
+    location.replace(practice+'.html?level=3&type=word');
+    return;
+  }
 
   function read(key){
     try{return JSON.parse(localStorage.getItem(key)||'null')||{}}
@@ -39,17 +45,7 @@
       picker.append(option);
     }
     picker.value=String(requested);
-    if(parameters.has('practice')){
-      const skill=parameters.get('practice');
-      const page={listening:'walkman',reading:'reading-study',speaking:'speaking-study',writing:'writing-study'}[skill];
-      if(page){
-        const all=element('option','汇总');all.value='all';picker.prepend(all);
-        picker.value='3';
-        picker.onchange=()=>{if(picker.value!=='3')location.href=page+'.html?level='+picker.value;};
-        back.after(picker);
-      }
-    }
-    if(!picker.onchange)picker.onchange=()=>{ location.href='sentence-game.html?level='+picker.value; };
+    picker.onchange=()=>{location.href='sentence-game.html?level='+picker.value;};
     back.after(picker);
   }
   if (requested === 3 && window.WMA1PhonicsClassroom) {

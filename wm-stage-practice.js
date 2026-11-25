@@ -4,16 +4,12 @@ const $=id=>document.getElementById(id),lib=document.body.dataset.skill==='writi
 if(!['listening','speaking','reading','writing'].includes(skill))throw Error('Unknown skill');
 const KEY='wm-stage-practice-v6430-'+skill,store=new WMStudyTools.Store(skill,WMA1Lesson.id),names={word:['Words','单词'],phrase:['Phrases','词组'],sentence:['Sentences','短句'],passage:['Passages','短文']};let saved={};try{saved=JSON.parse(localStorage.getItem(KEY)||'{}')||{}}catch{}
 const requested=Number(params.get('level'));
-if(requested===3){
- location.replace('sentence-game.html?level=3&practice='+skill);
- return;
-}
 const routedStage=lib.resolve(params.get('stage'),requested);
 const guidedStage=params.get('lesson')&&lib.stages.find(s=>s.passage.some(x=>x.guidedLesson===params.get('lesson')));
 const directPTE=skill==='reading'&&params.get('from')==='journey'&&window.WMUnifiedCourseData?.units?.[requested-1]?.kind==='pte';
-let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':(skill==='reading'||params.has('level'))&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
+let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':requested===3?'word':(skill==='reading'||params.has('level'))&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
 const filters=saved.filters||{};
-const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':'';
+const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':lib.number===3?':lesson-3':'';
 const filterKey=()=>stage.id+lessonScope+':'+type;
 if(!lessonScope&&!saved.filters&&saved.favoritesOnly&&stage.id===saved.stage&&type===saved.type)filters[filterKey()]=true;
 favoritesOnly=params.get('review')==='1'||(lib.scope!=='all'&&filters[filterKey()]===true);
@@ -162,7 +158,9 @@ function win(voiceInput=false){if(locked||!item())return;locked=true;saved.corre
  advanceTimer=setTimeout(()=>{if(t!==epoch)return;const remaining=items();if(remaining.length){const currentIndex=remaining.findIndex(y=>store.key(type,y)===store.key(type,x));index=removed||currentIndex<0?Math.min(before,remaining.length-1):(currentIndex+1)%remaining.length}else index=0;persist();draw()},850);
 }
 
-function judge(final=false,voiceInput=false){if(locked||!item())return;const text=$('entry').value;if(norm(text)===norm(item().en)||(voiceInput&&window.WMSpeechMatch?.equivalent(text,item().en))){void win(voiceInput);return}if(final&&norm(text))wrong()}
+function judge(final=false,voiceInput=false){const target=item();if(locked||!target)return;const text=$('entry').value;
+ const written=value=>norm(target.id?.startsWith('3yy3-word-')?value.normalize('NFD').replace(/\p{M}/gu,'').replaceAll('œ','oe'):value);
+ if(written(text)===written(target.en)||(voiceInput&&window.WMSpeechMatch?.equivalent(text,item().en))){void win(voiceInput);return}if(final&&norm(text))wrong()}
 function typed(){if(locked||!item()||passageView?.answered)return;
  if(passageView){
   usedManual=true;audioEpoch++;voice.stop();if(mic.state!=='idle')void mic.cancel();

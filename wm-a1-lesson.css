@@ -97,3 +97,20 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-phonics-entry { display:flex; align-items:center; gap:.5rem; }
 .a1-phonics-entry input { min-width:0; flex:1; min-height:2.75rem; padding-inline:.75rem; font:inherit; }
 .a1-classroom [hidden] { display:none!important; }
+
+.a1-spelling-highlight {
+  color:#203b2d;
+  background:#bde3c7;
+  border-radius:.2em;
+  text-shadow:none;
+}
+.a1-audible-option {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  gap:.4rem;
+  align-items:center;
+}
+.a1-audible-option > .a1-button { display:flex; min-width:0; }
+.a1-comparison-controls { position:relative; }
+.a1-local-comparison > summary { padding-inline-end:3.35rem; }
+.a1-local-speaker { position:absolute; top:.6rem; right:0; }

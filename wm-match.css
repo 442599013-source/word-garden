@@ -49,3 +49,11 @@
 
 /* Finite five-sentence rounds have no separate target list. */
 #match-game .target-heading,#match-game #targets{display:none!important}
+
+.match-sound-word { min-width:0; overflow-wrap:anywhere; }
+.match-sound-word .a1-spelling-highlight {
+  color:#193c29;
+  background:#dcf7d9;
+  border-radius:.2em;
+  text-shadow:none;
+}

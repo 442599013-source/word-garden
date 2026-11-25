@@ -37,13 +37,24 @@
     classification:Object.values(lesson2.labels).map(classificationLabel),sourceWordIds:secondIds
   }]:[];
   const thirdIds=[];
-  for(const row of window.WMA1Phonics?.rows||[]){
-    const groups=WMA1Phonics.cardGroups(row);
-    groups.forEach((spelling,i)=>{
-      const id='3yy3-'+row.id+'-'+i;
+  const phonics=window.WMA1Phonics;
+  for(const row of phonics?.rows||[]){
+    const split=Math.ceil(row.patterns.length/2);
+    const groups=row.patterns.join(' / ').length<=22?[row.patterns]:
+      [row.patterns.slice(0,split),row.patterns.slice(split)];
+    groups.forEach((spelling,index)=>{
+      const id='3yy3-'+row.id+'-'+index;
       words[id]={id:row.id,en:row.ipa,zh:spelling.join(' · '),kind:'sound-spelling',matchKey:'phonics:'+row.id};
+    });
+    row.examples.forEach((item,index)=>{
+      const id='3yy3-pair-'+row.id+'-'+index;
+      words[id]={id:row.id,en:row.ipa,zh:item.en,ranges:item.ranges,kind:'sound-word',matchKey:'word-sound:'+row.id};
       thirdIds.push(id);
     });
+  }
+  for(const item of phonics?.words||[]){
+    words[item.id]={...item,pairType:'meaning',zh:item.main};
+    thirdIds.push(item.id);
   }
   const thirdLevel=thirdIds.length?[{
     level:3,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:thirdIds

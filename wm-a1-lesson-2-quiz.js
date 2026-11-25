@@ -63,6 +63,13 @@
     function button(text,action){
       const el=node('button',text,'a1-button');el.type='button';el.onclick=action;return el;
     }
+    const next=WMClassroomCatalog.lessons.find(lesson=>lesson.number===WMA1Lesson2.number+1);
+    function nextLink(){
+      const link=node('a',next.number===3?'进入第三课 · 自然拼读':'进入第 '+next.number+' 课','a1-button');
+      link.href='sentence-game.html?level='+next.number;
+      return link;
+    }
+    const nextShortcut=next?nextLink():null;
     const actions=node('div','','a1-assessment-actions');
     const status=node('span','','a1-assessment-status');
     status.setAttribute('role','status');
@@ -76,6 +83,7 @@
       open();
     });
     actions.append(start,status,retry);
+    if(nextShortcut)actions.append(nextShortcut);
     root.append(actions,panel);
     function remaining(){return questions.filter(q=>!passed(record,q))}
     function paint(){
@@ -84,6 +92,7 @@
       status.classList.toggle('a1-assessment-complete',done);
       start.textContent=done?'查看考核':left===questions.length?'课堂考核':'继续考核';
       retry.hidden=!done;
+      if(nextShortcut)nextShortcut.hidden=!done||!panel.hidden;
     }
     function open(){
       clearTimeout(timer);stop();panel.hidden=false;draw();
@@ -94,7 +103,9 @@
       const left=remaining(),question=left[0];
       const header=node('h2','课堂考核 · '+(questions.length-left.length)+' / '+questions.length);
       if(!question){
-        panel.replaceChildren(header,node('p','✓ 已完成','a1-assessment-complete'));return;
+        panel.replaceChildren(header,node('p','✓ 已完成','a1-assessment-complete'));
+        if(next)panel.append(nextLink());
+        return;
       }
       const feedback=node('p','','a1-ability-status');
       feedback.setAttribute('role','status');
@@ -142,7 +153,14 @@
           if(!multi)check();
         });
         el.setAttribute('aria-pressed','false');
-        options.set(value,el);choices.append(el);
+        options.set(value,el);
+        const audioId=question.id.startsWith('word:')?WMA1Lesson2.words.find(word=>word.en===value)?.id:
+          question.id.startsWith('sound:')?WMA1Lesson.sounds.find(sound=>sound.en===value)?.id:null;
+        if(audioId){
+          const option=node('div','','a1-audible-option');
+          option.append(el,control('听 '+value,[audioId]));
+          choices.append(option);
+        }else choices.append(el);
       }
       panel.replaceChildren(title,node('p',question.prompt),node('p',multi?'多选':'单选'),choices,submit,feedback);
     }
