@@ -9,7 +9,8 @@
     word:lesson2.words,phrase:lesson2.phrases,sentence:lesson2.sentences,passage:lesson2.passages
   };
   if(window.WMA1Phonics) lessons[3]={word:WMA1Phonics.words,phrase:[],sentence:[],passage:[]};
-  const labels = lesson2?{all:'汇总',1:'第 1 课',2:'第 2 课',3:'第 3 课'}:{1:'第 1 课'};
+  if(window.WMVocabulary4) lessons[4]=WMVocabulary4.practice;
+  const labels = lesson2?{all:'汇总',1:'第 1 课',2:'第 2 课',3:'第 3 课',4:'第 4 课'}:{1:'第 1 课'};
   const search = new URLSearchParams(window.location?.search||'');
   const selected = search.get('level');
   const scope = Object.hasOwn(lessons,selected)?selected:lesson2?'all':'1';
@@ -17,6 +18,10 @@
   const normalize = window.WMStudyTools.normalize;
   const unique = rows => [...new Map(rows.map(item=>[normalize(item.en),item])).values()];
   const allItems = Object.fromEntries(types.map(type=>[type,unique(Object.values(lessons).flatMap(items=>items[type]))]));
+  if (lessons[4]) {
+    const known=new Map(lessons[4].word.map(item=>[normalize(item.en),item]));
+    allItems.word=allItems.word.map(item=>known.get(normalize(item.en))||item);
+  }
   const wordSources=new Map();
   for(const [source,items] of Object.entries(lessons)){
     for(const item of items.word){
@@ -41,7 +46,7 @@
     return byId[id]||byId[WMClassGroups.forLevel(level)?.id]||stages.find(stage=>stage.stage===id);
   }
   const books=types.map(type=>({
-    id:({all:lesson.id+'-all',1:lesson.id,2:'goldy-a1-first-sounds-2',3:'goldy-a1-phonics-3'})[scope]+'-'+type,
+    id:({all:lesson.id+'-all',1:lesson.id,2:'goldy-a1-first-sounds-2',3:'goldy-a1-phonics-3',4:'goldy-vocabulary-4'})[scope]+'-'+type,
     type,category:lesson.group,titleZh:labels[scope],titleEn:number?'Lesson '+number:'All lessons',
     items:availableItems(type)
   }));

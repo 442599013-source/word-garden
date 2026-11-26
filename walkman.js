@@ -2,7 +2,7 @@
 let reviewScope=[];
 const filters=saved.filters||{};
 const lib=window.WMStageLibrary;
-const lessonScope=lib.scope==='all'?':all':lib.number===2?':lesson-2':lib.number===3?':lesson-3':'';
+const lessonScope=lib.scope==='all'?':all':lib.number>1?':lesson-'+lib.number:'';
 const filterKey=()=>$('category').value+lessonScope+':'+type;
 function restoreFilter(){favoritesOnly=filters[filterKey()]===true}
 voice.isUserPaused=()=>paused;
@@ -11,7 +11,7 @@ const passageHost=document.createElement('div');
 const lessonSource=document.createElement('small');lessonSource.className='study-lesson-source';lessonSource.hidden=true;
 $('english').after(lessonSource);lessonSource.after(passageHost);
 
-let shownItem, meaningVisible=false;
+let shownItem, meaningVisible=false, wordMeaningVisible=false;
 const meaningButton=document.createElement('button');
 meaningButton.type='button';
 const progressActions=document.createElement('span');
@@ -26,7 +26,11 @@ progressActions.append(topPlay,meaningButton);
 const playbackRow=$('play').parentElement;
 playbackRow.classList.add('study-shared-playback');
 playbackRow.append(bottomMeaning);
-meaningButton.onclick=()=>{meaningVisible=!meaningVisible;showMeaning()};
+meaningButton.onclick=()=>{
+ meaningVisible=!meaningVisible;
+ if(type==='word')wordMeaningVisible=meaningVisible;
+ showMeaning();
+};
 function showMeaning(){
  $('chinese').hidden=!!transcript||!meaningVisible;
  transcript?.showMeanings(meaningVisible);
@@ -100,7 +104,7 @@ function findPassage(item){
 function updatePassage(item){
  if(item===shownItem)return;
  shownItem=item;
- meaningVisible=false;
+ meaningVisible=type==='word'&&wordMeaningVisible;
  if(transcript) {
   passageHost.replaceChildren();
   transcript=null;

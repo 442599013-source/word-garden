@@ -31,7 +31,7 @@ function entry(id){
 function tileText(t){return entry(t.word)[t.lang];}
 function tileCaption(t){
  const item=entry(t.word);
- if(t.lang==='en'&&item.kind==='word'&&item.pairType)return item.pairType==='meaning'?'释义':'First sound';
+ if(t.lang==='en'&&item.kind==='word'&&item.pairType)return item.pairType==='meaning'?'释义':item.pairType==='word-class'?'词类':'First sound';
  return '';
 }
 function tileLabel(t){
@@ -45,6 +45,20 @@ let wordMeasureContext;
 function measureWord(text,font){if(wordMeasureContext===undefined){try{wordMeasureContext=document.createElement('canvas').getContext?.('2d')||null;}catch{wordMeasureContext=null;}}if(wordMeasureContext){wordMeasureContext.font='750 '+font+'px -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif';return wordMeasureContext.measureText(text).width;}return [...text].reduce((w,c)=>w+(/[\u3400-\u9fff]/.test(c)?1:/[il' .]/.test(c)?.32:/[mwMW]/.test(c)?.9:.65),0)*font;}
 function fitTile(node,t,cw,ch){
  const title=tileText(t),caption=tileCaption(t),width=Math.max(1,cw-8);
+ const context=t.lang==='en'&&entry(t.word).context;
+ if(context){
+  const label=el('small','match-tile-context');
+  const word=entry(t.word).en;
+  const found=new RegExp('\\b'+word+'(?:ed)?\\b','i').exec(context);
+  if(found){
+   label.append(context.slice(0,found.index),el('strong','',found[0]),context.slice(found.index+found[0].length));
+  }else label.textContent=context;
+  node.classList.add('match-tile-stacked');
+  node.classList.remove('match-tile-wrapped');
+  node.style.fontSize=Math.min(13,ch*.26)+'px';
+  node.replaceChildren(el('span','match-tile-main',title+' · '+caption),label);
+  return;
+ }
  if(t.lang==='zh'&&entry(t.word).kind==='sound-spelling'){
   const base=Math.min(15,ch*.32);
   const tokens=title.split(' · ');
@@ -87,7 +101,7 @@ function fitTile(node,t,cw,ch){
 }
 
 function layoutTargets(){const host=$('targets'),width=host.clientWidth||stage.clientWidth*.75||292;host.querySelectorAll('.target-row').forEach(row=>{const cells=[...row.children],gap=3,tick=Math.max(5.5,(stage.clientWidth||390)*.018),fixed=cells.length*(tick+3)+gap*(cells.length-1),available=Math.max(1,width-fixed-8),max=Math.min(12,Math.max(9,(stage.clientWidth||390)*.03)),sizes=cells.map(n=>measureWord(n.querySelector('.target-label').textContent,max)),sum=sizes.reduce((a,b)=>a+b,0),scale=Math.min(1,available/Math.max(1,sum)),font=max*scale*.96;row.style.gap=gap+'px';cells.forEach((cell,i)=>{cell.style.flex='0 0 '+(tick+3+(available*(sizes[i]/Math.max(1,sum))))+'px';cell.style.fontSize=font+'px';const mark=cell.querySelector('.tick');mark.style.width=tick+'px';mark.style.height=tick+'px';mark.style.fontSize=Math.max(5,tick*.85)+'px';});});}
-function renderBoard(old=null,{initial=false,newIds=[]}={}){const m=layout(),live=new Set(game.s.board.map(t=>t.id)),animations=[];for(const [id,n]of tileNodes)if(!live.has(id)){n.remove();tileNodes.delete(id);}game.s.board.forEach((t,i)=>{let n=tileNodes.get(t.id);if(!n){n=btn(tileText(t),()=>tap(t.id),'match-tile');n.dataset.tileId=t.id;n.dataset.word=t.word;n.dataset.lang=t.lang;tileNodes.set(t.id,n);board.append(n);}const p=palette(t);['--tile','--shade','--ink','--text-shadow'].forEach((k,j)=>n.style.setProperty(k,p[j]));const position=Number.isInteger(t.slot)?t.slot:i,x=position%4*(m.cw+m.gap),y=Math.floor(position/4)*(m.ch+m.gap);n.style.left=x+'px';n.style.top=y+'px';n.style.width=m.cw+'px';n.style.height=m.ch+'px';n.classList.toggle('selected',game.selected===t.id);n.setAttribute('aria-pressed',String(game.selected===t.id));n.setAttribute('aria-label',tileLabel(t)+(t.lang==='en'?' · English':entry(t.word).pairType==='meaning'?' · 中文':''));fitTile(n,t,m.cw,m.ch);
+function renderBoard(old=null,{initial=false,newIds=[]}={}){const m=layout(),live=new Set(game.s.board.map(t=>t.id)),animations=[];for(const [id,n]of tileNodes)if(!live.has(id)){n.remove();tileNodes.delete(id);}game.s.board.forEach((t,i)=>{let n=tileNodes.get(t.id);if(!n){n=btn(tileText(t),()=>tap(t.id),'match-tile');n.dataset.tileId=t.id;n.dataset.word=t.word;n.dataset.lang=t.lang;tileNodes.set(t.id,n);board.append(n);}const p=palette(t);['--tile','--shade','--ink','--text-shadow'].forEach((k,j)=>n.style.setProperty(k,p[j]));const position=Number.isInteger(t.slot)?t.slot:i,x=position%4*(m.cw+m.gap),y=Math.floor(position/4)*(m.ch+m.gap);n.style.left=x+'px';n.style.top=y+'px';n.style.width=m.cw+'px';n.style.height=m.ch+'px';n.classList.toggle('selected',game.selected===t.id);n.setAttribute('aria-pressed',String(game.selected===t.id));n.setAttribute('aria-label',tileLabel(t)+(t.lang==='en'&&entry(t.word).context?' · '+entry(t.word).context:'')+(t.lang==='en'?' · English':entry(t.word).pairType==='meaning'?' · 中文':''));fitTile(n,t,m.cw,m.ch);
  if(initial||newIds.includes(t.id)){const dropOrder=initial?i:newIds.indexOf(t.id),tilt=(i%2?1:-1)*(7+(i*3)%8);animations.push(motion(n,[{transform:`translate(${(i%3-1)*12}px,${-y-m.ch-35-(i%5)*10}px) rotate(${tilt}deg)`,opacity:0},{offset:.78,transform:'translate(0,3px) rotate(-1deg)',opacity:1},{offset:.9,transform:'translate(0,-3px) rotate(.4deg)'},{transform:'translate(0,0) rotate(0)'}],{duration:480+(i%4)*45,delay:dropOrder*90,fill:'backwards'}));}
  else if(old?.has(t.id)){const prev=old.get(t.id);if(prev.x!==x||prev.y!==y)animations.push(motion(n,[{transform:`translate(${prev.x-x}px,${prev.y-y}px) rotate(-1deg)`},{offset:.82,transform:'translate(0,3px)'},{transform:'translate(0,0)'}],{duration:420+Math.min(180,Math.abs(prev.y-y))}));}
  });return Promise.all(animations);}

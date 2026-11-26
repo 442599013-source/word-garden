@@ -76,13 +76,13 @@
     const panel=node('section','','a1-block');
     panel.id='a1-assessment';panel.hidden=true;
     let record=read(),timer;
-    const start=button('课堂考核',open);
-    const retry=button('重新考核',()=>{
+    const start=button('课堂练习',open);
+    const retry=button('重新练习',()=>{
       clearTimeout(timer);stop();record={};
       try{localStorage.removeItem(key)}catch{}
       open();
     });
-    actions.append(start,status,retry);
+    actions.append(start,status);
     if(nextShortcut)actions.append(nextShortcut);
     root.append(actions,panel);
     function remaining(){return questions.filter(q=>!passed(record,q))}
@@ -90,8 +90,6 @@
       const left=remaining().length,done=!left;
       status.textContent=done?'✓ 已完成':left+' 题待答';
       status.classList.toggle('a1-assessment-complete',done);
-      start.textContent=done?'查看考核':left===questions.length?'课堂考核':'继续考核';
-      retry.hidden=!done;
       if(nextShortcut)nextShortcut.hidden=!done||!panel.hidden;
     }
     function open(){
@@ -101,9 +99,9 @@
     function draw(){
       paint();
       const left=remaining(),question=left[0];
-      const header=node('h2','课堂考核 · '+(questions.length-left.length)+' / '+questions.length);
+      const header=node('h2','课堂练习 · '+(questions.length-left.length)+' / '+questions.length);
       if(!question){
-        panel.replaceChildren(header,node('p','✓ 已完成','a1-assessment-complete'));
+        panel.replaceChildren(header,node('p','✓ 已完成','a1-assessment-complete'),retry);
         if(next)panel.append(nextLink());
         return;
       }
@@ -118,6 +116,7 @@
       const multi=question.answers.length>1;
       function check(){
         if(locked||!selected.size)return;
+        for (const value of selected) options.get(value).dataset.answerResult = question.answers.includes(value) ? 'correct' : 'wrong';
         if(selected.size!==question.answers.length||question.answers.some(answer=>!selected.has(answer))){
           feedback.dataset.state='wrong';feedback.textContent='再听一遍，试试看。';
           return;
@@ -146,7 +145,10 @@
         const el=button(value,()=>{
           if(!multi)selected.clear();
           if(selected.has(value))selected.delete(value);else selected.add(value);
-          for(const [choice,b] of options)b.setAttribute('aria-pressed',String(selected.has(choice)));
+          for(const [choice,b] of options){
+            b.setAttribute('aria-pressed',String(selected.has(choice)));
+            delete b.dataset.answerResult;
+          }
           feedback.textContent='';
           delete feedback.dataset.state;
           submit.disabled=!selected.size;

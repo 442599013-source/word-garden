@@ -36,6 +36,12 @@
     if (item?.kind === 'sound') return local(id);
     if (item?.kind === 'letter') return en(({A:'ay',H:'aitch',Z:'zed'})[item.en] || item.en);
     if (item) return en(item.en);
+    const fourth = /^4ch1-word-([a-z]+)-(\d+)$/.exec(id);
+    if (fourth) {
+      const word=window.WMVocabulary4?.words.find(item=>item.en===fourth[1]);
+      const use=word?.uses[Number(fourth[2])];
+      return use ? en(word.uses.length>1 ? use.phrase : word.en) : null;
+    }
     if (id.startsWith('3yy3-word-')) {
       const word=window.WMA1Phonics?.words.find(item=>item.id===id);
       return word?en(word.en):null;

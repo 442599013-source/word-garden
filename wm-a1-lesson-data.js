@@ -28,7 +28,7 @@
         titleZh:'第' + chineseNumber(number) + '课：' + type.title + '第' + chineseNumber(categoryNumber) + '节'};
     });
   }
-  const catalog = numberLessons([{id:lessonId, type:'pronunciation'}, {id:'goldy-a1-first-sounds-2',type:'pronunciation'}, {id:'goldy-a1-phonics-3',type:'pronunciation'}]);
+  const catalog = numberLessons([{id:lessonId, type:'pronunciation'}, {id:'goldy-a1-first-sounds-2',type:'pronunciation'}, {id:'goldy-a1-phonics-3',type:'pronunciation'}, {id:'goldy-vocabulary-4',type:'vocabulary'}]);
   window.WMClassroomCatalog = {lessons:catalog, numberLessons};
   const letterNames = ('eɪ biː siː diː iː ef dʒiː eɪtʃ aɪ dʒeɪ keɪ el em en əʊ piː kjuː ɑː es tiː juː viː ˈdʌbəl.juː eks waɪ zed').split(' ');
   const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].map((en, i) => ({

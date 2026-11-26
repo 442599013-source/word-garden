@@ -84,18 +84,18 @@
         if (answered || !selected.size) return;
         const correct = selected.size === item.correct.length && item.correct.every(i=>selected.has(i));
         if (correct) {
-          for (const i of selected) choices[i].dataset.state = 'correct';
+          for (const i of selected) choices[i].dataset.answerResult = choices[i].dataset.state = 'correct';
           succeed();
         } else {
           hadWrong = true;
-          for (const i of selected) choices[i].dataset.state = 'wrong';
+          for (const i of selected) choices[i].dataset.answerResult = item.correct.includes(i) ? 'correct' : 'wrong';
           feedback.textContent = 'Read the passage and try again.';
         }
       }
       const choices = item.options.map((text, i)=>{
         const option = button(text, ()=>{
           if (answered) return;
-          choices.forEach(node=>delete node.dataset.state);
+          choices.forEach(node=>{delete node.dataset.state;delete node.dataset.answerResult;});
           if (item.correct.length === 1) selected.clear();
           if (selected.has(i)) selected.delete(i);
           else selected.add(i);

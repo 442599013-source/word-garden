@@ -59,6 +59,19 @@
   const thirdLevel=thirdIds.length?[{
     level:3,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:thirdIds
   }]:[];
+  const fourthIds=[];
+  for(const word of window.WMVocabulary4?.words||[]){
+    for(const [index,use] of word.uses.entries()){
+      const context=word.uses.length>1?use.phrase:'';
+      const id=word.id+'-'+index;
+      words[id]={...word,id,en:word.en,zh:use.zh,pairType:'meaning',context};
+      words[id+'-type']={...word,id,en:word.en,zh:use.label,pairType:'word-class',context};
+      fourthIds.push(id,id+'-type');
+    }
+  }
+  const fourthLevel=fourthIds.length?[{
+    level:4,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:fourthIds
+  }]:[];
   for(const item of Object.values(words)){
     if(item.pairType==='classification')item.zh=classificationLabel(item.zh);
   }
@@ -68,6 +81,6 @@
     levels:[{
       level:1,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},
       classification:categories.map(classificationLabel),sourceWordIds:firstIds
-    },...secondLevel,...thirdLevel]
+    },...secondLevel,...thirdLevel,...fourthLevel]
   };
 })();

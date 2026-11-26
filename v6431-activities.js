@@ -15,7 +15,7 @@
     ['speaking','Blessed Voice','祝福之声 · 口语','♬'],
     ['reading','Magic Awakening','魔法唤醒 · 阅读','▱'],
     ['writing','Guardian Halo','守护之环 · 写作','✎'],
-    ['assessment','Advancement Mission','课堂考核','☆']
+    ['assessment','Classroom Practice','课堂练习','☆']
   ];
   for(const [id,en,zh,icon] of entries){
     const available=!!lesson;

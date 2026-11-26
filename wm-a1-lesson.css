@@ -88,10 +88,9 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-onset-heading { align-items:flex-start; }
 
 /* Selection must remain visible over the base answer style. */
-.a1-ability-answer .a1-button[aria-pressed="true"] {
-  background:#cde2d4; color:#203b2d; outline:2px solid #315b4a; outline-offset:-2px;
+.a1-ability-answer .a1-button[aria-pressed="true"]:not([data-answer-result]) {
+  background:#e9e0f8; color:#4b3470; outline:2px solid #7753a3; outline-offset:-2px;
 }
-.a1-ability-answer .a1-button[aria-pressed="true"]::before { content:'✓'; margin-inline-end:.55rem; }
 
 .a1-phonics-list { overflow-wrap:anywhere; font-weight:600; }
 .a1-phonics-entry { display:flex; align-items:center; gap:.5rem; }
@@ -114,3 +113,12 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-comparison-controls { position:relative; }
 .a1-local-comparison > summary { padding-inline-end:3.35rem; }
 .a1-local-speaker { position:absolute; top:.6rem; right:0; }
+
+.a1-phoneme-heading { white-space: nowrap; }
+.a1-vocabulary-list { display: grid; gap: .6rem; padding: .45rem 0; }
+.a1-vocabulary-word { border: 1px solid rgba(110,70,164,.23); border-radius: .75rem; padding: .65rem; }
+.a1-vocabulary-word p { margin: .35rem 0; }
+.a1-vocabulary-use + .a1-vocabulary-use { border-top: 1px solid rgba(110,70,164,.23); }
+.a1-vocabulary-example { font-weight: 650; }
+.a1-vocabulary-example mark { background: #fee5a9; color: #563810; border-radius: .2em; padding-inline: .1em; }
+.a1-vocabulary-section > summary { cursor: pointer; padding: .5rem 0; }

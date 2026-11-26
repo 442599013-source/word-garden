@@ -57,3 +57,13 @@
   border-radius:.2em;
   text-shadow:none;
 }
+
+.match-tile-context {
+  display: block;
+  font-size: .8em;
+  line-height: 1.08;
+  overflow-wrap: anywhere;
+  text-align: center;
+  white-space: normal;
+}
+.match-tile-context strong { text-decoration: underline; }

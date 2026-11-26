@@ -1,0 +1,242 @@
+/* Fourth lesson: contextual word meaning and word class. */
+(() => {
+  'use strict';
+  const {words,targets,classes}=WMVocabulary4;
+  const audio=WMA1Audio;
+  const key='goldy-vocabulary-4:practice';
+  const modes=['meaning','class'];
+  const questions=words.flatMap(word=>word.uses.flatMap(use=>modes.map(mode=>({
+    word,use,mode,id:use.id+'-'+mode,
+    signature:JSON.stringify([use.sentence,mode==='class'?use.part:use.zh])
+  }))));
+  function read(){
+    try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
+    catch { return {}; }
+  }
+  function pending(record){
+    return questions.filter(q=>record[q.id]!==q.signature);
+  }
+  const complete=()=>!pending(read()).length;
+
+  function node(tag,text,cls){
+    const el=document.createElement(tag);
+    if(text)el.textContent=text;
+    if(cls)el.className=cls;
+    return el;
+  }
+  function button(text,action,cls='a1-button'){
+    const el=node('button',text,cls);
+    el.type='button';el.onclick=action;
+    return el;
+  }
+  const en=text=>({text,locale:'en-GB'});
+  const zh=text=>({text,locale:'zh-CN'});
+  function highlight(host,text,word){
+    const test=new RegExp('\\b'+word+'(?:ed)?\\b','i');
+    const found=test.exec(text);
+    if(!found){host.textContent=text;return host;}
+    host.append(text.slice(0,found.index),node('mark',found[0]),text.slice(found.index+found[0].length));
+    return host;
+  }
+  const examplesByUse={
+    'book:n':'前面有冠词 a，这里指一本书，是读的对象',
+    'book:v':'和 a room 搭配，表示预订房间这个动作',
+    'cold:a':'描述 day，告诉我们那一天有多冷',
+    'cold:n':'和 a、bad 组成名词短语，指得的一场感冒',
+    'fast:r':'修饰 run，告诉我们跑得怎么样',
+    'fast:a':'描述 train，说明那趟列车的速度',
+    'well:r':'修饰 speak，告诉我们英语说得怎么样',
+    'this:d':'在 page 前说明是哪一页',
+    'this:o':'单独指眼前的东西，在句中作主语',
+    'that:c':'把 you are busy 接到 I know 后，说明我知道什么',
+    'they:o':'代替前面提到的人，在 study 前作主语',
+    'from:p':'带出 my sister，说明信是从谁那里来的',
+    'when:c':'把表示时间的从句 when you arrive 和主句 Call me 连起来',
+    'yeah:i':'用来回应对方，表达同意'
+  };
+  function explanation(word,use){
+    if(word.exampleOnly)
+      return use.part==='d'?'这个词放在名词前，帮助读者判断所指的是任意一个还是特指对象。它是限定词中的冠词。':'';
+    const phrase=use.phrase;
+    if(use.part==='v'&&['must','will'].includes(word.en))
+      return '在「'+phrase+'」中，'+word.en+' 放在主要动词前，表示'+use.zh+'。它是情态动词。';
+    const specific=examplesByUse[word.en+':'+use.part];
+    if(specific)return '在这句里，'+word.en+' '+specific+'，所以是'+use.label+'。';
+    const role=use.part==='r'?'补充说明「'+use.zh+'」这一用法，修饰句中的动作、性质或整句话':classes[use.part].reason;
+    return '在「'+phrase+'」里，'+word.en+' 表示「'+use.zh+'」，'+role+'，所以是'+use.label+'。';
+  }
+  function narration(word,use){
+    return [en(word.en),zh(use.label+'。'+use.gloss),en(use.sentence),zh(use.sentenceZh),explanation(word,use)];
+  }
+  const multi=targets.filter(word=>new Set(word.uses.map(use=>use.part)).size>1);
+  function mount(root){
+    const course=WMClassroomCatalog.lessons.find(lesson=>lesson.number===4);
+    const audioStatus=node('p','','a1-status');
+    audioStatus.setAttribute('role','status');
+    let playing,token=0;
+    function stop(){
+      token++;
+      playing?.paint(false);
+      playing=null;
+      audio.stop();
+    }
+    function speaker(label,id,parts){
+      audio.registerNarration(id,parts);
+      const control=button('',async()=>{
+        const wasPlaying=playing===control;
+        stop();
+        if(wasPlaying)return;
+        const current=token;
+        playing=control;control.paint(true);audioStatus.textContent='';
+        const ok=await audio.play('section-'+id);
+        if(current!==token)return;
+        playing=null;control.paint(false);
+        if(ok===false)audioStatus.textContent='点读未完成，请重试。';
+      },'a1-speaker');
+      control.paint=isPlaying=>{
+        control.setAttribute('aria-pressed',String(isPlaying));
+        WMStudyIcons.set(control,isPlaying?'stop':'speaker',isPlaying?'停止朗读':label);
+      };
+      control.paint(false);
+      return control;
+    }
+    function heading(title,id,parts,tag='h2'){
+      const row=node('div','','a1-block-heading');
+      row.append(node(tag,title),speaker('朗读'+title,id,parts));
+      return row;
+    }
+    function card(word,uses,prefix){
+      const card=node('article','','a1-vocabulary-word');
+      card.append(heading(word.en,prefix+'-'+word.id,uses.flatMap(use=>narration(word,use)),'h3'));
+      for(const use of uses){
+        const box=node('div','','a1-vocabulary-use');
+        box.append(
+          node('p',use.label+' · '+use.gloss),
+          highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),
+          node('p',use.sentenceZh),
+          node('p',explanation(word,use))
+        );
+        card.append(box);
+      }
+      return card;
+    }
+    const intro=node('section','','a1-block');
+    const tip='本课先认识九类词，再用句子学四字母常用词。词在句中的位置是线索，还要看它怎样和其他词搭配、在句中起什么作用。';
+    const groups=Object.entries(classes);
+    const examples=groups.map(([part,entry])=>{
+      const word=words.find(item=>item.en===entry.example);
+      return {word,use:word.uses.find(use=>use.part===part),entry};
+    });
+    intro.append(heading('九大词类','4ch1-intro',[tip,...examples.flatMap(({word,use,entry})=>[entry.label+'。'+entry.intro,...narration(word,use)])]));
+    intro.append(node('p',tip));
+    for(const {word,use,entry} of examples){
+      const section=node('section','','a1-vocabulary-word');
+      section.append(heading(entry.label,'4ch1-class-'+use.part,[entry.intro,...narration(word,use)],'h3'),
+        node('p',entry.intro),highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),node('p',use.sentenceZh),node('p',explanation(word,use)));
+      if(use.part==='d'){
+        const short=words.filter(item=>item.exampleOnly);
+        for(const item of short)section.append(card(item,item.uses,'4ch1-article'));
+      }
+      intro.append(section);
+    }
+    root.append(node('p','幼儿园 A1 · '+course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
+
+    function textGroups(title,id,groups){
+      const frame=node('section','','a1-block');
+      const readWords=list=>list.flatMap(word=>word.uses.flatMap(use=>narration(word,use)));
+      frame.append(heading(title,id,groups.flatMap(([,list])=>readWords(list))));
+      for(const [label,list] of groups){
+        const section=node('section','','a1-vocabulary-section');
+        const groupId=id+'-'+label;
+        section.append(heading(label+' · '+list.length+' 个词',groupId,readWords(list),'h3'));
+        const details=node('details');
+        const grid=node('div','','a1-vocabulary-list');
+        const summary=node('summary','展开词表');
+        details.append(summary,grid);
+        details.addEventListener('toggle',()=>{
+          summary.textContent=details.open?'收起词表':'展开词表';
+          if(details.open&&!grid.childElementCount)grid.append(...list.map(word=>card(word,word.uses,groupId)));
+        });
+        section.append(details);
+        frame.append(section);
+      }
+      root.append(frame);
+    }
+    const levels=['A1','A2','B1','B2','C1','C2'];
+    textGroups('四字母词 · '+targets.length+' 个','4ch1-corpus',levels.map(level=>[level,targets.filter(word=>word.level===level)]));
+    textGroups('课末对照 · 同一拼写，不同词类','4ch1-compare',levels.map(level=>[level,multi.filter(word=>word.level===level)]));
+
+    let record=read(),timer;
+    const status=node('span','','a1-assessment-status');
+    status.setAttribute('role','status');
+    const actions=node('div','','a1-assessment-actions');
+    const task=node('section','','a1-block');task.id='a1-assessment';task.hidden=true;
+    const start=button('课堂练习',open);
+    const match=node('a','去第四关魔法配对','a1-button');match.href='word-match.html?level=4&from=journey';
+    actions.append(start,status);
+    root.append(actions,task,match);
+
+    function save(){
+      try { localStorage.setItem(key,JSON.stringify(record));return true; }
+      catch { return false; }
+    }
+    function refresh(left=pending(record).length){
+      status.textContent=left?left+' 题待答':'✓ 已完成';
+      status.classList.toggle('a1-assessment-complete',!left);
+    }
+    function open(){
+      task.hidden=false;
+      draw();
+      task.scrollIntoView({block:'start'});
+    }
+    function draw(){
+      clearTimeout(timer);stop();
+      const left=pending(record);
+      refresh(left.length);
+      if(!left.length){
+        task.replaceChildren(node('h2','✓ 已完成','a1-assessment-complete'),
+          button('重新练习',()=>{record={};save();draw();}));
+        return;
+      }
+      const {id,mode,word,use,signature}=left[0];
+      const correct=mode==='class'?use.label:use.zh;
+      const allLabels=Object.values(classes).map(entry=>entry.label);
+      const startAt=questions.length-left.length;
+      const related=word.uses.filter(candidate=>candidate!==use).map(candidate=>mode==='class'?candidate.label:candidate.zh);
+      const offset=(startAt*41)%words.length;
+      const meaningChoices=Array.from({length:14},(_,index)=>words[(offset+index)%words.length].main);
+      const other=mode==='class'?allLabels.slice(startAt%9).concat(allLabels.slice(0,startAt%9)):meaningChoices;
+      const choices=[...new Set([...related,...other])].filter(label=>label!==correct).slice(0,3);
+      choices.splice(startAt%4,0,correct);
+      const optionBox=node('div','','a1-ability-answer');
+      const feedback=node('p','','a1-ability-status');
+      feedback.setAttribute('role','status');
+      let locked=false;
+      const options=choices.map(choice=>button(choice,()=>{
+        if(locked)return;
+        const ok=choice===correct;
+        for(const option of options)delete option.dataset.answerResult;
+        options[choices.indexOf(choice)].dataset.answerResult=ok?'correct':'wrong';
+        feedback.dataset.state=ok?'correct':'wrong';
+        if(!ok){feedback.textContent='再看看高亮词和句子里的其他词。';return;}
+        locked=true;stop();
+        for(const option of options)option.disabled=true;
+        record[id]=signature;
+        feedback.textContent=save()?'✓ Correct!':'✓ Correct! · 未能保存进度';
+        void window.WMStudySound?.ding();
+        refresh(left.length-1);
+        timer=setTimeout(draw,850);
+      }));
+      optionBox.append(...options);
+      const title='课堂练习 · '+(startAt+1)+' / '+questions.length;
+      const prompt=mode==='class'?'高亮词在这句里属于哪个词类？':'高亮词在这句里是什么意思？';
+      task.replaceChildren(heading(title,'4ch1-question-'+id,[en(use.sentence)]),
+        node('p',prompt),highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),optionBox,feedback);
+    }
+    refresh();
+    if(location.hash==='#a1-assessment')open();
+    window.addEventListener('pagehide',()=>{clearTimeout(timer);stop()});
+    window.addEventListener('pageshow',event=>{if(event.persisted&&!task.hidden){record=read();draw()}});
+  }
+  window.WMVocabularyClassroom={mount,complete};
+})();

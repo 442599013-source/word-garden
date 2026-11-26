@@ -91,8 +91,9 @@
     audioStatus.setAttribute('role','status');
     root.append(node('h1',catalog.titleZh+' · 自然拼读'),audioStatus);
     const intro='先听整词，再听彩色字母在这个词里对应的音素。词卡下方显示一个本课用到的释义。';
-    const introBlock=block('课堂介绍',[register('intro',[{text:intro,locale:'zh-CN'}])]);
-    introBlock.append(node('p',intro));
+    const firstSoundTip='判断单词以元音音素还是辅音音素开头，只听它的第一个音。第一个音是哪一类，单词就以哪一类音素开头。词中或词尾的音素不影响这个判断。';
+    const introBlock=block('课堂介绍',[register('intro',[{text:intro,locale:'zh-CN'},{text:firstSoundTip,locale:'zh-CN'}])]);
+    introBlock.append(node('p',intro),node('p',firstSoundTip));
     root.append(introBlock);
 
     const overview=block('44 个音素总览',rows.map(row=>row.id));
@@ -104,7 +105,10 @@
     for(const row of rows){
       const ids=row.examples.map((item,index)=>register(row.id+'-'+index,[wordPart(item)]));
       const sections=row.examples.flatMap(item=>[wordPart(item),soundPart(row.id)]);
-      const frame=block(row.ipa,[register(row.id+'-all',[soundPart(row.id),...sections])]);
+      const sound = WMA1Lesson.sounds.find(item=>item.id===row.id);
+      const label = sound.group==='vowel' ? 'Vowel sound' : 'Consonant sound';
+      const frame=block(row.ipa+' '+label,[register(row.id+'-all',[soundPart(row.id),...sections])]);
+      frame.querySelector('h2').classList.add('a1-phoneme-heading');
       frame.append(soundButton(row.ipa,row.id));
       const grid=node('div','','a1-card-grid a1-onset-cards');
       grid.append(...row.examples.map((item,index)=>card(item,row.ipa,row.id,ids[index])));
@@ -124,26 +128,25 @@
       recap.append(section);
     }
     root.append(recap);
-    mountAssessment(root);
+    mountPractice(root);
     const match=node('a','去第三关魔法配对','a1-button');
     match.href='word-match.html?level=3&from=journey';
     root.append(match);
   }
 
-  function mountAssessment(root){
-    let mode='assessment',position=0,saved=read(),timer;
+  function mountPractice(root){
+    let saved=read(),timer;
     const controls=node('div','','a1-assessment-actions');
     const task=node('section','','a1-block');
     task.id='a1-assessment';task.hidden=true;
     const status=node('span','','a1-assessment-status');
     status.setAttribute('role','status');
     const remaining=()=>questions.filter(q=>saved[q.row.id]!==key(q));
-    const practice=button('课堂练习',()=>open('practice'));
-    const exam=button('课堂考核',()=>open('assessment'));
-    const retry=button('重新考核',()=>{
-      saved={};persist();open('assessment');
+    const practice=button('课堂练习',open);
+    const retry=button('重新练习',()=>{
+      saved={};persist();open();
     });
-    controls.append(practice,exam,status,retry);
+    controls.append(practice,status);
     root.append(controls,task);
     function persist(){
       try{localStorage.setItem(quizKey,JSON.stringify(saved))}
@@ -151,29 +154,28 @@
     }
     function refresh(){
       const count=remaining().length;
-      exam.textContent=count===questions.length?'课堂考核':count?'继续考核':'查看考核';
       status.textContent=count?count+' 题待答':'✓ 已完成';
       status.classList.toggle('a1-assessment-complete',!count);
-      retry.hidden=!!count;
     }
-    function open(which){
-      mode=which;position=0;
+    function open(){
       task.hidden=false;draw();
       task.scrollIntoView({block:'start'});
     }
     function draw(){
       clearTimeout(timer);play(null,[]);
       refresh();
-      const assessment=mode==='assessment', list=assessment?remaining():questions;
-      const q=assessment?list[0]:list[position];
-      const number=assessment?questions.length-list.length:position;
+      const list=remaining();
+      const q=list[0];
+      const number=questions.length-list.length;
       if(!q){
-        task.replaceChildren(node('h2','✓ 已完成','a1-assessment-complete'));
+        const next = node('a','进入第四课 · 词汇','a1-button');
+        next.href='sentence-game.html?level=4';
+        task.replaceChildren(node('h2','✓ 已完成','a1-assessment-complete'),retry,next);
         return;
       }
       const heading=node('div','','a1-block-heading');
       const wordId=register('test-'+q.row.id,[wordPart(q.item)]);
-      heading.append(node('h2',(assessment?'课堂考核':'课堂练习')+' · '+(number+1)+' / '+questions.length),
+      heading.append(node('h2','课堂练习 · '+(number+1)+' / '+questions.length),
         speaker('听整词',[wordId]));
       const prompt=node('p','这个单词里，彩色字母对应哪个音素？');
       const answers=node('div','','a1-ability-answer');
@@ -184,6 +186,8 @@
         const row=node('div','','a1-audible-option');
         const answer=button(option.ipa,()=>{
           if(locked)return;
+          for(const control of answers.querySelectorAll('button')) delete control.dataset.answerResult;
+          answer.dataset.answerResult=option.id===q.row.id?'correct':'wrong';
           if(option.id!==q.row.id){
             feedback.dataset.state='wrong';
             feedback.textContent='再听整词和选项，比较高亮部分的音。';
@@ -193,8 +197,7 @@
           for(const control of answers.querySelectorAll('button'))control.disabled=true;
           feedback.dataset.state='correct';feedback.textContent='✓ Correct!';
           void window.WMStudySound?.ding();
-          if(assessment){saved[q.row.id]=key(q);persist();refresh();}
-          else position++;
+          saved[q.row.id]=key(q);persist();refresh();
           timer=setTimeout(draw,850);
         });
         row.append(answer,speaker('听 '+option.ipa,[option.id]));
@@ -203,7 +206,7 @@
       task.replaceChildren(heading,prompt,wordButton(q.item,wordId),answers,feedback);
     }
     refresh();
-    if(location.hash==='#a1-assessment')open('assessment');
+    if(location.hash==='#a1-assessment')open();
     window.addEventListener('pagehide',()=>{clearTimeout(timer);play(null,[])});
     window.addEventListener('pageshow',event=>{if(event.persisted&&!task.hidden){saved=read();draw()}});
   }

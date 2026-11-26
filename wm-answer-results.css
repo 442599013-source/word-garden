@@ -1,0 +1,20 @@
+button[data-answer-result="correct"] {
+  background: #d7f5e3 !important;
+  border-color: #54a778 !important;
+  color: #145733 !important;
+  opacity: 1 !important;
+}
+button[data-answer-result="wrong"] {
+  background: #fde0e2 !important;
+  border-color: #c85d67 !important;
+  color: #85212b !important;
+  opacity: 1 !important;
+}
+button[data-answer-result]::after {
+  display: inline-block;
+  position: static;
+  margin-inline-start: .4em;
+  font-weight: 800;
+}
+button[data-answer-result="correct"]::after { content: "✓"; }
+button[data-answer-result="wrong"]::after { content: "×"; }

@@ -2,13 +2,14 @@
   'use strict';
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
-  const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||item.number===2&&window.WMA1Lesson2Classroom||item.number===3&&window.WMA1PhonicsClassroom);
+  const classes = {2:window.WMA1Lesson2Classroom,3:window.WMA1PhonicsClassroom,4:window.WMVocabularyClassroom};
+  const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||classes[item.number]);
   const parameters=new URLSearchParams(location.search);
   const requested=Number(parameters.get('level') || (location.hash==='#a1-assessment'?1:resumeLesson()));
   const practicePages={listening:'walkman',reading:'reading-study',speaking:'speaking-study',writing:'writing-study'};
   const practice=practicePages[parameters.get('practice')];
-  if(requested===3&&practice){
-    location.replace(practice+'.html?level=3&type=word');
+  if((requested===3||requested===4)&&practice){
+    location.replace(practice+'.html?level='+requested+'&type=word');
     return;
   }
 
@@ -30,7 +31,7 @@
       ));
     });
     return available.find(({number})=>!(
-      number===1?firstQuizComplete:number===2?window.WMA1Lesson2Quiz?.complete():window.WMA1PhonicsClassroom?.complete()
+      number===1?firstQuizComplete:number===2?window.WMA1Lesson2Quiz?.complete():classes[number]?.complete()
     ))?.number||available.at(-1).number;
   }
 
@@ -48,12 +49,8 @@
     picker.onchange=()=>{location.href='sentence-game.html?level='+picker.value;};
     back.after(picker);
   }
-  if (requested === 3 && window.WMA1PhonicsClassroom) {
-    window.WMA1PhonicsClassroom.mount(root);
-    return;
-  }
-  if (requested === 2 && window.WMA1Lesson2Classroom) {
-    window.WMA1Lesson2Classroom.mount(root);
+  if (classes[requested]) {
+    classes[requested].mount(root);
     return;
   }
   if (requested !== lesson.number) {
@@ -450,7 +447,7 @@
   };
   const quizStatus = element('span','','a1-assessment-status');
   quizStatus.setAttribute('role','status');
-  const quizButton = button('课堂考核',startQuiz);
+  const quizButton = button('课堂练习',startQuiz);
   const signature = (question,item) => JSON.stringify([question.title,item.kind,item.en,item.ipa,item.group]);
   const current = new Map(questions.map(question=>[question.id,
     new Map(question.items.map(item=>[item.id,signature(question,item)]))]));
@@ -479,7 +476,6 @@
     quizStatus.hidden = remaining > 0 && !started && !questions.some(({id})=>Array.isArray(saved[id])&&saved[id].length);
     quizStatus.classList.toggle('a1-assessment-complete',!remaining);
     quizStatus.textContent = remaining ? '还有 '+remaining+' 题待补答' : '✓ 已完成';
-    quizButton.textContent = remaining && !quizStatus.hidden ? '继续考核' : '课堂考核';
   }
   function save() {
     saved.verifiedQuestions = Object.fromEntries(questions.map(({id})=>[id,
@@ -521,12 +517,16 @@
     let completed = false;
     function advance() {
       if (index < questions.length - 1) showQuiz(index + 1);
-      else quiz.replaceChildren(element('h2','第 1 课考核完成'),
+      else quiz.replaceChildren(element('h2','第 1 课练习完成'),
         button('重新练习',()=>{saved={};answers=new Map(questions.map(({id})=>[id,new Set()]));save();showQuiz(0);}));
     }
     function choose(group) {
       if (completed) return;
       if (!selection) { feedback.textContent = '请先点下面的一张卡片。'; return; }
+      for (const [name, answer] of categoryButtons) {
+        delete answer.dataset.answerResult;
+        if (name === group) answer.dataset.answerResult = selection.group === group ? 'correct' : 'wrong';
+      }
       if (selection.group !== group) { feedback.dataset.state='wrong'; feedback.textContent = '再听一遍，试试另一个分类。'; return; }
       const label = selection.kind === 'word' ? showWord(selection) : selection.en;
       buckets.get(group).append(tile(label,selection.id));
@@ -543,11 +543,14 @@
         quizTimer = setTimeout(advance,850);
       }
     }
+    const categoryButtons = new Map();
     for (const [group, label] of Object.entries(lesson.labels[question.items[0].kind])) {
       const frame = element('div', '', 'a1-category');
       const list = element('div', '', 'a1-pool');
       buckets.set(group, list);
-      frame.append(button(label,()=>choose(group)),list);
+      const answer = button(label,()=>choose(group));
+      categoryButtons.set(group,answer);
+      frame.append(answer,list);
       groups.append(frame);
     }
     for (const item of shuffle(question.items)) {
@@ -558,6 +561,7 @@
       }
       const card = button(label,()=>{
         if (completed) return;
+        for (const answer of categoryButtons.values()) delete answer.dataset.answerResult;
         selectedButton?.setAttribute('aria-pressed','false');
         selection = item;
         selectedButton = card;
@@ -567,7 +571,7 @@
       card.setAttribute('aria-pressed','false');
       pool.append(card);
     }
-    quiz.replaceChildren(element('h2','课堂考核 ' + (index + 1) + ' / 3'),
+    quiz.replaceChildren(element('h2','课堂练习 ' + (index + 1) + ' / 3'),
       element('p',question.title),element('p',index===0 ?
         '先听名字，认出字母，再选它的类别。Y 在字母分类里放入辅音字母框，它在不同单词里可以表示不同的音。' :
         index===1 ? '先听单音，再选元音音素或辅音音素。' : '先听整个单词，再判断首音素是元音音素还是辅音音素。'),
