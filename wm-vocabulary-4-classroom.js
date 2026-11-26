@@ -120,51 +120,53 @@
       }
       return card;
     }
+    function wordList(items,id){
+      const details=node('details','','a1-vocabulary-section');
+      const summary=node('summary','展开词表');
+      const grid=node('div','','a1-vocabulary-list');
+      details.append(summary,grid);
+      details.addEventListener('toggle',()=>{
+        summary.textContent=details.open?'收起词表':'展开词表';
+        if(details.open&&!grid.childElementCount){
+          grid.append(...items.map(({word,uses})=>card(word,uses,id)));
+        }
+      });
+      return details;
+    }
+    const tip='这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
-    const tip='本课先认识九类词，再用句子学四字母常用词。词在句中的位置是线索，还要看它怎样和其他词搭配、在句中起什么作用。';
-    const groups=Object.entries(classes);
-    const examples=groups.map(([part,entry])=>{
-      const word=words.find(item=>item.en===entry.example);
-      return {word,use:word.uses.find(use=>use.part===part),entry};
-    });
-    intro.append(heading('九大词类','4ch1-intro',[tip,...examples.flatMap(({word,use,entry})=>[entry.label+'。'+entry.intro,...narration(word,use)])]));
-    intro.append(node('p',tip));
-    for(const {word,use,entry} of examples){
-      const section=node('section','','a1-vocabulary-word');
-      section.append(heading(entry.label,'4ch1-class-'+use.part,[entry.intro,...narration(word,use)],'h3'),
-        node('p',entry.intro),highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),node('p',use.sentenceZh),node('p',explanation(word,use)));
-      if(use.part==='d'){
-        const short=words.filter(item=>item.exampleOnly);
-        for(const item of short)section.append(card(item,item.uses,'4ch1-article'));
-      }
-      intro.append(section);
-    }
-    root.append(node('p','幼儿园 A1 · '+course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
+    intro.append(heading('九大词类','4ch1-intro',[tip]),node('p',tip));
+    root.append(node('p',course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
 
-    function textGroups(title,id,groups){
-      const frame=node('section','','a1-block');
-      const readWords=list=>list.flatMap(word=>word.uses.flatMap(use=>narration(word,use)));
-      frame.append(heading(title,id,groups.flatMap(([,list])=>readWords(list))));
-      for(const [label,list] of groups){
-        const section=node('section','','a1-vocabulary-section');
-        const groupId=id+'-'+label;
-        section.append(heading(label+' · '+list.length+' 个词',groupId,readWords(list),'h3'));
-        const details=node('details');
-        const grid=node('div','','a1-vocabulary-list');
-        const summary=node('summary','展开词表');
-        details.append(summary,grid);
-        details.addEventListener('toggle',()=>{
-          summary.textContent=details.open?'收起词表':'展开词表';
-          if(details.open&&!grid.childElementCount)grid.append(...list.map(word=>card(word,word.uses,groupId)));
-        });
-        section.append(details);
-        frame.append(section);
-      }
-      root.append(frame);
+    const bySpelling=(a,b)=>a.en.localeCompare(b.en,'en');
+    const sortedWords=[...targets].sort(bySpelling);
+    for(const [part,entry] of Object.entries(classes)){
+      const id='4ch1-class-'+part;
+      const section=node('section','','a1-block');
+      section.dataset.wordClass=part;
+      const entries=sortedWords.map(word=>({word,uses:word.uses.filter(use=>use.part===part)}))
+        .filter(({uses})=>uses.length);
+      const example=entries.find(({word})=>word.en===entry.example);
+      const rest=entries.filter(item=>item!==example);
+      const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
+      const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
+      section.append(heading(entry.label,id,[
+        entry.label+'。'+entry.intro,
+        ...readEntries([example]),
+        ...articles.flatMap(word=>word.uses.flatMap(use=>narration(word,use))),
+        ...readEntries(rest)
+      ]),node('p',entry.intro),card(example.word,example.uses,id));
+      for(const article of articles)section.append(card(article,article.uses,id));
+      if(rest.length)section.append(wordList(rest,id));
+      root.append(section);
     }
-    const levels=['A1','A2','B1','B2','C1','C2'];
-    textGroups('四字母词 · '+targets.length+' 个','4ch1-corpus',levels.map(level=>[level,targets.filter(word=>word.level===level)]));
-    textGroups('课末对照 · 同一拼写，不同词类','4ch1-compare',levels.map(level=>[level,multi.filter(word=>word.level===level)]));
+
+    const comparisons=[...multi].sort(bySpelling).map(word=>({word,uses:word.uses}));
+    const recap=node('section','','a1-block');
+    recap.append(heading('课末对照 · 同一拼写，不同词类','4ch1-compare',
+      comparisons.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)))),
+      wordList(comparisons,'4ch1-compare'));
+    root.append(recap);
 
     let record=read(),timer;
     const status=node('span','','a1-assessment-status');
