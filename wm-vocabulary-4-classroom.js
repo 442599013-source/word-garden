@@ -207,7 +207,7 @@
       const rest=entries.filter(item=>item!==example);
       const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
       const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
-      section.append(heading(entry.label,id,[entry.label+'。'+entry.intro]),node('p',entry.intro),card(example.word,example.uses,id));
+      section.append(heading(entry.label+(entry.en?' · '+entry.en:''),id,[entry.label+'。'+entry.intro]),node('p',entry.intro),card(example.word,example.uses,id));
       for(const article of articles)section.append(card(article,article.uses,id));
       const groupSize=number===3?25:number===4?25:25;
       for(let i=0;i<rest.length;i+=groupSize)section.append(wordList(rest.slice(i,i+groupSize),id,listSpeaker));

@@ -4,15 +4,15 @@
 (() => {
   'use strict';
   const classes = {
-    n:{label:'名词', intro:'给人、事物、地点或概念命名。可作主语、宾语，也可出现在介词后。', example:'book', reason:'给句中提到的人、事物或概念命名'},
-    v:{label:'动词', intro:'表示做什么、发生了什么或处于什么状态。助动词和情态动词帮助构成谓语。', example:'read', reason:'说明动作、变化或状态，是谓语或动词短语的一部分'},
-    a:{label:'形容词', intro:'描述人或事物。常在名词前，也常在 be、seem 等动词后。', example:'cold', reason:'描述句中的人或事物具有怎样的性质或状态'},
-    r:{label:'副词', intro:'说明怎么做、何时、何地或到什么程度。可修饰动词、形容词或全句。', example:'soon', reason:'补充句中的时间、方式、地点、程度或逻辑关系'},
-    o:{label:'代词', intro:'代替名词或名词短语。位置取决于它作主语、宾语还是表语等。', example:'they', reason:'指代句中或语境中的人、事物、时间等'},
-    d:{label:'限定词', intro:'放在名词前，限定指哪一个、谁的或多少。a、an、the 是冠词。', example:'this', reason:'和后面的名词组成一个短语，限定所指对象或数量'},
-    p:{label:'介词', intro:'通常带名词、代词或其他成分，表达时间、地点、方向等关系。', example:'from', reason:'引出后面的成分，交代它与句中其他部分的关系'},
-    c:{label:'连词', intro:'把词、短语或分句连起来。看它连接了什么。', example:'when', reason:'连接分句，交代两部分之间的关系'},
-    i:{label:'感叹词', intro:'表示感受、反应或应答。常能单独使用。', example:'yeah', reason:'表达说话人的反应或应答'}
+    n:{label:'名词', en:'noun', intro:'noun 就是「名词」。给人、事物、地点或概念命名。可作主语、宾语，也可出现在介词后。', example:'book', reason:'给句中提到的人、事物或概念命名'},
+    v:{label:'动词', en:'verb', intro:'verb 就是「动词」。表示做什么、发生了什么或处于什么状态。助动词和情态动词帮助构成谓语。', example:'read', reason:'说明动作、变化或状态，是谓语或动词短语的一部分'},
+    a:{label:'形容词', en:'adjective', intro:'adjective 就是「形容词」。描述人或事物。常在名词前，也常在 be、seem 等动词后。', example:'cold', reason:'描述句中的人或事物具有怎样的性质或状态'},
+    r:{label:'副词', en:'adverb', intro:'adverb 就是「副词」。说明怎么做、何时、何地或到什么程度。可修饰动词、形容词或全句。', example:'soon', reason:'补充句中的时间、方式、地点、程度或逻辑关系'},
+    o:{label:'代词', en:'pronoun', intro:'pronoun 就是「代词」。代替名词或名词短语。位置取决于它作主语、宾语还是表语等。', example:'they', reason:'指代句中或语境中的人、事物、时间等'},
+    d:{label:'限定词', en:'determiner', intro:'determiner 就是「限定词」。放在名词前，限定指哪一个、谁的或多少。a、an、the 是冠词。', example:'this', reason:'和后面的名词组成一个短语，限定所指对象或数量'},
+    p:{label:'介词', en:'preposition', intro:'preposition 就是「介词」。通常带名词、代词或其他成分，表达时间、地点、方向等关系。', example:'from', reason:'引出后面的成分，交代它与句中其他部分的关系'},
+    c:{label:'连词', en:'conjunction', intro:'conjunction 就是「连词」。把词、短语或分句连起来。看它连接了什么。', example:'when', reason:'连接分句，交代两部分之间的关系'},
+    i:{label:'感叹词', en:'interjection', intro:'interjection 就是「感叹词」。表示感受、反应或应答。常能单独使用。', example:'yeah', reason:'表达说话人的反应或应答'}
   };
   const raw = [
     ["a","A1",true,[["d","一个（不定冠词）","一个（不定冠词）","a book","一本书","We talked about a book.","我们谈到了一本书。"]]],
@@ -787,7 +787,7 @@
     ["nano","B2",false,[["n","纳米技术（简称）","纳米技术（简称）","nano research","纳米技术研究","The article mentions nano research.","文章提到了纳米技术研究。"]]],
     ["navy","B2",false,[["n","海军","海军","a navy ship","一艘海军舰船","The article mentions a navy ship.","文章提到了一艘海军舰船。"]]],
     ["ness","B1",false,[["n","海岬","海岬","a rocky ness","一处多岩石的海岬","The article mentions a rocky ness.","文章提到了一处多岩石的海岬。"]]],
-    ["noun","A2",false,[["n","名词","名词","a plural noun","一个复数名词","The article mentions a plural noun.","文章提到了一个复数名词。"]]],
+    ["noun","A2",false,[["n","名词","名词","a noun","一个名词","Put a noun in each gap.","每个空里填一个名词。","noun 就是「名词」。这句说的是每个空里填一个名词，noun 是名词。"]]],
     ["oath","B2",false,[["n","誓言","誓言","a solemn oath","一个庄严的誓言","The article mentions a solemn oath.","文章提到了一个庄严的誓言。"]]],
     ["pear","A2",false,[["n","梨","梨","a ripe pear","一个熟梨","The article mentions a ripe pear.","文章提到了一个熟梨。"]]],
     ["peel","B2",false,[["n","果皮","果皮","an orange peel","一片橙皮","The article mentions an orange peel.","文章提到了一片橙皮。"],["v","削皮","削皮","Peel the apple.","把苹果削皮。","Peel the apple.","把苹果削皮。"]]],
@@ -1560,6 +1560,140 @@
     }
     if(miss.length)console.warn('V64.101 noun rewrite missed:',miss.join(','));
     window.WMVocab4NounRewrite3={rows:hit,missed:miss};
+  })();
+
+  // V64.102 第四课名词卡第四批（含 noun / verb 两张标题词卡，共 112 条）
+  (function lesson4NounRewrite4(){
+    const rows=[
+["noun","名词","a noun","Put a noun in each gap.","每个空里填一个名词。","noun 就是「名词」。这句说的是往每个空里填一个名词，noun 是名词。"],
+["verb","动词","a verb","Run is a verb.","run 是动词。","verb 就是「动词」。句中说 run 这个词是动词，verb 是名词。"],
+["sofa","沙发","a soft sofa","The cat sits on the sofa.","猫蹲在沙发上。","sofa 指一家人坐着的大软椅。这句说的是猫蹲的那张，sofa 是名词。"],
+["soil","土壤","fertile soil","Wet soil is good for corn.","湿土对玉米好。","soil 指地里长东西的那层土。句中说的是那层土，soil 是名词。"],
+["solo","独奏","a guitar solo","He sang a solo at noon.","他中午独唱了一段。","solo 作名词指一个人单独演的那一段。这句说的是那一段，solo 是名词。"],
+["song","歌曲","a folk song","She sang a folk song.","她唱了一首民谣。","song 指唱出来的曲子。句中说的是那一首，song 是名词。"],
+["sort","种类","a sort of fruit","This is a sort of cake.","这算是一种饼。","sort 指同一大类里的一种。这句说的是那一种，sort 是名词。"],
+["soul","灵魂","the human soul","The soul is not a body.","魂不是肉身。","soul 指人心里那部分看不见的东西。句中说的是这个，soul 是名词。"],
+["soup","汤","a bowl of soup","Hot soup is good on a cold day.","冷天喝热汤舒服。","soup 指煮出来的稀汤水。这句说的是那碗汤，soup 是名词。"],
+["span","时间跨度","a short time span","In a span of ten he was done.","一小会儿他就干完了。","span 作名词指从头到尾那一段。句中说的是那一段，span 是名词。"],
+["spin","旋转","a quick spin","Give the top a spin.","把陀螺一拧。","spin 作名词指转的那一圈。这句说的是那一下，spin 是名词。"],
+["spot","地方","a quiet spot","This is a calm spot.","这是个安静的去处。","spot 指某一块地方。句中说的是那块，spot 是名词。"],
+["spur","动力","a spur to growth","The win was a spur to them.","这场赢对他们是个推力。","spur 作名词指催人往前走的那股力。这句说的是那股，spur 是名词。"],
+["star","星星","a bright star","One star is in the sky.","天上有一颗星。","star 指夜里的那一点亮。句中说的是那一颗，star 是名词。"],
+["stay","停留","a short stay","Our stay was fun.","我们这趟住得开心。","stay 作名词指待的那一段。这句说的是那一段，stay 是名词。"],
+["stem","茎","a flower stem","The stem is long and thin.","那根茎又长又细。","stem 指连着花和叶的那根。句中说的是那根，stem 是名词。"],
+["step","步骤","the first step","Step one is to ask.","第一步是先开口问。","step 作名词指做事的第几道。这句说的是头一道，step 是名词。"],
+["stew","炖菜","a vegetable stew","Dad made a stew with meat.","爸爸炖了一锅带肉的菜。","stew 指小火慢炖的那锅菜。句中说的是那一锅，stew 是名词。"],
+["stop","站点","a bus stop","Meet me at the bus stop.","在公交站等我。","stop 作名词指车停的那一处。这句说的是那个站，stop 是名词。"],
+["suds","肥皂泡","soap suds","The sink is full of suds.","水槽里满是泡。","suds 指肥皂搓出来的那堆泡。句中说的是那堆，suds 是名词。"],
+["suit","西装","a dark suit","He wore a dark suit.","他穿了一身深色西装。","suit 指上衣配裤子的那一套。这句说的是那一身，suit 是名词。"],
+["surf","拍岸的浪","heavy surf","The surf is loud.","浪声很响。","surf 指冲上岸的那片浪。句中说的是那片，surf 是名词。"],
+["swan","天鹅","a white swan","A swan is on the lake.","湖上有一只天鹅。","swan 指脖子长的那种白鸟。这句说的是那只，swan 是名词。"],
+["swap","交换","a fair swap","It was a fair swap.","那是一次公平的对换。","swap 作名词指我拿一个换你一个。句中说的是那次，swap 是名词。"],
+["swim","一次游泳","a morning swim","A swim at dawn is best.","天刚亮去游最好。","swim 作名词指游的那一趟。这句说的是那一趟，swim 是名词。"],
+["tact","分寸","a little tact","He used tact and care.","他说得又稳又顾人。","tact 指说话做事拿捏的度。句中说的是那份，tact 是名词。"],
+["tail","尾巴","a long tail","The dog wags its tail.","狗摇着尾巴。","tail 指长在身后那一条。这句说的是那一条，tail 是名词。"],
+["take","看法","a fresh take","That is a new take.","那是一种新说法。","take 作名词指对一件事的看法。句中说的是那个看法，take 是名词。"],
+["tale","故事","a traditional tale","She told a tale of the sea.","她讲了一个海上的故事。","tale 指讲出来的那一段故事。这句说的是那一段，tale 是名词。"],
+["talk","谈话","a short talk","We had a talk at noon.","我们中午谈了一会儿。","talk 作名词指谈的那一场。句中说的是那一场，talk 是名词。"],
+["tank","储罐","a water tank","The tank is full of rain.","罐里存满了雨水。","tank 指装水装油的大容器。这句说的是那个罐，tank 是名词。"],
+["tape","胶带","sticky tape","I need tape for the box.","我要用胶带封箱子。","tape 指粘东西的那卷带子。句中说的是那卷，tape 是名词。"],
+["task","任务","a daily task","My task is to wash the car.","我的活是洗车。","task 指分给你的一件事。这句说的是那件，task 是名词。"],
+["taxi","出租车","a yellow taxi","We took a taxi to the mall.","我们打车去了商场。","taxi 指招手就停的那种车。句中说的是那辆车，taxi 是名词。"],
+["team","团队","a research team","Our team won the cup.","我们队拿了奖杯。","team 指一起干一件事的一伙人。这句说的是那一伙，team 是名词。"],
+["tear","眼泪","a tear rolled down","A tear fell on her hand.","一滴泪落到她手上。","tear 指眼里掉下来的那滴水。句中说的是那一滴，tear 是名词。"],
+["teen","青少年","a local teen","A teen has a job at the shop.","有个少年在店里帮忙。","teen 指十几岁那个年纪的人。这句说的是那个少年，teen 是名词。"],
+["tent","帐篷","a small tent","We put up a tent by the lake.","我们在湖边支了帐篷。","tent 指用布支起来过夜的棚。句中说的是那顶，tent 是名词。"],
+["term","术语","a technical term","It is a term from law.","这是法律里的一个说法。","term 指某一行业专用的词。这句说的是那个词，term 是名词。"],
+["test","测试","a simple test","The test was not hard.","这次测不难。","test 指考一考你会不会。句中说的是那一场，test 是名词。"],
+["text","文本","a short text","He sent a text to me.","他给我发了条信息。","text 指手机里那一小段字。这句说的是那一条，text 是名词。"],
+["tick","对号","a green tick","Put a tick by each name.","每个名字旁边打一个勾。","tick 作名词指那个勾。句中说的是那个，tick 是名词。"],
+["tide","潮水","the rising tide","The tide is high now.","这会儿潮涨得高。","tide 指海水一天里的涨落。这句说的是那次涨，tide 是名词。"],
+["tile","瓷砖","a floor tile","One tile is on the wall.","墙上贴着一块砖。","tile 指贴地贴墙的方片。句中说的是那一块，tile 是名词。"],
+["till","收银机","a shop till","The till is at the door.","收银台在门口。","till 指店里收钱的那台机。这句说的是那台，till 是名词。"],
+["time","时间","enough time","We have time to eat.","我们有时间吃饭。","time 指钟表走出来的那一段。句中说的是那点时间，time 是名词。"],
+["tire","轮胎（美式）","a flat tire","We had a flat tire.","我们的车胎瘪了。","tire 是美式说法，指车轮上那圈胶。这句说的是那个胎，tire 是名词。"],
+["toll","通行费","a road toll","We pay a toll here.","这儿过路要交钱。","toll 指过路过桥交的那笔钱。句中说的是那笔，toll 是名词。"],
+["tomb","坟墓","an ancient tomb","An old tomb is on the hill.","山坡上有一座老坟。","tomb 指埋人的那座石室。这句说的是那座，tomb 是名词。"],
+["tone","语气","a friendly tone","Her tone was warm.","她的语气很和气。","tone 指说话带出来的那股味。句中说的是那个口气，tone 是名词。"],
+["tool","工具","a useful tool","A saw is a tool.","锯子是一种工具。","tool 指干活用的一样东西。这句说的是那样，tool 是名词。"],
+["tour","参观","a city tour","We took a tour of the port.","我们绕着港口走了一圈。","tour 作名词指走一圈看的那趟。句中说的是那一趟，tour 是名词。"],
+["town","城镇","a small town","My town is near the sea.","我住的镇靠海。","town 指有街有店的一片地方。这句说的是那座镇，town 是名词。"],
+["tram","有轨电车","a city tram","A tram runs to the park.","有轨电车通到公园。","tram 指顺轨道走的那种电车。句中说的是那一趟车，tram 是名词。"],
+["trap","陷阱","a simple trap","A trap can hold a rat.","一个夹子能夹住老鼠。","trap 指设好等人踩的机关。这句说的是那个，trap 是名词。"],
+["tray","托盘","a wooden tray","Put the cups on the tray.","把杯子放到托盘上。","tray 指端东西用的浅盘。句中说的是那个，tray 是名词。"],
+["tree","树","a tall tree","A tall tree is by the gate.","大门口有一棵高树。","tree 指有干有枝的植物。这句说的是那一棵，tree 是名词。"],
+["trek","长途跋涉","a mountain trek","We did a trek up the hill.","我们上山走了很远。","trek 作名词指走很久的那趟路。句中说的是那一趟，trek 是名词。"],
+["trim","饰边","a gold trim","The coat has a gold trim.","这件外套镶了一圈金边。","trim 指衣边上的那圈装饰。这句说的是那一圈，trim 是名词。"],
+["trio","三人或三件一组","a jazz trio","A trio sang at the club.","三个人在俱乐部唱了一场。","trio 指凑在一起的三个人或三样东西。句中说的是那三个，trio 是名词。"],
+["trip","旅行","a school trip","Our trip was to the zoo.","我们这趟是去动物园。","trip 指出门走走的那一趟。这句说的是那一趟，trip 是名词。"],
+["tube","管","a glass tube","The tube is in the lab.","管子放在实验室里。","tube 指细长的空心管。句中说的是那根，tube 是名词。"],
+["tuna","金枪鱼","fresh tuna","We had tuna at noon.","我们中午吃的金枪鱼。","tuna 指海里那种大鱼。这句说的是那一份，tuna 是名词。"],
+["tune","曲调","a familiar tune","She hums a tune I know.","她哼的那支我熟。","tune 指能哼出来的那支调子。句中说的是那一支，tune 是名词。"],
+["turn","轮到的机会","my turn","It is my turn now.","现在轮到我。","turn 作名词指排到自己的那一次。这句说的是那一次，turn 是名词。"],
+["twin","双胞胎之一","an identical twin","She is a twin.","她是双胞胎里的一个。","twin 指一胎里出来的两个之一。句中说的是那一个，twin 是名词。"],
+["type","类型","a type of plant","This is a type of nut.","这是一种坚果。","type 指同一类里的那一种。这句说的是那一种，type 是名词。"],
+["urge","冲动","a sudden urge","I felt an urge to run.","我突然想跑。","urge 作名词指一下子上来的那股劲。句中说的是那股，urge 是名词。"],
+["user","使用者","a new user","A new user can sign in.","新用户能登进来。","user 指用这个软件或服务的人。这句说的是那个人，user 是名词。"],
+["vase","花瓶","a glass vase","The vase is on the desk.","花瓶在桌上。","vase 指插花的那个瓶。句中说的是那个，vase 是名词。"],
+["vein","静脉","a vein in the arm","A vein is in my arm.","我胳膊上有一根静脉。","vein 指把血送回心的那根管。这句说的是那一根，vein 是名词。"],
+["vice","恶习","a common vice","His one vice is cake.","他唯一的毛病是爱吃饼。","vice 指改不掉的不良嗜好。句中说的是那个，vice 是名词。"],
+["view","景色","a view of the bay","We had a view of the bay.","我们看得见那片海湾。","view 指从这处望出去的那片景。这句说的是那片，view 是名词。"],
+["visa","签证","a student visa","My visa is for a year.","我的签证是一年期的。","visa 指允许你入境的那张签。句中说的是那张，visa 是名词。"],
+["vote","选票","a final vote","The vote is at noon.","投票定在中午。","vote 作名词指投出去的那一票。这句说的是那一票，vote 是名词。"],
+["wage","工资","a minimum wage","His wage is not high.","他的工资不高。","wage 指干活按时间拿的钱。句中说的是那份，wage 是名词。"],
+["wait","等待时间","a long wait","We had a wait of ten.","我们等了十分钟。","wait 作名词指干等的那一段。这句说的是那一段，wait 是名词。"],
+["wake","尾流","a ship's wake","The boat left a wake.","船开过留下一道浪迹。","wake 指船过后拖出的那道水痕。句中说的是那道，wake 是名词。"],
+["walk","散步","a short walk","We took a walk at dusk.","黄昏时我们走了走。","walk 作名词指走的那一趟。这句说的是那一趟，walk 是名词。"],
+["wall","墙","a brick wall","A wall is by the gate.","大门口有一道砖墙。","wall 指把里外隔开的那面。句中说的是那一面，wall 是名词。"],
+["want","匮乏","want of food","Here is want of food.","这儿缺吃的。","want 作名词指缺了本该有的东西。这句说的是缺粮，want 是名词。"],
+["ward","病房","a hospital ward","She is in a ward.","她住在一间病房里。","ward 指病房里那一片床位。句中说的是那一片，ward 是名词。"],
+["wash","清洗","a quick wash","A wash will fix it.","洗一洗就好了。","wash 作名词指洗的那一遍。这句说的是那一遍，wash 是名词。"],
+["wasp","黄蜂","a wasp nest","A wasp is on the cup.","杯子上落着一只黄蜂。","wasp 指带刺会蜇人的黄蜂。这句说的是那一只，wasp 是名词。"],
+["wave","波浪","a large wave","A wave hit the boat.","一个浪打到船上。","wave 指水面上推起来的那一道。句中说的是那一道，wave 是名词。"],
+["weed","杂草","a garden weed","A weed grew by the wall.","墙边长出一棵草。","weed 指没人种却自己长的草。这句说的是那一棵，weed 是名词。"],
+["week","周","one week","I was in bed for a week.","我在床上躺了一周。","week 指七天那一段。句中说的是那一段，week 是名词。"],
+["weep","哭泣","a quiet weep","A weep can help.","哭一哭会好些。","weep 作名词指哭的那一阵。这句说的是那一阵，weep 是名词。"],
+["well","水井","an old well","An old well is in the yard.","院里有一口老井。","well 指地下取水的那口井。句中说的是那口，well 是名词。"],
+["west","西方","the west of the city","The sun sets in the west.","太阳从西边落。","west 指四个方向里的那一头。这句说的是那一头，west 是名词。"],
+["wife","妻子","his wife","His wife is a cook.","他妻子是做饭的。","wife 指成了家的那位女方。句中说的是那一位，wife 是名词。"],
+["will","遗嘱","a written will","He left a will.","他留下了一份遗嘱。","will 指写下来交代身后事的那张。这句说的是那份，will 是名词。"],
+["wind","风","a strong wind","A wind blew the door shut.","一阵风把门吹上了。","wind 指空气流起来的那股。句中说的是那股，wind 是名词。"],
+["wine","葡萄酒","a glass of wine","A cup of wine is fine.","一杯葡萄酒就挺好。","wine 指葡萄酿的那种酒。这句说的是那一杯，wine 是名词。"],
+["wing","翅膀","a bird's wing","A bird's wing is soft.","鸟的翅膀很软。","wing 指鸟用来飞的那两片。句中说的是那一片，wing 是名词。"],
+["wink","眨眼","a friendly wink","She gave me a wink.","她冲我眨了下眼。","wink 作名词指眨的那一下。这句说的是那一下，wink 是名词。"],
+["wire","金属丝","a thin wire","A thin wire is on the desk.","桌上有一根细金属丝。","wire 指拉直了导电的细丝。句中说的是那一根，wire 是名词。"],
+["wish","愿望","a simple wish","My wish is to go home.","我的愿望是回家。","wish 作名词指心里盼的那件事。这句说的是那件，wish 是名词。"],
+["wolf","狼","a gray wolf","A gray wolf is in the zoo.","动物园里有一只灰狼。","wolf 指成群跑的野狼。句中说的是那一只，wolf 是名词。"],
+["wood","木材","a piece of wood","One bit of wood is wet.","这块木头是湿的。","wood 指砍下来备用的木料。这句说的是那块，wood 是名词。"],
+["wool","羊毛","a ball of wool","A ball of wool is soft.","一团羊毛很软。","wool 指羊身上剪下来的毛。句中说的是那一团，wool 是名词。"],
+["word","单词","a new word","This is a new word.","这是一个新词。","word 指能单独说出来的一个词。这句说的是那一个，word 是名词。"],
+["work","作品","a piece of work","This is a fine work.","这是一件好作品。","work 作名词指做出来的那一件东西。句中说的是那一件，work 是名词。"],
+["worm","蠕虫","a small worm","A worm is on the leaf.","叶子上有一条虫。","worm 指身子细长会爬的小虫。这句说的是那一条，worm 是名词。"],
+["wrap","卷饼","a chicken wrap","I had a wrap at noon.","我中午吃了一个卷饼。","wrap 作名词指把料卷起来的那种饼。句中说的是那一个，wrap 是名词。"],
+["yard","院子","the front yard","The kids play in the yard.","孩子们在院子里玩。","yard 指房子外面那块空地。这句说的是那块，yard 是名词。"],
+["yawn","哈欠","a long yawn","He gave a long yawn.","他打了个长长的哈欠。","yawn 作名词指打的那一个哈欠。句中说的是那一个，yawn 是名词。"],
+["year","年","a full year","A full year has gone.","整整一年过去了。","year 指十二个月那一段。这句说的是那一段，year 是名词。"],
+["yell","喊叫","a loud yell","A yell came from the hall.","厅里传来一声喊。","yell 作名词指喊的那一嗓。句中说的是那一嗓，yell 是名词。"],
+["yoga","瑜伽","a yoga class","She does yoga at home.","她在家练瑜伽。","yoga 指那种拉抻身体的练法。这句说的是那套练法，yoga 是名词。"],
+["zone","区域","a safety zone","This is a safe zone.","这是安全区。","zone 指划出来的一块地方。句中说的是那块，zone 是名词。"],
+["zoom","变焦","a camera zoom","A zoom can help.","拉近一点看得清。","zoom 作名词指镜头拉近的那一下。这句说的是那一下，zoom 是名词。"]
+    ];
+    const course=courses[4];let hit=0,miss=[];
+    for(const row of rows){
+      const [en,zh,ph,sent,zhs,note]=row;
+      const word=course.words.find(w=>w.en===en);
+      const flat=t=>String(t||'').replace(/（[^）]*）|\([^)]*\)/g,'').trim();
+      const use=word&&word.uses.find(u=>u.part==='n'&&(u.zh===zh||flat(u.zh)===flat(zh)));
+      if(!use){miss.push(en+'|'+zh);continue;}
+      use.phrase=ph;use.sentence=sent;use.sentenceZh=zhs;use.note=note;hit++;
+    }
+    // 两张跨词条补写：同一拼写的铅、同伴
+    for(const [en,zh,sent,zhs,note] of [["lead","铅","Lead is soft and gray.","铅又软又是灰的。","lead 指那种软而重的灰金属。这句说的是它的样子，lead 是名词。"],["mate","同伴","He is my old mate.","他是我多年的老伙计。","mate 指常在一起的那个人。句中说的是那一位，mate 是名词。"]]){
+      const w=course.words.find(x=>x.en===en);const u=w&&w.uses.find(x=>x.part==='n'&&x.zh===zh);
+      if(u){u.phrase='';u.sentence=sent;u.sentenceZh=zhs;u.note=note;hit++;}
+    }
+    if(miss.length)console.warn('V64.102 noun rewrite missed:',miss.join(','));
+    window.WMVocab4NounRewrite4={rows:hit,missed:miss};
   })();
 
   window.WMVocabulary4={words,targets,classes,practice,courses,supplemental};
