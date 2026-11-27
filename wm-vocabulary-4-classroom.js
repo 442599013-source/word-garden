@@ -183,7 +183,9 @@
       const build=()=>{
         if(!grid.childElementCount)grid.append(...items.map(({word,uses})=>card(word,uses,id)));
       };
-      if(listSpeaker&&items.length)summary.append(listSpeaker(items,id,details,grid));
+      // 组喇叭的读点 id 必须逐组唯一，否则同一类词里后一组会覆盖前一组的朗读内容
+      const groupKey=id+'-'+(items.length?items[0].word.id:'g');
+      if(listSpeaker&&items.length)summary.append(listSpeaker(items,groupKey,details,grid));
       details.addEventListener('toggle',()=>{if(details.open)build();});
       return details;
     }
