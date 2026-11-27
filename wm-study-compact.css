@@ -133,10 +133,13 @@
 .wm-context-options{margin-block:6px}
 .wm-lesson-older-passages{border-top:1px solid var(--training-edge,#c8a2da);margin-top:10px;padding-top:8px;font-size:13px}
 
-/* V64.94 练习页标题单行：听、说、读、写四个练习页统一 */
+/* V64.95 练习页标题单行：听、说、读、写四页统一为两行页头（第一行返回＋标题，第二行课次下拉） */
 .wm-listening-header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:7px!important}
 .wm-listening-header>a{grid-area:back}
 .wm-listening-header h1{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.8vw,20px)!important;letter-spacing:-.02em}
 .wm-listening-header .study-category-row{grid-area:cats;justify-content:flex-end;margin-top:0!important}
-.wm-study-page .header{grid-template-columns:36px minmax(0,1fr) 150px!important}
-.wm-study-page .header .title{white-space:nowrap;font-size:clamp(14px,4.1vw,18px)!important;letter-spacing:-.02em;overflow:visible}
+.wm-study-page .header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:7px!important}
+.wm-study-page .header .back{grid-area:back}
+.wm-study-page .header .title{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.4vw,20px)!important;letter-spacing:-.02em;overflow:visible}
+.wm-study-page .header .wm-header-category{grid-area:cats;width:100%;min-height:0;flex-direction:row;justify-content:flex-end;padding:0;border:0;background:none;box-shadow:none;font-size:13px}
+.wm-study-page .header .wm-header-category>small,.wm-study-page .header .wm-header-category>strong{display:none}
