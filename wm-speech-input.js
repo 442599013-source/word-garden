@@ -67,13 +67,21 @@ Session.release=null;
 Session.startRequest=0;
 async function preparePlayback(){
  if(Session.active)await Session.active.cancel();
+ let until=0;
+ try{until=Number(sessionStorage.getItem('wm-mic-release-until'))}catch{}
+ const remaining=Math.min(1400,until-Date.now());
+ if(remaining>0)await new Promise(resolve=>setTimeout(resolve,remaining));
  while(Session.release)await Session.release;
  if(!Session.active)window.WMMicrosoftVoice?.audioMode?.('playback');
 }
 window.WMSpeechInput={Session,preparePlayback};
 function leaveMicrophone(){
- if(Session.active)void Session.active.cancel();
- else if(Session.release)window.WMMicrosoftVoice?.audioMode?.('playback');
+ ++Session.startRequest;
+ if(Session.active||Session.release){
+  try{sessionStorage.setItem('wm-mic-release-until',String(Date.now()+1400))}catch{}
+  if(Session.active)void Session.active.cancel();
+  window.WMMicrosoftVoice?.audioMode?.('playback');
+ }
 }
 window.addEventListener('pagehide',leaveMicrophone);
 document.addEventListener('visibilitychange',()=>{if(document.hidden)leaveMicrophone()});

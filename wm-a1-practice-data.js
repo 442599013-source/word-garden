@@ -8,19 +8,30 @@
   if(lesson2) lessons[2]={
     word:lesson2.words,phrase:lesson2.phrases,sentence:lesson2.sentences,passage:lesson2.passages
   };
-  if(window.WMA1Phonics) lessons[3]={word:WMA1Phonics.words,phrase:[],sentence:[],passage:[]};
-  if(window.WMVocabulary4) lessons[4]=WMVocabulary4.practice;
-  const labels = lesson2?{all:'汇总',1:'第 1 课',2:'第 2 课',3:'第 3 课',4:'第 4 课'}:{1:'第 1 课'};
-  const search = new URLSearchParams(window.location?.search||'');
-  const selected = search.get('level');
-  const scope = Object.hasOwn(lessons,selected)?selected:lesson2?'all':'1';
-  const number = scope==='all'?0:Number(scope);
-  const normalize = window.WMStudyTools.normalize;
-  const unique = rows => [...new Map(rows.map(item=>[normalize(item.en),item])).values()];
-  const allItems = Object.fromEntries(types.map(type=>[type,unique(Object.values(lessons).flatMap(items=>items[type]))]));
-  if (lessons[4]) {
-    const known=new Map(lessons[4].word.map(item=>[normalize(item.en),item]));
-    allItems.word=allItems.word.map(item=>known.get(normalize(item.en))||item);
+  if(window.WMA1Phonics) lessons[201]={word:WMA1Phonics.words,phrase:[],sentence:[],passage:[]};
+  for(const course of Object.values(window.WMVocabulary4?.courses||{}))lessons[course.number]=course.practice;
+  const search=new URLSearchParams(location.search);
+  const selected=search.get('level');
+  const scope=Object.hasOwn(lessons,selected)?selected:'all';
+  const number=Number(scope)||0;
+  const labels=Object.fromEntries(WMClassroomCatalog.lessons.map(c=>[c.number,c.titleZh]));
+  labels.all='汇总';
+  const normalize=window.WMStudyTools.normalize;
+  const stagesOf=key=>WMClassGroups.forLevel(Number(key));
+  const groups=[{id:'all-stages',stage:'all',en:'All stages',zh:'全部阶段汇总'},
+    ...WMUnifiedCourseMeta.ranges.flatMap(stage=>[
+      {id:stage.id+'-summary',stage:stage.id,en:stage.en+' · All',zh:stage.zh+'阶段汇总'},
+      ...stage.groups])];
+  function keysFor(group){
+    return Object.keys(lessons).filter(key=>{
+      const owner=stagesOf(key);
+      return group==='all-stages'||group===owner?.stage+'-summary'||group===owner?.id;
+    });
+  }
+  function itemsFor(group,type,selection){
+    const keys=keysFor(group);
+    if(keys.includes(selection))return lessons[selection][type];
+    return [...new Map(keys.flatMap(key=>lessons[key][type]).map(x=>[normalize(x.en),x])).values()];
   }
   const wordSources=new Map();
   for(const [source,items] of Object.entries(lessons)){
@@ -35,21 +46,15 @@
     const sources=item&&wordSources.get(normalize(item.en));
     return sources?.map(source=>labels[source]).join(' · ')||'';
   }
-  function availableItems(type,selection=scope){
-    return selection==='all'?allItems[type]:lessons[selection]?.[type]||[];
-  }
-  const stages=WMClassGroups.groups.map(group=>({
-    ...group,...Object.fromEntries(types.map(type=>[type,group.id===lesson.group?availableItems(type):[]]))
-  }));
+  const stages=groups.map(group=>({...group,...Object.fromEntries(types.map(type=>[type,itemsFor(group.id,type,scope)]))}));
   const byId=Object.fromEntries(stages.map(stage=>[stage.id,stage]));
   function resolve(id,level){
-    return byId[id]||byId[WMClassGroups.forLevel(level)?.id]||stages.find(stage=>stage.stage===id);
+    return byId[id]||byId[WMClassGroups.forLevel(level)?.id]||byId[id+'-summary'];
   }
-  const books=types.map(type=>({
-    id:({all:lesson.id+'-all',1:lesson.id,2:'goldy-a1-first-sounds-2',3:'goldy-a1-phonics-3',4:'goldy-vocabulary-4'})[scope]+'-'+type,
-    type,category:lesson.group,titleZh:labels[scope],titleEn:number?'Lesson '+number:'All lessons',
-    items:availableItems(type)
-  }));
+  const books=stages.flatMap(group=>types.filter(type=>group[type].length).map(type=>({
+    id:((group.id===stagesOf(scope)?.id&&({'1':lesson.id,'2':'goldy-a1-first-sounds-2','201':'goldy-a1-phonics-3'})[scope])||group.id+'-'+scope)+'-'+type,
+    type,category:group.id,titleZh:labels[scope],titleEn:group.en,items:group[type]
+  })));
   function openScope(selection,stage,type,{review=false,target}={}){
     const url=new URL(window.location.href);
     url.searchParams.set('level',selection);
@@ -60,11 +65,11 @@
     window.location.href=url.href;
   }
   function listScope(stage,type,favoritesOnly){
-    if(!lesson2||stage!==lesson.group||type!=='word')return {};
+    if(type!=='word')return {};
     return {
-      options:[['all',labels.all],...Object.keys(lessons).map(id=>[id,labels[id]])],
+      options:[['all',labels.all],...keysFor(stage).map(id=>[id,labels[id]])],
       initialScope:favoritesOnly?scope:'all',
-      itemsForScope:selection=>availableItems(type,selection),
+      itemsForScope:selection=>itemsFor(stage,type,selection),
       itemLabel:lessonLabel
     };
   }
@@ -78,23 +83,29 @@
     category.after(select);
     host.classList.add('wm-a1-lesson-picker');
     function sync(){
-      const available=category.value===lesson.group;
-      const options=available?(lesson2?['all',...Object.keys(lessons)]:['1']):[''];
+      const available=true;
+      const options=['all',...keysFor(category.value)];
       select.replaceChildren(...options.map(value=>{
         const option=document.createElement('option');
         option.value=value;
         option.textContent=labels[value]||'—';
         return option;
       }));
-      select.value=available?scope:'';
+      select.value=options.includes(scope)?scope:'all';
       select.disabled=!available;
     }
     select.addEventListener('change',()=>{
       if(!select.value)return;
       const active=document.querySelector('#types [aria-pressed="true"]');
-      openScope(select.value,category.value,select.value==='3'?'word':active?.dataset.type,{review:isReview()});
+      openScope(select.value,category.value,select.value==='201'?'word':active?.dataset.type,{review:isReview()});
     });
-    category.addEventListener('change',sync);
+    category.addEventListener('change',()=>{
+      sync();
+      if(scope!=='all'&&!keysFor(category.value).includes(scope)){
+        const active=document.querySelector('#types [aria-pressed="true"]');
+        openScope('all',category.value,active?.dataset.type,{review:isReview()});
+      }
+    });
     sync();
   };
 })();

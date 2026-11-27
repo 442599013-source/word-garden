@@ -57,21 +57,24 @@
     thirdIds.push(item.id);
   }
   const thirdLevel=thirdIds.length?[{
-    level:3,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:thirdIds
+    level:201,stage:'primary',group:'primary-2',lessons:[],meanings:{},classification:[],sourceWordIds:thirdIds
   }]:[];
+  const vocabularyLevels=[];
+  for(const course of Object.values(WMVocabulary4.courses)){
   const fourthIds=[];
-  for(const word of window.WMVocabulary4?.words||[]){
+  for(const word of course.words){
     for(const [index,use] of word.uses.entries()){
-      const context=word.uses.length>1?use.phrase:'';
-      const id=word.id+'-'+index;
+      const context=use.phrase;
+      const id=use.id.replace('-use-','-');
       words[id]={...word,id,en:word.en,zh:use.zh,pairType:'meaning',context};
       words[id+'-type']={...word,id,en:word.en,zh:use.label,pairType:'word-class',context};
       fourthIds.push(id,id+'-type');
     }
   }
-  const fourthLevel=fourthIds.length?[{
-    level:4,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:fourthIds
-  }]:[];
+  vocabularyLevels.push({
+    level:course.number,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:fourthIds
+  });
+  }
   for(const item of Object.values(words)){
     if(item.pairType==='classification')item.zh=classificationLabel(item.zh);
   }
@@ -81,6 +84,6 @@
     levels:[{
       level:1,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},
       classification:categories.map(classificationLabel),sourceWordIds:firstIds
-    },...secondLevel,...thirdLevel,...fourthLevel]
+    },...secondLevel,...vocabularyLevels,...thirdLevel]
   };
 })();

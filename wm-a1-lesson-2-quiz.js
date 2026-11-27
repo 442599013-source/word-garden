@@ -65,7 +65,7 @@
     }
     const next=WMClassroomCatalog.lessons.find(lesson=>lesson.number===WMA1Lesson2.number+1);
     function nextLink(){
-      const link=node('a',next.number===3?'进入第三课 · 自然拼读':'进入第 '+next.number+' 课','a1-button');
+      const link=node('a',next.number===3?'进入第三课 · 词类入门':'进入第 '+next.number+' 课','a1-button');
       link.href='sentence-game.html?level='+next.number;
       return link;
     }

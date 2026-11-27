@@ -86,7 +86,7 @@
     return el;
   }
   function mount(root){
-    const catalog=WMClassroomCatalog.lessons.find(lesson=>lesson.number===3);
+    const catalog=WMClassroomCatalog.lessons.find(lesson=>lesson.number===201);
     audioStatus=node('p','','a1-status');
     audioStatus.setAttribute('role','status');
     root.append(node('h1',catalog.titleZh+' · 自然拼读'),audioStatus);
@@ -130,7 +130,7 @@
     root.append(recap);
     mountPractice(root);
     const match=node('a','去第三关魔法配对','a1-button');
-    match.href='word-match.html?level=3&from=journey';
+    match.href='word-match.html?level=201&from=journey';
     root.append(match);
   }
 

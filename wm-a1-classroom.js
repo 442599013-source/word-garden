@@ -2,13 +2,13 @@
   'use strict';
   const lesson = WMA1Lesson, audio = WMA1Audio;
   const root = document.getElementById('root');
-  const classes = {2:window.WMA1Lesson2Classroom,3:window.WMA1PhonicsClassroom,4:window.WMVocabularyClassroom};
+  const classes = {2:window.WMA1Lesson2Classroom,...window.WMVocabularyClassrooms,201:window.WMA1PhonicsClassroom};
   const available=WMClassroomCatalog.lessons.filter(item=>item.number===1||classes[item.number]);
   const parameters=new URLSearchParams(location.search);
   const requested=Number(parameters.get('level') || (location.hash==='#a1-assessment'?1:resumeLesson()));
   const practicePages={listening:'walkman',reading:'reading-study',speaking:'speaking-study',writing:'writing-study'};
   const practice=practicePages[parameters.get('practice')];
-  if((requested===3||requested===4)&&practice){
+  if(([3,4,5,201].includes(requested))&&practice){
     location.replace(practice+'.html?level='+requested+'&type=word');
     return;
   }
@@ -41,7 +41,7 @@
     const picker=element('select');
     picker.setAttribute('aria-label','课次');
     for(const entry of available){
-      const option=element('option','第 '+entry.number+' 课 · '+entry.code);
+      const option=element('option',entry.titleZh);
       option.value=String(entry.number);
       picker.append(option);
     }

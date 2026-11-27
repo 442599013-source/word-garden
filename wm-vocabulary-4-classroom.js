@@ -1,7 +1,8 @@
 /* Fourth lesson: contextual word meaning and word class. */
 (() => {
   'use strict';
-  const {words,targets,classes}=WMVocabulary4;
+  function makeClassroom(courseData){
+  const {number,words,targets,classes}=courseData;
   const audio=WMA1Audio;
   const key='goldy-vocabulary-4:practice';
   const modes=['meaning','class'];
@@ -9,6 +10,20 @@
     word,use,mode,id:use.id+'-'+mode,
     signature:JSON.stringify([use.sentence,mode==='class'?use.part:use.zh])
   }))));
+  const focus=number===4?[
+    ['___ book','a','an','some'],['___ old book','an','a','some'],['___ unit','a','an','some'],
+    ['___ hour','an','a','some'],['___ milk（一些牛奶）','some','a','an']
+  ]:number===5?[
+    ['I like it.','like','实义动词'],['You look happy.','look','系动词'],
+    ['Do you like it?','Do','助动词'],['You must go.','must','情态动词'],
+    ['Look at the bird.','Look','实义动词'],['They are ready.','are','系动词']
+  ]:[];
+  questions.unshift(...focus.map(([sentence,second,third,fourth],i)=>{
+    const noun=number===4;
+    return {id:'focus-'+number+'-'+i,signature:sentence,mode:'focus',
+      word:{en:noun?'___':second,uses:[]},use:{sentence,zh:noun?second:third},
+      alternatives:noun?[third,fourth]:['实义动词','系动词','助动词','情态动词']};
+  }));
   function read(){
     try { return JSON.parse(localStorage.getItem(key) || '{}') || {}; }
     catch { return {}; }
@@ -68,9 +83,9 @@
   function narration(word,use){
     return [en(word.en),zh(use.label+'。'+use.gloss),en(use.sentence),zh(use.sentenceZh),explanation(word,use)];
   }
-  const multi=targets.filter(word=>new Set(word.uses.map(use=>use.part)).size>1);
+  const multi=(number===3?WMVocabulary4.targets:targets).filter(word=>new Set(word.uses.map(use=>use.part)).size>1);
   function mount(root){
-    const course=WMClassroomCatalog.lessons.find(lesson=>lesson.number===4);
+    const course=WMClassroomCatalog.lessons.find(lesson=>lesson.number===number);
     const audioStatus=node('p','','a1-status');
     audioStatus.setAttribute('role','status');
     let playing,token=0;
@@ -122,20 +137,21 @@
     }
     function wordList(items,id){
       const details=node('details','','a1-vocabulary-section');
-      const summary=node('summary','展开词表');
+      const caption=(id==='extra'?'补充词表':items.length?items[0].word.en+' – '+items.at(-1).word.en:'词表')+'（'+items.length+'）';
+      const summary=node('summary',caption);
       const grid=node('div','','a1-vocabulary-list');
       details.append(summary,grid);
       details.addEventListener('toggle',()=>{
-        summary.textContent=details.open?'收起词表':'展开词表';
+        summary.textContent=caption;
         if(details.open&&!grid.childElementCount){
           grid.append(...items.map(({word,uses})=>card(word,uses,id)));
         }
       });
       return details;
     }
-    const tip='这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
+    const tip=number===4?'先看是否泛指一个可数的人或事物，再听冠词后紧接着的首音。a book（一本书），an old book（一本旧书），a unit（一个单位），an hour（一小时）。milk 泛指牛奶时用 some milk。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
-    intro.append(heading('九大词类','4ch1-intro',[tip]),node('p',tip));
+    intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
     root.append(node('p',course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
 
     const bySpelling=(a,b)=>a.en.localeCompare(b.en,'en');
@@ -146,7 +162,8 @@
       section.dataset.wordClass=part;
       const entries=sortedWords.map(word=>({word,uses:word.uses.filter(use=>use.part===part)}))
         .filter(({uses})=>uses.length);
-      const example=entries.find(({word})=>word.en===entry.example);
+      if(!entries.length)continue;
+      const example=entries.find(({word})=>word.en===entry.example)||entries[0];
       const rest=entries.filter(item=>item!==example);
       const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
       const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
@@ -157,7 +174,7 @@
         ...readEntries(rest)
       ]),node('p',entry.intro),card(example.word,example.uses,id));
       for(const article of articles)section.append(card(article,article.uses,id));
-      if(rest.length)section.append(wordList(rest,id));
+      for(let i=0;i<rest.length;i+=25)section.append(wordList(rest.slice(i,i+25),id));
       root.append(section);
     }
 
@@ -166,7 +183,8 @@
     recap.append(heading('课末对照 · 同一拼写，不同词类','4ch1-compare',
       comparisons.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)))),
       wordList(comparisons,'4ch1-compare'));
-    root.append(recap);
+    if(comparisons.length)root.append(recap);
+    if(number===3&&WMVocabulary4.supplemental.words.length)root.append(wordList(WMVocabulary4.supplemental.words.map(word=>({word,uses:word.uses})),'extra'));
 
     let record=read(),timer;
     const status=node('span','','a1-assessment-status');
@@ -174,12 +192,12 @@
     const actions=node('div','','a1-assessment-actions');
     const task=node('section','','a1-block');task.id='a1-assessment';task.hidden=true;
     const start=button('课堂练习',open);
-    const match=node('a','去第四关魔法配对','a1-button');match.href='word-match.html?level=4&from=journey';
+    const match=node('a','魔法配对','a1-button');match.href='word-match.html?level='+number+'&from=journey';
     actions.append(start,status);
     root.append(actions,task,match);
 
     function save(){
-      try { localStorage.setItem(key,JSON.stringify(record));return true; }
+      try { localStorage.setItem(key,JSON.stringify({...read(),...record}));return true; }
       catch { return false; }
     }
     function refresh(left=pending(record).length){
@@ -197,7 +215,7 @@
       refresh(left.length);
       if(!left.length){
         task.replaceChildren(node('h2','✓ 已完成','a1-assessment-complete'),
-          button('重新练习',()=>{record={};save();draw();}));
+          button('重新练习',()=>{for(const q of questions)record[q.id]=null;save();draw();}));
         return;
       }
       const {id,mode,word,use,signature}=left[0];
@@ -207,7 +225,7 @@
       const related=word.uses.filter(candidate=>candidate!==use).map(candidate=>mode==='class'?candidate.label:candidate.zh);
       const offset=(startAt*41)%words.length;
       const meaningChoices=Array.from({length:14},(_,index)=>words[(offset+index)%words.length].main);
-      const other=mode==='class'?allLabels.slice(startAt%9).concat(allLabels.slice(0,startAt%9)):meaningChoices;
+      const other=mode==='focus'?left[0].alternatives:mode==='class'?allLabels.slice(startAt%9).concat(allLabels.slice(0,startAt%9)):meaningChoices;
       const choices=[...new Set([...related,...other])].filter(label=>label!==correct).slice(0,3);
       choices.splice(startAt%4,0,correct);
       const optionBox=node('div','','a1-ability-answer');
@@ -231,7 +249,7 @@
       }));
       optionBox.append(...options);
       const title='课堂练习 · '+(startAt+1)+' / '+questions.length;
-      const prompt=mode==='class'?'高亮词在这句里属于哪个词类？':'高亮词在这句里是什么意思？';
+      const prompt=mode==='focus'?(number===4?'选择适合填空的词。':'高亮动词在这句里起什么作用？'):mode==='class'?'高亮词在这句里属于哪个词类？':'高亮词在这句里是什么意思？';
       task.replaceChildren(heading(title,'4ch1-question-'+id,[en(use.sentence)]),
         node('p',prompt),highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),optionBox,feedback);
     }
@@ -240,5 +258,7 @@
     window.addEventListener('pagehide',()=>{clearTimeout(timer);stop()});
     window.addEventListener('pageshow',event=>{if(event.persisted&&!task.hidden){record=read();draw()}});
   }
-  window.WMVocabularyClassroom={mount,complete};
+  return {mount,complete};
+  }
+  window.WMVocabularyClassrooms=Object.fromEntries(Object.entries(WMVocabulary4.courses).map(([id,c])=>[id,makeClassroom(c)]));
 })();

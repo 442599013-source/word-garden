@@ -7,7 +7,7 @@ const requested=Number(params.get('level'));
 const routedStage=lib.resolve(params.get('stage'),requested);
 const guidedStage=params.get('lesson')&&lib.stages.find(s=>s.passage.some(x=>x.guidedLesson===params.get('lesson')));
 const directPTE=skill==='reading'&&params.get('from')==='journey'&&window.WMUnifiedCourseData?.units?.[requested-1]?.kind==='pte';
-let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':requested===3?'word':(skill==='reading'||params.has('level'))&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
+let stage=(guidedStage&&lib.byId[guidedStage.id])||(routedStage&&lib.byId[routedStage.id])||lib.byId[lib.resolve(saved.stage)?.id]||lib.stages[0],type=lib.types.includes(params.get('type'))?params.get('type'):directPTE?'sentence':requested===201?'word':(skill==='reading'||params.has('level'))&&lib.types.includes(saved.type)?saved.type:'word',favoritesOnly=false,index=0,epoch=0,locked=false,entryUI=null,revealed=false,usedShow=false,hadWrong=false,audioEpoch=0,advanceTimer=null,lessonView=null,passageView=null,usedManual=false,usedListen=false;
 const filters=saved.filters||{};
 const lessonScope=lib.scope==='all'?':all':lib.number>1?':lesson-'+lib.number:'';
 const filterKey=()=>stage.id+lessonScope+':'+type;

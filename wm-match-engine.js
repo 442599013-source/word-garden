@@ -25,8 +25,8 @@ function migrateWordIds(snapshot, replacements) {
 class MatchGame {
  constructor(data, {level = 1, seed = Date.now(), snapshot = null, reviews = [], reviewMeanings = {}} = {}) {
   this.data = data;
-  this.level = Math.max(1, Math.min(data.levels.length, Number(level) || 1));
-  this.plan = data.levels[this.level - 1];
+  this.level = data.levels.find(p=>p.level===Number(level))?.level||1;
+  this.plan = data.levels.find(p=>p.level===this.level);
   this.targets = new Set();
   this.selected = null;
 
