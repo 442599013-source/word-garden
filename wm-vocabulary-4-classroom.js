@@ -188,14 +188,15 @@
       return details;
     }
     const listSpeaker=(items,id,details,grid)=>groupSpeaker('朗读这一组的 '+items.length+' 个词',id+'-group',items,details,grid);
-    const tip=number===4?'先看是否泛指一个可数的人或事物，再听冠词后紧接着的首音。a book（一本书），an old book（一本旧书），a unit（一个单位），an hour（一小时）。milk 泛指牛奶时用 some milk。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
+    const reviewIntro='同一拼写，不同词类。同一个词，换个词类，意思和用法就不一样。这一课把前面几课学过的这类词放在一起对照复习。';
+    const tip=number===6?reviewIntro:number===4?'先看是否泛指一个可数的人或事物，再听冠词后紧接着的首音。a book（一本书），an old book（一本旧书），a unit（一个单位），an hour（一小时）。milk 泛指牛奶时用 some milk。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
-    intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
+    intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':number===6?'同一拼写，不同词类':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
     root.append(node('p',course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
 
     const bySpelling=(a,b)=>a.en.localeCompare(b.en,'en');
     const sortedWords=[...targets].sort(bySpelling);
-    for(const [part,entry] of Object.entries(classes)){
+    for(const [part,entry] of Object.entries(number===6?{}:classes)){
       const id='4ch1-class-'+part;
       const section=node('section','','a1-block');
       section.dataset.wordClass=part;
@@ -213,12 +214,20 @@
       root.append(section);
     }
 
-    const comparisons=[...multi].sort(bySpelling).map(word=>({word,uses:word.uses}));
-    const recap=node('section','','a1-block');
-    recap.append(heading('课末对照 · 同一拼写，不同词类','4ch1-compare',
-      ['课末对照。同一个词，换个词类，意思和用法就不一样，放在一起对照看。']),
-      wordList(comparisons,'4ch1-compare',listSpeaker));
-    if(comparisons.length)root.append(recap);
+    if(number===6){
+      const id='4ch6-all';
+      const section=node('section','','a1-block');
+      const items=sortedWords.map(word=>({word,uses:word.uses}));
+      for(let i=0;i<items.length;i+=10)section.append(wordList(items.slice(i,i+10),id,listSpeaker));
+      root.append(section);
+    }
+    if(number===3){
+      const more=node('p','','a1-block');
+      more.append('同一拼写、不同词类的词，等第四、五课学完，集中放在第六课复习：');
+      const go=node('a','去第六课','a1-button');go.href='sentence-game.html?level=6';
+      more.append(go);
+      root.append(more);
+    }
     if(number===3&&WMVocabulary4.supplemental.words.length)root.append(wordList(WMVocabulary4.supplemental.words.map(word=>({word,uses:word.uses})),'extra',listSpeaker));
 
     let record=read(),timer;

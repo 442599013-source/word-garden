@@ -965,6 +965,8 @@
   }
   courses[3].practice.phrase.push(...supplemental.practice.phrase);
   courses[3].practice.sentence.push(...supplemental.practice.sentence);
+  // V64.99 第六课：同一拼写、不同词类（跨课复习）——原来挂在第三课课末的对照段挪到这里
+  courses[6]=selectLesson(6,(word)=>new Set(word.uses.map(u=>u.part)).size>1);
   // V64.94 幼儿园第三课：名词卡例句改为日常场景句，逐词改写词类解说（不再用统一模板句）
   (function nounRewrite(){
     const rows=[
