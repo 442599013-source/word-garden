@@ -132,3 +132,11 @@
 .wm-context-definition{display:flex;align-items:center;gap:4px;font-size:13px}
 .wm-context-options{margin-block:6px}
 .wm-lesson-older-passages{border-top:1px solid var(--training-edge,#c8a2da);margin-top:10px;padding-top:8px;font-size:13px}
+
+/* V64.94 练习页标题单行：听、说、读、写四个练习页统一 */
+.wm-listening-header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:7px!important}
+.wm-listening-header>a{grid-area:back}
+.wm-listening-header h1{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.8vw,20px)!important;letter-spacing:-.02em}
+.wm-listening-header .study-category-row{grid-area:cats;justify-content:flex-end;margin-top:0!important}
+.wm-study-page .header{grid-template-columns:36px minmax(0,1fr) 150px!important}
+.wm-study-page .header .title{white-space:nowrap;font-size:clamp(14px,4.1vw,18px)!important;letter-spacing:-.02em;overflow:visible}

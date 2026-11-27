@@ -70,6 +70,7 @@
     'yeah:i':'用来回应对方，表达同意'
   };
   function explanation(word,use){
+    if(use.note)return use.note;
     if(word.exampleOnly)
       return use.part==='d'?'这个词放在名词前，帮助读者判断所指的是任意一个还是特指对象。它是限定词中的冠词。':'';
     const phrase=use.phrase;
