@@ -133,13 +133,30 @@
 .wm-context-options{margin-block:6px}
 .wm-lesson-older-passages{border-top:1px solid var(--training-edge,#c8a2da);margin-top:10px;padding-top:8px;font-size:13px}
 
-/* V64.95 练习页标题单行：听、说、读、写四页统一为两行页头（第一行返回＋标题，第二行课次下拉） */
-.wm-listening-header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:7px!important}
-.wm-listening-header>a{grid-area:back}
-.wm-listening-header h1{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.8vw,20px)!important;letter-spacing:-.02em}
-.wm-listening-header .study-category-row{grid-area:cats;justify-content:flex-end;margin-top:0!important}
-.wm-study-page .header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:7px!important}
+/* V64.96 练习页页头：第一行返回＋标题，第二行三级范围选择（学段／年级／课次） */
+.wm-listening-header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:8px!important;align-items:center}
+.wm-listening-header>a{width:36px!important;height:42px!important;min-width:36px!important;min-height:42px!important;padding:0!important;display:grid!important;place-items:center;font-size:0!important;overflow:hidden;text-decoration:none;border:1px solid var(--training-edge,#d9a7e9)!important;border-radius:15px!important;background:var(--training-light,#fff5fb)!important;box-shadow:inset 0 1px 1px #fff}
+.wm-listening-header>a::after{content:'‹';font-size:32px;line-height:1;color:#542877}
+.wm-listening-header h1{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.8vw,20px)!important;letter-spacing:-.02em;text-align:center}
+.wm-listening-header .study-category-row{grid-area:cats;margin:0!important}
+.wm-study-page .header{grid-template-columns:36px minmax(0,1fr)!important;grid-template-areas:"back title" "cats cats";row-gap:8px!important}
 .wm-study-page .header .back{grid-area:back}
-.wm-study-page .header .title{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.4vw,20px)!important;letter-spacing:-.02em;overflow:visible}
-.wm-study-page .header .wm-header-category{grid-area:cats;width:100%;min-height:0;flex-direction:row;justify-content:flex-end;padding:0;border:0;background:none;box-shadow:none;font-size:13px}
+.wm-study-page .header .title{grid-area:title;white-space:nowrap;font-size:clamp(16px,4.4vw,20px)!important;letter-spacing:-.02em;overflow:visible;text-align:center}
+.wm-study-page .header .wm-header-category{grid-area:cats;width:100%;min-height:0;padding:0;border:0;background:none;box-shadow:none;font-size:13px;display:block}
 .wm-study-page .header .wm-header-category>small,.wm-study-page .header .wm-header-category>strong{display:none}
+.wm-study-page .header .wm-header-category>.context{display:block;width:100%}
+
+/* 三级范围选择：三栏等分、等高 */
+.study-category-row{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;align-items:center;width:100%}
+.study-category-label,.study-category-row>label{display:contents!important}
+.study-category-row #book-title,.study-category-row #position{display:none!important}
+.wm-step-select,.study-category-row>select,.study-category-row select#lesson-number{width:100%!important;min-width:0!important;min-height:34px;height:34px;flex:1 1 auto!important;font-size:13px;line-height:1.1;padding:0 6px;border-radius:12px;border:1px solid var(--training-edge,#d9a7e9);background:#fffdfd;color:#5c2f80;text-overflow:ellipsis;font-family:inherit}
+.wm-step-select:disabled,.wm-step-locked,.study-category-row select:disabled{color:#b9a3cc!important;background:#f8f3fb!important;border-color:#e6d6f2!important;opacity:1}
+/* 覆盖 wm-a1-picker.css 里把课次下拉钉成 4.5rem 的规则，让三级选择等宽 */
+.wm-study-page .study-category-row.wm-header-category select#lesson-number,
+.wm-study-page .wm-header-category .study-category-row select#lesson-number{width:100%!important;min-width:0!important;flex:1 1 auto!important;padding:0 6px!important;border-radius:12px!important;height:34px;min-height:34px;font-size:13px}
+.wm-study-page .wm-header-category.wm-a1-lesson-picker,
+.wm-study-page .wm-header-category .wm-a1-lesson-picker,
+.wm-study-page .study-category-row.wm-a1-lesson-picker{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:6px!important;align-items:center!important}
+.wm-study-page .study-category-row select{background:#fffdfd!important;color:#5c2f80!important;font-size:13px!important;height:34px!important;min-height:34px!important;border-radius:12px!important}
+.wm-study-page .study-category-row select:disabled{background:#f8f3fb!important;color:#b9a3cc!important;border-color:#e6d6f2!important;opacity:1}
