@@ -122,3 +122,9 @@ body.a1-ability [hidden],body[data-skill] .wm-study-page [hidden]{display:none!i
 .a1-vocabulary-example { font-weight: 650; }
 .a1-vocabulary-example mark { background: #fee5a9; color: #563810; border-radius: .2em; padding-inline: .1em; }
 .a1-vocabulary-section > summary { cursor: pointer; padding: .5rem 0; }
+/* V64.98 词表分组：摘要行放组喇叭；正在朗读的卡片高亮 */
+.a1-vocabulary-section > summary{display:flex;align-items:center;justify-content:space-between;gap:.5rem;list-style:none}
+.a1-vocabulary-section > summary::-webkit-details-marker{display:none}
+.a1-vocab-caption{flex:1 1 auto;min-width:0}
+.a1-vocabulary-section > summary .a1-speaker{flex:none}
+.a1-vocabulary-word.is-reading{box-shadow:0 0 0 2px #67b98b;border-radius:.8rem;transition:box-shadow .2s}

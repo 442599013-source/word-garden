@@ -89,11 +89,13 @@
     const course=WMClassroomCatalog.lessons.find(lesson=>lesson.number===number);
     const audioStatus=node('p','','a1-status');
     audioStatus.setAttribute('role','status');
-    let playing,token=0;
+    let playing,token=0,markEl=null;
+    function clearMark(){markEl?.classList.remove('is-reading');markEl=null;}
     function stop(){
       token++;
       playing?.paint(false);
       playing=null;
+      clearMark();
       audio.stop();
     }
     function speaker(label,id,parts){
@@ -109,6 +111,41 @@
         playing=null;control.paint(false);
         if(ok===false)audioStatus.textContent='点读未完成，请重试。';
       },'a1-speaker');
+      control.paint=isPlaying=>{
+        control.setAttribute('aria-pressed',String(isPlaying));
+        WMStudyIcons.set(control,isPlaying?'stop':'speaker',isPlaying?'停止朗读':label);
+      };
+      control.paint(false);
+      return control;
+    }
+    function groupSpeaker(label,id,items,details,grid){
+      items.forEach(({word,uses},i)=>audio.registerNarration(id+'-'+i,uses.flatMap(use=>narration(word,use))));
+      const control=button('',async()=>{
+        const wasPlaying=playing===control;
+        stop();
+        if(wasPlaying)return;
+        const current=token;
+        playing=control;control.paint(true);audioStatus.textContent='';
+        if(!details.open)details.open=true;
+        await Promise.resolve();
+        if(!grid.childElementCount)grid.append(...items.map(({word,uses})=>card(word,uses,id)));
+        let failed=0;
+        for(let i=0;i<items.length;i++){
+          if(current!==token)return;
+          clearMark();
+          const el=grid.children[i];
+          if(el){el.classList.add('is-reading');markEl=el;el.scrollIntoView({block:'center',behavior:'smooth'});}
+          const ok=await audio.play('section-'+id+'-'+i);
+          if(current!==token)return;
+          if(ok===false){
+            audioStatus.textContent='这一段有词没读出来，先往后读。';
+            if(++failed>=3){audioStatus.textContent='点读未完成，请重试。';break;}
+          } else failed=0;
+        }
+        if(current!==token)return;
+        clearMark();playing=null;control.paint(false);
+      },'a1-speaker');
+      control.addEventListener('click',ev=>{ev.preventDefault();ev.stopPropagation();});
       control.paint=isPlaying=>{
         control.setAttribute('aria-pressed',String(isPlaying));
         WMStudyIcons.set(control,isPlaying?'stop':'speaker',isPlaying?'停止朗读':label);
@@ -136,20 +173,21 @@
       }
       return card;
     }
-    function wordList(items,id){
+    function wordList(items,id,listSpeaker){
       const details=node('details','','a1-vocabulary-section');
       const caption=(id==='extra'?'补充词表':items.length?items[0].word.en+' – '+items.at(-1).word.en:'词表')+'（'+items.length+'）';
-      const summary=node('summary',caption);
+      const summary=node('summary');
+      summary.append(node('span',caption,'a1-vocab-caption'));
       const grid=node('div','','a1-vocabulary-list');
       details.append(summary,grid);
-      details.addEventListener('toggle',()=>{
-        summary.textContent=caption;
-        if(details.open&&!grid.childElementCount){
-          grid.append(...items.map(({word,uses})=>card(word,uses,id)));
-        }
-      });
+      const build=()=>{
+        if(!grid.childElementCount)grid.append(...items.map(({word,uses})=>card(word,uses,id)));
+      };
+      if(listSpeaker&&items.length)summary.append(listSpeaker(items,id,details,grid));
+      details.addEventListener('toggle',()=>{if(details.open)build();});
       return details;
     }
+    const listSpeaker=(items,id,details,grid)=>groupSpeaker('朗读这一组的 '+items.length+' 个词',id+'-group',items,details,grid);
     const tip=number===4?'先看是否泛指一个可数的人或事物，再听冠词后紧接着的首音。a book（一本书），an old book（一本旧书），a unit（一个单位），an hour（一小时）。milk 泛指牛奶时用 some milk。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
     intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
@@ -168,24 +206,20 @@
       const rest=entries.filter(item=>item!==example);
       const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
       const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
-      section.append(heading(entry.label,id,[
-        entry.label+'。'+entry.intro,
-        ...readEntries([example]),
-        ...articles.flatMap(word=>word.uses.flatMap(use=>narration(word,use))),
-        ...readEntries(rest)
-      ]),node('p',entry.intro),card(example.word,example.uses,id));
+      section.append(heading(entry.label,id,[entry.label+'。'+entry.intro]),node('p',entry.intro),card(example.word,example.uses,id));
       for(const article of articles)section.append(card(article,article.uses,id));
-      for(let i=0;i<rest.length;i+=25)section.append(wordList(rest.slice(i,i+25),id));
+      const groupSize=number===3?25:number===4?25:25;
+      for(let i=0;i<rest.length;i+=groupSize)section.append(wordList(rest.slice(i,i+groupSize),id,listSpeaker));
       root.append(section);
     }
 
     const comparisons=[...multi].sort(bySpelling).map(word=>({word,uses:word.uses}));
     const recap=node('section','','a1-block');
     recap.append(heading('课末对照 · 同一拼写，不同词类','4ch1-compare',
-      comparisons.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)))),
-      wordList(comparisons,'4ch1-compare'));
+      ['课末对照。同一个词，换个词类，意思和用法就不一样，放在一起对照看。']),
+      wordList(comparisons,'4ch1-compare',listSpeaker));
     if(comparisons.length)root.append(recap);
-    if(number===3&&WMVocabulary4.supplemental.words.length)root.append(wordList(WMVocabulary4.supplemental.words.map(word=>({word,uses:word.uses})),'extra'));
+    if(number===3&&WMVocabulary4.supplemental.words.length)root.append(wordList(WMVocabulary4.supplemental.words.map(word=>({word,uses:word.uses})),'extra',listSpeaker));
 
     let record=read(),timer;
     const status=node('span','','a1-assessment-status');
