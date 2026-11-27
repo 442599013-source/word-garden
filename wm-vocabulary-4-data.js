@@ -2276,5 +2276,183 @@
     window.WMVocab3Rewrite1={rows:hit,missed:miss};
   })();
 
+  // V64.109 第三课文案改写第二批（138 条，第三课收官）
+  (function lesson3Rewrite2(){
+    const rows=[
+["with","p","和……一起","Come with me.","跟我一起来。","with 表示「和……一起」。这句说的是两个人一道，with 说明跟谁在一块，是介词。"],
+["yeah","i","嗯","Yeah, I can do it.","嗯，我能行。","yeah 表示「嗯」，是随口答应的口头语；这句说的是先应一声，yeah 说明语气，是感叹词。"],
+["yeah","r","是的（口语答语）","Can you come? Yeah.","你能来吗？能。","yeah 表示「是的」，是口语里的肯定答语；这句说的是直接点头答应，yeah 说明答的是什么，是副词。"],
+["your","d","你的","Your cup is here.","你的杯子在这儿。","your 表示「你的」。这句说的是属于你的那只杯，your 说明归谁，是限定词。"],
+["able","a","能够的","She is able to help.","她能帮上忙。","able 表示「能够的」。这句说的是她有这个本事，able 说明能不能做，是形容词。"],
+["dead","a","死亡的","The ant is dead.","蚂蚁死了。","dead 表示「死亡的」。这句说的是不再活了，dead 说明活的还是死的，是形容词。"],
+["deep","a","深的","The lake is deep.","这湖很深。","deep 表示「深的」。这句说的是从上到底距离大，deep 说明深浅，是形容词。"],
+["deep","r","往深处","We dig deep.","我们往深里挖。","deep 表示「往深处」。这句说的是往下挖得远，deep 说明挖到多深，是副词。"],
+["fair","a","公平的","It is a fair call.","这判得公道。","fair 表示「公平的」。这句说的是两边不偏心，fair 说明公不公，是形容词。"],
+["flat","a","平的","The roof is flat.","屋顶是平的。","flat 表示「平的」。这句说的是没有高低起伏，flat 说明平不平，是形容词。"],
+["flat","r","平直地","Lay it flat.","把它平着放。","flat 表示「平直地」。这句说的是贴平了放，flat 说明怎么放，是副词。"],
+["gold","a","金色的","She has a gold ring.","她有个金戒指。","gold 表示「金色的」。这句说的是那种黄亮颜色，gold 说明颜色，是形容词。"],
+["hers","o","她的东西","The blue coat is hers.","蓝外套是她的。","hers 表示「她的东西」。这句说的是那件外套归她，hers 直接指她的东西，是代词。"],
+["huge","a","巨大的","It was a huge win.","那是一次大胜。","huge 表示「巨大的」。这句说的是分量特别大，huge 说明大到什么程度，是形容词。"],
+["hurt","a","伤心的","She felt hurt.","她心里受伤了。","hurt 表示「伤心的」。这句说的是话扎到了她，hurt 说明心里什么滋味，是形容词。"],
+["lazy","a","懒惰的","The cat is lazy.","这只猫很懒。","lazy 表示「懒惰的」。这句说的是不爱动，lazy 说明勤不勤，是形容词。"],
+["lead","a","主要的","She has the lead role.","她演主角。","lead 表示「主要的」。这句说的是戏里挑大梁那个，lead 说明排第几位，是形容词。"],
+["less","d","更少的","Use less salt.","少放点盐。","less 表示「更少的」。这句说的是比现在再少些，less 说明量往下降，是限定词。"],
+["less","o","较少的量","We pay less.","我们付得少些。","less 表示「较少的量」。这句说的是钱少掏一些，less 直接指那份量，是代词。"],
+["less","r","不那么","I am less sad now.","我现在没那么难过了。","less 表示「不那么」。这句说的是程度减下来，less 说明减多少，是副词。"],
+["lost","a","迷路的","We got back the lost dog.","我们找到了走丢的狗。","lost 表示「迷路的」。这句说的是找不到回家的路，lost 说明狗什么处境，是形容词。"],
+["loud","a","响亮的","The bell is loud.","铃声很响。","loud 表示「响亮的」。这句说的是声音大得刺耳，loud 说明响不响，是形容词。"],
+["loud","r","响亮地","Sing out loud.","大声唱出来。","loud 表示「响亮地」。这句说的是把声放出来，loud 说明唱得多响，是副词。"],
+["male","a","男性的","It is a male bird.","这是只雄鸟。","male 表示「男性的、雄的」。这句说的是公的那只，male 说明性别，是形容词。"],
+["mine","o","我的东西","This pen is mine.","这支笔是我的。","mine 表示「我的东西」。这句说的是笔归我，mine 直接指我的东西，是代词。"],
+["none","o","没有一个","None came.","一个都没来。","none 表示「没有一个」。这句说的是该来的一个也没到，none 直接指那批人，是代词。"],
+["onto","p","到……上面","The cat got onto the bed.","猫跳到了床上。","onto 表示「到……上面」。这句说的是从下面到上面去，onto 说明落到哪儿，是介词。"],
+["rude","a","粗鲁的","That was a rude word.","那话说得粗。","rude 表示「粗鲁的」。这句说的是没礼貌，rude 说明话说得礼不礼貌，是形容词。"],
+["safe","a","安全的","It is a safe road.","这条路安全。","safe 表示「安全的」。这句说的是走上去不出事，safe 说明险不险，是形容词。"],
+["shut","a","关闭的","The shop is shut.","店关门了。","shut 表示「关闭的」。这句说的是门合上了，shut 说明店开没开，是形容词。"],
+["soft","a","柔软的","The bed is soft.","这床很软。","soft 表示「柔软的」。这句说的是压下去会陷，soft 说明软硬，是形容词。"],
+["such","d","这样的","I saw such a big fish.","我看见这么大的鱼。","such 表示「这样的」。这句说的是鱼大到这个份上，such 说明什么样的，是限定词。"],
+["such","o","如此情况","Such is life.","日子就是这样。","such 表示「如此情况」。这句说的是事情就是这么个样子，such 直接指那种情形，是代词。"],
+["thin","a","薄的","It is a thin cut.","这是薄薄的一片。","thin 表示「薄的」。这句说的是厚度小，thin 说明厚薄，是形容词。"],
+["twin","a","成对的","It is a twin pack.","这是双份装。","twin 表示「成对的」。这句说的是两件配成一套，twin 说明是不是一对，是形容词。"],
+["used","a","二手的","It is a used car.","这是辆二手车。","used 表示「二手的」。这句说的是别人用过，used 说明新还是旧，是形容词。"],
+["weak","a","弱的","My legs feel weak.","我腿没劲。","weak 表示「弱的」。这句说的是使不上力，weak 说明力气够不够，是形容词。"],
+["wide","a","宽的","It is a wide road.","这条路很宽。","wide 表示「宽的」。这句说的是两边距离大，wide 说明宽窄，是形容词。"],
+["wide","r","充分地","Open the door wide.","把门敞开。","wide 表示「充分地」。这句说的是开到最大，wide 说明开多大，是副词。"],
+["wild","a","野生的","It is a wild fox.","这是只野狐狸。","wild 表示「野生的」。这句说的是在林子里自己活，wild 说明家养还是野生，是形容词。"],
+["zero","d","零","We had zero rain.","我们这儿一滴雨没下。","zero 表示「零」。这句说的是完全没有，zero 说明数量，是限定词。"],
+["calm","a","平静的","The sea is calm.","海面很平。","calm 表示「平静的」。这句说的是不起浪，calm 说明静不静，是形容词。"],
+["folk","a","民间的","We saw a folk song.","我们听到一首民歌。","folk 表示「民间的」。这句说的是老百姓传下来的，folk 说明从哪儿来，是形容词。"],
+["glad","a","高兴的","I am glad you came.","你来了我很高兴。","glad 表示「高兴的」。这句说的是心里舒坦，glad 说明心情，是形容词。"],
+["mild","a","温和的","It was a mild day.","那天不冷不热。","mild 表示「温和的」。这句说的是天气不厉害，mild 说明冷不冷，是形容词。"],
+["neat","a","整齐的","My desk is neat.","我桌子收拾得很整齐。","neat 表示「整齐的」。这句说的是东西摆得有条理，neat 说明乱不乱，是形容词。"],
+["ours","o","我们的东西","The tent is ours.","帐篷是我们的。","ours 表示「我们的东西」。这句说的是帐篷归我们，ours 直接指我们的东西，是代词。"],
+["pale","a","苍白的","Her face is pale.","她脸色发白。","pale 表示「苍白的」。这句说的是血色少，pale 说明脸色，是形容词。"],
+["plus","p","加上","The fee plus tax is ten.","费用加税是十。","plus 表示「加上」。这句说的是把税再加进去，plus 说明还要加什么，是介词。"],
+["plus","a","正的","It is a plus sign.","这是个加号。","plus 表示「正的、加的」。这句说的是那个加号，plus 说明是哪种符号，是形容词。"],
+["plus","c","而且（口语）","It is new, plus it is fast.","它是新的，而且快。","plus 表示「而且」，是口语里的追加说法；这句说的是再补一条好处，plus 说明把话接下去，是连词。"],
+["quit","a","摆脱了的","They are quit of debt.","他们终于不欠债了。","quit 表示「摆脱了的」。这句说的是债已经了了，quit 说明还欠不欠，是形容词。"],
+["rare","a","罕见的","It is a rare gem.","这是块少见的宝石。","rare 表示「罕见的」。这句说的是不常碰见，rare 说明常见还是少见，是形容词。"],
+["till","p","直到","The shop is open till six.","店开到六点。","till 表示「直到」。这句说的是开到那个钟点为止，till 说明到什么时候，是介词。"],
+["till","c","直到……为止","Wait till the rain ends.","等到雨停。","till 表示「直到……为止」。这句说的是等到那件事过去，till 说明等到哪一步，是连词。"],
+["tiny","a","极小的","It is a tiny bug.","这是只很小的虫子。","tiny 表示「极小的」。这句说的是小得要看仔细，tiny 说明大小，是形容词。"],
+["ugly","a","丑陋的","The wall is ugly.","这面墙很难看。","ugly 表示「丑陋的」。这句说的是看着不舒服，ugly 说明好不好看，是形容词。"],
+["upon","p","在……之上","Call upon me.","来了就找我。","upon 表示「在……之时、在……之上」，多用于正式说法；这句说的是到了就来找我，upon 说明在什么时候，是介词。"],
+["acid","a","酸性的","It was acid rain.","那是酸雨。","acid 表示「酸性的」。这句说的是雨水带酸性，acid 说明是哪一类雨，是形容词。"],
+["aged","a","年龄为……的","Kids aged ten came.","十岁的孩子来了。","aged 表示「年龄为……的」。这句说的是按岁数来分，aged 说明多大年纪，是形容词。"],
+["bent","a","弯曲的","The nail is bent.","钉子弯了。","bent 表示「弯曲的」。这句说的是不再直，bent 说明形状，是形容词。"],
+["bold","a","大胆的","It was a bold move.","那一步走得大胆。","bold 表示「大胆的」。这句说的是敢冒险，bold 说明胆大胆小，是形容词。"],
+["core","a","核心的","The core tips are here.","这些是最要紧的窍门。","core 表示「核心的」。这句说的是最里头最要紧的，core 说明排第几层，是形容词。"],
+["cute","a","可爱的","The pup is cute.","这只小狗很可爱。","cute 表示「可爱的」。这句说的是看着让人喜欢，cute 说明讨不讨人喜欢，是形容词。"],
+["dull","a","枯燥的","The talk was dull.","那场讲得没意思。","dull 表示「枯燥的」。这句说的是听着犯困，dull 说明有没有意思，是形容词。"],
+["evil","a","邪恶的","It was an evil deed.","那是件恶事。","evil 表示「邪恶的」。这句说的是存心害人，evil 说明好坏，是形容词。"],
+["fake","a","假的","It is a fake note.","这张纸条是假的。","fake 表示「假的」。这句说的是仿出来骗人的，fake 说明真不真，是形容词。"],
+["firm","a","坚定的","She is firm on it.","这事她不让步。","firm 表示「坚定的」。这句说的是态度不松，firm 说明立场稳不稳，是形容词。"],
+["fond","a","喜爱的","I am fond of tea.","我爱喝茶。","fond 表示「喜爱的」。这句说的是心里偏爱，fond 说明喜不喜欢，是形容词。"],
+["holy","a","神圣的","It is a holy site.","这是一处圣地。","holy 表示「神圣的」。这句说的是受人敬拜的地方，holy 说明神圣不神圣，是形容词。"],
+["lean","a","瘦的","It is lean meat.","这是瘦肉。","lean 表示「瘦的」。这句说的是没什么肥，lean 说明肥瘦，是形容词。"],
+["mass","a","大规模的","Mass work is done by hand.","大批的活儿靠手工做。","mass 表示「大规模的」。这句说的是成批成批地干，mass 说明规模多大，是形容词。"],
+["pure","a","纯的","The air is pure.","空气很干净。","pure 表示「纯的」。这句说的是没有杂物，pure 说明纯不纯，是形容词。"],
+["thus","r","因此","It was late, thus we left.","天晚了，所以我们就走了。","thus 表示「因此」。这句说的是由前面的事推出后面，thus 说明因果，是副词。"],
+["vast","a","广阔的","The sea is vast.","海面一望无边。","vast 表示「广阔的」。这句说的是大得看不到头，vast 说明有多大，是形容词。"],
+["whom","o","谁（宾格，较正式）","Whom did you ask?","你问了谁？","whom 表示「谁」，是宾格，比较正式；这句问的是被问的那个人，whom 指他，是代词。"],
+["wise","a","明智的","It was a wise call.","这个决定很明智。","wise 表示「明智的」。这句说的是看得远、不会错，wise 说明聪不聪明，是形容词。"],
+["amid","p","在……之中","The game was amid the rain.","事情是在雨里开始的。","amid 表示「在……之中」。这句说的是周围正下着雨，amid 说明在什么当中，是介词。"],
+["bare","a","裸露的","The wall is bare.","这面墙是空的。","bare 表示「裸露的」。这句说的是上面什么都没挂，bare 说明有没有遮盖，是形容词。"],
+["cult","a","受小众狂热追捧的","It is a cult film.","这是一部小众追捧的片子。","cult 表示「受小众狂热追捧的」。这句说的是有一小群死忠，cult 说明火在哪一层，是形容词。"],
+["dual","a","双重的","It has a dual use.","它有两种用法。","dual 表示「双重的」。这句说的是一样东西两样用处，dual 说明几重，是形容词。"],
+["keen","a","热衷的","She is keen on art.","她很喜欢画画。","keen 表示「热衷的」。这句说的是兴致很高，keen 说明热不热衷，是形容词。"],
+["mere","a","仅仅的","It was a mere joke.","那只是句玩笑。","mere 表示「仅仅的」。这句说的是不值一提，mere 说明分量多轻，是形容词。"],
+["oral","a","口头的","It was an oral test.","那是一场口试。","oral 表示「口头的」。这句说的是用嘴说、不写字，oral 说明哪种形式，是形容词。"],
+["rear","a","后面的","The rear door is open.","后门开着。","rear 表示「后面的」。这句说的是靠后那扇门，rear 说明哪一边，是形容词。"],
+["sole","a","唯一的","That is the sole aim.","那是唯一的目的。","sole 表示「唯一的」。这句说的是除了它没别的，sole 说明有几个，是形容词。"],
+["solo","a","单独的","It was a solo trip.","那是一次独自出行。","solo 表示「单独的」。这句说的是一个人走，solo 说明几个人，是形容词。"],
+["solo","r","单独地","She went solo.","她一个人去的。","solo 表示「单独地」。这句说的是不结伴，solo 说明怎么去，是副词。"],
+["vice","a","副职的","He is the vice boss.","他是副手。","vice 表示「副职的」。这句说的是排在正手后头那个，vice 说明正还是副，是形容词。"],
+["idle","a","闲置的","The car sits idle.","车停着没人用。","idle 表示「闲置的」。这句说的是放着不动，idle 说明用没用上，是形容词。"],
+["rife","a","普遍的","The plan was rife with risk.","这个计划处处是险。","rife 表示「普遍的」。这句说的是到处都有，rife 说明多不多，是形容词。"],
+["grey","a","灰色的","The sky is grey.","天是灰的。","grey 表示「灰色的」，是英式拼法；这句说的是天上一片灰，grey 说明颜色，是形容词。"],
+["plum","a","令人向往的","It is a plum job.","这是份让人眼红的工作。","plum 表示「令人向往的」。这句说的是好得人人想要，plum 说明好不好，是形容词。"],
+["bald","a","秃头的","The man is bald.","那个人头顶没头发。","bald 表示「秃头的」。这句说的是头上光着，bald 说明有没有头发，是形容词。"],
+["numb","a","麻木的","My toes are numb.","我脚趾麻了。","numb 表示「麻木的」。这句说的是感觉不到，numb 说明有没有知觉，是形容词。"],
+["tidy","a","整洁的","The room is tidy.","屋里很整齐。","tidy 表示「整洁的」。这句说的是东西归置得好，tidy 说明乱不乱，是形容词。"],
+["anti","a","反对的","He is anti war.","他是反战的。","anti 表示「反对的」。这句说的是站到对面去，anti 说明什么立场，是形容词。"],
+["aqua","a","浅水绿色的","She has an aqua top.","她有件浅水绿的上衣。","aqua 表示「浅水绿色的」。这句说的是那种淡淡的青绿，aqua 说明颜色，是形容词。"],
+["avid","a","热衷的","He is an avid fan.","他是个狂热粉丝。","avid 表示「热衷的」。这句说的是追得很起劲，avid 说明有多热，是形容词。"],
+["bony","a","多骨的","The fish is bony.","这鱼刺多。","bony 表示「多骨的」。这句说的是骨头扎手，bony 说明骨多骨少，是形容词。"],
+["cosy","a","舒适的","The room is cosy.","屋里很舒服。","cosy 表示「舒适的」，是英式拼法；这句说的是待着暖和安心，cosy 说明舒不舒服，是形容词。"],
+["cozy","a","舒适的（美式拼写）","The bed is cozy.","这床很舒服。","cozy 表示「舒适的」，是 cosy 的美式拼法；这句说的是睡着踏实，cozy 说明舒不舒服，是形容词。"],
+["daft","a","愚蠢的","That was a daft idea.","那是个傻主意。","daft 表示「愚蠢的」。这句说的是想得不靠谱，daft 说明傻不傻，是形容词。"],
+["damn","a","该死的（粗俗用语）","That damn cat is loud.","那只该死的猫叫得吵。","damn 表示「该死的」，是粗俗的骂法；这句说的是气话里带上那只猫，damn 说明语气，是形容词。"],
+["damn","r","非常（粗俗用语）","It is damn cold.","冷得要命。","damn 表示「非常」，是粗俗的加强说法；这句说的是把程度往上顶，damn 说明有多，是副词。"],
+["damn","i","糟糕（粗俗感叹语）","Damn! I lost my key.","糟糕！我把钥匙丢了。","damn 表示「糟糕」，是粗俗的感叹；这句说的是懊恼地冒一句，damn 说明语气，是感叹词。"],
+["damp","a","潮湿的","My coat is damp.","我外套潮了。","damp 表示「潮湿的」。这句说的是有点水汽、不干透，damp 说明干湿，是形容词。"],
+["deaf","a","听不见的","The dog is deaf.","这只狗听不见。","deaf 表示「听不见的」。这句说的是耳朵不管用，deaf 说明听力，是形容词。"],
+["dumb","a","愚蠢的（非正式）","That was a dumb slip.","那个疏忽很蠢。","dumb 表示「愚蠢的」，是非正式说法；这句说的是不该犯的错，dumb 说明傻不傻，是形容词。"],
+["foul","a","难闻的","The air is foul.","空气很难闻。","foul 表示「难闻的」。这句说的是闻着恶心，foul 说明气味，是形容词。"],
+["glum","a","闷闷不乐的","He sits glum.","他闷闷地坐着。","glum 表示「闷闷不乐的」。这句说的是提不起兴致，glum 说明脸色心情，是形容词。"],
+["grim","a","严峻的","It was a grim note.","那条消息很沉重。","grim 表示「严峻的」。这句说的是让人高兴不起来，grim 说明轻重，是形容词。"],
+["lame","a","站不住脚的","That lame tale is thin.","那套说法很站不住。","lame 表示「站不住脚的」。这句说的是理由撑不起来，lame 说明理由强不强，是形容词。"],
+["lush","a","茂盛的","The park is lush.","公园里长得很旺。","lush 表示「茂盛的」。这句说的是草木密而绿，lush 说明长势，是形容词。"],
+["mock","a","模拟的","We had a mock test.","我们做了一场模拟测验。","mock 表示「模拟的」。这句说的是照真的来一遍但不作数，mock 说明真还是练，是形容词。"],
+["oily","a","油腻的","The food is oily.","这吃食油太多。","oily 表示「油腻的」。这句说的是入口一层油，oily 说明油多油少，是形容词。"],
+["okay","a","尚可的","It was an okay film.","这片子还过得去。","okay 表示「尚可的」。这句说的是不算好也不差，okay 说明行不行，是形容词。"],
+["okay","r","还不错地","The test went okay.","测验考得还行。","okay 表示「还不错地」。这句说的是结果过得去，okay 说明做得怎样，是副词。"],
+["oval","a","椭圆形的","The room is oval.","这间屋子是椭圆的。","oval 表示「椭圆形的」。这句说的是长圆那种形状，oval 说明形状，是形容词。"],
+["paid","a","有报酬的","It is paid work.","这活儿给钱。","paid 表示「有报酬的」。这句说的是干了能拿钱，paid 说明给不给钱，是形容词。"],
+["posh","a","豪华的","It is a posh club.","这是家高档会所。","posh 表示「豪华的」。这句说的是贵气、不便宜，posh 说明档次，是形容词。"],
+["rash","a","轻率的","It was a rash move.","那一步太莽撞。","rash 表示「轻率的」。这句说的是没想清就做，rash 说明稳不稳，是形容词。"],
+["ripe","a","成熟的","The pear is ripe.","梨熟了。","ripe 表示「成熟的」。这句说的是能吃了，ripe 说明熟没熟，是形容词。"],
+["rosy","a","乐观的","The plan is rosy.","这计划前景看好。","rosy 表示「乐观的」。这句说的是看着一片亮，rosy 说明好还是坏，是形容词。"],
+["sexy","a","性感的","She wore a sexy top.","她穿了件性感的上衣。","sexy 表示「性感的」。这句说的是穿得惹眼，sexy 说明什么风格，是形容词。"],
+["slim","a","微小的","A slim hope is left.","希望很小。","slim 表示「微小的」。这句说的是成的可能很薄，slim 说明机会多少，是形容词。"],
+["smug","a","自鸣得意的","He had a smug grin.","他笑得挺自得。","smug 表示「自鸣得意的」。这句说的是觉得自己了不起，smug 说明神色，是形容词。"],
+["sore","a","疼痛的","My knee is sore.","我膝盖疼。","sore 表示「疼痛的」。这句说的是碰一下就难受，sore 说明疼不疼，是形容词。"],
+["sour","a","酸的","The plum is sour.","这李子很酸。","sour 表示「酸的」。这句说的是入口发酸，sour 说明味道，是形容词。"],
+["tame","a","温顺的","The cat is tame.","这只猫很温顺。","tame 表示「温顺的」。这句说的是不咬人、听话，tame 说明野不野，是形容词。"],
+["taut","a","绷紧的","The rope is taut.","绳子绷得很紧。","taut 表示「绷紧的」。这句说的是拉得没有余地，taut 说明松紧，是形容词。"],
+["vain","a","徒劳的","It was a vain try.","那一试白费了。","vain 表示「徒劳的」。这句说的是费了力也没用，vain 说明有没有结果，是形容词。"],
+["wary","a","警惕的","He gave a wary look.","他警惕地看了一眼。","wary 表示「警惕的」。这句说的是心里防着，wary 说明警觉不警觉，是形容词。"],
+["worn","a","磨损的","The rug is worn.","这地毯磨旧了。","worn 表示「磨损的」。这句说的是用久了变薄，worn 说明新还是旧，是形容词。"],
+["zany","a","滑稽古怪的","It was a zany plan.","那是个古怪的主意。","zany 表示「滑稽古怪的」。这句说的是听着好笑又离谱，zany 说明正不正经，是形容词。"],
+["nigh","r","几乎（旧式）","It was nigh dark.","天差不多黑了。","nigh 表示「几乎」，是旧式说法；这句说的是快黑透了，nigh 说明差多少，是副词。"],
+["unto","p","向（旧式）","Do unto him as you wish.","你愿别人怎样待你，你就怎样待他。","unto 表示「向」，是旧式说法；这句说的是把心意对向别人，unto 说明对谁，是介词。"],
+["lest","c","以免","Talk low lest you wake her.","小声点，免得吵醒她。","lest 表示「以免」。这句说的是怕出现那件事，lest 说明防的是什么，是连词。"]
+    ];
+    const course=courses[3];let hit=0,miss=[];
+    const flat=t=>String(t||'').replace(/（[^）]*）|\([^)]*\)/g,'').trim();
+    for(const row of rows){
+      const [en,part,zh,sent,zhs,note]=row;
+      const word=course.words.find(w=>w.en===en);
+      if(!word){miss.push(en+'|no word');continue;}
+      const use=word.uses.find(u=>(u.part||'')===part&&(u.zh===zh||flat(u.zh)===flat(zh)));
+      if(!use){miss.push(en+'|'+part+'|'+zh);continue;}
+      use.sentence=sent;use.sentenceZh=zhs;use.note=note;hit++;
+    }
+    if(miss.length)console.warn('V64.109 rewrite missed:',miss.join(','));
+    window.WMVocab3Rewrite2={rows:hit,missed:miss};
+  })();
+
+  // V64.109b 第六课四个动词补写（halt/levy/raid/scam）
+  (function lesson6VerbFix(){
+    const rows=[
+["halt","v","停止","We will halt the work.","我们要把这活儿停下来。","halt 表示「停止」。这句说的是让事情不再往前推，halt 说明它在哪儿停下，是动词。"] ,
+["levy","v","征收","They may levy a tax.","他们可能要征税。","levy 表示「征收」。这句说的是按规定收一笔钱，levy 说明收的动作，是动词。"] ,
+["raid","v","突袭","The cops may raid the den.","警察可能突袭那个窝点。","raid 表示「突袭」。这句说的是突然冲进去查，raid 说明他们的行动，是动词。"] ,
+["scam","v","诈骗","They scam a poor man.","他们骗一个可怜人。","scam 表示「诈骗」。这句说的是哄着人把钱交出去，scam 说明他们的做法，是动词。"]
+    ];
+    const course=courses[6];let hit=0,miss=[];
+    const flat=t=>String(t||'').replace(/（[^）]*）|\([^)]*\)/g,'').trim();
+    for(const row of rows){
+      const [en,part,zh,sent,zhs,note]=row;
+      const word=course.words.find(w=>w.en===en);
+      if(!word){miss.push(en);continue;}
+      const use=word.uses.find(u=>(u.part||'')===part&&(u.zh===zh||flat(u.zh)===flat(zh)));
+      if(!use){miss.push(en+'|'+zh);continue;}
+      use.sentence=sent;use.sentenceZh=zhs;use.note=note;hit++;
+    }
+    if(miss.length)console.warn('V64.109b missed:',miss.join(','));
+    window.WMVocab6Fix={rows:hit,missed:miss};
+  })();
+
   window.WMVocabulary4={words,targets,classes,practice,courses,supplemental};
 })();
