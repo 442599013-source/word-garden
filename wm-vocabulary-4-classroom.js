@@ -174,6 +174,7 @@
         );
         const why=explanation(word,use);
         if(why)box.append(node('p',why));
+        if(use.skeleton)box.append(node('p',use.skeleton,'a1-vocabulary-skeleton'));
         card.append(box);
       }
       return card;
@@ -196,14 +197,14 @@
     }
     const listSpeaker=(items,id,details,grid)=>groupSpeaker('朗读这一组的 '+items.length+' 个词',id+'-group',items,details,grid);
     const reviewIntro='同一拼写，不同词类。同一个词，换个词类，意思和用法就不一样。这一课把前面几课学过的这类词放在一起对照复习。';
-    const tip=number===7?reviewIntro:number===6?'这一课全是形容词。形容词放在名词前说清它是什么样，也可以跟在 be 后面说主语的状态：a cold night（一个寒冷的夜晚），The night is cold.（夜晚很冷）。卡片只给词、义和例句和原有解说。':number===4?'这一课全是名词。卡片只给词、义和例句，不再逐词解释词性：能给它加 a / an、能给它起名字，它就落在名词这一类。a 与 an 怎么分，见下面名词板块开头的说明。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
+    const tip=number===7?reviewIntro:number===6?'这一课全是形容词。形容词放在名词前说清它是什么样，也可以跟在 be 后面说主语的状态：a cold night（一个寒冷的夜晚），The night is cold.（夜晚很冷）。卡片只给词、义和例句和原有解说。':number===4?'这一课全是名词。卡片只给词、义和例句，不再逐词解释词性：能给它加 a / an、能给它起名字，它就落在名词这一类。a 与 an 怎么分，见下面名词板块开头的说明。':number===5?'这一课按四类讲动词：实义动词、系动词、助动词、情态动词。判断时先看它后面接什么——自己带动作或状态、句子靠它撑起来的是实义动词；把主语和后面的描述连起来的是系动词；自己不表示动作、只帮忙提问否定或凑时态的是助动词；给后面动词加“必须、将会”态度的是情态动词。有的词会换类，同一个词后面接的东西不一样就可能是不同类型，课末再总结。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
-    intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':number===7?'同一拼写，不同词类':number===6?'形容词在句子里起什么作用？':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
+    intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':number===7?'同一拼写，不同词类':number===6?'形容词在句子里起什么作用？':number===5?'动词的四种用法':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
     root.append(node('p',course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
 
     const bySpelling=(a,b)=>a.en.localeCompare(b.en,'en');
     const sortedWords=[...targets].sort(bySpelling);
-    for(const [part,entry] of Object.entries(number===7?{}:classes)){
+    for(const [part,entry] of Object.entries(number===7||number===5?{}:classes)){
       const id='4ch1-class-'+part;
       const section=node('section','','a1-block');
       section.dataset.wordClass=part;
@@ -226,6 +227,32 @@
       const groupSize=number===3?25:number===4?25:25;
       for(let i=0;i<rest.length;i+=groupSize)section.append(wordList(rest.slice(i,i+groupSize),id,listSpeaker));
       root.append(section);
+    }
+
+    if(number===5){
+      const groups=[['实义动词','verb-main','句子里说清“做了什么、处于什么状态”的那个词。去掉它，句子就没有核心意思了。所以它后面可以什么都不接，也可以接“做什么的对象”。','We swim in the sea.'],
+        ['系动词','verb-link','它不在说动作，而是把前面的主语和后面的描述连起来，说明主语是什么样。所以它后面接“什么样的”，不接动作的对象：You seem sad.（对）／You seem a sad.（错）','You seem sad.'],
+        ['助动词','verb-aux','它自己没有任何动作，只帮忙变问句、否定或凑时态，真正的动作在后面。所以它后面要跟真正的动词：Does she like it?','Does she like it?'],
+        ['情态动词','verb-modal','它也不表示动作，只给后面的动词加上“必须、将会”这层态度。所以它后面跟动词原形，不加 to，也不加 -ed：You must go.','You must go.']];
+      for(const [label,key,intro,sample] of groups){
+        const id='4ch5-'+key;
+        const items=[...targets].filter(w=>w.uses.some(u=>u.part==='v'&&u.sub===label)).sort(bySpelling)
+          .map(word=>({word,uses:word.uses.filter(u=>u.part==='v')}));
+        if(!items.length)continue;
+        const section=node('section','','a1-block');
+        section.append(heading(label,id,[],'h2'),node('p',intro),node('p','例：'+sample,'a1-vocabulary-sample'));
+        const example=items[0],rest=items.slice(1);
+        section.append(card(example.word,example.uses,id));
+        const groupSize=label==='实义动词'?25:25;
+        for(let i=0;i<rest.length;i+=groupSize)section.append(wordList(rest.slice(i,i+groupSize),id,listSpeaker));
+        root.append(section);
+      }
+      const close=node('section','','a1-block a1-vocabulary-summary');
+      close.append(heading('课末总结：哪些词会换类','4ch5-summary',[],'h2'));
+      ['最后记住两件事。','一、有些词是会变的：be（am/is/are/was/were/been）、have、do/does/did、look、feel、seem、grow、turn、keep、stay、get 这类，同一个词在不同句子里可能是系动词、助动词，也可能是实义动词，全看它后面接什么。接“什么样的”描述就是系动词（You seem sad.）；接过去分词帮忙构成完成时就是助动词（I have done my work.）；自己带动作、带对象就是实义动词（Look at the map.）。',
+       '二、大部分实义动词是固定的：swim、call、help、hate 走到哪句都在说动作，不会变成别的类。','所以判断永远先看它后面那个词，再定类型，不用背单词表。']
+        .forEach(t=>close.append(node('p',t)));
+      root.append(close);
     }
 
     if(number===7){

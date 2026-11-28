@@ -2949,3 +2949,41 @@
     c3.words.sort((a,b)=>a.en.localeCompare(b.en,'en'));
     c3.targets.sort((a,b)=>a.en.localeCompare(b.en,'en'));
   })();
+
+  // V64.115 第五课动词分四类：实义 / 系 / 助 / 情态，逐条改结论、补骨架
+  (function verbTyping(){
+    const V=window.WMVocabulary4, c5=V.courses[5];
+    const LINK=new Set(["feel", "seem", "were"]), AUX=new Set(["does"]), MOD=new Set(["must", "will"]), SPEC={"feel": ["系动词", "在「I feel good now.」里，feel 后面跟的是 good，它不是“摸到某样东西”，而是把 I 和 good 连起来，说我现在是什么样，所以是系动词。", "… + feel + 什么样的（说主语的状态）"], "seem": ["系动词", "在「You seem sad.」里，seem 后面跟 sad，把 You 和 sad 连起来，说你看上去是什么样，所以是系动词。", "… + seem + 什么样的（说主语看起来怎样）"], "were": ["系动词", "在「We were late.」里，were 后面跟 late，把 We 和 late 连起来，说当时我们是什么样，所以是系动词。", "… + were + 什么样的（说主语当时的状态）"], "does": ["助动词", "在「Does she like it?」里，does 自己不表示任何动作，只把这句话变成问句，真正的动作是 like，所以是助动词。", "does + 谁 + 动词原形？（帮忙提问）"], "must": ["情态动词", "在「You must wear a hat.」里，must 不表示动作，只给 wear 加上“没有别的选择”这层态度，所以是情态动词。", "… + must + 动词原形（不给动作加 to 或 -ed）"], "will": ["情态动词", "在「We will meet soon.」里，will 不表示动作，只把 meet 挪到往后，加上“将会”，所以是情态动词。", "… + will + 动词原形（说往后会发生）"], "done": ["实义动词", "在「I have done my work.」里，done 是 do 的过去分词，说“干完”这个动作的还是它，have 只是帮它表示完成，所以算实义动词。", "have + done + 做的那件事（说已经做完）"], "been": ["实义动词", "在「I have been here.」里，been 是 be 的过去分词，说的是“来过这儿”这件事，不是把主语和描述连起来，所以算实义动词。", "have + been + 地点（说去过、来过）"]};
+    const trueAux=new Set(['be','is','am','are','was','were','have','has','had','do','does','did']);
+    let counts={实义动词:0,系动词:0,助动词:0,情态动词:0};
+    for(const w of c5.words){
+      for(const u of w.uses){
+        if(u.part!=='v')continue;
+        let sub='实义动词';
+        if(LINK.has(w.en))sub='系动词';
+        else if(AUX.has(w.en))sub='助动词';
+        else if(MOD.has(w.en))sub='情态动词';
+        const spec=SPEC[w.en];
+        if(spec){
+          sub=spec[0]; u.note=spec[1]; u.skeleton=spec[2];
+        }else{
+          u.note=(u.note||'').replace(/是动词。$/,'是'+sub+'。');
+          if(!/是实义动词。|是系动词。|是助动词。|是情态动词。/.test(u.note))
+            u.note=(u.note||'')+' 它在句子里'+(sub==='实义动词'?'撑起动作或状态':'承担语法作用')+'，所以是'+sub+'。';
+          if(sub==='实义动词'){
+            const tail=(u.sentence||'').replace(/^[^A-Za-z]*/,'').split(/\s+/);
+            const at=tail.findIndex(t=>t.toLowerCase().replace(/[^a-z']/g,'')===w.en.toLowerCase());
+            const after=at>=0?tail.slice(at+1).join(' '):'';
+            const prepHead=/^(in|at|on|to|for|with|by|from|up|down|out|over|about|into|off|of|near|under|after|before|here|there|home|soon|now|again|back|well)\b/i;
+            const takesObj=after.trim().length>0&&!prepHead.test(after.trim());
+            u.skeleton=takesObj?'… + '+w.en+' + 接下要做的那一样东西':'… + '+w.en+' + 后面不跟东西，直接说在哪、怎么';
+          }else{
+            u.skeleton='… + '+w.en+' + 按例句的位置接';
+          }
+        }
+        u.sub=sub; u.label=sub;
+        counts[sub]++;
+      }
+    }
+    window.WMVocabVerbTypes={counts:counts,words:c5.words.length};
+  })();
