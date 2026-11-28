@@ -67,8 +67,12 @@
       const context=use.phrase;
       const id=use.id.replace('-use-','-');
       words[id]={...word,id,en:word.en,zh:use.zh,pairType:'meaning',context};
-      words[id+'-type']={...word,id,en:word.en,zh:use.label,pairType:'word-class',context};
-      fourthIds.push(id,id+'-type');
+      fourthIds.push(id);
+      // V64.114 第四课整课都是名词，不再出「是不是名词」的词类对
+      if(course.number!==4){
+        words[id+'-type']={...word,id,en:word.en,zh:use.label,pairType:'word-class',context};
+        fourthIds.push(id+'-type');
+      }
     }
   }
   // V64.113 第三课：冠词 a / an 识别配对（左「___ 词」对应右「a/an 词」）
