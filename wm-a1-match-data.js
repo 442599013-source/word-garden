@@ -87,7 +87,7 @@
       else if(['ball','bank','bike','cake','card'].includes(word.en))art='a';
       if(!art)continue;
       const id='3ch1-article-'+word.en;
-      words[id]={id,en:'___ '+word.en,zh:art+' '+word.en,pairType:'article',matchKey:'article:'+word.en};
+      words[id]={id,en:'___ '+word.en,zh:art,pairType:'article'};
       fourthIds.push(id);
     }
   }
