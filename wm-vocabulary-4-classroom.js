@@ -86,6 +86,7 @@
     const parts=[en(word.en),zh(use.label+'。'+use.gloss),en(use.sentence),zh(use.sentenceZh)];
     const why=explanation(word,use);
     if(why)parts.push(zh(why));
+    if(use.skeleton)parts.push(zh(use.skeleton.includes('不跟东西')?'这句里它后面不跟东西，直接说在哪、怎么。':'这句里它后面接上被做的那一样东西。'));
     return parts;
   }
   const multi=(number===3?WMVocabulary4.targets:targets).filter(word=>new Set(word.uses.map(use=>use.part)).size>1);
@@ -215,11 +216,14 @@
       const rest=entries.filter(item=>item!==example);
       const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
       const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
-      section.append(heading(entry.label+(entry.en?' · '+entry.en:''),id,[entry.label+'。'+entry.intro]),node('p',entry.intro));
+      const blurbParts=part==='n'&&WMVocabulary4.nounArticleIntro
+        ? WMVocabulary4.nounArticleIntro.split(/(?=为什么不一律用 a？|所以字母长什么样|一句话：)/).filter(Boolean).map(t=>t.trim())
+        : [];
+      section.append(heading(entry.label+(entry.en?' · '+entry.en:''),id,
+        [entry.label+'。'+entry.intro].concat(blurbParts)),node('p',entry.intro));
       if(part==='n'&&WMVocabulary4.nounArticleIntro){
         const blurb=node('div',null,'a1-vocabulary-note');
-        WMVocabulary4.nounArticleIntro.split(/(?=为什么不一律用 a？|所以字母长什么样|一句话：)/).filter(Boolean)
-          .forEach(function(t){blurb.append(node('p',t.trim()));});
+        blurbParts.forEach(function(t){blurb.append(node('p',t));});
         section.append(blurb);
       }
       section.append(card(example.word,example.uses,id));
@@ -248,10 +252,10 @@
         root.append(section);
       }
       const close=node('section','','a1-block a1-vocabulary-summary');
-      close.append(heading('课末总结：哪些词会换类','4ch5-summary',[zh('课末总结：哪些词会换类')],'h2'));
-      ['最后记住两件事。','一、有些词是会变的：be（am/is/are/was/were/been）、have、do/does/did、look、feel、seem、grow、turn、keep、stay、get 这类，同一个词在不同句子里可能是系动词、助动词，也可能是实义动词，全看它后面接什么。接“什么样的”描述就是系动词（You seem sad.）；接过去分词帮忙构成完成时就是助动词（I have done my work.）；自己带动作、带对象就是实义动词（Look at the map.）。',
-       '二、大部分实义动词是固定的：swim、call、help、hate 走到哪句都在说动作，不会变成别的类。','所以判断永远先看它后面那个词，再定类型，不用背单词表。']
-        .forEach(t=>close.append(node('p',t)));
+      const summaryLines=['最后记住两件事。','一、有些词是会变的：be（am/is/are/was/were/been）、have、do/does/did、look、feel、seem、grow、turn、keep、stay、get 这类，同一个词在不同句子里可能是系动词、助动词，也可能是实义动词，全看它后面接什么。接“什么样的”描述就是系动词（You seem sad.）；接过去分词帮忙构成完成时就是助动词（I have done my work.）；自己带动作、带对象就是实义动词（Look at the map.）。',
+       '二、大部分实义动词是固定的：swim、call、help、hate 走到哪句都在说动作，不会变成别的类。','所以判断永远先看它后面那个词，再定类型，不用背单词表。'];
+      close.append(heading('课末总结：哪些词会换类','4ch5-summary',[zh('课末总结：哪些词会换类')].concat(summaryLines.map(zh)),'h2'));
+      summaryLines.forEach(t=>close.append(node('p',t)));
       root.append(close);
     }
 
