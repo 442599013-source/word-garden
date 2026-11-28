@@ -70,6 +70,7 @@
     'yeah:i':'用来回应对方，表达同意'
   };
   function explanation(word,use){
+    if(use.silent)return '';
     if(use.note)return use.note;
     if(word.exampleOnly)
       return use.part==='d'?'这个词放在名词前，帮助读者判断所指的是任意一个还是特指对象。它是限定词中的冠词。':'';
@@ -82,7 +83,10 @@
     return '在「'+phrase+'」里，'+word.en+' 表示「'+use.zh+'」，'+role+'，所以是'+use.label+'。';
   }
   function narration(word,use){
-    return [en(word.en),zh(use.label+'。'+use.gloss),en(use.sentence),zh(use.sentenceZh),explanation(word,use)];
+    const parts=[en(word.en),zh(use.label+'。'+use.gloss),en(use.sentence),zh(use.sentenceZh)];
+    const why=explanation(word,use);
+    if(why)parts.push(zh(why));
+    return parts;
   }
   const multi=(number===3?WMVocabulary4.targets:targets).filter(word=>new Set(word.uses.map(use=>use.part)).size>1);
   function mount(root){
@@ -166,9 +170,10 @@
         box.append(
           node('p',use.label+' · '+use.gloss),
           highlight(node('p','','a1-vocabulary-example'),use.sentence,word.en),
-          node('p',use.sentenceZh),
-          node('p',explanation(word,use))
+          node('p',use.sentenceZh)
         );
+        const why=explanation(word,use);
+        if(why)box.append(node('p',why));
         card.append(box);
       }
       return card;
@@ -191,7 +196,7 @@
     }
     const listSpeaker=(items,id,details,grid)=>groupSpeaker('朗读这一组的 '+items.length+' 个词',id+'-group',items,details,grid);
     const reviewIntro='同一拼写，不同词类。同一个词，换个词类，意思和用法就不一样。这一课把前面几课学过的这类词放在一起对照复习。';
-    const tip=number===6?reviewIntro:number===4?'先看是否泛指一个可数的人或事物，再听冠词后紧接着的首音。a book（一本书），an old book（一本旧书），a unit（一个单位），an hour（一小时）。milk 泛指牛奶时用 some milk。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
+    const tip=number===6?reviewIntro:number===4?'这一课全是名词。卡片只给词、义和例句，不再逐词解释词性：能给它加 a / an、能给它起名字，它就落在名词这一类。a 与 an 怎么分，见下面名词板块开头的说明。':number===5?'看动词在句子中的作用。I like it.（我喜欢它。）like 表达状态，是实义动词。You look happy.（你看起来很开心。）look 连接主语和描述，是系动词。Do you like it?（你喜欢它吗？）do 帮忙提问，是助动词。You must go.（你必须走。）must 表示必须，是情态动词。':'这堂课按九大词类学四字母常用词。先看这一类词在句中起什么作用，再学词义和例句。判断词类时，可以观察位置，也要看它怎样和其他词搭配。';
     const intro=node('section','','a1-block');
     intro.append(heading(number===3?'九大词类':number===4?'什么时候用 a 或 an？':number===6?'同一拼写，不同词类':'动词在句子里起什么作用？','4ch1-intro',[tip]),node('p',tip));
     root.append(node('p',course.code,'a1-kicker'),node('h1',course.titleZh),audioStatus,intro);
@@ -209,7 +214,14 @@
       const rest=entries.filter(item=>item!==example);
       const articles=part==='d'?words.filter(word=>word.exampleOnly):[];
       const readEntries=items=>items.flatMap(({word,uses})=>uses.flatMap(use=>narration(word,use)));
-      section.append(heading(entry.label+(entry.en?' · '+entry.en:''),id,[entry.label+'。'+entry.intro]),node('p',entry.intro),card(example.word,example.uses,id));
+      section.append(heading(entry.label+(entry.en?' · '+entry.en:''),id,[entry.label+'。'+entry.intro]),node('p',entry.intro));
+      if(part==='n'&&WMVocabulary4.nounArticleIntro){
+        const blurb=node('div',null,'a1-vocabulary-note');
+        WMVocabulary4.nounArticleIntro.split(/(?=为什么不一律用 a？|所以字母长什么样|一句话：)/).filter(Boolean)
+          .forEach(function(t){blurb.append(node('p',t.trim()));});
+        section.append(blurb);
+      }
+      section.append(card(example.word,example.uses,id));
       for(const article of articles)section.append(card(article,article.uses,id));
       const groupSize=number===3?25:number===4?25:25;
       for(let i=0;i<rest.length;i+=groupSize)section.append(wordList(rest.slice(i,i+groupSize),id,listSpeaker));

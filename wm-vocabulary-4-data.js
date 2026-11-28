@@ -2800,3 +2800,94 @@
 
   window.WMVocabulary4={words,targets,classes,practice,courses,supplemental};
 })();
+
+  // V64.111 名词板块重构：an 归第三课、a 示例留 5 个、其余入第四课、逐词解说停用
+  (function nounRestructure(){
+    const V=window.WMVocabulary4;
+    V.nounArticleIntro="名词前面的 a 和 an。只有单数可数名词前面才加 a 或 an，表示「一个」。不可数的（info）和复数（odds、arms）不加，说 the 或者什么都不加。用哪一个，看这个词读出来的第一个音素：第一个音是辅音音素（/b/、/k/、/s/）就用 a，例如 a cup、a bear、a key；第一个音是元音音素（/æ/、/i/、/ɔ/）就用 an，例如 an atom、an idea、an apple。为什么不一律用 a？因为英语里两个元音音素不能直接挨着读。a 本身读 /ə/，末尾就是元音，若后面紧跟另一个元音，中间没有东西隔开就读不下去；an 末尾的 n 正好接到后面的元音上，把两个音隔开，读起来就顺了。所以字母长什么样不参与判断，只看读出来的第一个音：an hour——字母是 h，但 h 不发音，读 /ˈaʊə/，开头是元音 /aʊ/，所以要 an，用 n 把两个元音隔开；an honest man 同理。a unit、a user、a euro——字母是元音，开头读的却是辅音 /j/，后面接的是辅音，本来就不需要隔开，所以用 a。一句话：单数可数名词，第一个音素是元音就用 an，是辅音就用 a，看读音不看字母。";
+    const c3=V.courses[3], c4=V.courses[4];
+    const isN=u=>u.part==='n';
+    const keepVowel=new Set(["area", "aunt", "east", "euro", "exam", "idea", "unit", "atom", "info", "aide", "auto", "odds"]);
+    const keepA=new Set(['ball','bank','bike','cake','card']);
+    const anList=[["area", "/ˈeəriə/", "一片地区"], ["aunt", "/ɑːnt/", "家里的姑妈"], ["exam", "/ɪɡˈzæm/", "一场考试"], ["idea", "/aɪˈdɪə/", "心里冒出来的一个念头"], ["atom", "/ˈætəm/", "极小的一颗原子"], ["aide", "/eɪd/", "身边帮忙的助手"], ["auto", "/ˈɔːtəʊ/", "一辆汽车"], ["army", "/ˈɑːmi/", "一支成建制的队伍"], ["item", "/ˈaɪtəm/", "清单上的一个条目"], ["oven", "/ˈʌvn/", "烤东西的炉子"], ["edge", "/edʒ/", "东西最外侧的边"], ["exit", "/ˈeksɪt/", "走出去的那道门"], ["iron", "/ˈaɪən/", "一块铁"], ["acid", "/ˈæsɪd/", "一种能腐蚀东西的酸"], ["acre", "/ˈeɪkə/", "一块地的面积"], ["edit", "/ˈedɪt/", "整理修改的那一遍"], ["evil", "/ˈiːvl/", "害人的那种坏"], ["icon", "/ˈaɪkɒn/", "屏幕上的小图标"], ["inch", "/ɪntʃ/", "一英寸的长度"], ["urge", "/ɜːdʒ/", "心里按不住的那股冲动"], ["ally", "/ˈælaɪ/", "站在一起的伙伴"], ["ease", "/iːz/", "不费力的那种状态"], ["echo", "/ˈekəʊ/", "声音撞回来的那点回响"], ["oral", "/ˈɔːrəl/", "用嘴说的那场考试"], ["ache", "/eɪk/", "身上一阵隐痛"], ["arch", "/ɑːtʃ/", "弯成弧形的门洞"], ["axis", "/ˈæksɪs/", "一根假想的轴"], ["envy", "/ˈenvi/", "看见别人好时那点不舒服"], ["idol", "/ˈaɪdl/", "被人追捧的那个人"], ["isle", "/aɪl/", "海上的小岛"], ["oath", "/əʊθ/", "说出口的誓言"], ["adjective", "/ˈædʒɪktɪv/", "形容词这个词类"], ["adverb", "/ˈædvɜːb/", "副词这个词类"], ["interjection", "/ˌɪntəˈdʒekʃn/", "感叹词这个词类"]];
+
+    // 1) 第四课里真正用 an 的词整条搬到第三课
+    const movedAn=c4.words.filter(w=>w.uses.every(isN)&&anList.some(r=>r[0]===w.en));
+    for(const w of movedAn){
+      c4.words.splice(c4.words.indexOf(w),1);
+      const ti=c4.targets.indexOf(w); if(ti>=0)c4.targets.splice(ti,1);
+      c3.words.push(w); c3.targets.push(w);
+      keepVowel.add(w.en);
+    }
+
+    // 2) 第三课名词只留元音开头这批 + 5 个 a 示例，其余搬第四课前面
+    const carry=[];
+    for(const w of [...c3.words]){
+      const nUses=w.uses.filter(isN);
+      if(!nUses.length) continue;
+      if(keepVowel.has(w.en)||keepA.has(w.en)) continue;
+      if(w.uses.length===nUses.length){
+        c3.words.splice(c3.words.indexOf(w),1);
+        const ti=c3.targets.indexOf(w); if(ti>=0)c3.targets.splice(ti,1);
+        carry.push(w);
+      } else {
+        const clone=Object.assign({},w,{id:w.id+'-noun',uses:nUses.slice(),zh:nUses[0].zh,main:nUses[0].zh,pos:'n'});
+        w.uses=w.uses.filter(u=>u.part!=='n');
+        carry.push(clone);
+      }
+    }
+    c4.words.unshift(...carry);
+    c4.targets.unshift(...carry);
+    if(c3.classes&&c3.classes.n)c3.classes.n.example='ball';
+
+    // 3) 第四课原有名词停用逐词解说（从第三课搬来的保留）
+    const carried=new Set(carry.map(w=>w.en));
+    for(const w of c4.words){
+      for(const u of w.uses){
+        if(u.part!=='n') continue;
+        if(carried.has(w.en)) continue;
+        u.note=''; u.silent=true;
+      }
+    }
+
+    // 4) an 与特例的解说写清楚
+    const anNotes={};
+    for(const r of anList){
+      const en=r[0], ipa=r[1], clue=r[2];
+      const w=c3.words.find(x=>x.en===en); if(!w)continue;
+      const u=w.uses.find(x=>x.part==='n'); if(!u)continue;
+      anNotes[en]=en+' 表示「'+(u.zh||'')+'」。在「an '+en+'」里，用 an 是因为 '+en+' 开头读的是元音音素 '+ipa+'，不是因为它以元音字母开头；它给'+clue+'起了名字，所以是名词。';
+    }
+    const specials={"euro": "euro 表示「欧元」。它字母是 e，开头读的却是辅音音素 /j/，所以用 a euro，不用 an。它给一种货币起了名字，所以是名词。", "unit": "unit 表示「单位」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a unit，不用 an。它给计量的一个单位起了名字，所以是名词。", "user": "user 表示「使用者」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a user，不用 an。它给用东西的那个人起了名字，所以是名词。", "east": "east 表示「东方」。说方向时不用 a 也不用 an，说 the east。它给一个方向起了名字，所以是名词。", "info": "info 表示「信息」，是口语说法。信息没法一个一个数，所以不加 a/an，说 more info 或者 some info。它给一类消息起了名字，所以是名词。", "odds": "odds 表示「几率」，本身是复数，不加 a/an，说 the odds。它给成事的那点可能性起了名字，所以是名词。", "arms": "arms 表示「武器」，本身是复数，不加 a/an。它给打仗用的那些家伙起了名字，所以是名词。"};
+    for(const w of c3.words){
+      for(const u of w.uses){
+        if(u.part!=='n') continue;
+        const n=anNotes[w.en];
+        if(n){u.note=n;delete u.silent;}
+      }
+    }
+    // 特例在哪个课就写到哪个课，两个课都扫一遍
+    for(const c of [c3,c4]){
+      for(const w of c.words){
+        for(const u of w.uses){
+          if(u.part!=='n') continue;
+          const n=specials[w.en];
+          if(n){u.note=n;delete u.silent;}
+        }
+      }
+    }
+    // 同形词合并：课3 里 acid/evil/oral 既作形容词又作名词，合成一张卡
+    for(const en of new Set(c3.words.map(w=>w.en))){
+      const group=c3.words.filter(w=>w.en===en);
+      if(group.length<2)continue;
+      const host=group.find(w=>w.uses.some(u=>u.part!=='n'))||group[0];
+      for(const w of group){
+        if(w===host)continue;
+        host.uses=host.uses.concat(w.uses);
+        const wi=c3.words.indexOf(w); if(wi>=0)c3.words.splice(wi,1);
+        const ti=c3.targets.indexOf(w);
+        if(ti>=0){c3.targets.splice(ti,1); if(c3.targets.indexOf(host)<0)c3.targets.push(host);}
+      }
+    }
+    window.WMVocabNounRestructure={an:anList.length,carried:carry.length,special:Object.keys({"euro": "euro 表示「欧元」。它字母是 e，开头读的却是辅音音素 /j/，所以用 a euro，不用 an。它给一种货币起了名字，所以是名词。", "unit": "unit 表示「单位」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a unit，不用 an。它给计量的一个单位起了名字，所以是名词。", "user": "user 表示「使用者」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a user，不用 an。它给用东西的那个人起了名字，所以是名词。", "east": "east 表示「东方」。说方向时不用 a 也不用 an，说 the east。它给一个方向起了名字，所以是名词。", "info": "info 表示「信息」，是口语说法。信息没法一个一个数，所以不加 a/an，说 more info 或者 some info。它给一类消息起了名字，所以是名词。", "odds": "odds 表示「几率」，本身是复数，不加 a/an，说 the odds。它给成事的那点可能性起了名字，所以是名词。", "arms": "arms 表示「武器」，本身是复数，不加 a/an。它给打仗用的那些家伙起了名字，所以是名词。"}).length};
+  })();
