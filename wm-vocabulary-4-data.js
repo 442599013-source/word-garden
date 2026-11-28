@@ -2891,3 +2891,37 @@
     }
     window.WMVocabNounRestructure={an:anList.length,carried:carry.length,special:Object.keys({"euro": "euro 表示「欧元」。它字母是 e，开头读的却是辅音音素 /j/，所以用 a euro，不用 an。它给一种货币起了名字，所以是名词。", "unit": "unit 表示「单位」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a unit，不用 an。它给计量的一个单位起了名字，所以是名词。", "user": "user 表示「使用者」。它字母是 u，开头读的却是辅音音素 /j/，所以用 a user，不用 an。它给用东西的那个人起了名字，所以是名词。", "east": "east 表示「东方」。说方向时不用 a 也不用 an，说 the east。它给一个方向起了名字，所以是名词。", "info": "info 表示「信息」，是口语说法。信息没法一个一个数，所以不加 a/an，说 more info 或者 some info。它给一类消息起了名字，所以是名词。", "odds": "odds 表示「几率」，本身是复数，不加 a/an，说 the odds。它给成事的那点可能性起了名字，所以是名词。", "arms": "arms 表示「武器」，本身是复数，不加 a/an。它给打仗用的那些家伙起了名字，所以是名词。"}).length};
   })();
+
+  // V64.112 形容词拆分：第三课留 13 个，其余 141 个独立成第六课，原第六课（同形不同词类）顺延为第七课
+  (function adjectiveSplit(){
+    const V=window.WMVocabulary4;
+    const c3=V.courses[3];
+    const keep=new Set(['good','cold','warm','tall','long','fast','slow','easy','hard','nice','busy','free','true']);
+    const moved=[];
+    for(const w of [...c3.words]){
+      const adjs=w.uses.filter(u=>u.part==='a');
+      if(!adjs.length)continue;
+      if(keep.has(w.en))continue;
+      if(w.uses.length===adjs.length){
+        const wi=c3.words.indexOf(w); if(wi>=0)c3.words.splice(wi,1);
+        const ti=c3.targets.indexOf(w); if(ti>=0)c3.targets.splice(ti,1);
+        moved.push(w);
+      }else{
+        const clone=Object.assign({},w,{id:w.id+'-adj',uses:adjs.slice(),zh:adjs[0].zh,main:adjs[0].zh,pos:'a'});
+        w.uses=w.uses.filter(u=>u.part!=='a');
+        moved.push(clone);
+      }
+    }
+    const adjCourse={number:6,words:moved,targets:moved.filter(w=>!w.exampleOnly),
+      classes:c3.classes,practice:{word:moved,phrase:[],sentence:[],passage:[]}};
+    for(const w of moved)for(const u of w.uses){
+      adjCourse.practice.phrase.push({id:u.id+'-phrase',kind:'phrase',en:u.phrase,zh:u.phraseZh});
+      adjCourse.practice.sentence.push({id:u.id+'-sentence',kind:'sentence',en:u.sentence,zh:u.sentenceZh});
+    }
+    const review=V.courses[6];
+    review.number=7;
+    delete V.courses[6];
+    V.courses[7]=review;
+    V.courses[6]=adjCourse;
+    window.WMVocabAdjectiveSplit={adj:moved.length,keep:keep.size,review:review.words.length};
+  })();

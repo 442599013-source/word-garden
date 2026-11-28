@@ -28,9 +28,9 @@
         titleZh:'第' + chineseNumber(number) + '课：' + type.title + '第' + chineseNumber(categoryNumber) + '节'};
     });
   }
-  const catalog = numberLessons([{id:lessonId, type:'pronunciation'}, {id:'goldy-a1-first-sounds-2',type:'pronunciation'}, {id:'goldy-vocabulary-4',type:'vocabulary'}, {id:'goldy-nouns',type:'vocabulary'}, {id:'goldy-verbs',type:'vocabulary'}, {id:'goldy-vocabulary-review',type:'vocabulary'}]);
-  ['词类入门与运用','名词与 a / an','动词的四种用法'].forEach((title,i)=>catalog[i+2].titleZh+=' · '+title);
-  catalog[5].titleZh+=' · 同一拼写，不同词类';
+  const catalog = numberLessons([{id:lessonId, type:'pronunciation'}, {id:'goldy-a1-first-sounds-2',type:'pronunciation'}, {id:'goldy-vocabulary-4',type:'vocabulary'}, {id:'goldy-nouns',type:'vocabulary'}, {id:'goldy-verbs',type:'vocabulary'}, {id:'goldy-adjectives',type:'vocabulary'}, {id:'goldy-vocabulary-review',type:'vocabulary'}]);
+  ['词类入门与运用','名词与 a / an','动词的四种用法','形容词的用法'].forEach((title,i)=>catalog[i+2].titleZh+=' · '+title);
+  catalog[6].titleZh+=' · 同一拼写，不同词类';
   catalog.push({id:'goldy-a1-phonics-3',type:'pronunciation',number:201,code:'3YY3',titleZh:'小学二年级第一课 · 音素在单词里的发音'});
   window.WMClassroomCatalog = {lessons:catalog, numberLessons};
   const letterNames = ('eɪ biː siː diː iː ef dʒiː eɪtʃ aɪ dʒeɪ keɪ el em en əʊ piː kjuː ɑː es tiː juː viː ˈdʌbəl.juː eks waɪ zed').split(' ');
