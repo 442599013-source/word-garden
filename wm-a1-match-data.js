@@ -71,6 +71,22 @@
       fourthIds.push(id,id+'-type');
     }
   }
+  // V64.113 第三课：冠词 a / an 识别配对（左「___ 词」对应右「a/an 词」）
+  if(course.number===3){
+    for(const word of course.words){
+      const use=word.uses.find(item=>item.part==='n');
+      if(!use)continue;
+      const note=use.note||'';
+      let art=null;
+      if(/用 an/.test(note))art='an';
+      else if(/用 a /.test(note))art='a';
+      else if(['ball','bank','bike','cake','card'].includes(word.en))art='a';
+      if(!art)continue;
+      const id='3ch1-article-'+word.en;
+      words[id]={id,en:'___ '+word.en,zh:art+' '+word.en,pairType:'article',matchKey:'article:'+word.en};
+      fourthIds.push(id);
+    }
+  }
   vocabularyLevels.push({
     level:course.number,stage:'kindergarten',group:lesson.group,lessons:[],meanings:{},classification:[],sourceWordIds:fourthIds
   });

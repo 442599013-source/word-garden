@@ -2925,3 +2925,27 @@
     V.courses[6]=adjCourse;
     window.WMVocabAdjectiveSplit={adj:moved.length,keep:keep.size,review:review.words.length};
   })();
+
+  // V64.113 第三课再补 30 个用 a 的名词（从第四课移入），并在配对中练习 a / an
+  (function articleMove(){
+    const V=window.WMVocabulary4;
+    const c3=V.courses[3], c4=V.courses[4];
+    const list=[["baby", "/ˈbeɪbi/", "一位小宝宝"], ["back", "/bæk/", "身上的一个部位"], ["band", "/bænd/", "一支乐队"], ["bath", "/bɑːθ/", "一件日常小事"], ["beer", "/bɪə/", "一种饮料"], ["bill", "/bɪl/", "一张要付钱的单子"], ["bird", "/bɜːd/", "一只小动物"], ["blog", "/blɒɡ/", "一个网页"], ["boat", "/bəʊt/", "一件交通工具"], ["body", "/ˈbɒdi/", "一个整体"], ["book", "/bʊk/", "一本书"], ["boot", "/buːt/", "一只鞋"], ["cafe", "/kəˈfeɪ/", "一家小店"], ["call", "/kɔːl/", "一次通话"], ["city", "/ˈsɪti/", "一座城"], ["club", "/klʌb/", "一个团体"], ["coat", "/kəʊt/", "一件衣服"], ["cold", "/kəʊld/", "一场病"], ["cook", "/kʊk/", "一个做饭的人"], ["date", "/deɪt/", "日历上的一格"], ["desk", "/desk/", "一张桌子"], ["dish", "/dɪʃ/", "一道菜"], ["door", "/dɔː/", "一块能开合的门板"], ["farm", "/fɑːm/", "一片农地"], ["fish", "/fɪʃ/", "一条鱼"], ["food", "/fuːd/", "一类吃的东西"], ["foot", "/fʊt/", "一只脚"], ["form", "/fɔːm/", "一张要填的纸"], ["game", "/ɡeɪm/", "一个玩的把式"], ["girl", "/ɡɜːl/", "一个女孩"]];
+    for(const r of list){
+      const w=c4.words.find(x=>x.en===r[0]);
+      if(!w)continue;
+      const wi=c4.words.indexOf(w); if(wi>=0)c4.words.splice(wi,1);
+      const ti=c4.targets.indexOf(w); if(ti>=0)c4.targets.splice(ti,1);
+      c3.words.push(w);
+      if(c3.targets.indexOf(w)<0)c3.targets.push(w);
+      for(const u of w.uses){
+        if(u.part!=='n')continue;
+        u.note=r[0]+' 表示「'+(u.zh||'')+'」。在「a '+r[0]+'」里，用 a 是因为 '+r[0]+' 开头读的是辅音音素 '+r[1]+'，不是元音音素；它给'+r[2]+'起了名字，所以是名词。';
+        delete u.silent;
+      }
+    }
+    // 第三课名词按字母序稳定排列，避免 30 个新词全堆在末尾
+    const order=c3.words.slice();
+    c3.words.sort((a,b)=>a.en.localeCompare(b.en,'en'));
+    c3.targets.sort((a,b)=>a.en.localeCompare(b.en,'en'));
+  })();
