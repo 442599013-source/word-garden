@@ -230,7 +230,7 @@
     }
 
     if(number===5){
-      const groups=[['实义动词','verb-main','句子里说清“做了什么、处于什么状态”的那个词。去掉它，句子就没有核心意思了。所以它后面可以什么都不接，也可以接“做什么的对象”。','We swim in the sea.'],
+      const groups=[['实义动词','verb-main','实义动词是最“实”的那类动词：句子里到底干了什么、有什么、知道什么，都由它说。We swim in the sea. 这句里，只有 swim 在说我们干的事；把它删掉，这句话就散了。所以它自己能把意思撑起来：后面可以不接东西（We swim.），也可以接上被做的那一样（We help our pals.）。','We swim in the sea.'],
         ['系动词','verb-link','它不在说动作，而是把前面的主语和后面的描述连起来，说明主语是什么样。所以它后面接“什么样的”，不接动作的对象：You seem sad.（对）／You seem a sad.（错）','You seem sad.'],
         ['助动词','verb-aux','它自己没有任何动作，只帮忙变问句、否定或凑时态，真正的动作在后面。所以它后面要跟真正的动词：Does she like it?','Does she like it?'],
         ['情态动词','verb-modal','它也不表示动作，只给后面的动词加上“必须、将会”这层态度。所以它后面跟动词原形，不加 to，也不加 -ed：You must go.','You must go.']];
@@ -240,7 +240,7 @@
           .map(word=>({word,uses:word.uses.filter(u=>u.part==='v')}));
         if(!items.length)continue;
         const section=node('section','','a1-block');
-        section.append(heading(label,id,[],'h2'),node('p',intro),node('p','例：'+sample,'a1-vocabulary-sample'));
+        section.append(heading(label,id,[zh(label+'。'+intro),zh('例：'+sample)],'h2'),node('p',intro),node('p','例：'+sample,'a1-vocabulary-sample'));
         const example=items[0],rest=items.slice(1);
         section.append(card(example.word,example.uses,id));
         const groupSize=label==='实义动词'?25:25;
@@ -248,7 +248,7 @@
         root.append(section);
       }
       const close=node('section','','a1-block a1-vocabulary-summary');
-      close.append(heading('课末总结：哪些词会换类','4ch5-summary',[],'h2'));
+      close.append(heading('课末总结：哪些词会换类','4ch5-summary',[zh('课末总结：哪些词会换类')],'h2'));
       ['最后记住两件事。','一、有些词是会变的：be（am/is/are/was/were/been）、have、do/does/did、look、feel、seem、grow、turn、keep、stay、get 这类，同一个词在不同句子里可能是系动词、助动词，也可能是实义动词，全看它后面接什么。接“什么样的”描述就是系动词（You seem sad.）；接过去分词帮忙构成完成时就是助动词（I have done my work.）；自己带动作、带对象就是实义动词（Look at the map.）。',
        '二、大部分实义动词是固定的：swim、call、help、hate 走到哪句都在说动作，不会变成别的类。','所以判断永远先看它后面那个词，再定类型，不用背单词表。']
         .forEach(t=>close.append(node('p',t)));
